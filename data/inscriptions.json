@@ -1,0 +1,41 @@
+{
+  "version": "1.0",
+  "note": "灵魂刻印 = 官方分支，每类武器 3 个（宝藏猎人刻印为通用位 + 2 个专属）。共 27 个。",
+  "inscriptions": [
+    { "id": "thw_hunter",    "name": "宝藏猎人刻印", "wt": "THW",   "kind": "hunter" },
+    { "id": "thw_berserk",   "name": "狂暴武士刻印", "wt": "THW",   "kind": "specific" },
+    { "id": "thw_ironbone",  "name": "铁骨莽勇刻印", "wt": "THW",   "kind": "specific" },
+
+    { "id": "shw_hunter",    "name": "宝藏猎人刻印", "wt": "SHW",   "kind": "hunter" },
+    { "id": "shw_revenge",   "name": "复仇战士刻印", "wt": "SHW",   "kind": "specific" },
+    { "id": "shw_fearless",  "name": "无畏勇士刻印", "wt": "SHW",   "kind": "specific" },
+
+    { "id": "staff_hunter",  "name": "宝藏猎人刻印", "wt": "STAFF", "kind": "hunter" },
+    { "id": "staff_arcane",  "name": "奥术大师刻印", "wt": "STAFF", "kind": "specific" },
+    { "id": "staff_ethereal","name": "空灵法师刻印", "wt": "STAFF", "kind": "specific" },
+
+    { "id": "db_hunter",     "name": "宝藏猎人刻印", "wt": "DB",    "kind": "hunter" },
+    { "id": "db_blademaster","name": "利刃舞女刻印", "wt": "DB",    "kind": "specific" },
+    { "id": "db_bladewarrior","name": "刀锋战士刻印","wt": "DB",    "kind": "specific" },
+
+    { "id": "bow_hunter",    "name": "宝藏猎人刻印", "wt": "BOW",   "kind": "hunter" },
+    { "id": "bow_roaring",   "name": "轰鸣游侠刻印", "wt": "BOW",   "kind": "specific" },
+    { "id": "bow_strongarm", "name": "强臂弓手刻印", "wt": "BOW",   "kind": "specific" },
+
+    { "id": "fd_hunter",     "name": "宝藏猎人刻印", "wt": "FD",    "kind": "hunter" },
+    { "id": "fd_gunner",     "name": "炮斗士刻印",   "wt": "FD",    "kind": "specific" },
+    { "id": "fd_volcano",    "name": "火山战士刻印", "wt": "FD",    "kind": "specific" },
+
+    { "id": "gun_hunter",    "name": "宝藏猎人刻印", "wt": "GUN",   "kind": "hunter" },
+    { "id": "gun_lucky",     "name": "幸运猎手刻印", "wt": "GUN",   "kind": "specific" },
+    { "id": "gun_special",   "name": "特种枪手刻印", "wt": "GUN",   "kind": "specific" },
+
+    { "id": "pl_hunter",     "name": "宝藏猎人刻印", "wt": "PL",    "kind": "hunter" },
+    { "id": "pl_ghostflame", "name": "幽焰行者刻印", "wt": "PL",    "kind": "specific" },
+    { "id": "pl_shadowstep", "name": "踏影魔人刻印", "wt": "PL",    "kind": "specific" },
+
+    { "id": "ka_hunter",     "name": "宝藏猎人刻印", "wt": "KA",    "kind": "hunter" },
+    { "id": "ka_swordmaster","name": "剑术大师刻印", "wt": "KA",    "kind": "specific" },
+    { "id": "ka_wanderer",   "name": "流浪剑客刻印", "wt": "KA",    "kind": "specific" }
+  ]
+}

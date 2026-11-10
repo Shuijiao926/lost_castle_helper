@@ -1,0 +1,29 @@
+# 依赖
+node_modules/
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# 构建产物
+dist/
+build/*.exe
+build/*.zip
+out/
+release/
+
+# 运行时缓存
+.cache/
+temp/
+*.log
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# 本地调试
+*.local.json
+.env
+.env.local

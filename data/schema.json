@@ -1,0 +1,195 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/Shuijiao926/lost_castle_helper/data/schema.json",
+  "title": "LC2 Helper 流派数据规范",
+  "description": "失落城堡2 流派图鉴的数据格式。一个 build = 一个玩家流派。所有图片字段只存名称，图标由 id/名称自动匹配。",
+  "type": "object",
+  "required": ["version", "gameVersion", "builds"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "string", "description": "数据格式版本，如 1.0" },
+    "gameVersion": { "type": "string", "description": "适用游戏版本，如 1.0.1.3" },
+    "updatedAt": { "type": "string", "description": "本文件最后更新日期 YYYY-MM-DD" },
+    "builds": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/build" } }
+  },
+  "definitions": {
+    "build": {
+      "type": "object",
+      "required": ["id", "name", "wt", "insc", "rating", "votes", "features", "tip", "author", "gameVersion"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9_]{3,40}$", "description": "唯一 id（小写字母/数字/下划线）" },
+        "name": { "type": "string", "minLength": 2, "maxLength": 20, "description": "流派名，保留社区叫法" },
+        "aliases": { "type": "array", "items": { "type": "string" }, "description": "社区别名/黑话，供搜索命中" },
+        "wt": { "enum": ["THW", "SHW", "STAFF", "DB", "BOW", "FD", "GUN", "PL", "KA"], "description": "武器大类" },
+        "insc": { "type": "string", "description": "主刻印 id，见 inscriptions.json" },
+        "rating": { "type": "number", "minimum": 0, "maximum": 10, "description": "社区平均分（10 分制）" },
+        "votes": { "type": "integer", "minimum": 0, "description": "打分人数" },
+        "features": {
+          "type": "array", "minItems": 1, "maxItems": 5,
+          "items": { "type": "string", "maxLength": 8 },
+          "description": "特点标签，卡片上展示（如 一顶到底 / 站桩硬顶）"
+        },
+        "tags": {
+          "type": "array", "items": { "type": "string" },
+          "description": "宝物流派标签（如 冰属性 / 雷击 / 暴击），见 schools.json"
+        },
+        "author": { "type": "string", "maxLength": 24, "description": "投稿人昵称" },
+        "source": { "type": "string", "description": "来源链接（社区原帖 / TapTap / 抖音等）" },
+        "updatedAt": { "type": "string", "description": "本流派最后更新日期 YYYY-MM-DD" },
+        "gameVersion": { "type": "string", "description": "本流派适用的游戏版本" },
+        "contributors": { "type": "array", "items": { "type": "string" } },
+
+        "dmgLabel": { "type": "string", "maxLength": 10, "description": "伤害指标名：单段伤害 / 秒伤" },
+        "dmg": { "type": "string", "maxLength": 12, "description": "数值，未知填 待补（不填则不显示该区块）" },
+
+        "tip": { "type": "string", "minLength": 6, "maxLength": 100, "description": "一句话玩法技巧（卡片展开 + 详情顶部）" },
+
+        "inscEff": { "type": "string", "description": "刻印效果原文" },
+        "resonance": {
+          "type": "object",
+          "required": ["code"],
+          "additionalProperties": false,
+          "properties": {
+            "code": { "type": "string", "pattern": "^[0-9]-[0-9]-[0-9]$", "description": "共鸣选择，如 2-1-2" },
+            "nodes": { "type": "array", "items": { "type": "string" }, "description": "各共鸣节点收益" }
+          }
+        },
+
+        "soulStones": {
+          "type": "array",
+          "items": {
+            "type": "object", "required": ["name"], "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string", "description": "词条名" },
+              "lv": { "type": "string", "description": "等级要求，如 Lv.10/10；不填显示 —" },
+              "eff": { "type": "string", "description": "效果说明" }
+            }
+          }
+        },
+        "soulPlan": {
+          "type": "array",
+          "items": {
+            "type": "object", "required": ["g", "items"], "additionalProperties": false,
+            "properties": {
+              "g": { "type": "string", "description": "分组名，如 提供增伤" },
+              "items": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+
+        "gear": {
+          "type": "object", "additionalProperties": false,
+          "properties": {
+            "weapon": { "$ref": "#/definitions/gearWeapon" },
+            "armor": { "$ref": "#/definitions/gearArmor" }
+          }
+        },
+        "weaponChoices": {
+          "type": "array", "items": { "$ref": "#/definitions/weaponChoice" },
+          "description": "推荐清单：核心 / 毕业 / 可选武器"
+        },
+        "transition": {
+          "type": "array", "items": { "$ref": "#/definitions/weaponChoice" },
+          "description": "过渡装，会合并进推荐清单并标注「过渡」"
+        },
+
+        "treasures": {
+          "type": "object", "additionalProperties": false,
+          "properties": {
+            "chaos": { "type": "array", "items": { "type": "string" }, "description": "混沌宝藏名称" },
+            "gold": { "type": "array", "items": { "type": "string" }, "description": "合成金宝藏名称" }
+          }
+        },
+        "treasureOrder": {
+          "type": "array", "items": { "$ref": "#/definitions/treasure" },
+          "description": "其他宝藏，按从上到下的顺序=拾取优先级（顺序已内含门槛逻辑）"
+        },
+        "treasureNotes": { "type": "array", "items": { "type": "string" }, "description": "宝藏取舍说明" },
+
+        "cursed": {
+          "type": "array",
+          "items": {
+            "type": "object", "required": ["name", "verdict"], "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string" },
+              "eff": { "type": "string", "description": "效果与诅咒副作用" },
+              "verdict": { "enum": ["净化", "不净化"], "description": "是否净化" }
+            }
+          }
+        },
+
+        "alchemy": {
+          "type": "array",
+          "items": {
+            "type": "object", "required": ["name"], "additionalProperties": false,
+            "properties": { "name": { "type": "string" }, "eff": { "type": "string" } }
+          }
+        },
+        "hunterItems": {
+          "type": "array",
+          "items": {
+            "type": "object", "required": ["name"], "additionalProperties": false,
+            "properties": { "name": { "type": "string" }, "eff": { "type": "string" } }
+          }
+        },
+
+        "nightmareList": {
+          "type": "array",
+          "items": {
+            "type": "object", "required": ["n"], "additionalProperties": false,
+            "properties": {
+              "n": { "type": "string", "description": "梦魇效果名" },
+              "p": { "type": "string", "description": "百分比，如 65%；不填显示 —" }
+            }
+          }
+        },
+
+        "combos": { "type": "array", "items": { "type": "string" }, "description": "连招要点" },
+        "core": { "type": "array", "items": { "type": "string" }, "description": "核心武器名（无 weaponChoices 时作为兜底）" }
+      }
+    },
+
+    "gearWeapon": {
+      "type": "object", "required": ["name"], "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string", "description": "单手武器 / 双手武器 / 法杖 …" },
+        "rarity": { "enum": ["普通", "优秀", "稀有", "史诗", "传奇"] },
+        "atk": { "type": "string", "description": "攻击力" },
+        "skill": { "type": "string", "description": "武器技能名" },
+        "cost": { "type": "string", "description": "技能法力消耗" },
+        "note": { "type": "string", "description": "一句话说明" },
+        "obtain": { "type": "string", "description": "获取方式" }
+      }
+    },
+    "gearArmor": {
+      "type": "object", "required": ["name"], "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string", "description": "轻甲 / 布甲 / 重甲" },
+        "rarity": { "enum": ["普通", "优秀", "稀有", "史诗", "传奇"] },
+        "attrs": { "type": "array", "items": { "type": "string" }, "description": "面板属性条目" },
+        "note": { "type": "string" },
+        "obtain": { "type": "string" }
+      }
+    },
+    "weaponChoice": {
+      "type": "object", "required": ["name", "tag"], "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "tag": { "enum": ["核心", "毕业", "过渡", "可选"] },
+        "note": { "type": "string" },
+        "obtain": { "type": "string" }
+      }
+    },
+    "treasure": {
+      "type": "object", "required": ["n", "r"], "additionalProperties": false,
+      "properties": {
+        "n": { "type": "string", "description": "宝藏名" },
+        "r": { "enum": ["普通", "优秀", "稀有", "史诗", "传奇"], "description": "稀有度" },
+        "t": { "enum": ["S", "R", "1", "2"], "description": "内部用：流派深度（界面上不显示，仅用于校验顺序合理性）" }
+      }
+    }
+  }
+}
