@@ -35,4 +35,5 @@ apps/server/prisma/generated/
 # ===== 运行时 / 不上公开仓库的内容 =====
 storage/
 data/submissions/
+data/runtime/
 data/ratings.json

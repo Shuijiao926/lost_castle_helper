@@ -1,6 +1,7 @@
-// 城堡助手数据模型
-// 说明：骨架阶段 DATABASE_URL 为空时不会连库，服务走 JSON 文件存储；
-//       配好 PostgreSQL 后执行 npm run db:push 即可启用。
+// 城堡助手数据模型（P4 才启用；P1 走 JSON 文件仓储）
+//
+// 目录结构说明：这里按「限界上下文」分区，
+// 与 src/modules/<上下文> 一一对应，方便将来拆分服务。
 
 generator client {
   provider = "prisma-client-js"
@@ -11,43 +12,112 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ============================================================
+// 图鉴上下文（catalog）：只读参考数据，采集器写入
+// ============================================================
+
+model WeaponType {
+  id    String @id // THW / SHW / STAFF / DB / BOW / FD / GUN / PL / KA
+  name  String
+  short String
+  forms Json? // 形态列表，如 ["重剑/大刀", "重斧/重锤"]
+  note  String @default("")
+  sort  Int    @default(0)
+
+  inscriptions Inscription[]
+  builds       Build[]
+
+  @@map("weapon_type")
+}
+
+model Inscription {
+  id           String @id
+  name         String
+  weaponTypeId String
+  kind         String @default("normal") // normal | hunter
+  effect       String @default("")
+  icon         String?
+  sort         Int    @default(0)
+
+  weaponType WeaponType @relation(fields: [weaponTypeId], references: [id])
+  builds     Build[]
+
+  @@index([weaponTypeId])
+  @@map("inscription")
+}
+
+model Treasure {
+  id       String  @id
+  name     String
+  rarity   String // 普通/优秀/稀有/史诗/传奇
+  depth    String? // S/R/1/2 —— 仅内部排序用，永不返回给客户端
+  classify String? // 宝物流派分类 id（school）
+  icon     String?
+  version  String  @default("")
+
+  @@index([rarity])
+  @@index([classify])
+  @@map("treasure")
+}
+
+model School {
+  id   String @id
+  name String
+  kind String @default("classify") // classify | rune
+
+  @@map("school")
+}
+
+/// 图鉴导入批次：便于回溯「这批数据来自哪次采集」
+model CatalogVersion {
+  id          Int      @id @default(autoincrement())
+  gameVersion String
+  source      String   @default("wiki")
+  importedAt  DateTime @default(now())
+  stats       Json?
+
+  @@map("catalog_version")
+}
+
+// ============================================================
+// 流派上下文（builds）：聚合根 Build
+// ============================================================
+
 enum BuildStatus {
-  DRAFT      // 编辑中
-  REVIEWING  // 待审核
-  PUBLISHED  // 已发布（客户端可见）
-  ARCHIVED   // 已下架
+  DRAFT
+  REVIEWING
+  PUBLISHED
+  ARCHIVED
 }
 
-enum SubmissionStatus {
-  PENDING
-  APPROVED
-  REJECTED
-}
-
-/// 流派主表：payload 存整条流派数据（与 data/builds.json 一条记录同构），
-/// 这样后台字段调整不会牵动数据库结构。
 model Build {
   id           String      @id
   name         String
-  weaponType   String      // THW/SHW/...
+  weaponTypeId String
   inscriptionId String
   author       String
+  status       BuildStatus @default(DRAFT)
   rating       Float       @default(0)
   votes        Int         @default(0)
-  status       BuildStatus @default(DRAFT)
   gameVersion  String
-  payload      Json
+  sourceType   String      @default("maintainer") // wiki|self-test|authorized-submission|pr|maintainer
+  sourceUrl    String?
+  license      String      @default("CC-BY-NC-SA-4.0")
+  payload      Json // 完整流派数据（8 个区块 + 内部字段）
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
 
-  versions  BuildVersion[]
-  ratings   Rating[]
+  weaponType  WeaponType      @relation(fields: [weaponTypeId], references: [id])
+  inscription Inscription     @relation(fields: [inscriptionId], references: [id])
+  versions    BuildVersion[]
+  ratings     Rating[]
 
   @@index([status])
-  @@index([weaponType])
+  @@index([weaponTypeId])
+  @@index([inscriptionId])
+  @@map("build")
 }
 
-/// 历史版本，支持回滚
 model BuildVersion {
   id        Int      @id @default(autoincrement())
   buildId   String
@@ -59,56 +129,87 @@ model BuildVersion {
   build Build @relation(fields: [buildId], references: [id], onDelete: Cascade)
 
   @@unique([buildId, version])
+  @@map("build_version")
 }
 
-/// 评分：同一 voterKey 对同一流派只保留最后一次
+// ============================================================
+// 投稿上下文（submissions）
+// ============================================================
+
+enum SubmissionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Submission {
+  id              String           @id
+  buildId         String
+  author          String
+  contact         String?
+  source          String?
+  sourceType      String           @default("authorized-submission")
+  licenseAccepted Boolean          @default(false)
+  status          SubmissionStatus @default(PENDING)
+  payload         Json
+  files           Json?
+  reviewNote      String?
+  reviewedAt      DateTime?
+  createdAt       DateTime         @default(now())
+
+  @@index([status])
+  @@map("submission")
+}
+
+// ============================================================
+// 评分上下文（ratings）
+// ============================================================
+
 model Rating {
-  id        Int      @id @default(autoincrement())
-  buildId   String
-  score     Float
-  voterKey  String
+  id       Int      @id @default(autoincrement())
+  buildId  String
+  score    Float
+  voterKey String
   createdAt DateTime @default(now())
 
   build Build @relation(fields: [buildId], references: [id], onDelete: Cascade)
 
   @@unique([buildId, voterKey])
   @@index([buildId])
+  @@map("rating")
 }
 
-/// 玩家投稿：截图等附件存文件服务，这里只存引用
-model Submission {
-  id         Int              @id @default(autoincrement())
-  buildId    String
-  author     String
-  contact    String?
-  status     SubmissionStatus @default(PENDING)
-  payload    Json
-  sourceUrl  String?
-  files      Json?            // [{ name, url, size }]
-  reviewNote String?
-  createdAt  DateTime         @default(now())
-  reviewedAt DateTime?
+// ============================================================
+// 发布上下文（publishing）
+// ============================================================
 
-  @@index([status])
-}
-
-/// 数据包：客户端热更新用。发布后客户端比对 version 决定是否拉取。
 model DataPackage {
   id          Int      @id @default(autoincrement())
-  version     String   @unique   // 如 1.0.1.3-r2
+  version     String   @unique // 如 1.0.1.3-r2
   gameVersion String
-  fileUrl     String             // GitHub Release / OSS 地址
-  fileHash    String             // sha256，客户端校验
+  fileUrl     String
+  fileHash    String
   size        Int
-  notes       String?
-  published   Boolean  @default(false)
-  createdAt   DateTime @default(now())
+  notes       String   @default("")
+  publishedAt DateTime @default(now())
+
+  @@index([publishedAt])
+  @@map("data_package")
 }
 
-/// 管理员（骨架阶段先用 ADMIN_TOKEN，正式版切账号）
-model Admin {
+// ============================================================
+// 资产上下文（assets）
+// ============================================================
+
+model Asset {
   id        Int      @id @default(autoincrement())
-  username  String   @unique
-  password  String   // bcrypt hash
+  kind      String // icon | screenshot | cover
+  filename  String
+  url       String
+  hash      String
+  size      Int
   createdAt DateTime @default(now())
+
+  @@unique([kind, filename])
+  @@map("asset")
 }

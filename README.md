@@ -22,7 +22,8 @@
 | 需求 / 交互 / 数据设计 | ✅ 完成并冻结（见 `文档/`） |
 | 可交互原型 | ✅ 完成（见 `文档/原型/index.html`） |
 | 数据格式与样例 | ✅ 完成（见 `data/`） |
-| 代码实现（M1 骨架） | 🚧 进行中：壳 + 托盘 + 气泡 + 热键 + 列表渲染已就位 |
+| 客户端（M1） | ✅ 可用：原生气泡 + 托盘 + 热键 + 卡片列表 |
+| 后端（P1） | ✅ 领域骨架可运行：查询 / 评分 / 投稿 / 审核 / 发布（JSON 仓储） |
 
 > M1 骨架可运行（需先 `npm i`），但**图标仍走 wiki CDN**、搜索/投稿页仍是占位。详见下方「运行」。
 
@@ -78,9 +79,22 @@ lost_castle_helper/
 │  │  ├─ native/bubble.ps1        原生分层窗口气泡（PowerShell + UpdateLayeredWindow）
 │  │  ├─ assets/                  图标（打包进客户端）
 │  │  └─ package.json
-│  ├─ server/                     后台服务（骨架，暂未启用）
-│  │  ├─ prisma/schema.prisma     6 张表
-│  │  ├─ src/                     app.js · config.js · plugins/ · modules/ · store/
+│  ├─ server/                     后台服务（P1：JSON 仓储，可独立运行）
+│  │  ├─ src/
+│  │  │  ├─ index.js              启动入口（只做装配 + 数据加载日志）
+│  │  │  ├─ app/                  组合根：config · container · http-server · auth · adapters
+│  │  │  ├─ api/                  ★ 接口公共定义：routes（路由表）· handlers · errors
+│  │  │  ├─ shared/               跨模块：logger · errors · event-bus · shared-kernel · json-database
+│  │  │  └─ modules/              ★ 每个目录 = 一个限界上下文
+│  │  │     ├─ catalog/           图鉴：武器 / 刻印 / 宝藏 / 流派分类
+│  │  │     ├─ builds/            流派聚合根 + 不变量
+│  │  │     ├─ submissions/       投稿与审核
+│  │  │     ├─ ratings/           评分
+│  │  │     ├─ publishing/        数据包版本与 hash
+│  │  │     └─ security/          安全管控：请求指纹 + 滑动窗口限流
+│  │  │        （模块内：domain / application / infrastructure）
+│  │  ├─ test/                    领域 + 安全 + HTTP 集成测试（28 个用例）
+│  │  ├─ prisma/schema.prisma     P4 数据模型（按上下文分区）
 │  │  ├─ .env.example
 │  │  └─ package.json
 │  └─ shared/                     前后端共用
@@ -90,6 +104,7 @@ lost_castle_helper/
 ├─ 文档/                          ★ 全部文档在这里
 │  ├─ 文档索引.md                 入口（阅读顺序）
 │  ├─ 方案总纲.md  需求说明.md  技术架构.md
+│  ├─ 数据源清单.md  数据源与采集.md  后端设计-DDD.md
 │  ├─ 数据填写指南.md  数据说明.md  贡献指南.md
 │  ├─ 后台架构.md  窗口渲染方案.md  客户端说明.md
 │  ├─ 服务端说明.md  共享层说明.md  脚本说明.md

@@ -2,22 +2,24 @@
   "name": "@lc2/server",
   "version": "0.1.0",
   "private": true,
-  "description": "城堡助手后台服务（骨架）：流派 / 投稿 / 评分 / 数据包。Node + Fastify + Prisma + PostgreSQL",
+  "description": "城堡助手后台：按限界上下文分模块（catalog/builds/submissions/ratings/publishing），模块内 DDD 分层",
   "type": "commonjs",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
+    "test": "node --test",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio"
   },
   "dependencies": {
-    "@prisma/client": "^6.1.0",
-    "fastify": "^5.2.0",
     "@fastify/cors": "^10.0.1",
     "@fastify/multipart": "^9.0.1",
-    "dotenv": "^16.4.7"
+    "@lc2/shared": "*",
+    "@prisma/client": "^6.1.0",
+    "dotenv": "^16.4.7",
+    "fastify": "^5.2.0"
   },
   "devDependencies": {
     "prisma": "^6.1.0"
