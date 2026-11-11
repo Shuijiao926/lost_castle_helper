@@ -19,8 +19,8 @@
 
 | 阶段 | 状态 |
 |---|---|
-| 需求 / 交互 / 数据设计 | ✅ 完成并冻结（见 `docs/`） |
-| 可交互原型 | ✅ 完成（见 `design/index.html`） |
+| 需求 / 交互 / 数据设计 | ✅ 完成并冻结（见 `文档/`） |
+| 可交互原型 | ✅ 完成（见 `文档/原型/index.html`） |
 | 数据格式与样例 | ✅ 完成（见 `data/`） |
 | 代码实现（M1 骨架） | 🚧 进行中：壳 + 托盘 + 气泡 + 热键 + 列表渲染已就位 |
 
@@ -33,13 +33,14 @@
 需要 Node.js 18+。
 
 ```bash
-npm install          # 首次，装 electron（约 100MB）
-npm start            # 启动
+npm install          # 仓库根执行，workspaces 一次装齐
+npm run desktop      # 启动客户端
+npm run server       # 另开终端，启动数据服务（骨架，需先装依赖）
 ```
 
 启动后：
 
-- 屏幕右侧中部出现一个 44×44 的**气泡**（圆形，渐变）
+- 屏幕右侧中部出现一个 72×72 的**圆形气泡**（原生分层窗口，彩色光环，悬停会转）
 - 按 **`Alt + \``** 展开 / 收起面板 → 面板会从气泡位置往左展开
 - 面板里用 `↑ ↓` 选流派、`Enter` 展开卡片、`D` 进详情、`F` 筛选、`H` 帮助
 - 关掉窗口等于退出；托盘图标（有图标时）可右键退出
@@ -60,35 +61,54 @@ npm run dist         # 产出 release/LC2Helper-0.1.0-portable.exe
 
 ## 仓库结构
 
+> 文档全部集中在 [`文档/`](文档/文档索引.md)，从[文档索引](文档/文档索引.md)开始看。
+> 各子目录下的 `README.md` 只是指路页（方便在 GitHub 点进目录时有说明），完整内容以 `文档/` 为准。
+
 ```
 lost_castle_helper/
-├─ docs/                    设计文档
-│  ├─ PROPOSAL.md           总纲：概念定义、信息架构、决策记录
-│  ├─ PRD.md                需求：功能清单 FR-01~13、优先级、验收标准
-│  ├─ ARCHITECTURE.md       架构：模块划分、热键方案、算法、打包
-│  └─ DATA.md               数据填写指南（给投稿者）
-├─ design/
-│  ├─ index.html            ★ 可交互原型（单文件，双击即开）
-│  └─ README.md             原型使用说明
-├─ data/                    数据
-│  ├─ schema.json           数据规范（JSON Schema）
-│  ├─ builds.json           流派数据
-│  ├─ weapons.json          9 大武器类型
-│  ├─ inscriptions.json     27 个刻印
-│  └─ schools.json          宝物流派标签
-├─ src/                     客户端源码
-│  ├─ main/index.js         主进程：窗口 / 托盘 / 全局热键 / IPC
-│  ├─ preload.js            contextBridge 白名单 API
-│  └─ renderer/index.html   界面（由 design/index.html 演化而来）
-├─ assets/                  图标等素材（待补）
-└─ package.json
+├─ apps/
+│  ├─ desktop/                    客户端（Electron）
+│  │  ├─ src/
+│  │  │  ├─ main/
+│  │  │  │  ├─ index.js           双窗口 / 热键 / IPC / 配置
+│  │  │  │  ├─ nativeBubble.js    原生气泡桥接（行协议 + 坐标换算 + 回退）
+│  │  │  │  └─ source.js          数据源：github | local | cache
+│  │  │  ├─ preload.js            contextBridge 白名单
+│  │  │  └─ renderer/index.html   界面（单文件，无构建链）
+│  │  ├─ native/bubble.ps1        原生分层窗口气泡（PowerShell + UpdateLayeredWindow）
+│  │  ├─ assets/                  图标（打包进客户端）
+│  │  └─ package.json
+│  ├─ server/                     后台服务（骨架，暂未启用）
+│  │  ├─ prisma/schema.prisma     6 张表
+│  │  ├─ src/                     app.js · config.js · plugins/ · modules/ · store/
+│  │  ├─ .env.example
+│  │  └─ package.json
+│  └─ shared/                     前后端共用
+│     ├─ schema/build.schema.json 数据规范
+│     └─ validate.js              校验器
+├─ data/                          种子数据（客户端内置 + 服务端初始化）
+├─ 文档/                          ★ 全部文档在这里
+│  ├─ 文档索引.md                 入口（阅读顺序）
+│  ├─ 方案总纲.md  需求说明.md  技术架构.md
+│  ├─ 数据填写指南.md  数据说明.md  贡献指南.md
+│  ├─ 后台架构.md  窗口渲染方案.md  客户端说明.md
+│  ├─ 服务端说明.md  共享层说明.md  脚本说明.md
+│  ├─ 图标说明.md  原型说明.md  图标方案对比.png
+│  └─ 原型/index.html             可点击原型（不参与打包）
+├─ scripts/                       数据校验 / 图标生成
+│  ├─ validate-data.js
+│  └─ make-icons.ps1
+├─ .github/workflows/validate.yml CI：数据 + 语法校验
+├─ .editorconfig  .nvmrc  .gitignore
+├─ package.json                   workspace 根
+└─ README.md  LICENSE  LICENSE-DATA
 ```
 
 ---
 
 ## 先看原型
 
-**双击 `design/index.html`** 直接用浏览器打开，不需要安装任何东西。
+**双击 `文档/原型/index.html`** 直接用浏览器打开，不需要安装任何东西。
 
 | 操作 | 效果 |
 |---|---|
@@ -122,7 +142,7 @@ lost_castle_helper/
 **5）机制藏在顺序里**
 游戏有"流派深度门槛"（先拿根级，1 级才会出）。界面上不解释机制，只把宝藏**按正确顺序**列出来——顺序本身就是答案。
 
-详见 [`docs/PROPOSAL.md`](docs/PROPOSAL.md)。
+详见 [`文档/方案总纲.md`](文档/方案总纲.md)。
 
 ---
 
@@ -130,9 +150,52 @@ lost_castle_helper/
 
 每个流派是一条 JSON 记录，包含：基本信息、玩法技巧与连招、伤害参考、武器刻印、灵魂石、武器衣服、宝藏、诅咒宝藏、炼金与猎人道具、梦魇加点。
 
-字段规范见 [`data/schema.json`](data/schema.json)，填写说明见 [`docs/DATA.md`](docs/DATA.md)。
+字段规范见 [`apps/shared/schema/build.schema.json`](apps/shared/schema/build.schema.json)，
+填写说明见 [`文档/数据填写指南.md`](文档/数据填写指南.md)，贡献流程见 [`文档/贡献指南.md`](文档/贡献指南.md)。
+
+本地校验：
+
+```bash
+node scripts/validate-data.js
+```
 
 **想投稿？** 在 `data/builds.json` 的 `builds` 数组里新增一条，提 PR 即可。
+
+---
+
+## 数据与文件存储
+
+当前**不依赖自建服务器**，数据与文件全部由 GitHub 承担：
+
+| 内容 | 位置 | 客户端如何拿到 |
+|---|---|---|
+| 流派数据 `data/*.json` | 本仓库 | 拉 `raw.githubusercontent.com/.../data/builds.json`，本地缓存 + sha256 校验 |
+| 图标 | `apps/desktop/assets/` | 打包进客户端（离线可用） |
+| 数据包版本 | `data/package.json`（可选） | 有则比对 version + hash 决定是否重下 |
+| 投稿截图（将来） | 对象存储（不入公开仓库） | 见下 |
+
+数据来源可在 `config.json` 切换：
+
+```jsonc
+{ "dataSource": "github" }   // github | local
+```
+
+开发时用 `LC2_DATA_SOURCE=local npm run desktop` 直接读本地 `data/`。
+失败时自动降级：GitHub → 本地缓存 → 内置种子数据，**断网也能用**。
+
+> 为什么截图不能走 GitHub：仓库是公开且永久的，玩家截图可能含个人信息，体积也会膨胀。
+> 所以截图从第一天就该走对象存储（或先存服务器本地、不入 git）。
+
+---
+
+## 后台（骨架，暂未启用）
+
+详见 [文档/后台架构.md](文档/后台架构.md)。
+
+- 技术栈：Node + Fastify + Prisma + PostgreSQL
+- 已建骨架：6 张表、全部路由、无数据库时自动降级为 JSON 文件存储
+- 什么时候启用：投稿量起来、需要审核队列与评分防刷时
+- 现阶段替代流程：投稿 = 提 PR 改 `data/builds.json`，审核 = review + merge
 
 ---
 

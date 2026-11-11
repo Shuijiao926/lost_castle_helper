@@ -1,6 +1,5 @@
 # 依赖
 node_modules/
-package-lock.json
 pnpm-lock.yaml
 yarn.lock
 
@@ -27,3 +26,13 @@ Thumbs.db
 *.local.json
 .env
 .env.local
+
+# ===== 服务端 =====
+apps/server/.env
+apps/server/node_modules/
+apps/server/prisma/generated/
+
+# ===== 运行时 / 不上公开仓库的内容 =====
+storage/
+data/submissions/
+data/ratings.json

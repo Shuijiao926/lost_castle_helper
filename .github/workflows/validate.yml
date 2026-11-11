@@ -1,0 +1,35 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 数据校验
+        run: node scripts/validate-data.js
+
+      - name: 文档内链检查
+        run: node scripts/check-links.js
+
+      - name: JS 语法检查
+        run: |
+          set -e
+          for f in $(git ls-files '*.js' | grep -v node_modules); do
+            node --check "$f"
+          done
+
+      - name: JSON 语法检查
+        run: |
+          set -e
+          for f in $(git ls-files '*.json' | grep -v node_modules); do
+            node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))"
+          done

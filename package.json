@@ -1,30 +1,18 @@
 {
   "name": "lc2-helper",
   "version": "0.1.0",
-  "description": "城堡助手 · 失落城堡2 流派速查（常驻托盘 + 热键浮窗，不抢游戏焦点）",
-  "main": "src/main/index.js",
-  "author": "Shuijiao926",
-  "license": "MIT",
   "private": true,
+  "description": "城堡助手 · 失落城堡2 流派速查（monorepo：桌面客户端 + 数据服务）",
+  "workspaces": [
+    "apps/*"
+  ],
   "scripts": {
-    "start": "electron .",
-    "dev": "electron . --dev",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "desktop": "npm run start -w @lc2/desktop",
+    "server": "npm run start -w @lc2/server",
+    "dist": "npm run dist -w @lc2/desktop",
+    "validate": "node scripts/validate-data.js"
   },
-  "devDependencies": {
-    "electron": "^33.0.0",
-    "electron-builder": "^25.1.8"
-  },
-  "build": {
-    "appId": "com.lc2helper.app",
-    "productName": "LC2 Helper",
-    "directories": { "output": "release" },
-    "files": ["src/**/*", "data/**/*", "assets/**/*", "package.json"],
-    "win": {
-      "target": ["portable", "zip"],
-      "icon": "assets/icon.ico"
-    },
-    "portable": { "artifactName": "LC2Helper-${version}-portable.exe" }
+  "engines": {
+    "node": ">=18"
   }
 }
