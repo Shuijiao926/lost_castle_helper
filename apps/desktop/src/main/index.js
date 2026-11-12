@@ -651,10 +651,28 @@ function disablePanelKeys() {
 }
 
 /* ---------------- 托盘 ---------------- */
+/**
+ * 托盘「显示气泡」：
+ *   - Electron 回落气泡如果被隐藏，先恢复显示
+ *   - 面板未打开则呼出；已打开则抬回前台
+ */
+function showBubbleAndPanel() {
+  if (bubbleWin && !bubbleWin.isDestroyed() && !bubbleWin.isVisible()) {
+    const b = config.bubble || defaultBubbleBounds();
+    bubbleWin.setBounds({ x: b.x, y: b.y, width: BUBBLE.w, height: BUBBLE.h });
+    bubbleWin.showInactive();
+  }
+  if (!panelOpen) showPanel();
+  else if (panelWin && !panelWin.isDestroyed()) {
+    try { panelWin.setAlwaysOnTop(true, 'screen-saver'); } catch {}
+  }
+}
+
 function createTray() {
   const candidates = [
+    path.join(ASSETS_DIR, 'tray-32.png'),   // 官方客户端图标提亮版（16/32px 可辨认）
+    path.join(ASSETS_DIR, 'tray-16.png'),
     path.join(ASSETS_DIR, 'icon-32.png'),
-    path.join(ASSETS_DIR, 'icon-64.png'),
     path.join(ASSETS_DIR, 'icon.png'),
   ];
   let img = nativeImage.createEmpty();
@@ -666,9 +684,8 @@ function createTray() {
   tray = new Tray(img);
   tray.setToolTip(`城堡助手${baseKey ? ' · ' + baseKey : ''}`);
   tray.setContextMenu(Menu.buildFromTemplate([
-    { label: `呼出面板 (${baseKey || '未注册'})`, click: togglePanel },
+    { label: '显示气泡', click: showBubbleAndPanel },
     { type: 'separator' },
-    { label: '打开数据目录', click: () => require('electron').shell.openPath(DATA_DIR) },
     { label: '退出', click: () => app.quit() },
   ]));
   tray.on('click', togglePanel);

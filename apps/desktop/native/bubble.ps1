@@ -309,8 +309,8 @@ public class Lc2Bubble : Form
         double cy = size / 2.0;
         double rIn = size * RingInnerRatio;
         double rOut = size * RingOuterRatio;
-        double v = hover ? 0.78 : 0.62;
-        double sat = hover ? 0.95 : 0.90;
+        double v = hover ? 0.92 : 0.76;
+        double sat = hover ? 1.0 : 0.95;
         int samples = SuperSample * SuperSample;
 
         for (int y = 0; y < size; y++)
