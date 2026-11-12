@@ -301,9 +301,10 @@
   body.electron.mode-panel{background:#15161c}
   body.electron.mode-panel .panel{
     position:fixed;inset:0;right:auto;top:auto;transform:none;
-    width:100%;height:100%;border-radius:0;animation:none;
+    width:100%;height:100%;border-radius:8px;animation:none;
     border-color:transparent;
-    box-shadow:none;
+    background:linear-gradient(180deg,#191b23 0%,#15161c 150px);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
     backface-visibility:hidden
   }
   body.electron.mode-bubble .panel{display:none!important}

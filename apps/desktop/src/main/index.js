@@ -71,13 +71,15 @@ const DEV_HOT = !app.isPackaged && process.env.LC2_HOT !== '0';
 const USE_PANEL_SHADOW = process.env.LC2_PANEL_SHADOW === '1';
 
 /**
- * 面板圆角
+ * 面板圆角模式
  *
- * 默认方形：圆角窗口的四角会透出背后的像素（游戏/文档），在浅色背景上
- * 表现为四个白点，观感很脏。方形 + 1px 系统描边最干净。
- * 需要圆角：LC2_PANEL_ROUND=1
+ *   auto（默认）：Win11 ROUNDSMALL（约 4px 小圆角）——比直角柔和，
+ *                 透底面积小，浅色背景下也几乎看不出白点
+ *   LC2_PANEL_ROUND=1：ROUND（约 8px 大圆角，四角透底更明显）
+ *   LC2_PANEL_ROUND=0：DONOTROUND（纯方角）
  */
-const PANEL_ROUND = process.env.LC2_PANEL_ROUND === '1';
+const PANEL_ROUND_ENV = (process.env.LC2_PANEL_ROUND || 'auto').toLowerCase();
+const PANEL_CORNER_PREF = PANEL_ROUND_ENV === '1' ? 2 : (PANEL_ROUND_ENV === '0' ? 1 : 3);
 const SHADOW_PAD = Math.max(8, Math.min(48, Number(process.env.LC2_SHADOW_PAD ?? 24)));
 
 /** 气泡实现：native（默认，Windows 分层窗口）| electron（旧的透明窗口，兜底） */
@@ -274,12 +276,12 @@ function setupPanelCorners() {
     log('getNativeWindowHandle failed:', e.message);
   }
 
-  panelShadow.setPanelCorner(hwndValue, PANEL_ROUND ? 2 : 1).then((ok) => {
+  panelShadow.setPanelCorner(hwndValue, PANEL_CORNER_PREF).then((ok) => {
     if (!panelWin || panelWin.isDestroyed()) return;
     if (ok) {
       panelCornersMode = 'dwm';
       try { panelWin.setShape([]); } catch {}
-      log('panel corners: dwm', PANEL_ROUND ? 'round' : 'square');
+      log('panel corners: dwm pref=' + PANEL_CORNER_PREF, PANEL_CORNER_PREF === 1 ? 'square' : (PANEL_CORNER_PREF === 2 ? 'round' : 'round-small'));
     } else {
       panelCornersMode = 'shape';
       if (USE_PANEL_SHADOW) panelShadow.setFill(true);
