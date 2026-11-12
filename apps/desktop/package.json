@@ -7,8 +7,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "electron .",
-    "dev": "electron . --dev",
+    "start": "chcp 65001 >nul && electron .",
+    "dev": "chcp 65001 >nul && electron . --dev",
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },

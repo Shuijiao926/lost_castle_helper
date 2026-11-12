@@ -9,6 +9,10 @@
     --ok:#5FAE7A; --hl:rgba(255,255,255,.07); --tag:#8b9ad4; --star:#E0B44A; --legend:#cf9440;
   }
   *{box-sizing:border-box}
+/* ---- 隐藏滚动条（保留滚轮滚动）---- */
+::-webkit-scrollbar{width:0;height:0}
+*{scrollbar-width:none;-ms-overflow-style:none}
+
   html,body{height:100%;margin:0}
   body{
     font:13.5px/1.65 "Microsoft YaHei","Segoe UI",sans-serif;color:var(--txt);
@@ -35,14 +39,61 @@
     background:var(--panel);border:1px solid var(--line);box-shadow:0 22px 60px rgba(0,0,0,.75);
     display:flex;flex-direction:column}
 
-  .hdr{display:flex;align-items:center;gap:8px;padding:13px 16px 6px}
-  .ttl{font-size:16px;font-weight:600;flex:1}
+  
+  /* 顶部边缘拖拽条（替代拖拽标题栏，避免误触与拖拽残影） */
+  .grip{height:14px;flex:none;display:flex;align-items:center;justify-content:center;
+    cursor:grab;user-select:none;touch-action:none}
+  .grip:active{cursor:grabbing}
+  .grip i{display:block;width:42px;height:4px;border-radius:2px;background:rgba(255,255,255,.16);
+    transition:background .16s ease,width .16s ease}
+  .grip:hover i{background:rgba(255,255,255,.28);width:52px}
+
+.hdr{display:flex;align-items:center;gap:8px;padding:13px 16px 6px}
+  .ttl{font-size:15.5px;font-weight:600;flex:1;letter-spacing:.2px}
+
+/* ---- 标题栏图标按钮（统一尺寸 / 单色 / 交互反馈）---- */
+.hbtns{display:flex;align-items:center;gap:7px;margin-left:auto}
+.fbtn.icon{
+  width:29px;height:29px;padding:0;display:flex;align-items:center;justify-content:center;
+  border-radius:8px;font-size:15px;line-height:1;font-weight:600;
+  font-family:"Segoe UI Symbol","Segoe UI",system-ui,sans-serif;
+  color:#9aa5bd;background:rgba(255,255,255,.025);
+  transition:background .16s ease,border-color .16s ease,color .16s ease,transform .1s cubic-bezier(.22,1,.36,1),box-shadow .16s ease;
+  user-select:none
+}
+.fbtn.icon:hover{background:#252c3c;color:#e8eeff;border-color:#48557a;box-shadow:0 2px 10px rgba(0,0,0,.28);transform:translateY(-1px)}
+.fbtn.icon:active{transform:scale(.92);background:#202634}
+.fbtn.icon.on{background:#2c3346;color:#fff;border-color:#3b4560;box-shadow:inset 0 0 0 1px rgba(139,154,212,.18)}
+.fbtn.pin.on{background:#26313f;color:#cfe0ff;border-color:#45557a}
+
+@keyframes m-press{0%{transform:scale(1)}40%{transform:scale(.9)}100%{transform:scale(1)}}
+
+.fbtn.icon.m-press{animation:m-press .22s cubic-bezier(.22,1,.36,1)}
+  .searchbar.m-press{animation:m-press .22s cubic-bezier(.22,1,.36,1)}
+
   .back{font-size:13px;color:#93b6ea;cursor:pointer}
-  .fbtn{font-size:12px;border:1px solid var(--line);border-radius:6px;padding:4px 11px;color:var(--dim);cursor:pointer;white-space:nowrap}
-  .fbtn.on{background:#2c3346;color:#fff;border-color:#3b4560}
-  .searchbar{padding:8px 16px}
-  .searchbar input{width:100%;background:#1e212a;border:1px solid var(--line);border-radius:8px;
-    padding:8px 12px;color:var(--txt);font-size:12.5px;outline:none}
+
+  .searchbar{display:flex;align-items:center;gap:8px;height:38px;margin:6px 14px 2px;padding:0 10px 0 12px;
+    background:#1e212a;border:1px solid var(--line);border-radius:9px;cursor:text;
+    transition:background .16s ease,border-color .16s ease,box-shadow .16s ease}
+  .searchbar:hover{background:#222633;border-color:#3a4560}
+  .searchbar.on,.searchbar.searching{border-color:#4a5b80;background:#252e3f;box-shadow:0 0 0 2px rgba(90,111,168,.14)}
+  .searchbar .sico{flex:0 0 16px;width:16px;height:16px;display:flex;flex-direction:column;justify-content:center;gap:3px;
+    color:#7f8798;cursor:pointer;border-radius:4px}
+  .searchbar .sico i{display:block;height:1.5px;width:13px;border-radius:1px;background:currentColor;margin:0 auto}
+  .searchbar .sico:hover{color:#cfd8ee}
+  .searchbar .schev{flex:0 0 16px;width:16px;height:16px;position:relative;color:#7f8798;cursor:pointer;border-radius:4px}
+  .searchbar .schev::before{content:'';position:absolute;left:50%;top:42%;width:6px;height:6px;
+    border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;
+    transform:translate(-50%,-50%) rotate(45deg);transition:transform .2s cubic-bezier(.22,1,.36,1)}
+  .searchbar.open .schev::before{transform:translate(-50%,-30%) rotate(225deg)}
+  .searchbar .schev:hover{color:#cfd8ee}
+  .searchbar input{flex:1;min-width:0;height:100%;background:transparent;border:0;padding:0;margin:0;
+    color:var(--txt);font-size:12.5px;font-family:inherit;line-height:normal;outline:none;
+    pointer-events:auto;cursor:text}
+  .searchbar input::placeholder{color:#606880}
+  .searchbar.m-press{animation:m-press .22s cubic-bezier(.22,1,.36,1)}
+
   .searchbar input::placeholder{color:#606880}
   .tabs{display:flex;gap:8px;padding:2px 16px 9px;border-bottom:1px solid var(--line)}
   .tab{padding:4px 13px;border-radius:6px;color:var(--dim);cursor:pointer;font-size:12.5px}
@@ -50,8 +101,6 @@
 
   .feed{flex:1;overflow-y:auto;padding:12px 14px 16px;display:block}
   .detail{flex:1;overflow-y:auto;padding:14px 16px 20px;display:none}
-  .feed::-webkit-scrollbar,.detail::-webkit-scrollbar{width:7px}
-  .feed::-webkit-scrollbar-thumb,.detail::-webkit-scrollbar-thumb{background:#333a4a;border-radius:4px}
 
   /* 图标基元 */
   .ic{position:relative;display:inline-flex;flex:none;align-items:center;justify-content:center;border-radius:50%;
@@ -191,6 +240,13 @@
   /* 筛选弹层 */
   .modal{position:absolute;inset:0;background:rgba(6,7,10,.6);display:none;flex-direction:column;justify-content:flex-end}
   .modal.on{display:flex}
+/* 筛选弹层：从搜索栏下拉 */
+  #modal{justify-content:flex-start;background:rgba(6,7,10,.42)}
+  #modal .msheet{width:calc(100% - 28px);margin:76px 14px 0;border-radius:12px;
+    border:1px solid var(--line);box-shadow:0 18px 40px rgba(0,0,0,.5);
+    max-height:calc(100% - 104px);border-radius:12px}
+  @keyframes m-drop-in{from{opacity:0;transform:translateY(-10px) scale(.985)}to{opacity:1;transform:none}}
+  #modal.on .msheet{animation:m-drop-in .22s cubic-bezier(.22,1,.36,1) both}
   .msheet{background:#1a1c24;border-radius:14px 14px 0 0;height:auto;max-height:62%;
     display:flex;flex-direction:column;border-top:1px solid var(--line);box-shadow:0 -10px 30px rgba(0,0,0,.5)}
   .mh{display:flex;align-items:center;padding:11px 16px;border-bottom:1px solid var(--line);font-size:13px}
@@ -237,6 +293,40 @@
 
   .foot{border-top:1px solid var(--line);padding:9px 16px;font-size:11px;color:#767e94;display:flex;gap:14px;flex-wrap:wrap}
   .foot b{color:#a3b2d4;font-weight:600}
+
+
+/* ---- 按钮交互反馈（hover / 按下 / 键盘触发）---- */
+.det{transition:background .16s ease,border-color .16s ease,color .16s ease,transform .1s cubic-bezier(.22,1,.36,1)}
+.det:hover{background:#2c3a55;border-color:#4a5b80;color:#cfe0ff}
+.det:active{transform:scale(.95)}
+.act{transition:transform .12s cubic-bezier(.22,1,.36,1),color .16s ease}
+.act:hover{transform:scale(1.18)}
+.act:active{transform:scale(.88)}
+
+/* ================= 动效层（统一节奏与缓动） ================= */
+:root{--m1:150ms;--m2:230ms;--m3:330ms;--me:cubic-bezier(.22,1,.36,1)}
+@keyframes m-panel-in{from{opacity:0;transform:translateY(12px) scale(.988)}to{opacity:1;transform:none}}
+@keyframes m-view-in{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
+@keyframes m-view-back{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:none}}
+@keyframes m-item-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes m-modal-in{from{opacity:0;transform:translateY(10px) scale(.975)}to{opacity:1;transform:none}}
+@keyframes m-toast-in{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes m-pop{0%{transform:scale(.8)}55%{transform:scale(1.12)}100%{transform:scale(1)}}
+
+.panel{transform-origin:50% 50%}
+.panel.m-panel-in{animation:m-panel-in var(--m3) var(--me) both}
+#feed.m-view-in{animation:m-view-in var(--m2) var(--me) both}
+#feed.m-view-back{animation:m-view-back var(--m2) var(--me) both}
+#detail.m-view-in{animation:m-view-in var(--m2) var(--me) both}
+.card{transition:border-color var(--m2) ease,background var(--m2) ease,transform var(--m1) var(--me),box-shadow var(--m2) ease}
+.card:hover{transform:translateY(-1px)}
+.card.is-active{box-shadow:0 8px 22px rgba(0,0,0,.30)}
+.card.m-item-in{animation:m-item-in var(--m2) var(--me) both;animation-delay:calc(var(--i,0)*24ms)}
+.card.m-expanding .sec,.card.m-expanding .tip,.card.m-expanding .chips,.card.m-expanding .footline{animation:m-item-in var(--m2) var(--me) both}
+.modal.on .msheet{animation:m-modal-in var(--m2) var(--me) both}
+.toast.on{animation:m-toast-in var(--m2) var(--me) both}
+.m-pop{animation:m-pop 260ms var(--me)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
@@ -249,11 +339,17 @@
     <div class="hdr">
       <span class="back" id="back" style="display:none">← 返回</span>
       <div class="ttl" id="ttl">城堡助手</div>
-      <div class="fbtn" id="hbtn">? 帮助</div>
-      <div class="fbtn" id="fbtn">⚙ 筛选</div>
-      <div class="fbtn" id="sbtn">✎ 投稿</div>
+<div class="hbtns">
+<div class="fbtn icon pin" id="pinbtn" title="置顶（P）：点击外部不收起" aria-label="置顶">⤒</div>
+<div class="fbtn icon" id="hbtn" title="帮助（H）" aria-label="帮助">?</div>
+<div class="fbtn icon" id="sbtn" title="投稿（I）" aria-label="投稿">✎</div>
+</div>
     </div>
-    <div class="searchbar" id="sbar"><input id="q" placeholder="搜索流派名 / 别名 / 武器 / 宝藏"></div>
+    <div class="searchbar" id="sbar" title="点击输入关键词；☰ 或 F 打开筛选">
+  <span class="sico" id="fopen" title="筛选（F）"><i></i><i></i><i></i></span>
+  <input id="q" placeholder="搜索流派 / 别名 / 武器 / 宝藏" autocomplete="off" spellcheck="false">
+  <span class="schev" id="fchev" title="筛选（F）"></span>
+</div>
     <div class="feed" id="feed"></div>
     <div class="detail" id="detail"></div>
     <div class="toast" id="toast"></div>
@@ -269,8 +365,11 @@
             <div class="hrow"><b>←</b><span>收起卡片 / 详情页返回列表</span></div>
             <div class="hrow"><b>D</b><span>打开 / 关闭流派详情页</span></div>
             <div class="hrow"><b>F</b><span>打开筛选（武器 / 刻印 / 标签 + 排序）</span></div>
+<div class="hrow"><b>点击搜索栏</b><span>输入关键词搜索；Esc 退出输入（平时不抢焦点）</span></div>
             <div class="hrow"><b>I</b><span>投稿入口</span></div>
             <div class="hrow"><b>H</b><span>打开本帮助</span></div>
+<div class="hrow"><b>P</b><span>置顶（点击外部不收起面板）</span></div>
+
             <div class="hrow"><b>Esc</b><span>逐级退出（详情 → 列表 → 清筛选 → 收起）</span></div>
             <div class="hrow"><b>`</b><span>收起 / 呼出面板</span></div>
           </div>
@@ -278,7 +377,7 @@
           <div class="hnote">
             · 游戏内请使用<b>「窗口化 / 无边框窗口」</b>模式，独占全屏盖不住浮窗（系统限制）<br>
             · 列表卡片右侧 <b>☆</b> 打分、<b>♡</b> 收藏；打分只在列表页做<br>
-            · 面板<b>不抢焦点</b>，呼出与收起不会让游戏暂停或最小化<br>
+            · 面板<b>平时不抢焦点</b>；点搜索栏或筛选搜索框时临时获焦用于输入，退出输入立即交还焦点<br>
             · 详情页的宝藏按从上到下的顺序拿即可，不用记规则<br>
             · 数据由玩家社区维护，每条都标注适用版本与来源，版本不符会提示过期<br>
             · 本工具不读游戏内存、不修改游戏文件，联机也能用
@@ -508,7 +607,7 @@ const ALL_TAGS=(()=>{const m=new Map();BUILDS.forEach(b=>(b.tags||[]).forEach(t=
 /* ================= 状态 ================= */
 const state={sort:'hot',view:'feed',detailId:null,expanded:{},cur:'',owned:new Set(),myVote:{},
   favs:new Set(),ratingOpen:null,
-  q:'',tag:null,filterW:null,filterI:null,modal:false,seg:'w',sideSel:null,mq:''};
+  q:'',focusedInput:false,dormant:false,tag:null,filterW:null,filterI:null,modal:false,seg:'w',sideSel:null,mq:''};
 
 /* ================= 工具 ================= */
 const esc=s=>String(s==null?'':s).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
@@ -521,7 +620,7 @@ function matched(b){
   if(state.filterI&&b.insc!==state.filterI)return false;
   if(state.tag&&!(b.tags||[]).includes(state.tag))return false;
   if(state.q){const q=state.q.toLowerCase();
-    const hay=[b.name,...(b.alias||[]),...(b.tags||[]),...(b.core||[]),...(b.features||[]),wName(b.wt),inscName(b.insc)].join(' ').toLowerCase();
+    const hay=[b.name,...(b.aliases||[]),...(b.alias||[]),...(b.tags||[]),...(b.core||[]),...(b.features||[]),wName(b.wt),inscName(b.insc),b.author||'',...((b.treasureOrder||[]).map(x=>x.n||''))].join(' ').toLowerCase();
     if(!hay.includes(q))return false;}
   return true;
 }
@@ -554,17 +653,36 @@ const tierCls=t=>t==='R'?'tR':(t==='1'?'t1':'t2');
 /* ================= DOM ================= */
 const $=id=>document.getElementById(id);
 const elFeed=$('feed'),elDetail=$('detail'),elTabs=$('tabs'),elSbar=$('sbar'),elBack=$('back'),
-      elTtl=$('ttl'),elModal=$('modal'),elGrid=$('mgrid'),elFbtn=$('fbtn'),
+      elTtl=$('ttl'),elModal=$('modal'),elGrid=$('mgrid'),elFbtn=$('sbar'),
       elPanel=$('panel'),elBubble=$('bubble'),elTip=$('bubbleTip');
+
+
+/* ===== 搜索焦点：面板默认不抢焦点，输入时才临时获焦 ===== */
+function acquireFocusInput(el){
+  state.focusedInput = true;
+  var sb=document.getElementById('sbar');
+  if(sb && el && el.id==='q') sb.classList.add('searching');
+  if(typeof window.lc2!=='undefined' && window.lc2.searchFocus) window.lc2.searchFocus(true);
+  setTimeout(function(){ try{ el.focus(); }catch(e){} }, 20);
+  setTimeout(function(){ try{ if(document.activeElement!==el) el.focus(); }catch(e){} }, 90);
+}
+function releaseFocusInput(){
+  if(!state.focusedInput) return;
+  state.focusedInput = false;
+  var sb=document.getElementById('sbar');
+  if(sb) sb.classList.remove('searching');
+  var ae=document.activeElement;
+  if(ae && ae.blur) { try{ ae.blur(); }catch(e){} }
+  if(typeof window.lc2!=='undefined' && window.lc2.searchFocus) window.lc2.searchFocus(false);
+}
 
 function render(){
   const isFeed=state.view==='feed';
   elFeed.style.display=isFeed?'block':'none';
   elDetail.style.display=isFeed?'none':'block';
-  elSbar.style.display=isFeed?'block':'none';
+  elSbar.style.display=isFeed?'flex':'none';
   elBack.style.display=isFeed?'none':'inline';
   /* 详情页：隐藏「帮助 / 筛选 / 投稿 / 标题」，只留返回 */
-  elFbtn.style.display=isFeed?'':'none';
   $sbtn.style.display=isFeed?'':'none';
   $hbtn.style.display=isFeed?'':'none';
   elTtl.style.display=isFeed?'':'none';
@@ -796,8 +914,14 @@ elBack.onclick=closeDetail;
 
 /* 筛选 */
 function openModal(){state.modal=true;state.mq='';$('mq').value='';
-  elModal.classList.add('on');renderModal();}
-function closeModal(){state.modal=false;elModal.classList.remove('on');}
+  elModal.classList.add('on');
+    var sb=document.getElementById('sbar'); if(sb) sb.classList.add('open');
+    renderModal();}
+function closeModal(){
+    state.modal=false;elModal.classList.remove('on');
+    var sb=document.getElementById('sbar'); if(sb) sb.classList.remove('open');
+    if(state.focusedInput) releaseFocusInput();
+  }
 function cell(key,label,sub,on){
   return '<div class="mg'+(on?' on':'')+'" data-k="'+esc(key)+'">'
     +ic(key,label,'s46',RC['传奇'])
@@ -826,7 +950,23 @@ function renderModal(){
     elGrid.querySelectorAll('.mg').forEach(n=>{n.onclick=()=>{const k=n.dataset.k;state.filterI=(state.filterI===k?null:k);renderModal();};});
   }
 }
-elFbtn.onclick=openModal;
+elFbtn.onclick=(ev)=>{
+  const t=ev.target;
+  if(t && t.closest && (t.closest('#fopen') || t.closest('#fchev'))){ releaseFocusInput(); openModal(); return; }
+  acquireFocusInput($('q'));
+};
+const $pinbtn=$('pinbtn');
+$pinbtn.onclick=()=>{
+  __mPress($pinbtn);
+  if(typeof window.lc2!=='undefined' && window.lc2.pinToggle){ window.lc2.pinToggle(); }
+  else { const on=$pinbtn.classList.toggle('on'); showToast(on?'已置顶：点击外部不收起':'已取消置顶'); }
+};
+if(typeof window.lc2!=='undefined' && window.lc2.onPin){
+  window.lc2.onPin(function(p){
+    $pinbtn.classList.toggle('on',!!p);
+    showToast(p?'已置顶：点击外部不收起':'已取消置顶');
+  });
+}
 
 /* 排序（在筛选弹层里） */
 function syncSortUI(){
@@ -863,22 +1003,48 @@ elModal.onclick=ev=>{if(ev.target===elModal)closeModal();};
 document.querySelectorAll('.mseg div').forEach(d=>{d.onclick=()=>{state.seg=d.dataset.seg;
   document.querySelectorAll('.mseg div').forEach(x=>x.classList.toggle('on',x.dataset.seg===state.seg));renderModal();};});
 $('mq').addEventListener('input',e=>{state.mq=e.target.value;renderModal();});
-$('q').addEventListener('input',e=>{state.q=e.target.value;render();});
-['q','mq'].forEach(id=>$(id).addEventListener('keydown',e=>e.stopPropagation()));
+$('q').addEventListener('input',e=>{state.q=e.target.value;render();fbtnState();});
+$('q').addEventListener('blur',()=>{
+  var sb=document.getElementById('sbar'); if(sb) sb.classList.remove('searching');
+});
+$('q').addEventListener('keydown',e=>{
+  if(e.key==='Escape'){ e.preventDefault(); e.stopPropagation();
+    if(state.q){ state.q=''; e.target.value=''; render(); fbtnState(); }
+    else e.target.blur();
+  } else if(e.key==='Enter'){ e.preventDefault(); e.stopPropagation(); e.target.blur(); }
+});
+$('mq').addEventListener('keydown',e=>{
+    if(e.key==='Escape'){ e.preventDefault(); e.stopPropagation(); closeModal(); }
+  });
+  var msearchEl=document.querySelector('.msearch'); if(msearchEl) msearchEl.addEventListener('click',()=>acquireFocusInput($('mq')));
 function fbtnState(){
   const p=[];if(state.filterW)p.push(wName(state.filterW));
   if(state.filterI)p.push(inscName(state.filterI).replace('刻印',''));
   if(state.tag)p.push(state.tag);
   if(state.sort==='rating')p.push('评分');
   elFbtn.classList.toggle('on',p.length>0);
-  elFbtn.textContent=p.length?('⚙ '+p.join('·')):'⚙ 筛选';
+  const inp=$('q');
+  if(inp) inp.placeholder = p.length ? ('已筛选：'+p.join(' · ')+'（点此搜索或调整）') : '搜索流派 / 别名 / 武器 / 宝藏';
   syncSortUI();
 }
-elBubble.onclick=()=>{elPanel.classList.remove('hidden');elBubble.classList.add('hidden');elTip.classList.add('hidden');};
+elBubble.onclick=()=>{elPanel.classList.remove('hidden');elBubble.classList.add('hidden');elTip.classList.add('hidden');
+setTimeout(__mPanelIn,30);};
+
+/* 面板休眠时点击任意位置唤醒（捕获阶段，先恢复焦点再处理点击） */
+if (typeof window.lc2 !== 'undefined' && window.lc2) {
+  document.addEventListener('mousedown', () => {
+    if (state.dormant) {
+      state.dormant = false;
+      if (window.lc2.activatePanel) window.lc2.activatePanel();
+    }
+  }, true);
+}
 
 /* 键盘 */
 document.addEventListener('keydown',e=>{
   const k=e.key;
+  const tag=(e.target&&e.target.tagName)||'';
+  if(tag==='INPUT') return;   // 输入框自己处理键盘
   if(k==='`'){e.preventDefault();const hid=elPanel.classList.toggle('hidden');
     elBubble.classList.toggle('hidden',!hid);elTip.classList.toggle('hidden',!hid);return;}
   if(elPanel.classList.contains('hidden'))return;
@@ -893,9 +1059,13 @@ document.addEventListener('keydown',e=>{
     else if(state.q){state.q='';$('q').value='';render();}
     else if(state.tag){state.tag=null;render();fbtnState();}
     return;}
-  if(k==='f'||k==='F'){e.preventDefault();if(state.view==='feed')openModal();return;}
-  if(k==='i'||k==='I'){e.preventDefault();if(state.view==='feed')$sbtn.click();return;}
-  if(k==='h'||k==='H'){e.preventDefault();openHelp();return;}
+  if(k==='f'||k==='F'){e.preventDefault();__mPress($('sbar'));if(state.view==='feed')openModal();return;}
+  if(k==='i'||k==='I'){e.preventDefault();__mPress($('sbtn'));if(state.view==='feed')$sbtn.click();return;}
+  if(k==='h'||k==='H'){e.preventDefault();__mPress($('hbtn'));openHelp();return;}
+  if(k==='p'||k==='P'){e.preventDefault();__mPress($('pinbtn'));
+    if(typeof window.lc2!=='undefined'&&window.lc2.pinToggle){ window.lc2.pinToggle(); }
+    else { const on=$('pinbtn').classList.toggle('on'); showToast(on?'已置顶：点击外部不收起':'已取消置顶'); }
+    return;}
   if(k==='d'||k==='D'){e.preventDefault();state.view==='feed'?openDetail(state.cur):closeDetail();return;}
   if(k==='ArrowDown'||k==='ArrowUp'){
     if(state.view==='detail'){elDetail.scrollTop+=(k==='ArrowDown'?80:-80);e.preventDefault();return;}
@@ -910,6 +1080,93 @@ document.addEventListener('keydown',e=>{
 
 state.cur=BUILDS[0].id;
 render();fbtnState();
+
+/* ================= 动效层（统一接管进出场） ================= */
+var __mReduce = false;
+try { __mReduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e){}
+
+
+/* 键盘触发按钮时给一次按压反馈（鼠标按下已有 :active） */
+function __mPress(el){
+  if(!el || __mReduce) return;
+  el.classList.remove('m-press');
+  void el.offsetWidth;
+  el.classList.add('m-press');
+}
+
+function __mReplay(el, cls){
+  if(!el || __mReduce) return;
+  el.classList.remove(cls);
+  void el.offsetWidth;              /* 强制回流，让动画可重播 */
+  el.classList.add(cls);
+}
+function __mStagger(root){
+  if(!root || __mReduce) return;
+  var cards = root.querySelectorAll('.card');
+  for(var i=0;i<cards.length && i<16;i++){
+    cards[i].style.setProperty('--i', String(i));
+    cards[i].classList.add('m-item-in');
+  }
+}
+function __mPanelIn(){
+  var p=document.getElementById('panel');
+  if(!p || p.classList.contains('hidden')) return;
+  __mReplay(p,'m-panel-in');
+  __mStagger(document.getElementById('feed'));
+}
+
+/* 详情进出场：进入右滑，返回左滑 */
+var __openDetail = openDetail;
+openDetail = function(id){
+  __openDetail(id);
+  __mReplay(document.getElementById('detail'),'m-view-in');
+};
+var __closeDetail = closeDetail;
+closeDetail = function(){
+  __closeDetail();
+  __mReplay(document.getElementById('feed'),'m-view-back');
+};
+
+/* 卡片展开：新增区块淡入上移 */
+var __toggleExpand = toggleExpand;
+toggleExpand = function(id){
+  __toggleExpand(id);
+  if(state.expanded[id]){
+    var c=document.querySelector('.card[data-bid="'+id+'"]');
+    if(c) __mReplay(c,'m-expanding');
+  }
+};
+
+/* 收藏：爱心弹一下 */
+var __toggleFav = toggleFav;
+toggleFav = function(id){
+  __toggleFav(id);
+  var el=document.querySelector('.card[data-bid="'+id+'"] .act.fav');
+  if(el) __mReplay(el,'m-pop');
+};
+
+/* 筛选确认后列表重新入场 */
+window.__mStaggerNext = false;
+var __render = render;
+render = function(){
+  __render.apply(null, arguments);
+  if(window.__mStaggerNext){
+    window.__mStaggerNext = false;
+    __mStagger(document.getElementById('feed'));
+  }
+};
+var __closeModal = closeModal;
+closeModal = function(){
+  window.__mStaggerNext = state.modal;
+  __closeModal();
+};
+
+/* 打分星点按弹一下（事件委托，不侵入原逻辑） */
+document.addEventListener('click', function(ev){
+  var rp = ev.target && ev.target.closest ? ev.target.closest('.rp') : null;
+  if(rp) __mReplay(rp,'m-pop');
+}, true);
+
 </script>
 </body>
 </html>

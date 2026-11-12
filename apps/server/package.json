@@ -6,8 +6,8 @@
   "type": "commonjs",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "node --watch src/index.js",
+    "start": "chcp 65001 >nul && node src/index.js",
+    "dev": "chcp 65001 >nul && node --watch src/index.js",
     "test": "node --test",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",

@@ -12,7 +12,9 @@
     "dist": "npm run dist -w @lc2/desktop",
     "validate": "node scripts/validate-data.js",
     "test:server": "npm test -w @lc2/server",
-    "test": "npm run validate && npm run test:server"
+    "test": "npm run validate && npm run test:server",
+    "server:dev": "npm run dev -w @lc2/server",
+    "desktop:hot": "npm run start -w @lc2/desktop"
   },
   "engines": {
     "node": ">=18"

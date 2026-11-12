@@ -27,6 +27,24 @@ contextBridge.exposeInMainWorld('lc2', {
   /** 请求关闭面板 */
   requestClose: () => ipcRenderer.send('lc2:closePanel'),
 
+  /* ---- 搜索/筛选时临时获焦（输入框需要键盘） ---- */
+  searchFocus: (on) => ipcRenderer.send('lc2:searchFocus', !!on),
+  /** 面板休眠（被点到外部后不接收键盘）→ 点击面板时唤醒 */
+  activatePanel: () => ipcRenderer.send('lc2:activatePanel'),
+  onDormant: (cb) => {
+    const h = (_e, v) => cb(v);
+    ipcRenderer.on('lc2:dormant', h);
+    return () => ipcRenderer.removeListener('lc2:dormant', h);
+  },
+
+  /* ---- 置顶（点击外部不收起） ---- */
+  pinToggle: () => ipcRenderer.send('lc2:pinToggle'),
+  onPin: (cb) => {
+    const h = (_e, pinned) => cb(pinned);
+    ipcRenderer.on('lc2:pin', h);
+    return () => ipcRenderer.removeListener('lc2:pin', h);
+  },
+
   /* ---- 气泡拖拽 ---- */
   dragStart: (sx, sy) => ipcRenderer.send('lc2:dragStart', {sx, sy}),
   dragMove: (sx, sy) => ipcRenderer.send('lc2:dragMove', {sx, sy}),

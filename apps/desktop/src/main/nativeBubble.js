@@ -69,6 +69,8 @@ function start(opts = {}) {
     '-Size', String(size),
     '-X', String(px),
     '-Y', String(py),
+    // parent pid: helper self-closes if Electron dies (no orphan bubbles)
+    '-ParentPid', String(process.pid),
   ];
 
   log('spawn size=' + size + ' scale=' + scale);

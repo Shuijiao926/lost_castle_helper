@@ -20,6 +20,7 @@ param(
   [int]$Size = 90,
   [int]$X = 100,
   [int]$Y = 100,
+  [int]$ParentPid = 0,
   [string]$Preview = '',
   [switch]$GenerateOnly
 )
@@ -95,6 +96,14 @@ public class Lc2Bubble : Form
 
     private readonly System.Windows.Forms.Timer timer;
     private float angle;
+    
+    /* ring animation: slow idle spin, fast on hover */
+    private bool hovering;
+    private int tickCount;
+    private const int IdleInterval = 60;     // ms
+    private const float IdleStep = 2.4f;    // deg/tick -> ~9s per turn (visible but slow)
+    private const int HoverInterval = 33;   // ms
+    private const float HoverStep = 7f;     // deg/tick -> ~1.7s per turn
 
     private bool dragging;
     private bool moved;
@@ -495,33 +504,57 @@ public class Lc2Bubble : Form
     {
         base.OnHandleCreated(e);
         Compose(0f, false);
+        timer.Interval = IdleInterval;
+        timer.Start();
         Console.WriteLine("READY");
         Console.Out.Flush();
     }
 
-    /* ---------------- hover animation ---------------- */
+    /* ---------------- 光环动画：默认慢转，悬停加速 ---------------- */
+
+    private bool IsCursorInside()
+    {
+        Rectangle r = ClientRectangle;
+        r.Inflate(4, 4);   // small tolerance so hovering does not flicker at the edge
+        return r.Contains(PointToClient(Cursor.Position));
+    }
+
+    private void SetHovering(bool value)
+    {
+        if (hovering == value) return;
+        hovering = value;
+        timer.Interval = value ? HoverInterval : IdleInterval;
+        Compose(angle, value);
+    }
 
     private void OnTick(object sender, EventArgs e)
     {
-        angle += 7f;
+        // 悬停状态以 OnMouseEnter / OnMouseLeave 为准；
+        // 每帧只做“离开”校正（鼠标离开事件偶尔会丢）
+        if (hovering && !IsCursorInside()) SetHovering(false);
+
+        angle += hovering ? HoverStep : IdleStep;
         if (angle >= 360f) angle -= 360f;
-        Compose(angle, true);
+        Compose(angle, hovering);
+
+        tickCount += 1;
+        if ((tickCount % 25) == 0 && Environment.GetEnvironmentVariable("LC2_BUBBLE_DEBUG") == "1")
+        {
+            Console.WriteLine("tick " + tickCount + " hover=" + hovering + " angle=" + angle.ToString("F1"));
+            Console.Out.Flush();
+        }
     }
 
     protected override void OnMouseEnter(EventArgs e)
     {
         base.OnMouseEnter(e);
-        angle = 0f;
-        Compose(angle, true);
-        timer.Start();
+        SetHovering(true);
     }
 
     protected override void OnMouseLeave(EventArgs e)
     {
         base.OnMouseLeave(e);
-        timer.Stop();
-        angle = 0f;
-        Compose(0f, false);
+        SetHovering(false);
     }
 
     /* ---------------- drag / click ---------------- */
@@ -577,17 +610,42 @@ public class Lc2Bubble : Form
 
     /* ---------------- entry ---------------- */
 
-    public static void Run(string iconPath, int size, int x, int y)
+    public static void Run(string iconPath, int size, int x, int y, int parentPid)
     {
         Application.EnableVisualStyles();
         Instance = new Lc2Bubble(size, x, y, iconPath);
+
+        if (parentPid > 0)
+        {
+            // watchdog: close this window if the Electron parent dies (prevents orphan bubbles)
+            Thread w = new Thread(delegate()
+            {
+                while (true)
+                {
+                    Thread.Sleep(1000);
+                    bool alive = false;
+                    try { alive = !System.Diagnostics.Process.GetProcessById(parentPid).HasExited; }
+                    catch { alive = false; }
+                    if (!alive)
+                    {
+                        try { Instance.BeginInvoke(new MethodInvoker(delegate() { Instance.Close(); })); }
+                        catch { }
+                        return;
+                    }
+                }
+            });
+            w.IsBackground = true;
+            w.Start();
+        }
+
+
 
         Thread t = new Thread(delegate()
         {
             string line;
             while ((line = Console.ReadLine()) != null)
             {
-                if (line == "QUIT")
+                    if (line == "QUIT")
                 {
                     try { Instance.BeginInvoke(new MethodInvoker(delegate() { Instance.Close(); })); }
                     catch { }
@@ -634,4 +692,4 @@ if ($GenerateOnly) {
 }
 
 if (-not $Icon) { throw '-Icon is required' }
-[Lc2Bubble]::Run($Icon, $Size, $X, $Y)
+[Lc2Bubble]::Run($Icon, $Size, $X, $Y, $ParentPid)
