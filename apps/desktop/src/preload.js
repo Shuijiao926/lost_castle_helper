@@ -27,6 +27,10 @@ contextBridge.exposeInMainWorld('lc2', {
   /** 请求关闭面板 */
   requestClose: () => ipcRenderer.send('lc2:closePanel'),
 
+  /* ---- 用户印象 / 评价（本地保存，后续用于标签整理） ---- */
+  notesGet: () => ipcRenderer.invoke('lc2:notes:get'),
+  notesSet: (buildId, text) => ipcRenderer.invoke('lc2:notes:set', { buildId, text }),
+
   /* ---- 搜索/筛选时临时获焦（输入框需要键盘） ---- */
   searchFocus: (on) => ipcRenderer.send('lc2:searchFocus', !!on),
   /** 面板休眠（被点到外部后不接收键盘）→ 点击面板时唤醒 */

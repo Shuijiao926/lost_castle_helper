@@ -10,7 +10,8 @@
     "start": "chcp 65001 >nul && electron .",
     "dev": "chcp 65001 >nul && electron . --dev",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "test": "node --test \"test/*.test.js\""
   },
   "devDependencies": {
     "electron": "^33.0.0",

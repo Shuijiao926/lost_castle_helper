@@ -14,7 +14,8 @@
     "test:server": "npm test -w @lc2/server",
     "test": "npm run validate && npm run test:server",
     "server:dev": "npm run dev -w @lc2/server",
-    "desktop:hot": "npm run start -w @lc2/desktop"
+    "desktop:hot": "npm run start -w @lc2/desktop",
+    "desktop:test": "npm --prefix apps/desktop run test"
   },
   "engines": {
     "node": ">=18"
