@@ -187,15 +187,34 @@ function panelBoundsFrom(b) {
   return { x, y, width: PANEL.w, height: PANEL.h };
 }
 
+/**
+ * 面板是否至少有一部分落在某个显示器里
+ * 拖拽允许移出屏幕边界（和 uTools 一样），但恢复位置时不能让它“彻底消失”。
+ */
+function panelVisibleSomewhere(x, y) {
+  const minVisible = 48; // 至少露出 48px，保证还能点回来
+  const bounds = { x, y, width: PANEL.w, height: PANEL.h };
+  for (const d of screen.getAllDisplays()) {
+    const wa = d.workArea;
+    const iw = Math.min(bounds.x + bounds.width, wa.x + wa.width) - Math.max(bounds.x, wa.x);
+    const ih = Math.min(bounds.y + bounds.height, wa.y + wa.height) - Math.max(bounds.y, wa.y);
+    if (iw >= minVisible && ih >= minVisible) return true;
+  }
+  return false;
+}
+
 /** 面板位置：优先用上次记住的位置，没有才锚定气泡 */
 function resolvePanelBounds() {
   const fallback = panelBoundsFrom(currentBubbleBounds());
   if (!config.panel) return fallback;
 
   const p = config.panel;
-  const disp = screen.getDisplayNearestPoint({ x: p.x, y: p.y });
+  // 允许上次放在屏幕边缘外（部分露出）；只有完全找不到时才夹回最近显示器
+  if (panelVisibleSomewhere(p.x, p.y)) {
+    return { x: p.x, y: p.y, width: PANEL.w, height: PANEL.h };
+  }
+  const disp = screen.getDisplayNearestPoint({ x: p.x + PANEL.w / 2, y: p.y + PANEL.h / 2 });
   const wa = disp.workArea;
-  // 显示器变了就把面板夹回可见区域
   return {
     x: clamp(p.x, wa.x, wa.x + wa.width - PANEL.w),
     y: clamp(p.y, wa.y, wa.y + wa.height - PANEL.h),
@@ -418,14 +437,14 @@ panelShadow.onDrag((px, py) => {
 });
 panelShadow.onDragEnd(() => finalizePanelDrag());
 
-/** 把面板移动到指定 DIP 坐标（拖拽用，带屏幕 clamp 与层级兜底） */
+/**
+ * 把面板移动到指定 DIP 坐标（拖拽用）
+ * 和 uTools 一样允许移出屏幕边界：不做 clamp，只保留窗口层级兜底。
+ * 恢复位置时由 resolvePanelBounds() 保证至少有一部分可见。
+ */
 function movePanelTo(x, y) {
   if (!panelWin || panelWin.isDestroyed()) return;
-  const disp = screen.getDisplayNearestPoint({ x: Math.round(x), y: Math.round(y) });
-  const wa = disp.workArea;
-  const nx = clamp(x, wa.x, wa.x + wa.width - PANEL.w);
-  const ny = clamp(y, wa.y, wa.y + wa.height - PANEL.h);
-  panelWin.setPosition(Math.round(nx), Math.round(ny), false);
+  panelWin.setPosition(Math.round(x), Math.round(y), false);
   dragMoveCount += 1;
   if (dragMoveCount % 12 === 0) {
     try { panelWin.setAlwaysOnTop(true, 'screen-saver'); } catch {}
