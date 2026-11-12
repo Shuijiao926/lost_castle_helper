@@ -18,7 +18,9 @@ const dataDir = path.join(tmpRoot, 'data');
 const runtimeDir = path.join(tmpRoot, 'runtime');
 fs.mkdirSync(dataDir, { recursive: true });
 
-for (const name of ['builds.json', 'weapons.json', 'inscriptions.json', 'schools.json']) {
+// builds.json 用测试 fixture（仓库里的种子数据已清空，等真实数据接入）
+fs.copyFileSync(path.join(__dirname, 'fixtures', 'builds.json'), path.join(dataDir, 'builds.json'));
+for (const name of ['weapons.json', 'inscriptions.json', 'schools.json']) {
   fs.copyFileSync(path.join(REPO_ROOT, 'data', name), path.join(dataDir, name));
 }
 

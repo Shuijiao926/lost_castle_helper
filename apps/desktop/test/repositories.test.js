@@ -28,8 +28,9 @@ test('data：Electron 环境读取真实数据；空数据归一为 null', async
   const data = await repo.data.load();
   assert.equal(data.builds.length, 1);
 
+  // 空 builds 也是有效数据：渲染层据此显示空状态（而不是保留内置示例）
   const empty = createRepositories({ lc2: { getData: async () => ({ builds: [] }) }, storage: memoryStorage() });
-  assert.deepEqual(await empty.data.load(), null);
+  assert.deepEqual(await empty.data.load(), { builds: [] });
 });
 
 test('notes：localStorage 兜底读写', async () => {

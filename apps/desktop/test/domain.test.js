@@ -1,4 +1,6 @@
-/* 领域层单元测试：纯函数，不需要 DOM / Electron */
+/* 领域层单元测试：纯函数，不需要 DOM / Electron
+ * 数据已清空（等真实数据接入），所以业务规则用测试内 fixture 验证。
+ */
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
@@ -8,12 +10,37 @@ const createDomain = require('../src/renderer/js/domain/builds.js');
 const catalog = createCatalog();
 const domain = createDomain(catalog);
 
-test('catalog：内置示例流派与目录已就绪', () => {
+/** 最小可用的流派 fixture（字段与 data/builds.json 一致） */
+function makeBuild(over = {}) {
+  return {
+    id: 'test_build_1',
+    name: '测试流派一',
+    aliases: ['别名一'],
+    wt: 'SHW',
+    insc: 'shw_revenge',
+    rating: 8.2,
+    votes: 1915,
+    author: '@测试',
+    features: ['站桩', '低门槛'],
+    tags: ['冰属性', '盾反'],
+    core: ['昂龙剑盾'],
+    tip: '测试用玩法技巧，足够长',
+    treasureOrder: [{ t: 'R', n: '不融冰', r: '优秀' }],
+    ...over,
+  };
+}
+const FIXTURE_BUILDS = [
+  makeBuild(),
+  makeBuild({ id: 'test_build_2', name: '测试流派二', wt: 'DB', insc: 'db_blademaster', rating: 7.6, votes: 1299, tags: ['暴击'], features: ['高段数'] }),
+  makeBuild({ id: 'test_build_3', name: '测试流派三', wt: 'BOW', insc: 'bow_roaring', rating: 9.1, votes: 300, tags: ['雷击'], features: ['远程'] }),
+];
+
+test('catalog：结构完整，允许流派数据为空（真实数据未接入）', () => {
   assert.ok(Array.isArray(catalog.BUILDS));
-  assert.ok(catalog.BUILDS.length >= 2);
-  assert.ok(catalog.WEAPONS.length >= 1);
+  assert.equal(catalog.BUILDS.length, 0);
+  assert.ok(Array.isArray(catalog.WEAPONS));
   assert.ok(Object.keys(catalog.INSC).length > 0);
-  assert.ok(catalog.BUILDS[0].id && catalog.BUILDS[0].name);
+  assert.ok(Array.isArray(catalog.ALL_TAGS));
 });
 
 test('目录查找：武器名 / 刻印名 / 未知兜底', () => {
@@ -31,41 +58,40 @@ test('stars：每 2 分一颗星，四舍五入', () => {
 });
 
 test('matches：关键词 / 武器 / 刻印 / 标签过滤', () => {
-  const b = catalog.BUILDS[0];
+  const b = FIXTURE_BUILDS[0];
   assert.equal(domain.matches(b, {}), true);
-  assert.equal(domain.matches(b, { q: b.name.slice(0, 2) }), true);
+  assert.equal(domain.matches(b, { q: '测试流派' }), true);
   assert.equal(domain.matches(b, { q: '绝对不存在的词' }), false);
   assert.equal(domain.matches(b, { filterW: b.wt }), true);
   assert.equal(domain.matches(b, { filterW: 'NOT_A_WEAPON' }), false);
   assert.equal(domain.matches(b, { filterI: b.insc }), true);
-  if (b.tags && b.tags.length) {
-    assert.equal(domain.matches(b, { tag: b.tags[0] }), true);
-    assert.equal(domain.matches(b, { tag: '绝对不存在的标签' }), false);
-  }
+  assert.equal(domain.matches(b, { tag: b.tags[0] }), true);
+  assert.equal(domain.matches(b, { tag: '绝对不存在的标签' }), false);
 });
 
-test('visibleBuilds：人气 / 评分排序 + 过滤', () => {
-  const hot = domain.visibleBuilds(catalog.BUILDS, { sort: 'hot' });
-  assert.equal(hot.length, catalog.BUILDS.length);
+test('visibleBuilds：人气 / 评分排序 + 过滤（空列表也安全）', () => {
+  assert.deepEqual(domain.visibleBuilds([], { sort: 'hot' }), []);
+
+  const hot = domain.visibleBuilds(FIXTURE_BUILDS, { sort: 'hot' });
+  assert.equal(hot.length, FIXTURE_BUILDS.length);
   for (let i = 1; i < hot.length; i++) assert.ok(hot[i - 1].votes >= hot[i].votes);
 
-  const rating = domain.visibleBuilds(catalog.BUILDS, { sort: 'rating' });
+  const rating = domain.visibleBuilds(FIXTURE_BUILDS, { sort: 'rating' });
   for (let i = 1; i < rating.length; i++) assert.ok(rating[i - 1].rating >= rating[i].rating);
 
-  const filtered = domain.visibleBuilds(catalog.BUILDS, { sort: 'hot', q: '绝对不存在的词' });
-  assert.equal(filtered.length, 0);
+  assert.equal(domain.visibleBuilds(FIXTURE_BUILDS, { sort: 'hot', q: '绝对不存在的词' }).length, 0);
 });
 
-test('normalizeBuilds：服务端 DTO 归一化', () => {
+test('normalizeBuilds：服务端 DTO 归一化（空数据安全）', () => {
   const raw = [{ id: 'x', source: '来源A', updatedAt: '2026-01-01' }];
   const out = domain.normalizeBuilds(raw);
   assert.equal(out[0].src, '来源A');
   assert.equal(out[0].updated, '2026-01-01');
 
-  // 已经带 src / updated 的示例数据保持原值
   const demo = domain.normalizeBuilds([{ id: 'y', src: '来源B', updated: '2026-02-02' }]);
   assert.equal(demo[0].src, '来源B');
   assert.equal(demo[0].updated, '2026-02-02');
 
   assert.deepEqual(domain.normalizeBuilds(null), []);
+  assert.deepEqual(domain.normalizeBuilds([]), []);
 });

@@ -288,6 +288,7 @@ if (!gotLock) {
     });
     configStore.load();
 
+    log('数据来源 =', configStore.state.dataSource, '| 缓存目录 =', source.cacheDir(), process.env.LC2_DATA_URL ? '| 自定义数据地址 = ' + process.env.LC2_DATA_URL : '');
     geometry = createGeometry({ BUBBLE, PANEL, MARGIN });
     notesStore = createNotesStore({ userDataDir, log });
     dataLoader = createDataLoader({ source, configStore, log });

@@ -28,7 +28,7 @@
     load: function () {
       if (!dataRepo.available()) return Promise.resolve(null);
       return lc2.getData().then(function (d) {
-        return d && Array.isArray(d.builds) && d.builds.length ? d : null;
+        return d && Array.isArray(d.builds) ? d : null;   // 空数组也算有效数据：显示空状态
       });
     }
   };

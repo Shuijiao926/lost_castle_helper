@@ -23,7 +23,9 @@ function dataDir() {
     : path.join(__dirname, '..', '..', '..', '..', 'data');
 }
 function cacheDir() {
-  return path.join(app.getPath('userData'), 'data-cache');
+  // 拉取到的数据缓存在这里；LC2_CACHE_DIR 可改到自定义目录（如测试/多实例）
+  const override = process.env.LC2_CACHE_DIR;
+  return override ? path.resolve(override) : path.join(app.getPath('userData'), 'data-cache');
 }
 
 function readLocalJSON(name, fallback) {
@@ -32,6 +34,9 @@ function readLocalJSON(name, fallback) {
 }
 
 function rawBase(repo) {
+  // LC2_DATA_URL 可覆盖数据源地址（自建服务 / 镜像 / 本地静态目录）
+  const custom = process.env.LC2_DATA_URL;
+  if (custom) return custom.replace(/\/+$/, '');
   const { owner, repo: r, branch } = { ...DEFAULT_REPO, ...(repo || {}) };
   return `https://raw.githubusercontent.com/${owner}/${r}/${branch}/data`;
 }

@@ -33,6 +33,14 @@ const state={sort:'hot',view:'feed',detailId:null,expanded:{},cur:'',owned:new S
   favs:new Set(),ratingOpen:null,notes:{},noteBid:null,
   q:'',focusedInput:false,dormant:false,tag:null,filterW:null,filterI:null,modal:false,seg:'w',sideSel:null,mq:''};
 
+/* ================= 数据加载提示 ================= */
+function logDataSummary(arr){
+  try{
+    console.log('[lc2] 流派数据已加载：' + arr.length + ' 条'
+      + (arr.length ? '' : '（数据为空，显示空状态）'));
+  }catch(e){}
+}
+
 /* ================= 领域调用（应用状态 → 领域参数） ================= */
 function currentFilters() {
   return { q: state.q, filterW: state.filterW, filterI: state.filterI, tag: state.tag, sort: state.sort };
@@ -79,6 +87,15 @@ function render(){
 function renderFeed(){
   const list=visible();
   if(!list.some(b=>b.id===state.cur)&&list.length)state.cur=list[0].id;
+  if(!BUILDS.length){
+    elFeed.innerHTML='<div class="empty">'
+      +'<img class="empty-crest" alt="" src="../../assets/tray-32.png">'
+      +'<div class="empty-title">数据准备中</div>'
+      +'<div class="empty-sub">还没有接入真实流派数据</div>'
+      +'<div class="empty-hint">数据源就绪后，流派会自动出现在这里</div>'
+      +'</div>';
+    return;
+  }
   if(!list.length){elFeed.innerHTML='<div class="tip">没有匹配的流派。按 F 重新筛选。</div>';return;}
   elFeed.innerHTML=list.map(b=>cardHTML(b,b.id===state.cur)).join('');
   elFeed.querySelectorAll('.card').forEach(n=>{
@@ -548,19 +565,19 @@ document.addEventListener('keydown',e=>{
     if(typeof window.lc2!=='undefined'&&window.lc2.pinToggle){ window.lc2.pinToggle(); }
     else { const on=$('pinbtn').classList.toggle('on'); showToast(on?'已置顶：点击外部不收起':'已取消置顶'); }
     return;}
-  if(k==='d'||k==='D'){e.preventDefault();state.view==='feed'?openDetail(state.cur):closeDetail();return;}
+  if(k==='d'||k==='D'){e.preventDefault();if(state.view==='feed'&&!state.cur)return;state.view==='feed'?openDetail(state.cur):closeDetail();return;}
   if(k==='ArrowDown'||k==='ArrowUp'){
     if(state.view==='detail'){elDetail.scrollTop+=(k==='ArrowDown'?80:-80);e.preventDefault();return;}
     e.preventDefault();const list=visible();const i=list.findIndex(b=>b.id===state.cur);
     const n=Math.max(0,Math.min(list.length-1,(i<0?0:i)+(k==='ArrowDown'?1:-1)));
     if(list[n]){state.cur=list[n].id;render();}return;}
-  if(k==='Enter'||k==='ArrowRight'){e.preventDefault();if(state.view==='detail')return;toggleExpand(state.cur);return;}
+  if(k==='Enter'||k==='ArrowRight'){e.preventDefault();if(state.view==='detail'||!state.cur)return;toggleExpand(state.cur);return;}
   if(k==='ArrowLeft'){e.preventDefault();
     if(state.view==='detail')closeDetail();
     else if(state.expanded[state.cur]){state.expanded[state.cur]=false;render();}return;}
 });
 
-state.cur=BUILDS[0].id;
+state.cur=BUILDS.length?BUILDS[0].id:'';
 render();fbtnState();
 if(typeof window.lc2 === 'undefined') bootNotes();   // 浏览器 / 原型：读 localStorage
 
@@ -703,8 +720,9 @@ window.lc2.onPanel(function(s){
     var arr = domain.normalizeBuilds(d.builds);
     BUILDS.length = 0;
     Array.prototype.push.apply(BUILDS, arr);
-    state.cur = BUILDS[0].id;
+    state.cur = arr.length ? BUILDS[0].id : '';
     state.expanded = {};
+    logDataSummary(arr);
     render(); fbtnState();
   }).catch(function(e){
     console.error('[lc2] 数据加载失败', e);

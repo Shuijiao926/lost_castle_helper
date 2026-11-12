@@ -25,7 +25,8 @@ function makeCatalog() {
 }
 
 function loadBuilds() {
-  return readJSON('data/builds.json').builds;
+  // 仓库种子 builds.json 已清空（等真实数据接入），测试用固定 fixture
+  return readJSON('apps/server/test/fixtures/builds.json').builds;
 }
 
 module.exports = { REPO_ROOT, readJSON, makeCatalog, loadBuilds };

@@ -261,7 +261,7 @@ infrastructure/sources/wiki/
 
 | 阶段 | 内容 | 可验证结果 |
 |---|---|---|
-| **P1** | 领域模型 + 仓储接口 + JSON 实现 + 用例 + HTTP 路由 | `npm start` 起服务，`/api/builds` 返回现有 2 条真实数据，**不连数据库** |
+| **P1** | 领域模型 + 仓储接口 + JSON 实现 + 用例 + HTTP 路由 | `npm start` 起服务，`/api/builds` 返回种子数据（当前种子已清空，测试用 fixture），**不连数据库** |
 | **P2** | wiki 采集器 + Lua 解析 + catalog 落地 | `node scripts/fetch-wiki.js` 产出 `data/catalog/*.json` |
 | **P3** | 客户端去 mock，改读 catalog + catalog 图标 | 界面上的武器/刻印/宝藏全部来自真实数据 |
 | **P4** | 切 PostgreSQL，投稿与审核跑通 | 投稿 → 审核 → 发布 → 客户端更新 |

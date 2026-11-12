@@ -131,3 +131,14 @@
     box-shadow:0 10px 30px rgba(0,0,0,.5)}
   .hrow{border-bottom:1px dashed rgba(255,214,146,.1);color:#BBB0D0}
   .hrow b{color:#F0C878}
+
+  /* ================= 空数据状态 ================= */
+  .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:74px 24px 60px;text-align:center;user-select:none}
+  .empty-crest{width:46px;height:46px;border-radius:50%;opacity:.9;
+    box-shadow:0 0 0 1px rgba(255,214,146,.35),0 0 18px rgba(255,190,90,.18)}
+  .empty-title{margin-top:16px;font-size:15px;font-weight:600;background:linear-gradient(180deg,#FFE9B8,#E8B96A);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .empty-sub{margin-top:8px;font-size:12.5px;color:#B9AED0}
+  .empty-hint{margin-top:14px;font-size:11px;color:#7E7394;line-height:1.7;max-width:260px;
+    border-top:1px dashed rgba(255,214,146,.12);padding-top:12px}
