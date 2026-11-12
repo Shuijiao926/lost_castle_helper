@@ -22,6 +22,21 @@
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts\make-bubble-icon.ps1
 ```
 
+## 面板背景
+
+| 文件 | 用途 |
+|---|---|
+| `source/panel-bg-src.png` | 官方营地加载背景图（举杯欢庆 / 篝火，© Hunter Studio） |
+| `panel-bg.jpg` | 880×1360 竖版裁切，面板 `.bgart` 底纹 |
+
+生成：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\make-panel-bg.ps1
+```
+
+（裁切区域可通过 `-CropX/-CropY/-CropW/-CropH` 调整。）
+
 ## 旧版 key art 裁切（保留参考，不再作为默认）
 
 `icon-art.png` / `icon-half.png` / `icon-face.png` / `icon-full.png` / `icon-raw.png`

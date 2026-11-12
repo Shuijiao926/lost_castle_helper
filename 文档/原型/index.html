@@ -126,7 +126,7 @@
   .stars{color:#4d5468;letter-spacing:1.5px;font-size:12px}
   .stars i{color:var(--star);font-style:normal}
   .right-col{display:flex;flex-direction:column;gap:7px;align-items:flex-end;flex:none}
-  .who{font-size:11px;color:#767e94}
+  .who{font-size:11px;color:#9C90B4}
   .det{font-size:11px;color:#93b6ea;border:1px solid #37456520;background:#243049;border-radius:6px;padding:3px 9px;cursor:pointer;white-space:nowrap}
   .det:hover{background:#2c3b58}
   .cardacts{display:flex;gap:5px;margin-top:1px}
@@ -153,8 +153,8 @@
   .chip.lock{opacity:.35;text-decoration:line-through}
   .chip.on{background:rgba(95,174,122,.2);color:#8fd6a8}
   .kv{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:#b6bdd0;padding:3px 0}
-  .kv .k{color:#8d95a8;flex:none}
-  .kv .v{color:#c6ccdb;text-align:right}
+  .kv .k{color:#B0A4C6;flex:none}
+  .kv .v{color:#E4DBF2;text-align:right}
   .footline{margin-top:12px;padding-top:9px;border-top:1px dashed #313644;display:flex;justify-content:space-between;
     gap:10px;font-size:11px;color:#6b7386}
 
@@ -180,7 +180,7 @@
   .t-weapon{background:rgba(224,90,90,.16);color:#e79a9a}
   .t-armor{background:rgba(96,146,224,.16);color:#9cbdf0}
   .t-legend{background:rgba(224,180,74,.16);color:#e2b957}
-  .ps{font-size:12px;color:#9aa2b4;margin-top:5px;line-height:1.65}
+  .ps{font-size:12px;color:#B9AFCE;margin-top:5px;line-height:1.65}
   .attrs{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
   .attr{font-size:11px;background:rgba(255,255,255,.055);color:#b6bdd0;border-radius:4px;padding:1px 6px}
   .res{font-size:12px;color:#c6ccdb;margin-top:9px;padding:9px 11px;background:rgba(109,143,232,.09);
@@ -188,9 +188,9 @@
 
   .srow{display:flex;gap:8px;font-size:12px;padding:4px 0;border-bottom:1px dashed rgba(255,255,255,.05);align-items:baseline}
   .srow:last-child{border:0}
-  .srow .sn{width:74px;flex:none;color:#cfd5e2}
+  .srow .sn{width:74px;flex:none;color:#EDE4FA}
   .srow .sl{width:60px;flex:none;font-size:11px;color:#8b9ad4}
-  .srow .se{flex:1;color:#9aa2b4;line-height:1.6}
+  .srow .se{flex:1;color:#BBAFD2;line-height:1.6}
   .plan{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
   .plan .pg{font-size:11.5px;background:rgba(255,255,255,.045);border-radius:6px;padding:5px 8px;color:#b9c0d0;line-height:1.5}
   .plan .pg b{display:block;color:#d9b96a;font-weight:600;font-size:11px;margin-bottom:2px}
@@ -327,6 +327,139 @@
 .toast.on{animation:m-toast-in var(--m2) var(--me) both}
 .m-pop{animation:m-pop 260ms var(--me)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+  /* ================= 失落城堡2 风格皮肤（虚空紫 + 金线 + 微光） ================= */
+  /* 无位图背景：深紫渐变 + 噪点纹理 + 暗角，避免截图底纹发脏 */
+  .panel, body.electron.mode-panel .panel{
+    background:
+      radial-gradient(140% 92% at 50% -14%, rgba(126,86,214,.34) 0%, rgba(126,86,214,0) 58%),
+      radial-gradient(80% 56% at 104% 104%, rgba(255,150,70,.16) 0%, rgba(255,150,70,0) 62%),
+      radial-gradient(60% 42% at -8% 96%, rgba(226,90,170,.08) 0%, rgba(226,90,170,0) 60%),
+      radial-gradient(56% 26% at 50% -4%, rgba(255,214,146,.12) 0%, rgba(255,214,146,0) 72%),
+      linear-gradient(180deg,#241B38 0%,#1E1528 240px,#191120 100%);
+    box-shadow:inset 0 0 0 1px rgba(255,214,146,.10), inset 0 0 70px rgba(8,5,16,.6);
+    overflow:hidden;
+  }
+  /* 噪点 + 暗角 */
+  .panel::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:4;
+    background-image:
+      linear-gradient(180deg, rgba(8,5,16,0) 52%, rgba(8,5,16,.42) 100%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='160' height='160' filter='url(%23n)' opacity='.055'/></svg>"),
+      radial-gradient(1.6px 1.6px at 14% 26%, rgba(255,228,170,.45), rgba(0,0,0,0) 70%),
+      radial-gradient(1.2px 1.2px at 86% 18%, rgba(190,220,255,.40), rgba(0,0,0,0) 70%),
+      radial-gradient(1.4px 1.4px at 74% 56%, rgba(255,214,146,.30), rgba(0,0,0,0) 70%),
+      radial-gradient(1.1px 1.1px at 24% 66%, rgba(190,220,255,.28), rgba(0,0,0,0) 70%),
+      radial-gradient(1.3px 1.3px at 52% 84%, rgba(255,214,146,.26), rgba(0,0,0,0) 70%);
+    background-repeat:no-repeat, repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+    mix-blend-mode:normal;
+  }
+  .panel::after{content:'';position:absolute;inset:6px;border-radius:8px;pointer-events:none;z-index:5;
+    border:1px solid rgba(255,214,146,.16);box-shadow:inset 0 0 0 1px rgba(0,0,0,.35)}
+  /* 营地截图底纹（暖色，低透明度 + 遮罩） */
+  .bgart{position:absolute;inset:0;z-index:0;pointer-events:none;
+    background:url('../../apps/desktop/assets/panel-bg.jpg') center 38% / cover no-repeat;
+    opacity:.62;filter:saturate(1.05) brightness(.9) blur(.4px);
+    -webkit-mask-image:linear-gradient(180deg, rgba(0,0,0,.9) 0%, rgba(0,0,0,.82) 36%, rgba(0,0,0,.72) 72%, rgba(0,0,0,.7) 100%);
+    mask-image:linear-gradient(180deg, rgba(0,0,0,.9) 0%, rgba(0,0,0,.82) 36%, rgba(0,0,0,.72) 72%, rgba(0,0,0,.7) 100%)}
+  /* 顶部压暗，保证标题可读 */
+  .bgveil{position:absolute;inset:0;z-index:0;pointer-events:none;
+    background:linear-gradient(180deg, rgba(12,8,20,.72) 0px, rgba(12,8,20,.30) 90px, rgba(12,8,20,0) 170px),
+               linear-gradient(0deg, rgba(12,8,20,.55) 0px, rgba(12,8,20,0) 140px)}
+  /* 金色符文环（底部氛围） */
+  .rune{position:absolute;left:50%;bottom:-92px;width:440px;height:440px;transform:translateX(-50%);
+    z-index:0;pointer-events:none;opacity:.95;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(255,214,146,.07) 0%, rgba(255,214,146,0) 58%),
+      repeating-conic-gradient(from 0deg, rgba(255,214,146,.18) 0deg 1.1deg, rgba(255,214,146,0) 1.1deg 22deg);
+    -webkit-mask-image:radial-gradient(circle at 50% 50%, transparent 44%, #000 46%, #000 74%, transparent 76%);
+    mask-image:radial-gradient(circle at 50% 50%, transparent 44%, #000 46%, #000 74%, transparent 76%);
+  }
+  .rune::before{content:'';position:absolute;inset:36px;border:1px dashed rgba(255,214,146,.22);border-radius:50%}
+  .rune::after{content:'';position:absolute;left:50%;top:50%;width:66px;height:66px;transform:translate(-50%,-50%) rotate(45deg);
+    border:1px solid rgba(255,214,146,.24);box-shadow:inset 0 0 30px rgba(255,214,146,.14)}
+  /* 城堡徽章水印（原生气泡图标，很淡） */
+  .mark{display:none}
+  .panel > .grip,.panel > .hdr,.panel > .searchbar,.panel > .feed,.panel > .detail{position:relative;z-index:1}
+  .toast{z-index:20}
+
+  .crest{width:22px;height:22px;border-radius:50%;flex:none;margin-right:2px;
+    box-shadow:0 0 0 1px rgba(255,214,146,.4),0 0 10px rgba(255,190,90,.22);
+    image-rendering:auto}
+  .hdr{padding:14px 18px 10px;position:relative}
+  .hdr::after{content:'';position:absolute;left:16px;right:16px;bottom:0;height:1px;
+    background:linear-gradient(90deg,rgba(255,214,146,0) 0%,rgba(255,214,146,.38) 18%,rgba(255,214,146,.08) 62%,rgba(255,214,146,0) 100%)}
+  .ttl{font-size:16px;font-weight:700;letter-spacing:.6px;
+    background:linear-gradient(180deg,#FFF3CE 0%,#F4C777 52%,#D99534 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 1px 0 rgba(0,0,0,.45))}
+  .back{color:#F0C878}
+
+  .fbtn.icon{background:linear-gradient(180deg,rgba(56,42,90,.85),rgba(30,22,48,.9));
+    border:1px solid rgba(255,214,146,.16);color:#D8CEE8}
+  .fbtn.icon:hover{border-color:rgba(255,214,146,.5);color:#FFF1CC;
+    box-shadow:0 0 14px rgba(255,190,90,.18),inset 0 1px 0 rgba(255,255,255,.08)}
+  .fbtn.icon.on{background:linear-gradient(180deg,rgba(122,84,190,.75),rgba(66,42,110,.85));
+    border-color:rgba(214,168,255,.55);color:#F6ECFF;box-shadow:0 0 14px rgba(170,120,255,.25)}
+
+  .searchbar{background:linear-gradient(180deg,rgba(24,18,40,.92),rgba(16,12,28,.94));
+    border:1px solid rgba(255,214,146,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 2px 10px rgba(0,0,0,.35)}
+  .searchbar:hover{border-color:rgba(255,214,146,.32);background:linear-gradient(180deg,rgba(30,22,50,.95),rgba(18,13,32,.95))}
+  .searchbar.on,.searchbar.searching{border-color:rgba(176,138,255,.55);
+    background:linear-gradient(180deg,rgba(40,28,66,.96),rgba(24,17,42,.96));
+    box-shadow:0 0 0 1px rgba(176,138,255,.16),0 0 18px rgba(150,100,255,.18)}
+  .searchbar .sico i{background:linear-gradient(90deg,#FFE6AE,#E3A64B)}
+  .searchbar .schev::before{border-color:#D9C8EA}
+  .searchbar input::placeholder{color:#7E7394}
+
+  .card{background:linear-gradient(180deg,rgba(48,36,78,.85) 0%,rgba(32,24,52,.9) 100%);
+    border:1px solid rgba(255,214,146,.12);box-shadow:0 8px 22px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.045)}
+  .card:hover{border-color:rgba(255,214,146,.3);background:linear-gradient(180deg,rgba(56,42,90,.9),rgba(36,27,58,.92))}
+  .card.is-active{border-color:rgba(184,146,255,.55);
+    background:linear-gradient(180deg,rgba(62,46,104,.9),rgba(42,30,70,.94));
+    box-shadow:0 10px 26px rgba(0,0,0,.4),0 0 18px rgba(150,100,255,.14),inset 0 1px 0 rgba(255,255,255,.06)}
+  .cname{color:#F3EDE0}
+  .cmeta{color:#B4A9C8}
+  .rate .sc{background:linear-gradient(180deg,#4C3B7A,#2E2350);color:#FFE1A3;border:1px solid rgba(255,214,146,.25)}
+  .stars{color:#4A4260}
+  .det{border-color:rgba(255,214,146,.34);background:rgba(255,214,146,.08);color:#F2D59B}
+  .det:hover{background:rgba(255,214,146,.16);border-color:rgba(255,214,146,.55)}
+  .act{color:#8B7FA6}
+  .act:hover{background:rgba(255,214,146,.1);color:#FFE6B0}
+  .act.on{color:#F0B84A}
+  .sec{border-top:0;padding-top:15px;position:relative;color:#E6D2A6}
+  .sec::before{content:'';position:absolute;left:0;right:0;top:0;height:1px;
+    background:linear-gradient(90deg,rgba(255,214,146,.32),rgba(255,214,146,.05) 70%,transparent)}
+  .sec::after{content:'';position:absolute;left:0;top:-2.5px;width:5px;height:5px;transform:rotate(45deg);
+    background:linear-gradient(135deg,#FFE6B0,#D9902F);box-shadow:0 0 6px rgba(255,190,90,.5)}
+  .tip,.box,.res{background:rgba(30,22,50,.72);border-color:rgba(255,214,146,.12);color:#E7DEF4}
+  .box{border:1px solid rgba(255,214,146,.12);background:rgba(30,22,50,.6)}
+  .res{border-left-color:#B892FF;background:rgba(120,90,200,.10)}
+  .chips .chip{background:rgba(120,100,190,.20);color:#DED5F2;border:1px solid rgba(255,214,146,.10)}
+  .chip.gold{background:rgba(224,180,74,.16);color:#FFDE9C;border-color:rgba(255,214,146,.22)}
+  .footline{border-top:1px dashed rgba(255,214,146,.18);color:#A092BE}
+  .ratepick{background:rgba(255,214,146,.08);border-color:rgba(255,214,146,.24)}
+  .ratepick .rp:hover,.ratepick .rp.on{color:#F4C567}
+  .dname{color:#FBF3DF}
+  .dhead{border-bottom:1px solid rgba(255,214,146,.14)}
+  .dps b{color:#FFD9A0}
+  .hintbox{background:rgba(120,90,200,.10);border-left-color:#8A6CD8;color:#A99FC0}
+
+  .modal{background:rgba(10,7,20,.66)}
+  .msheet{background:linear-gradient(180deg,#231A36,#171123);border-top:1px solid rgba(255,214,146,.18);
+    box-shadow:0 -12px 36px rgba(0,0,0,.55)}
+  .mh{border-bottom:1px solid rgba(255,214,146,.14)}
+  .mh span.ok{color:#F2C878}
+  .msearch input{background:rgba(20,15,34,.9);border-color:rgba(255,214,146,.14)}
+  .mseg div{border-color:rgba(255,214,146,.14);color:#A99FC0}
+  .mseg div.on{background:linear-gradient(180deg,#54407F,#38285C);color:#F6ECFF;border-color:rgba(184,146,255,.5)}
+  .mbody{border-top:1px solid rgba(255,214,146,.12)}
+  .mside{background:rgba(14,10,24,.9)}
+  .mside div.on{background:rgba(70,52,110,.72);box-shadow:inset 3px 0 0 #C79BFF}
+  .toast{background:rgba(26,18,42,.96);border:1px solid rgba(255,214,146,.24);color:#E9E2F3;
+    box-shadow:0 10px 30px rgba(0,0,0,.5)}
+  .hrow{border-bottom:1px dashed rgba(255,214,146,.1);color:#BBB0D0}
+  .hrow b{color:#F0C878}
+
 </style>
 </head>
 <body>
@@ -335,10 +468,10 @@
   <div class="bubble-tip" id="bubbleTip">Alt + ` 呼出</div>
   <div class="bubble hidden" id="bubble">LC2</div>
 
-  <div class="panel" id="panel">
+  <div class="panel" id="panel"><span class="bgart"></span><span class="bgveil"></span><span class="rune"></span><span class="mark"></span><span class="orn tl"></span><span class="orn tr"></span><span class="orn bl"></span><span class="orn br"></span>
     <div class="hdr">
       <span class="back" id="back" style="display:none">← 返回</span>
-      <div class="ttl" id="ttl">城堡助手</div>
+      <img class="crest" id="crest" alt="" src="../../apps/desktop/assets/tray-32.png"><div class="ttl" id="ttl">城堡助手</div>
 <div class="hbtns">
 <div class="fbtn icon pin" id="pinbtn" title="置顶（P）：点击外部不收起" aria-label="置顶">⤒</div>
 <div class="fbtn icon" id="hbtn" title="帮助（H）" aria-label="帮助">?</div>
