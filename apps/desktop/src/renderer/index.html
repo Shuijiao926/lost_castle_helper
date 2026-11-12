@@ -398,6 +398,13 @@
 .m-pop{animation:m-pop 260ms var(--me)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
+
+  /* 打分悬停预览：悬停到第 N 颗，前 N 颗亮起 */
+  .ratepick .rp{transition:color .12s ease,transform .12s ease}
+  .ratepick .rp.preview{color:#F4C567;transform:scale(1.12)}
+  .ratepick .rp.dim{color:#3E4457!important;transform:none}
+  .ratepick .rp-tip{transition:color .12s ease}
+
   /* ================= 失落城堡2 风格皮肤（虚空紫 + 金线 + 微光） ================= */
   /* 无位图背景：深紫渐变 + 噪点纹理 + 暗角，避免截图底纹发脏 */
   .panel, body.electron.mode-panel .panel{
@@ -450,7 +457,8 @@
   /* 城堡徽章水印（原生气泡图标，很淡） */
   .mark{display:none}
   .panel > .grip,.panel > .hdr,.panel > .searchbar,.panel > .feed,.panel > .detail{position:relative;z-index:1}
-  .toast{z-index:20}
+  .modal{z-index:30}
+  .toast{z-index:40}
 
   .crest{width:22px;height:22px;border-radius:50%;flex:none;margin-right:2px;
     box-shadow:0 0 0 1px rgba(255,214,146,.4),0 0 10px rgba(255,190,90,.22);
@@ -934,7 +942,7 @@ function cardHTML(b,isCur){
     const my=state.myVote[b.id]||0;
     h+='<div class="ratepick"><span>给这个流派打分</span>'
      +[1,2,3,4,5].map(v=>'<span class="rp'+(v<=my?' on':'')+'" data-v="'+v+'">★</span>').join('')
-     +'<span style="margin-left:auto;color:#6b7386;font-size:11px">'+(my?'已投 '+my+' 星':'点星选择')+'</span></div>';
+     +'<span class="rp-tip" style="margin-left:auto;color:#6b7386;font-size:11px" data-base="'+(my?'已投 '+my+' 星':'点星选择')+'">'+(my?'已投 '+my+' 星':'点星选择')+'</span></div>';
   }
   if(open){
     h+='<div class="sec">玩法技巧</div><div class="tip">'+esc(b.tip)+'</div>';
@@ -1100,8 +1108,7 @@ function renderDetail(){
   }
 
   h+='<div class="footline"><span>作者 '+esc(b.author||'—')+' · 来源：'+esc(b.src)+'</span><span>更新 '+esc(b.updated)+'</span></div>';
-  h+='<div class="footline" style="border:0;color:#5b6373">图标来源：失落城堡2中文维基（CC BY-NC-SA 4.0），失败时以首字兜底</div>';
-
+  
   elDetail.innerHTML=h;elDetail.scrollTop=0;
   elDetail.querySelectorAll('[data-tag]').forEach(n=>{n.onclick=()=>{state.tag=n.dataset.tag;closeDetail();fbtnState();};});
 }
@@ -1255,6 +1262,34 @@ if (typeof window.lc2 !== 'undefined' && window.lc2) {
     }
   }, true);
 }
+
+
+/* ===== 打分悬停预览 ===== */
+function __setRatePreview(box, n){
+  if(!box) return;
+  box.querySelectorAll('.rp').forEach(function(s){
+    var v = +s.dataset.v;
+    s.classList.toggle('preview', n > 0 && v <= n);
+    s.classList.toggle('dim', n > 0 && v > n);
+  });
+  var tip = box.querySelector('.rp-tip');
+  if(tip){
+    if(n > 0){ tip.textContent = '评 ' + n + ' 星（点击确认）'; tip.style.color = '#F4C567'; }
+    else { tip.textContent = tip.dataset.base || '点星选择'; tip.style.color = '#6b7386'; }
+  }
+}
+document.addEventListener('mouseover', function(ev){
+  var rp = ev.target && ev.target.closest ? ev.target.closest('.ratepick .rp') : null;
+  if(!rp) return;
+  __setRatePreview(rp.closest('.ratepick'), +rp.dataset.v);
+});
+document.addEventListener('mouseout', function(ev){
+  var box = ev.target && ev.target.closest ? ev.target.closest('.ratepick') : null;
+  if(!box) return;
+  var to = ev.relatedTarget;
+  if(to && box.contains(to)) return;
+  __setRatePreview(box, 0);
+});
 
 /* 键盘 */
 document.addEventListener('keydown',e=>{
