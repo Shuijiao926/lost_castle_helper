@@ -1,8 +1,12 @@
 {
   "name": "@lc2/shared",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "前后端共享：数据校验与 JSON Schema",
   "main": "validate.js",
-  "files": ["validate.js", "schema"]
+  "files": [
+    "validate.js",
+    "schema"
+  ],
+  "license": "MIT"
 }

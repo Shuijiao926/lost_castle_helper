@@ -1,8 +1,8 @@
 {
   "name": "lc2-helper",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
-  "description": "城堡助手 · 失落城堡2 流派速查（monorepo：桌面客户端 + 数据服务）",
+  "description": "《失落城堡2》流派速查助手：Windows 常驻托盘 + 热键浮窗，不抢游戏焦点",
   "workspaces": [
     "apps/*"
   ],
@@ -12,12 +12,39 @@
     "dist": "npm run dist -w @lc2/desktop",
     "validate": "node scripts/validate-data.js",
     "test:server": "npm test -w @lc2/server",
-    "test": "npm run validate && npm run test:server",
+    "test": "npm run validate && npm run test:desktop && npm run test:server",
     "server:dev": "npm run dev -w @lc2/server",
     "desktop:hot": "npm run start -w @lc2/desktop",
-    "desktop:test": "npm --prefix apps/desktop run test"
+    "desktop:test": "npm --prefix apps/desktop run test",
+    "version:show": "node scripts/version.js show",
+    "version:check": "node scripts/version.js check",
+    "version:sync": "node scripts/version.js sync",
+    "version:patch": "node scripts/version.js patch",
+    "version:minor": "node scripts/version.js minor",
+    "version:major": "node scripts/version.js major",
+    "release": "node scripts/version.js major --release",
+    "hooks:install": "node scripts/install-hooks.js",
+    "prepare": "node scripts/install-hooks.js",
+    "test:desktop": "npm --prefix apps/desktop run test"
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+  "license": "MIT",
+  "author": "Shuijiao926",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Shuijiao926/lost_castle_helper.git"
+  },
+  "homepage": "https://github.com/Shuijiao926/lost_castle_helper#readme",
+  "bugs": {
+    "url": "https://github.com/Shuijiao926/lost_castle_helper/issues"
+  },
+  "keywords": [
+    "lost-castle-2",
+    "electron",
+    "overlay",
+    "game-helper",
+    "windows"
+  ]
 }

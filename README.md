@@ -1,253 +1,161 @@
+<div align="center">
+
+<img src="apps/desktop/assets/icon.png" width="96" height="96" alt="城堡助手" />
+
 # 城堡助手 · LC2 Helper
 
-> 《失落城堡2》流派速查助手　｜　Windows　｜　常驻托盘 + 热键浮窗
->
-> **不是攻略站，是打游戏时按一下就能看的东西。**
+**《失落城堡2》流派速查助手** ｜ 不抢焦点 · 不注入游戏 · 跑在游戏旁边
 
-打游戏时想确认"这件宝藏要不要拿""这套玩法该配什么装备"，切屏查攻略会掉焦点、全屏会黑、联机可能掉线。
-这个工具就是一个**不抢焦点、不注入游戏、跑在旁边的流派图鉴**。
+[![version](https://img.shields.io/github/package-json/v/Shuijiao926/lost_castle_helper?label=version&color=F0C878)](https://github.com/Shuijiao926/lost_castle_helper/releases)
+[![platform](https://img.shields.io/badge/platform-Windows%2010%2F11-4B8DFF)](#)
+[![electron](https://img.shields.io/badge/Electron-33-47848F?logo=electron&logoColor=white)](#)
+[![node](https://img.shields.io/badge/node-%E2%89%A518-339933?logo=nodedotjs&logoColor=white)](#)
+[![code license](https://img.shields.io/badge/code%20license-MIT-blue)](./LICENSE)
+[![data license](https://img.shields.io/badge/data%20license-CC%20BY--NC--SA%204.0-lightgrey)](./LICENSE-DATA)
 
-```
-按 Alt + `  →  浮出卡片列表  →  选流派  →  看详情
-                                      ↓
-                            再按一次收起，游戏全程没被打断
-```
+[快速开始](#快速开始) · [项目结构](#项目结构) · [开发规范](#开发规范) · [文档](./文档/文档索引.md) · [许可与声明](#许可与声明)
 
----
-
-## 当前状态
-
-| 阶段 | 状态 |
-|---|---|
-| 需求 / 交互 / 数据设计 | ✅ 完成并冻结（见 `文档/`） |
-| 可交互原型 | ✅ 完成（见 `文档/原型/index.html`） |
-| 数据格式与样例 | ✅ 完成（见 `data/`） |
-| 客户端（M1） | ✅ 可用：原生气泡 + 托盘 + 热键 + 卡片列表 |
-| 后端（P1） | ✅ 领域骨架可运行：查询 / 评分 / 投稿 / 审核 / 发布（JSON 仓储） |
-
-> M1 骨架可运行（需先 `npm i`），但**图标仍走 wiki CDN**、搜索/投稿页仍是占位。详见下方「运行」。
+</div>
 
 ---
 
-## 运行（开发）
+## 简介
 
-需要 Node.js 18+。
+打游戏时想确认「这件宝藏要不要拿」「这套玩法该配什么装备」，切屏查攻略会掉焦点、全屏会黑、联机可能掉线。
+
+城堡助手是一个**常驻托盘 + 热键浮窗**的流派速查工具：按一下热键，面板从屏幕边缘浮出，看完再按一下收起——游戏全程不被打断。
+
+```text
+Alt + `  →  浮出流派卡片  →  ↑ ↓ 选择  →  Enter 展开 / D 看详情
+                                    ↓
+                              再按一次收起
+```
+
+## 功能
+
+- 🪟 **双窗口**：72×72 圆形气泡 + 440×680 面板，均可拖拽、位置独立记忆
+- 🎯 **不抢焦点**：窗口 `focusable: false`，用全局热键驱动，游戏不进后台
+- ⌨️ **全键盘操作**：列表 / 详情 / 筛选 / 帮助 / 置顶，全部有快捷键
+- 🎮 **游戏风格 UI**：虚空紫 + 金线皮肤、营地篝火底纹、动效节奏统一
+- ⭐ **本地互动**：打分、收藏、一句话印象（覆盖更新，本地保存）
+- 📦 **数据可更新**：GitHub raw / 自定义数据地址 → 本地缓存 → 内置种子，三级降级
+- 🖥️ **原生窗口细节**：Win11 DWM 系统圆角、原生分层气泡（无白角 / 无锯齿）
+
+## 截图
+
+![界面](./文档/界面皮肤预览.png)
+![空状态](./文档/空状态预览.png)
+
+## 快速开始
+
+**要求**：Windows 10/11、Node.js ≥ 18（推荐 20+）
 
 ```bash
-npm install          # 仓库根执行，workspaces 一次装齐
+git clone https://github.com/Shuijiao926/lost_castle_helper.git
+cd lost_castle_helper
+npm install          # 自动启用 git hooks（提交时版本号自动 patch +1）
 npm run desktop      # 启动客户端
-npm run server       # 另开终端，启动数据服务（骨架，需先装依赖）
 ```
 
-启动后：
+启动后：屏幕右侧出现圆形气泡 → 按 **`Alt + \``** 呼出面板。
 
-- 屏幕右侧中部出现一个 72×72 的**圆形气泡**（原生分层窗口，彩色光环，悬停会转）
-- 按 **`Alt + \``** 展开 / 收起面板 → 面板会从气泡位置往左展开
-- 面板里用 `↑ ↓` 选流派、`Enter` 展开卡片、`D` 进详情、`F` 筛选、`H` 帮助
-- 关掉窗口等于退出；托盘图标（有图标时）可右键退出
+| 快捷键 | 作用 |
+|---|---|
+| `Alt + \`` / `` ` `` | 呼出 / 收起面板 |
+| `↑ ↓` | 列表移动 |
+| `Enter` / `→` | 展开卡片 |
+| `←` | 收起 / 返回 |
+| `D` | 打开 / 关闭详情 |
+| `F` | 筛选（武器 / 刻印 / 标签 + 排序） |
+| `H` | 帮助 |
+| `P` | 置顶（点外部不收起） |
+| `I` | 投稿入口 |
+| `Esc` | 逐级退出 |
 
-**首次运行注意**
+> 若 `Alt + \`` 被占用，会依次回退到 `Ctrl+Alt+C` / `Alt+Shift+C` / `Ctrl+Shift+F12`，控制台会打印实际生效的键。
+> 游戏内请使用**窗口化 / 无边框窗口**模式（独占全屏盖不住浮窗）。
 
-- 现在窗口是 `focusable: false`，所以**面板里不能打字**（搜索框暂时用不了）。这是刻意设计，见下方"关键设计决策"。
-- 若 `Alt + \`` 被占用，会自动回退到 `Ctrl+Alt+C` / `Alt+Shift+C` / `Ctrl+Shift+F12`，控制台会打印实际生效的键。
-- 游戏内请用**窗口化 / 无边框窗口**模式，独占全屏盖不住浮窗。
+**服务端（可选，骨架）**
+
+```bash
+npm run server       # 默认 http://127.0.0.1:4317
+npm run test:server  # 28 个用例
+```
 
 **打包**
 
 ```bash
-npm run dist         # 产出 release/LC2Helper-0.1.0-portable.exe
+npm run dist         # 产物在 apps/desktop/release/
 ```
 
----
+## 数据
 
-## 仓库结构
+> **当前状态：流派数据已清空**（`data/builds.json` 为 `builds: []`），客户端显示「数据准备中」空状态，等待真实数据接入。
+> 武器 / 刻印 / 标签等参考目录保留，用于筛选与图标。
 
-> 文档全部集中在 [`文档/`](文档/文档索引.md)，从[文档索引](文档/文档索引.md)开始看。
-> 各子目录下的 `README.md` 只是指路页（方便在 GitHub 点进目录时有说明），完整内容以 `文档/` 为准。
+真实数据接入后仍走同一套流程，代码不需要改：
 
+```text
+data/*.json  →  node scripts/validate-data.js  →  客户端拉取（GitHub / 自定义地址 → 本地缓存）
 ```
+
+- 数据规范：[数据说明](./文档/数据说明.md) · [数据填写指南](./文档/数据填写指南.md)
+- 数据来源与许可：[数据源清单](./文档/数据源清单.md)（wiki 内容 CC BY-NC-SA 4.0）
+- 客户端缓存位置：`<userData>/data-cache/builds.json`，可用 `LC2_CACHE_DIR` / `LC2_DATA_URL` 覆盖
+
+## 项目结构
+
+```text
 lost_castle_helper/
 ├─ apps/
-│  ├─ desktop/                    客户端（Electron）
-│  │  ├─ src/
-│  │  │  ├─ main/
-│  │  │  │  ├─ index.js           双窗口 / 热键 / IPC / 配置
-│  │  │  │  ├─ nativeBubble.js    原生气泡桥接（行协议 + 坐标换算 + 回退）
-│  │  │  │  └─ source.js          数据源：github | local | cache
-│  │  │  ├─ preload.js            contextBridge 白名单
-│  │  │  └─ renderer/index.html   界面（单文件，无构建链）
-│  │  ├─ native/bubble.ps1        原生分层窗口气泡（PowerShell + UpdateLayeredWindow）
-│  │  ├─ assets/                  图标（打包进客户端）
-│  │  └─ package.json
-│  ├─ server/                     后台服务（P1：JSON 仓储，可独立运行）
-│  │  ├─ src/
-│  │  │  ├─ index.js              启动入口（只做装配 + 数据加载日志）
-│  │  │  ├─ app/                  组合根：config · container · http-server · auth · adapters
-│  │  │  ├─ api/                  ★ 接口公共定义：routes（路由表）· handlers · errors
-│  │  │  ├─ shared/               跨模块：logger · errors · event-bus · shared-kernel · json-database
-│  │  │  └─ modules/              ★ 每个目录 = 一个限界上下文
-│  │  │     ├─ catalog/           图鉴：武器 / 刻印 / 宝藏 / 流派分类
-│  │  │     ├─ builds/            流派聚合根 + 不变量
-│  │  │     ├─ submissions/       投稿与审核
-│  │  │     ├─ ratings/           评分
-│  │  │     ├─ publishing/        数据包版本与 hash
-│  │  │     └─ security/          安全管控：请求指纹 + 滑动窗口限流
-│  │  │        （模块内：domain / application / infrastructure）
-│  │  ├─ test/                    领域 + 安全 + HTTP 集成测试（28 个用例）
-│  │  ├─ prisma/schema.prisma     P4 数据模型（按上下文分区）
-│  │  ├─ .env.example
-│  │  └─ package.json
-│  └─ shared/                     前后端共用
-│     ├─ schema/build.schema.json 数据规范
-│     └─ validate.js              校验器
-├─ data/                          种子数据（客户端内置 + 服务端初始化）
-├─ 文档/                          ★ 全部文档在这里
-│  ├─ 文档索引.md                 入口（阅读顺序）
-│  ├─ 方案总纲.md  需求说明.md  技术架构.md
-│  ├─ 数据源清单.md  数据源与采集.md  后端设计-DDD.md
-│  ├─ 数据填写指南.md  数据说明.md  贡献指南.md
-│  ├─ 后台架构.md  窗口渲染方案.md  客户端说明.md
-│  ├─ 服务端说明.md  共享层说明.md  脚本说明.md
-│  ├─ 图标说明.md  原型说明.md  图标方案对比.png
-│  └─ 原型/index.html             可点击原型（不参与打包）
-├─ scripts/                       数据校验 / 图标生成
-│  ├─ validate-data.js
-│  └─ make-icons.ps1
-├─ .github/workflows/validate.yml CI：数据 + 语法校验
-├─ .editorconfig  .nvmrc  .gitignore
-├─ package.json                   workspace 根
-└─ README.md  LICENSE  LICENSE-DATA
+│  ├─ desktop/          Electron 客户端
+│  │  ├─ src/main/      主进程（组合根 + panel/config/geometry/ipc/tray…）
+│  │  ├─ src/renderer/  渲染层（data / domain / infra / ui / app 分层 + styles）
+│  │  ├─ test/          渲染层 + 主进程单测
+│  │  ├─ native/        原生气泡 / 阴影 helper（PowerShell）
+│  │  └─ assets/        图标资产
+│  ├─ server/           Fastify 数据服务（DDD 模块：builds / catalog / ratings / submissions / publishing）
+│  └─ shared/           前后端共用校验层 @lc2/shared
+├─ data/                种子数据（builds / weapons / inscriptions / schools）
+├─ scripts/             版本、校验、图标生成等脚本
+├─ 文档/                 设计文档与可交互原型
+├─ AGENTS.md            开发规范（架构约束 / 提交 / 版本 / 质量门）
+└─ .github/workflows/   CI（数据校验、测试、版本一致性）
 ```
 
----
+## 开发规范
 
-## 先看原型
-
-**双击 `文档/原型/index.html`** 直接用浏览器打开，不需要安装任何东西。
-
-| 操作 | 效果 |
-|---|---|
-| `Alt + \`` | 呼出 / 收起面板 |
-| `↑ ↓` | 在流派列表中移动 |
-| `Enter` / `→` | 展开卡片（玩法技巧、核心宝藏） |
-| `D` | 打开 / 关闭流派详情页 |
-| `F` | 筛选（武器 / 刻印 / 标签 + 排序） |
-| `I` | 投稿入口（v1 仅提示） |
-| `H` | 帮助 |
-| `Esc` | 逐级退出 |
-
-原型里 `复仇战士剑盾流` 用的是真实社区数据（来源：抖音图文《失落城堡2流派》第7集），其余为示例数据。
-
----
-
-## 几个关键设计决策
-
-**1）不抢焦点**
-浮窗 `focusable: false`，呼出与收起不会让游戏暂停、最小化或掉焦点。代价是窗口拿不到键盘事件，所以全部键盘操作走 `globalShortcut`。
-
-**2）热键分两套注册**
-常驻只注册 `Alt+\`` 一个；面板展开时才临时注册方向键、关闭立即注销。否则会和游戏里的方向键抢输入。
-
-**3）纯树 + 卡片流**
-`武器 → 刻印 → 玩家流派` 是底层结构，界面上呈现为**卡片列表 + 筛选弹层**，不是树控件——玩家的实际动作是"翻看有哪些玩法"，不是"沿着树找节点"。
-
-**4）刻印 ≠ 流派**
-刻印是官方分支，真正的流派是玩家自己总结的构筑（「双刀闪避暴击流」「虚浮的闪电溜溜球」）。玩家流派挂在对应刻印下。
-
-**5）机制藏在顺序里**
-游戏有"流派深度门槛"（先拿根级，1 级才会出）。界面上不解释机制，只把宝藏**按正确顺序**列出来——顺序本身就是答案。
-
-详见 [`文档/方案总纲.md`](文档/方案总纲.md)。
-
----
-
-## 数据与社区维护
-
-每个流派是一条 JSON 记录，包含：基本信息、玩法技巧与连招、伤害参考、武器刻印、灵魂石、武器衣服、宝藏、诅咒宝藏、炼金与猎人道具、梦魇加点。
-
-字段规范见 [`apps/shared/schema/build.schema.json`](apps/shared/schema/build.schema.json)，
-填写说明见 [`文档/数据填写指南.md`](文档/数据填写指南.md)，贡献流程见 [`文档/贡献指南.md`](文档/贡献指南.md)。
-
-本地校验：
+- **架构与约定**：见 [AGENTS.md](./AGENTS.md)（DDD 分层与依赖规则、编码/测试规范、数据规则、UI 约定、Windows 坑）
+- **提交规范**：Conventional Commits，如 `feat(desktop): …` / `fix(renderer): …` / `docs: …`
+- **版本号（自动化）**：
+  - 每次提交 → pre-commit **自动 patch +1**（`0.1.1 → 0.1.2`）
+  - 正式发布时 → `npm run release`（语义化 **major +1**，如 `0.9.3 → 1.0.0`），提交并打 tag
+  - 版本以**根 `package.json` 为唯一来源**，自动同步到各 workspace 与 lockfile
+- **质量门**（提交前全部通过）：
 
 ```bash
-node scripts/validate-data.js
+npm run validate      # 数据校验
+npm test              # 数据 + 桌面测试 + 服务端测试
+node scripts/check-links.js   # 文档内链
+node scripts/version.js check # 版本一致性
 ```
 
-**想投稿？** 在 `data/builds.json` 的 `builds` 数组里新增一条，提 PR 即可。
+## 文档
+
+所有设计文档在 [`文档/`](./文档/文档索引.md)，从 [文档索引](./文档/文档索引.md) 开始看：
+
+- [方案总纲](./文档/方案总纲.md) · [需求说明](./文档/需求说明.md) · [技术架构](./文档/技术架构.md)
+- [前端架构](./文档/前端架构.md) · [主进程架构](./文档/主进程架构.md) · [服务端说明](./文档/服务端说明.md)
+- [数据源清单](./文档/数据源清单.md) · [数据说明](./文档/数据说明.md) · [贡献指南](./文档/贡献指南.md)
+- [可交互原型](./文档/原型/index.html)（浏览器直接打开）
+
+## 许可与声明
+
+- **代码**：[MIT License](./LICENSE)
+- **数据与文档**：[CC BY-NC-SA 4.0](./LICENSE-DATA)（署名 · 非商业 · 相同方式共享）
+- **游戏素材**：`失落城堡2` 商标与游戏内素材版权归 [Hunter Studio](https://store.steampowered.com/app/2445690/) 所有；图标等参考数据来自 [失落城堡2中文维基](https://lc2.huijiwiki.com/)（CC BY-NC-SA 4.0）
+- 本项目为**非商业的玩家工具**，与 Hunter Studio 无关联；不会注入游戏、修改游戏文件或读取游戏内存
 
 ---
 
-## 数据与文件存储
-
-当前**不依赖自建服务器**，数据与文件全部由 GitHub 承担：
-
-| 内容 | 位置 | 客户端如何拿到 |
-|---|---|---|
-| 流派数据 `data/*.json` | 本仓库 | 拉 `raw.githubusercontent.com/.../data/builds.json`，本地缓存 + sha256 校验 |
-| 图标 | `apps/desktop/assets/` | 打包进客户端（离线可用） |
-| 数据包版本 | `data/package.json`（可选） | 有则比对 version + hash 决定是否重下 |
-| 投稿截图（将来） | 对象存储（不入公开仓库） | 见下 |
-
-数据来源可在 `config.json` 切换：
-
-```jsonc
-{ "dataSource": "github" }   // github | local
-```
-
-开发时用 `LC2_DATA_SOURCE=local npm run desktop` 直接读本地 `data/`。
-失败时自动降级：GitHub → 本地缓存 → 内置种子数据，**断网也能用**。
-
-> 为什么截图不能走 GitHub：仓库是公开且永久的，玩家截图可能含个人信息，体积也会膨胀。
-> 所以截图从第一天就该走对象存储（或先存服务器本地、不入 git）。
-
----
-
-## 后台（骨架，暂未启用）
-
-详见 [文档/后台架构.md](文档/后台架构.md)。
-
-- 技术栈：Node + Fastify + Prisma + PostgreSQL
-- 已建骨架：6 张表、全部路由、无数据库时自动降级为 JSON 文件存储
-- 什么时候启用：投稿量起来、需要审核队列与评分防刷时
-- 现阶段替代流程：投稿 = 提 PR 改 `data/builds.json`，审核 = review + merge
-
----
-
-## 路线图
-
-| 阶段 | 内容 |
-|---|---|
-| M1 | Electron 壳 + 托盘 + 气泡 + 全局热键 + 读本地 JSON 渲染卡片列表 |
-| M2 | 详情页 + 筛选弹层 + 打分/收藏 |
-| M3 | 数据全量补齐（9 大类 × 27 刻印的流派内容） |
-| M4 | 投稿页（表单 → 生成 JSON）+ 数据热更新 |
-| M5 | 图标打包（离线可用）+ 过期版本提示 |
-
----
-
-## 许可证
-
-- **代码**：[MIT](LICENSE)
-- **数据与文档**：[CC BY-NC-SA 4.0](LICENSE-DATA)（源自[失落城堡2中文维基](https://lc2.huijiwiki.com/)，须署名、不得商用、同协议共享）
-
----
-
-## 免责声明
-
-本项目为**非官方玩家工具**，与 Hunter Studio 无关。
-《失落城堡》/《失落城堡2》商标及游戏内素材归 Hunter Studio 所有。
-
-本工具：
-- **不**读取游戏内存
-- **不**注入 DLL、**不**修改游戏文件
-- **不**提供任何自动化操作
-
-仅做信息展示，联机场景下也可安全使用。
-
----
-
-## 数据来源致谢
-
-- [失落城堡2中文维基（灰机wiki）](https://lc2.huijiwiki.com/) — 武器类型、刻印、宝藏流派标签、游戏机制
-- 社区玩家：TapTap / 抖音 / 小红书 上的流派图文作者
+<div align="center"><sub>如果对你有帮助，点个 ⭐ 就好</sub></div>

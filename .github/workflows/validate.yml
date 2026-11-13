@@ -1,18 +1,30 @@
-name: validate
+name: CI
 
 on:
   push:
     branches: [main]
+    tags: ['v*']
   pull_request:
+
+permissions:
+  contents: read
 
 jobs:
   checks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
+
+      - name: 安装依赖（会启用 git hooks，CI 中不产生提交）
+        run: npm ci
+
+      - name: 版本一致性
+        run: node scripts/version.js check
 
       - name: 数据校验
         run: node scripts/validate-data.js
@@ -33,3 +45,9 @@ jobs:
           for f in $(git ls-files '*.json' | grep -v node_modules); do
             node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))"
           done
+
+      - name: 桌面测试（渲染层 + 主进程）
+        run: npm run test:desktop
+
+      - name: 服务端测试
+        run: npm run test:server

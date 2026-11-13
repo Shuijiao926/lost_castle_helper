@@ -1,0 +1,34 @@
+#!/bin/sh
+# 提交前自动做两件事：
+#   1. 普通提交：patch 版本 +1（0.1.0 → 0.1.1）
+#   2. 正式发布（先跑过 npm run release 的 major 递增）：检测到版本已改，只做多包同步
+#
+# 跳过自动版本：git commit --no-verify（不推荐）
+# 调试：LC2_HOOK_DRY=1 git commit ...（只打印，不写文件）
+
+ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0
+cd "$ROOT" || exit 0
+
+# 合并 / rebase 过程中不碰版本，避免冲突
+[ -f .git/MERGE_HEAD ] && exit 0
+[ -d .git/rebase-merge ] && exit 0
+[ -d .git/rebase-apply ] && exit 0
+
+NODE=$(command -v node 2>/dev/null) || exit 0
+
+if [ "$LC2_HOOK_DRY" = "1" ]; then
+  "$NODE" scripts/version.js patch --dry-run --from-hook
+  exit 0
+fi
+
+# 工作区版本已和 HEAD 不同 → 视为正式发布/手动改版，只同步其余包
+if "$NODE" scripts/version.js check-changed --quiet; then
+  "$NODE" scripts/version.js sync --quiet
+  git add package.json package-lock.json apps/desktop/package.json apps/server/package.json apps/shared/package.json 2>/dev/null
+  exit 0
+fi
+
+# 普通提交：自动 patch 版本并加入本次提交
+"$NODE" scripts/version.js patch --from-hook || exit 0
+git add package.json package-lock.json apps/desktop/package.json apps/server/package.json apps/shared/package.json 2>/dev/null
+exit 0

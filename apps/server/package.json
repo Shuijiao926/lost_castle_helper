@@ -1,6 +1,6 @@
 {
   "name": "@lc2/server",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "城堡助手后台：按限界上下文分模块（catalog/builds/submissions/ratings/publishing），模块内 DDD 分层",
   "type": "commonjs",
@@ -23,5 +23,6 @@
   },
   "devDependencies": {
     "prisma": "^6.1.0"
-  }
+  },
+  "license": "MIT"
 }
