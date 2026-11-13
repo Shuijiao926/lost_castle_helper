@@ -54,11 +54,28 @@
     ].join(' ').toLowerCase();
   }
 
-  /** 单条流派是否命中筛选条件 */
+  /** 把筛选值统一成数组（兼容单值字符串） */
+  function asList(v) {
+    if (!v) return [];
+    return Array.isArray(v) ? v : [v];
+  }
+
+  /**
+   * 单条流派是否命中筛选条件
+   *
+   * 多选语义：同一类里是「或」（选了双刀或法杖都算命中），
+   * 不同类之间是「且」（武器 + 标签必须同时满足）。
+   */
   function matches(build, filters) {
-    if (filters.filterW && build.wt !== filters.filterW) return false;
-    if (filters.filterI && build.insc !== filters.filterI) return false;
-    if (filters.tag && (build.tags || []).indexOf(filters.tag) === -1) return false;
+    var wantW = asList(filters.filterW);
+    var wantI = asList(filters.filterI);
+    var wantT = asList(filters.tag).concat(asList(filters.tags));
+    if (wantW.length && wantW.indexOf(build.wt) === -1) return false;
+    if (wantI.length && wantI.indexOf(build.insc) === -1) return false;
+    if (wantT.length) {
+      var tags = build.tags || [];
+      if (!wantT.some(function (t) { return tags.indexOf(t) !== -1; })) return false;
+    }
     if (filters.q && searchText(build).indexOf(String(filters.q).toLowerCase()) === -1) return false;
     return true;
   }

@@ -114,7 +114,6 @@ let notesStore = null;
 let dataLoader = null;
 let geometry = null;
 let disposeHotReload = null;
-let topmostTimer = null;
 
 /* ---------------- 进程级兜底 ---------------- */
 process.on('uncaughtException', (e) => {
@@ -168,6 +167,7 @@ function createElectronBubble() {
     bounds: currentBubbleBounds(),
     preloadPath: PRELOAD_PATH,
     rendererDir: RENDERER_DIR,
+    topmostLevel: 'floating',
     applyShape: (win) => {
       if (USE_SHAPE_CLIP) shapeRounded(win, BUBBLE.w, BUBBLE.h, BUBBLE.w / 2, log);
     },
@@ -202,20 +202,6 @@ async function startNativeBubble() {
     log('startNativeBubble failed:', e.message);
     return false;
   }
-}
-
-/* ---------------- 层级守护 ---------------- */
-function startTopmostWatchdog() {
-  if (topmostTimer) return;
-  topmostTimer = setInterval(() => {
-    if (bubbleWin && !bubbleWin.isDestroyed()) {
-      try { bubbleWin.setAlwaysOnTop(true, 'screen-saver'); } catch {}
-    }
-    const pw = panel && panel.getWindow();
-    if (pw && !pw.isDestroyed() && panel.isOpen()) {
-      try { pw.setAlwaysOnTop(true, 'screen-saver'); } catch {}
-    }
-  }, 1000);
 }
 
 /* ---------------- 孤儿 helper 清理 ---------------- */
@@ -256,7 +242,7 @@ function showBubbleAndPanel() {
   else {
     const pw = panel.getWindow();
     if (pw && !pw.isDestroyed()) {
-      try { pw.setAlwaysOnTop(true, 'screen-saver'); } catch {}
+      try { pw.setAlwaysOnTop(true, 'floating'); } catch {}
     }
   }
 }
@@ -317,6 +303,7 @@ if (!gotLock) {
       PANEL_CORNER_PREF,
       USE_PANEL_SHADOW,
       USE_SHAPE_CLIP,
+      topmostLevel: 'floating',
       fade: FADE,
     });
     panel.setPinned(configStore.state.panelPinned);
@@ -380,8 +367,6 @@ if (!gotLock) {
     });
     log(trayHandle ? '托盘已就绪' : '托盘不可用（缺少图标资源）');
 
-    startTopmostWatchdog();
-
     if (DEV_HOT) {
       disposeHotReload = setupDevHotReload({
         fs,
@@ -431,11 +416,7 @@ if (!gotLock) {
 
   app.on('before-quit', () => {
     app.isQuitting = true;
-    if (topmostTimer) {
-      clearInterval(topmostTimer);
-      topmostTimer = null;
-    }
-    if (disposeHotReload) {
+      if (disposeHotReload) {
       try { disposeHotReload(); } catch {}
     }
     try { nativeBubble.stop(); } catch {}

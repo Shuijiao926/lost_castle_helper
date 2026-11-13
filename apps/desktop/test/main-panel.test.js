@@ -64,12 +64,15 @@ function makeHarness({ pinned = false } = {}) {
     }
   };
   const primary = { workArea: HD, scaleFactor: 1 };
+  let cursor = { x: 0, y: 0 };
   const screen = {
     getPrimaryDisplay: () => primary,
     getAllDisplays: () => [primary],
     getDisplayMatching: () => primary,
     getDisplayNearestPoint: () => primary,
+    getCursorScreenPoint: () => ({ ...cursor }),
   };
+  const setCursor = (x, y) => { cursor = { x, y }; };
   const shadow = {
     started: 0,
     setPanelCorner: async () => true,
@@ -114,7 +117,7 @@ function makeHarness({ pinned = false } = {}) {
   });
   panel.setPinned(pinned);
   panel.create();
-  return { panel, win: created[0], configStore, keys, shadow };
+  return { panel, win: created[0], configStore, keys, shadow, screen, setCursor };
 }
 
 test('panel：创建后默认隐藏、不可聚焦', () => {
@@ -177,10 +180,27 @@ test('panel：非置顶时点外部 → 收起', () => {
   assert.equal(win.visible, false);
 });
 
-test('panel：拖拽结束后保存位置', () => {
-  const { panel, win, configStore } = makeHarness();
+test('panel：拖拽由主进程光标轮询驱动（8ms）', async () => {
+  const { panel, win, screen, setCursor } = makeHarness();
   panel.show();
   win.setBounds({ x: 200, y: 300, width: PANEL.w, height: PANEL.h });
+  setCursor(300, 400);
+  panel.startDrag({ sx: 300, sy: 400 }); // 偏移 = (100, 100)
+  setCursor(360, 450);
+  await new Promise((r) => setTimeout(r, 50));
+  assert.deepEqual(win.getBounds(), { x: 260, y: 350, width: PANEL.w, height: PANEL.h });
+  panel.finalizeDrag();
+  // 结束后计时器已停止：再移动光标，窗口不应再动
+  setCursor(500, 500);
+  await new Promise((r) => setTimeout(r, 30));
+  assert.deepEqual(win.getBounds(), { x: 260, y: 350, width: PANEL.w, height: PANEL.h });
+});
+
+test('panel：拖拽结束后保存位置', () => {
+  const { panel, win, configStore, setCursor } = makeHarness();
+  panel.show();
+  win.setBounds({ x: 200, y: 300, width: PANEL.w, height: PANEL.h });
+  setCursor(300, 400);
   panel.startDrag({ sx: 300, sy: 400 });
   panel.finalizeDrag();
   assert.deepEqual(configStore.state.panel, { x: 200, y: 300 });

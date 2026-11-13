@@ -18,17 +18,38 @@
       <span class="back" id="back" style="display:none">← 返回</span>
       <img class="crest" id="crest" alt="" src="../../assets/tray-32.png"><div class="ttl" id="ttl">城堡助手</div>
 <div class="hbtns">
-<div class="fbtn icon pin" id="pinbtn" title="置顶（P）：点击外部不收起" aria-label="置顶">⤒</div>
-<div class="fbtn icon" id="hbtn" title="帮助（H）" aria-label="帮助">?</div>
-<div class="fbtn icon" id="sbtn" title="投稿（I）" aria-label="投稿">✎</div>
+<div class="fbtn icon pin" id="pinbtn" title="置顶（P）：点击外部不收起" aria-label="置顶">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>
+</div>
+<div class="fbtn icon" id="hbtn" title="帮助（H）" aria-label="帮助">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><path d="M9.3 9a2.8 2.8 0 0 1 5.4 1c0 1.9-2.7 2.3-2.7 4"/><path d="M12 17.2h.01"/></svg>
+</div>
+<div class="fbtn icon" id="sbtn" title="投稿（I）" aria-label="投稿">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><path d="M16 8 2 22"/><path d="M17.5 15H9"/></svg>
+</div>
 </div>
     </div>
-    <div class="searchbar" id="sbar" title="点击输入关键词；☰ 或 F 打开筛选">
-  <span class="sico" id="fopen" title="筛选（F）"><i></i><i></i><i></i></span>
+    <div class="searchbar" id="sbar" title="点击输入关键词；左侧漏斗或 F 打开筛选">
+  <span class="sico" id="fopen" title="筛选（F）" aria-label="筛选"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.2 5.6h15.6l-6.2 7.1v5.9l-3.2 1.2v-7.1z"/></svg></span>
   <input id="q" placeholder="搜索流派 / 别名 / 武器 / 宝藏" autocomplete="off" spellcheck="false">
   <span class="schev" id="fchev" title="筛选（F）"></span>
 </div>
-    <div class="feed" id="feed"></div>
+    <div class="listbar" id="listbar">
+  <div class="frow" id="frow" style="display:none">
+    <div class="filterbar" id="filterbar"></div>
+    <span class="lclear" id="lclear" title="清空全部筛选" aria-label="清空全部筛选">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/>
+      <path d="M8 6V4.6A1.6 1.6 0 0 1 9.6 3h4.8A1.6 1.6 0 0 1 16 4.6V6"/>
+      <path d="M18.5 6l-.9 13.2a2 2 0 0 1-2 1.8H8.4a2 2 0 0 1-2-1.8L5.5 6"/>
+      <path d="M10 10.6v6.4M14 10.6v6.4"/></svg>
+    </span>
+  </div>
+  <div class="sorter" id="sorter" data-sort="hot" title="列表排序">
+    <span class="sbtn on" data-sort="hot">人气</span>
+    <span class="sbtn" data-sort="rating">评分</span>
+  </div>
+</div>
+<div class="feed" id="feed"></div>
     <div class="detail" id="detail"></div>
     <div class="modal" id="noteModal">
   <div class="msheet" style="height:auto;max-height:76%">
@@ -52,8 +73,9 @@
             <div class="hrow"><b>Enter / →</b><span>展开卡片（玩法技巧、核心宝藏）</span></div>
             <div class="hrow"><b>←</b><span>收起卡片 / 详情页返回列表</span></div>
             <div class="hrow"><b>D</b><span>打开 / 关闭流派详情页</span></div>
-            <div class="hrow"><b>F</b><span>打开筛选（武器 / 刻印 / 标签 + 排序）</span></div>
+            <div class="hrow"><b>F</b><span>打开筛选（武器 / 刻印 / 标签，可多选）</span></div>
 <div class="hrow"><b>点击搜索栏</b><span>输入关键词搜索；Esc 退出输入（平时不抢焦点）</span></div>
+            <div class="hrow"><b>搜索栏下方左侧</b><span>切换排序：人气 / 评分</span></div>
             <div class="hrow"><b>I</b><span>投稿入口</span></div>
             <div class="hrow"><b>H</b><span>打开本帮助</span></div>
 <div class="hrow"><b>P</b><span>置顶（点击外部不收起面板）</span></div>
@@ -73,24 +95,18 @@
         </div>
       </div>
     </div>
-  </div>
-</div>
-
     <div class="modal" id="modal">
       <div class="msheet">
-        <div class="mh"><span id="mCancel">取消</span><b>筛选</b><span id="mOk" class="ok">确认</span></div>
-        <div class="mseg"><div class="on" data-seg="w">武器</div><div data-seg="i">刻印</div><div data-seg="t">标签</div></div>
-        <div class="msort" id="msort">
-          <span class="lb">排序</span>
-          <div class="so on" data-sort="hot">人气最多</div>
-          <div class="so" data-sort="rating">评分最高</div>
-        </div>
+        <div class="mh"><span class="mh-spacer"></span><b>筛选</b><span class="mh-close" id="mClose" title="关闭（选中立即生效）" aria-label="关闭"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></span></div>
+        <div class="mseg" data-seg="w"><span class="seg-thumb"></span><div class="on" data-seg="w">武器</div><div data-seg="i">刻印</div><div data-seg="t">标签</div><span class="mseg-right"><span class="mseg-ic" id="mclear" title="清空当前类" aria-label="清空当前类"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.4"/><path d="M9.2 9.2l5.6 5.6M14.8 9.2l-5.6 5.6"/></svg></span><span class="mseg-ic" id="mall" title="全部清空" aria-label="全部清空"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4.6A1.6 1.6 0 0 1 9.6 3h4.8A1.6 1.6 0 0 1 16 4.6V6"/><path d="M18.5 6l-.9 13.2a2 2 0 0 1-2 1.8H8.4a2 2 0 0 1-2-1.8L5.5 6"/><path d="M10 10.6v6.4M14 10.6v6.4"/></svg></span></span></div>
         <div class="msearch"><input id="mq" placeholder="搜索"></div>
         <div class="mbody"><div class="mgrid" id="mgrid"></div></div>
+        <div class="mfoot"><span class="mcount" id="mcount"></span></div>
       </div>
     </div>
   </div>
 </div>
+
 <script src="js/data/catalog.js"></script>
 <script src="js/domain/builds.js"></script>
 <script src="js/infra/repositories.js"></script>

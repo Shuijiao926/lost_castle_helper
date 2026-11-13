@@ -1,4 +1,4 @@
-# 城堡助手 · 面板阴影窗口（原生分层窗口）
+﻿# 城堡助手 · 面板阴影窗口（原生分层窗口）
 # ------------------------------------------------------------------
 # 目的：Electron 的透明窗口在部分机器上会失效（留白显示成浅灰框），
 #       所以"面板外侧的柔和阴影"改由这个原生分层窗口来画：
@@ -296,10 +296,10 @@ public class PanelShadow : Form
         {
             int pref = cornerPref;              // DWMWCP_ROUND=2 / DWMWCP_DONOTROUND=1
             int hr = DwmSetCorner(hwnd, 33, ref pref, 4);
-            // subtle dark border (COLORREF = 0x00BBGGRR -> rgb(43,48,56))
-            // darker than system white border, matches the dark panel
-            uint borderColor = 0x0038302B;
-            DwmSetColor(hwnd, 34, ref borderColor, 4);
+            // 去掉 Win11 默认窗口边框：暗色面板上这条边会呈现白/浅灰细线，
+            // 圆角处尤其像锯齿毛边（DWMWA_COLOR_NONE = 0xFFFFFFFE）
+            uint borderNone = 0xFFFFFFFE;
+            DwmSetColor(hwnd, 34, ref borderNone, 4);
             return hr == 0;
         }
         catch { return false; }

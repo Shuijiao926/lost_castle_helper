@@ -1,6 +1,6 @@
 {
   "name": "@lc2/desktop",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "城堡助手 · 失落城堡2 流派速查（Electron 客户端，常驻托盘 + 热键浮窗）",
   "main": "src/main/index.js",
   "author": "Shuijiao926",

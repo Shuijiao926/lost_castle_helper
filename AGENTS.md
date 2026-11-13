@@ -211,6 +211,7 @@ scope：`desktop` / `renderer` / `main` / `server` / `shared` / `data` / `docs` 
 ## 11. UI / 交互约定
 
 - 皮肤：虚空紫 + 金线 + 暖色底纹，参考 [前端架构](./文档/前端架构.md)
+- 字体：只用系统字体（不内嵌 webfont），统一 `var(--font-ui)`；图标符号用 `var(--font-symbol)`；不要写死 font-family
 - 文案用用户视角，不出现「根级 / 1 级 / 2 级」等内部术语
 - 圆角/阴影走 Win11 DWM；不要用 CSS 阴影模拟窗口阴影
 - 弹层层级：`.modal` z-index 30、`.toast` 40；新浮层必须显式设层级
@@ -218,6 +219,13 @@ scope：`desktop` / `renderer` / `main` / `server` / `shared` / `data` / `docs` 
 - 动效统一走 `ui/motion.js`（replay / stagger / panelIn / press），不要猴补丁替换业务函数
 
 ## 12. Windows 环境坑
+
+- **圆角毛边**：Win11 系统边框会在深色面板圆角处形成白边，native helper 需把 `DWMWA_BORDER_COLOR` 设为 `0xFFFFFFFE`（COLOR_NONE）
+
+- **拖拽性能**：面板拖拽由主进程 8ms 轮询 `screen.getCursorScreenPoint()` 驱动；不要在每次 move 里重设 `setAlwaysOnTop`/重算显示信息，helper 只用于检测窗口外松开
+
+- **截图兼容**：窗口置顶用 `floating`，禁止 `screen-saver` 级别、禁止周期性抢顶层，否则系统/微信截图无法在面板内部框选
+
 
 - 控制台默认 GBK：脚本 / npm script 需要 `chcp 65001`
 - PowerShell 5.1 的 C# 代码块只允许 ASCII（`native/*.ps1`）

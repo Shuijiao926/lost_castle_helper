@@ -2,6 +2,10 @@
   :root{
     --panel:#15161c; --sub:#1c1e26; --line:#2c303a; --txt:#e8eaf1; --dim:#949bb0;
     --ok:#5FAE7A; --hl:rgba(255,255,255,.07); --tag:#8b9ad4; --star:#E0B44A; --legend:#cf9440;
+    /* 字体规范：只用系统字体（不内嵌 webfont），按平台优先级回退 */
+    --font-ui:"Noto Sans SC","Source Han Sans SC","Source Han Sans CN","HarmonyOS Sans SC","PingFang SC","Microsoft YaHei UI","Microsoft YaHei",system-ui,sans-serif;
+    /* 图标符号专用（⤒ ? ✎ 等），保证各系统字形一致 */
+    --font-symbol:"Segoe UI Symbol","Segoe UI",system-ui,sans-serif;
   }
   *{box-sizing:border-box}
 /* ---- 隐藏滚动条（保留滚轮滚动）---- */
@@ -10,7 +14,7 @@
 
   html,body{height:100%;margin:0}
   body{
-    font:14px/1.6 "Noto Sans SC","Source Han Sans SC","Source Han Sans CN","HarmonyOS Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:var(--txt);
+    font:14px/1.6 var(--font-ui);color:var(--txt);
     background:#0b0d12;overflow:hidden;
   }
   .desktop{position:fixed;inset:0;display:flex;align-items:center;justify-content:flex-end;
@@ -49,14 +53,19 @@
 /* ---- 标题栏图标按钮（统一尺寸 / 单色 / 交互反馈）---- */
 .hbtns{display:flex;align-items:center;gap:7px;margin-left:auto}
 .fbtn.icon{
-  width:29px;height:29px;padding:0;display:flex;align-items:center;justify-content:center;
-  border-radius:8px;font-size:15px;line-height:1;font-weight:600;
-  font-family:"Segoe UI Symbol","Segoe UI",system-ui,sans-serif;
+  width:27px;height:27px;padding:0;display:flex;align-items:center;justify-content:center;
+  border-radius:9px;line-height:1;
   color:#9aa5bd;background:rgba(255,255,255,.025);
   transition:background .16s ease,border-color .16s ease,color .16s ease,transform .1s cubic-bezier(.22,1,.36,1),box-shadow .16s ease;
   user-select:none
 }
 .fbtn.icon:hover{background:#252c3c;color:#e8eeff;border-color:#48557a;box-shadow:0 2px 10px rgba(0,0,0,.28);transform:translateY(-1px)}
+.fbtn.icon svg{width:16px;height:16px;display:block;fill:none;stroke:currentColor;
+  stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;opacity:.9;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.45));
+  transition:opacity .16s ease,transform .16s ease}
+.fbtn.icon:hover svg{opacity:1;transform:translateY(-.5px)}
+.fbtn.icon.on svg{opacity:1}
 .fbtn.icon:active{transform:scale(.92);background:#202634}
 .fbtn.icon.on{background:#2c3346;color:#fff;border-color:#3b4560;box-shadow:inset 0 0 0 1px rgba(139,154,212,.18)}
 .fbtn.pin.on{background:#26313f;color:#cfe0ff;border-color:#45557a}
@@ -73,10 +82,12 @@
     transition:background .16s ease,border-color .16s ease,box-shadow .16s ease}
   .searchbar:hover{background:#222633;border-color:#3a4560}
   .searchbar.on,.searchbar.searching{border-color:#4a5b80;background:#252e3f;box-shadow:0 0 0 2px rgba(90,111,168,.14)}
-  .searchbar .sico{flex:0 0 16px;width:16px;height:16px;display:flex;flex-direction:column;justify-content:center;gap:3px;
-    color:#7f8798;cursor:pointer;border-radius:4px}
-  .searchbar .sico i{display:block;height:1.5px;width:13px;border-radius:1px;background:currentColor;margin:0 auto}
-  .searchbar .sico:hover{color:#cfd8ee}
+  .searchbar .sico{flex:0 0 18px;width:18px;height:18px;display:flex;align-items:center;justify-content:center;
+    color:#C4B5D8;cursor:pointer;border-radius:5px;transition:color .15s ease,background .15s ease}
+  .searchbar .sico svg{width:16px;height:16px;display:block;fill:none;stroke:currentColor;
+    stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;opacity:.9;
+    filter:drop-shadow(0 1px 1px rgba(0,0,0,.35))}
+  .searchbar .sico:hover{color:#FFE6B0;background:rgba(255,214,146,.08)}
   .searchbar .schev{flex:0 0 16px;width:16px;height:16px;position:relative;color:#7f8798;cursor:pointer;border-radius:4px}
   .searchbar .schev::before{content:'';position:absolute;left:50%;top:42%;width:6px;height:6px;
     border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;
@@ -115,7 +126,7 @@
   .ch .main{flex:1;min-width:0}
   .cname{font-size:15px;font-weight:600;line-height:1.35}
   .cmeta{font-size:11.5px;color:var(--dim);margin-top:2px}
-  .rate{display:flex;align-items:center;gap:7px;margin-top:6px;font-size:11.5px;flex-wrap:wrap}
+  .rate{display:flex;align-items:center;gap:7px;margin-top:6px;font-size:11.5px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
   .rate .sc{background:#1f6f63;color:#8ff0dd;border-radius:4px;padding:1px 5px;font-size:11px;font-weight:600}
   .stars{color:#4d5468;letter-spacing:1.5px;font-size:12px}
   .stars i{color:var(--star);font-style:normal}
@@ -215,7 +226,7 @@
   .chain .arw{color:#4d5566;font-size:10px;flex:none}
   .chaincap{font-size:11px;color:#7f8798;margin-bottom:10px}
   .plist{display:flex;flex-direction:column;gap:5px}
-  .prow{display:flex;align-items:center;gap:8px;font-size:12px;color:#c6ccdb;background:rgba(255,255,255,.028);
+  .prow{display:flex;align-items:center;gap:8px;font-size:12px;color:#c6ccdb;font-variant-numeric:tabular-nums;background:rgba(255,255,255,.028);
     border-radius:7px;padding:5px 9px}
   .prow.on{background:rgba(95,174,122,.10)}
   .prow.lock{opacity:.42}
@@ -235,29 +246,83 @@
   .modal.on{display:flex}
 /* 筛选弹层：从搜索栏下拉 */
   #modal{justify-content:flex-start;background:rgba(6,7,10,.42)}
-  #modal .msheet{width:calc(100% - 28px);margin:76px 14px 0;border-radius:12px;
+  #modal .msheet{width:calc(100% - 28px);margin:76px 14px 16px;border-radius:12px;
+    height:calc(100% - 92px);max-height:none;display:flex;flex-direction:column;
     border:1px solid var(--line);box-shadow:0 18px 40px rgba(0,0,0,.5);
     max-height:calc(100% - 104px);border-radius:12px}
-  @keyframes m-drop-in{from{opacity:0;transform:translateY(-10px) scale(.985)}to{opacity:1;transform:none}}
-  #modal.on .msheet{animation:m-drop-in .22s cubic-bezier(.22,1,.36,1) both}
+  @keyframes m-drop-in{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+  #modal.on .msheet{animation:m-drop-in .26s cubic-bezier(.16,1,.3,1) both;will-change:transform,opacity}
+  @keyframes m-drop-out{from{opacity:1;transform:none}to{opacity:0;transform:translateY(-6px)}}
+  #modal.closing .msheet{animation:m-drop-out .16s ease-in both}
   .msheet{background:#1a1c24;border-radius:14px 14px 0 0;height:auto;max-height:62%;
     display:flex;flex-direction:column;border-top:1px solid var(--line);box-shadow:0 -10px 30px rgba(0,0,0,.5)}
   .mh{display:flex;align-items:center;padding:11px 16px;border-bottom:1px solid var(--line);font-size:13px}
   .mh b{flex:1;text-align:center;font-weight:600}
   .mh span{color:var(--dim);cursor:pointer;font-size:12.5px}.mh span.ok{color:#6fc7e8}
-  .mseg{display:flex;gap:7px;padding:9px 16px 0}
-  .mseg div{padding:3px 12px;border-radius:14px;font-size:12px;color:var(--dim);cursor:pointer;border:1px solid var(--line)}
-  .mseg div.on{background:#2c3346;color:#fff;border-color:#2c3346}
+  .mh .mh-spacer{width:24px}
+  .mh .mh-close{width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:6px;
+    color:#B9A9D2;transition:background .15s,color .15s}
+  .mh .mh-close svg{width:15px;height:15px;display:block;fill:none;stroke:currentColor;
+    stroke-width:1.7;stroke-linecap:round}
+  .mh .mh-close:hover{background:rgba(255,214,146,.10);color:#FFE6B0}
+  .mseg{position:relative;display:flex;gap:7px;padding:9px 16px 0;align-items:center}
+  .mseg .seg-thumb{position:absolute;top:9px;left:0;width:0;height:0;border-radius:14px;pointer-events:none;
+    background:linear-gradient(180deg,rgba(255,214,146,.20),rgba(224,180,74,.12));
+    box-shadow:0 2px 10px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.07);
+    transition:left .2s cubic-bezier(.22,1,.36,1),width .2s cubic-bezier(.22,1,.36,1),
+      top .2s cubic-bezier(.22,1,.36,1),height .2s cubic-bezier(.22,1,.36,1)}
+  .mseg div{position:relative;z-index:1;padding:3px 12px;border-radius:14px;font-size:12px;color:var(--dim);
+    cursor:pointer;border:1px solid transparent;transition:color .16s ease}
+  .mseg div:hover{color:#E7DDF2}
+  .mseg div.on{background:transparent;border-color:transparent;color:#FFE6B0;font-weight:600}
   .msearch{padding:9px 16px}
   .msearch input{width:100%;background:#242732;border:1px solid var(--line);border-radius:8px;padding:6px 11px;color:var(--txt);font-size:12px;outline:none}
-  .mbody{flex:1;display:flex;min-height:0;border-top:1px solid var(--line)}
+  .mbody{flex:1;display:flex;min-height:0;border-top:1px solid var(--line);position:relative}
+  .mbody::after{content:'';position:absolute;left:0;right:0;bottom:0;height:24px;pointer-events:none;
+    background:linear-gradient(0deg,rgba(23,17,35,.92),rgba(23,17,35,0))}
+  .mfoot{flex:none;padding:8px 16px 11px;font-size:11px;color:#9B8FB5;
+    border-top:1px dashed rgba(255,214,146,.12);display:flex;align-items:center;justify-content:center}
+  .mfoot .mcount{text-align:center}
+  /* 清空操作：两个图标固定在页签行右侧（禁用态也占位，不产生空白） */
+  .mseg-right{margin-left:auto;display:flex;align-items:center;gap:4px;position:relative;z-index:2}
+  .mseg-ic{width:26px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:7px;
+    color:#C0B0D8;cursor:pointer;transition:background .15s,color .15s,opacity .15s}
+  .mseg-ic svg{width:15px;height:15px;display:block;fill:none;stroke:currentColor;
+    stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .mseg-ic:hover{background:rgba(255,214,146,.10);color:#FFE6B0}
+  .mseg-ic.disabled{opacity:.26;pointer-events:none}
   .mside{width:88px;overflow-y:auto;background:#171920;padding:6px 0}
   .mside div{padding:8px 13px;font-size:12px;color:var(--dim);cursor:pointer}
   .mside div.on{color:#fff;background:#232733;box-shadow:inset 3px 0 0 #6d8fe8}
-  .mgrid{flex:1;overflow-y:auto;padding:11px 12px;display:flex;flex-wrap:wrap;gap:9px 11px;align-content:flex-start}
-  .mg{width:76px;text-align:center;cursor:pointer;padding:4px 0;border-radius:8px;border:1px solid transparent}
+  .mgrid{flex:1;overflow-y:auto;padding:11px 10px 26px 12px;
+    display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:9px 8px;justify-items:center;align-content:start;scrollbar-width:auto}
+  .mgrid.m-seg-in{animation:m-seg-in .18s cubic-bezier(.22,1,.36,1) both}
+  @keyframes m-seg-in{from{opacity:.35;transform:translateY(5px)}to{opacity:1;transform:none}}
+  .mgrid .empty{grid-column:1 / -1;width:100%}
+  /* 筛选列表：半隐滚动条，平时几乎看不见，悬停/滚动时才隐约浮现 */
+  .mgrid::-webkit-scrollbar{width:3px;height:0}
+  .mgrid::-webkit-scrollbar-track{background:transparent}
+  .mgrid::-webkit-scrollbar-thumb{background:rgba(255,214,146,0);border-radius:2px}
+  .mgrid:hover::-webkit-scrollbar-thumb{background:rgba(255,214,146,.14)}
+  .mgrid.scrolling::-webkit-scrollbar-thumb{background:rgba(255,214,146,.26)}
+  .mg{position:relative;width:76px;text-align:center;cursor:pointer;padding:4px 0;border-radius:8px;
+    border:1px solid transparent;transition:transform .14s ease,background .16s ease}
   .mg:hover{background:var(--hl)}
-  .mg.on{background:rgba(109,143,232,.16);border-color:#556796}
+  .mg:active{transform:scale(.93)}
+  .mg .ic{transition:box-shadow .18s ease,transform .18s ease}
+  /* 选中态：图标金环 + 右上角勾，不再套整块方框 */
+  .mg.on{background:transparent;border-color:transparent}
+  .mg.on .ic{box-shadow:0 0 0 2px #F2C878,0 0 18px rgba(255,190,90,.32);transform:scale(1.04)}
+  .mg.on .cn{color:#FFE6B0}
+  .mg.on::after{content:'✓';position:absolute;top:-3px;right:3px;width:16px;height:16px;
+    border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:10px;font-weight:700;color:#2a1c08;
+    background:linear-gradient(180deg,#F7D790,#C8963C);
+    box-shadow:0 2px 6px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.5)}
+  /* 标签卡（内部是矩形块）选中 */
+  .mg.on > div:first-child{background:rgba(255,214,146,.16);color:#FFE6B0;
+    box-shadow:0 0 0 1.5px rgba(242,200,120,.75) inset}
   .mg .cn{font-size:11px;color:#c8cede;line-height:1.3;margin-top:4px}
   .mg .cc{font-size:10px;color:#6b7386}
 
@@ -423,3 +488,40 @@
   #noteModal .msheet{width:100%;max-width:392px;max-height:80%;border-radius:12px;
     border:1px solid rgba(255,214,146,.18);box-shadow:0 18px 46px rgba(0,0,0,.55)}
   #noteModal .mh{border-radius:12px 12px 0 0}
+
+  /* ================= 筛选 chips ================= */
+  .filterbar{display:none;gap:6px;align-items:center;padding:7px 14px 2px;flex-wrap:wrap}
+  .fchip{display:inline-flex;align-items:center;gap:5px;font-size:11px;line-height:1;flex:none;
+    padding:4px 7px;border-radius:10px;cursor:pointer;user-select:none;
+    border:1px solid rgba(178,146,236,.26);
+    background:rgba(66,49,104,.52);color:#D9CDEC}
+  .fchip:hover{border-color:rgba(255,214,146,.42);color:#FFE6B0}
+  .fmore{border-style:dashed;border-color:rgba(255,214,146,.3);color:#C9B8E4;background:rgba(40,30,64,.55)}
+  .fchip:hover{border-color:rgba(255,214,146,.62)}
+  .fchip .fx{display:inline-flex;align-items:center;justify-content:center;width:12px;height:12px;
+    border-radius:50%;font-style:normal;font-size:11px;line-height:1;color:#B9A9D2;background:rgba(255,255,255,.07)}
+  .fchip .fx:hover{background:rgba(255,120,120,.32);color:#fff}
+  .fclear{font-size:11px;color:#B7A9D0;cursor:pointer;padding:2px 4px;
+    border-bottom:1px dashed rgba(255,214,146,.28)}
+  .fclear:hover{color:#FFE6B0;border-color:rgba(255,214,146,.6)}
+
+  /* ================= 列表工具栏（筛选 chips + 排序） ================= */
+  .sorter{align-self:flex-start;display:flex;align-items:center;gap:12px;flex:none;padding:1px 2px 1px 0}
+  .sorter .sbtn{position:relative;font-size:11.5px;color:#8F83A8;cursor:pointer;user-select:none;
+    padding:2px 0;transition:color .15s}
+  .sorter .sbtn:hover{color:#D9CCEC}
+  .sorter .sbtn.on{color:#F4C777;font-weight:600}
+  .sorter .sbtn.on::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:1.5px;border-radius:1px;
+    background:linear-gradient(90deg,rgba(255,214,146,0),rgba(255,214,146,.85),rgba(255,214,146,0))}
+  .listbar{display:flex;flex-direction:column;gap:5px;padding:7px 14px 3px}
+  .frow{display:flex;align-items:center;gap:7px}
+  .frow .filterbar{flex:1;min-width:0}
+  .listbar .filterbar{flex:1;min-width:0;padding:0;display:flex;gap:6px;flex-wrap:nowrap;overflow:hidden}
+
+  /* 列表工具栏：清空全部筛选，做成和筛选 chip 同族的胶囊 */
+  .lclear{flex:none;width:22px;height:22px;display:none;align-items:center;justify-content:center;
+    border-radius:10px;border:1px solid rgba(178,146,236,.26);background:rgba(66,49,104,.52);
+    color:#C6B6E0;cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+  .lclear svg{width:14px;height:14px;display:block;fill:none;stroke:currentColor;
+    stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .lclear:hover{background:rgba(120,84,190,.38);border-color:rgba(255,214,146,.42);color:#FFE6B0}

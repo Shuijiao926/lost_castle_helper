@@ -23,6 +23,8 @@
       feed: $('feed'),
       detail: $('detail'),
       sbar: $('sbar'),
+      filterbar: $('filterbar'),
+      listbar: $('listbar'),
       back: $('back'),
       ttl: $('ttl'),
       modal: $('modal'),

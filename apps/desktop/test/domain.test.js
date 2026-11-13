@@ -69,6 +69,30 @@ test('matches：关键词 / 武器 / 刻印 / 标签过滤', () => {
   assert.equal(domain.matches(b, { tag: '绝对不存在的标签' }), false);
 });
 
+test('多选筛选：同类取「或」，不同类取「且」', () => {
+  const a = FIXTURE_BUILDS[0]; // SHW / shw_revenge / tags 冰属性,盾反
+  const b = FIXTURE_BUILDS[1]; // DB / db_blademaster / tags 暴击
+
+  // 同类多选：武器 OR
+  assert.equal(domain.matches(a, { filterW: [a.wt, b.wt] }), true);
+  assert.equal(domain.matches(a, { filterW: [b.wt] }), false);
+
+  // 刻印多选
+  assert.equal(domain.matches(a, { filterI: [a.insc, b.insc] }), true);
+  assert.equal(domain.matches(a, { filterI: [b.insc] }), false);
+
+  // 标签多选：命中任一即可
+  assert.equal(domain.matches(a, { tag: ['暴击', a.tags[0]] }), true);
+  assert.equal(domain.matches(a, { tag: ['暴击'] }), false);
+
+  // 不同类同时满足：武器 + 标签
+  assert.equal(domain.matches(a, { filterW: [a.wt], tag: [a.tags[0]] }), true);
+  assert.equal(domain.matches(a, { filterW: [a.wt], tag: ['暴击'] }), false);
+
+  // 兼容旧的单值字符串
+  assert.equal(domain.matches(a, { filterW: a.wt }), true);
+});
+
 test('visibleBuilds：人气 / 评分排序 + 过滤（空列表也安全）', () => {
   assert.deepEqual(domain.visibleBuilds([], { sort: 'hot' }), []);
 
