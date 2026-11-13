@@ -35,6 +35,9 @@
     <div class="searchbar" id="sbar" title="点击输入关键词；左侧漏斗或 F 打开筛选">
   <span class="sico" id="fopen" title="筛选（F）" aria-label="筛选"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.2 5.6h15.6l-6.2 7.1v5.9l-3.2 1.2v-7.1z"/></svg></span>
   <input id="q" placeholder="搜索流派 / 别名 / 武器 / 宝藏" autocomplete="off" spellcheck="false">
+  <button type="button" class="search-clear" id="qClear" title="清空搜索内容" aria-label="清空搜索内容" hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg>
+  </button>
   <span class="schev" id="fchev" title="筛选（F）"></span>
 </div>
     <div class="listbar" id="listbar">
@@ -76,6 +79,7 @@
           <div class="update-version"><span>当前版本</span><strong id="updateVersion"></strong></div>
           <h2>本次更新</h2>
           <ul id="updateNotes"></ul>
+          <p class="update-source" id="catalogSource" hidden></p>
         </div>
       </div>
     </div>
@@ -89,7 +93,7 @@
             <div class="hrow"><b>Enter / →</b><span>展开卡片（玩法技巧、核心宝藏）</span></div>
             <div class="hrow"><b>←</b><span>收起卡片 / 详情页返回列表</span></div>
             <div class="hrow"><b>D</b><span>打开 / 关闭流派详情页</span></div>
-            <div class="hrow"><b>F</b><span>打开筛选（武器 / 刻印 / 标签，可多选）</span></div>
+            <div class="hrow"><b>F</b><span>打开筛选（武器 / 刻印 / 标签 / 宝藏，可多选）</span></div>
 <div class="hrow"><b>点击搜索栏</b><span>输入关键词搜索；Esc 退出输入（平时不抢焦点）</span></div>
             <div class="hrow"><b>搜索栏下方左侧</b><span>切换排序：人气 / 评分</span></div>
             <div class="hrow"><b>I</b><span>投稿入口</span></div>
@@ -114,8 +118,13 @@
     <div class="modal" id="modal">
       <div class="msheet">
         <div class="mh"><span class="mh-spacer"></span><b>筛选</b><span class="mh-close" id="mClose" title="关闭（选中立即生效）" aria-label="关闭"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></span></div>
-        <div class="mseg" data-seg="w"><span class="seg-thumb"></span><div class="on" data-seg="w">武器</div><div data-seg="i">刻印</div><div data-seg="t">标签</div><span class="mseg-right"><span class="mseg-ic" id="mclear" title="清空当前类" aria-label="清空当前类"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.4"/><path d="M9.2 9.2l5.6 5.6M14.8 9.2l-5.6 5.6"/></svg></span><span class="mseg-ic" id="mall" title="全部清空" aria-label="全部清空"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4.6A1.6 1.6 0 0 1 9.6 3h4.8A1.6 1.6 0 0 1 16 4.6V6"/><path d="M18.5 6l-.9 13.2a2 2 0 0 1-2 1.8H8.4a2 2 0 0 1-2-1.8L5.5 6"/><path d="M10 10.6v6.4M14 10.6v6.4"/></svg></span></span></div>
-        <div class="msearch"><input id="mq" placeholder="搜索"></div>
+        <div class="mseg" data-seg="w"><span class="seg-thumb"></span><div class="on" data-seg="w">武器</div><div data-seg="i">刻印</div><div data-seg="equip">装备</div><div data-seg="armor">衣服</div><div data-seg="treasure">宝藏</div><div data-seg="t">标签</div><span class="mseg-right"><span class="mseg-ic" id="mclear" title="清空当前类" aria-label="清空当前类"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.4"/><path d="M9.2 9.2l5.6 5.6M14.8 9.2l-5.6 5.6"/></svg></span><span class="mseg-ic" id="mall" title="全部清空" aria-label="全部清空"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4.6A1.6 1.6 0 0 1 9.6 3h4.8A1.6 1.6 0 0 1 16 4.6V6"/><path d="M18.5 6l-.9 13.2a2 2 0 0 1-2 1.8H8.4a2 2 0 0 1-2-1.8L5.5 6"/><path d="M10 10.6v6.4M14 10.6v6.4"/></svg></span></span></div>
+        <div class="msearch">
+          <input id="mq" placeholder="搜索">
+          <button type="button" class="search-clear msearch-clear" id="mqClear" title="清空搜索内容" aria-label="清空搜索内容" hidden>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg>
+          </button>
+        </div>
         <div class="mbody"><div class="mgrid" id="mgrid"></div></div>
         <div class="mfoot"><span class="mcount" id="mcount"></span></div>
       </div>

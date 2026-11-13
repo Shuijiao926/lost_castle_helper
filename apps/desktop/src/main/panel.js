@@ -42,6 +42,7 @@ function createPanel(deps) {
   let open = false;
   let pinned = false;
   let dormant = false;
+  let focusTimer = null;
   /** 圆角模式：dwm（Win11 系统圆角）| shape（Win10 回退裁剪）| null（探测中） */
   let cornersMode = null;
   let dragState = null;
@@ -233,9 +234,26 @@ function createPanel(deps) {
   }
 
   /* ---------------- 休眠 / 唤醒 ---------------- */
+  function cancelFocusTimer() {
+    clearTimeout(focusTimer);
+    focusTimer = null;
+  }
+
+  function focusPanel() {
+    try {
+      win.setFocusable(true);
+      win.focus();
+      win.webContents.focus();
+    } catch (e) {
+      log('panel focus failed:', e.message);
+    }
+    keepOffTaskbar();
+  }
+
   function enterDormant() {
     if (!win || win.isDestroyed() || !open || dormant) return;
     dormant = true;
+    cancelFocusTimer();
     disablePanelKeys();
     try { win.setFocusable(false); } catch {}
     try { win.webContents.send('lc2:dormant', true); } catch {}
@@ -243,6 +261,7 @@ function createPanel(deps) {
   }
 
   function exitSearchFocus() {
+    cancelFocusTimer();
     if (!win || win.isDestroyed()) return;
     keepOffTaskbar();
     // 只恢复不可聚焦 + 重新注册热键；不要 hide/show，否则会打断点击
@@ -251,16 +270,15 @@ function createPanel(deps) {
   }
 
   function wake() {
-    if (!win || win.isDestroyed() || !open) return;
+    if (!win || win.isDestroyed() || !open || !dormant) return;
+    cancelFocusTimer();
     dormant = false;
     log('panel activate（点击唤醒）pinned =', pinned);
-    try { win.setFocusable(true); } catch {}
-    try { win.focus(); } catch {}
-    try { win.webContents.focus(); } catch {}
-    keepOffTaskbar();
+    focusPanel();
     if (win.webContents) win.webContents.send('lc2:dormant', false);
-    setTimeout(() => {
-      if (!win || win.isDestroyed()) return;
+    focusTimer = setTimeout(() => {
+      focusTimer = null;
+      if (!win || win.isDestroyed() || !open || dormant) return;
       const focused = win.isFocused();
       log('panel activate: focused=', focused);
       if (!focused) {
@@ -278,28 +296,19 @@ function createPanel(deps) {
       exitSearchFocus();
       return;
     }
+    if (!open) return;
+    cancelFocusTimer();
     dormant = false;
     win.webContents.send('lc2:dormant', false);
     disablePanelKeys();
-    try { win.setFocusable(true); } catch {}
-    try { win.focus(); } catch {}
-    try { win.webContents.focus(); } catch {}
-    keepOffTaskbar();
-    setTimeout(() => {
-      if (!win || win.isDestroyed()) return;
+    focusPanel();
+    focusTimer = setTimeout(() => {
+      focusTimer = null;
+      if (!win || win.isDestroyed() || !open || dormant) return;
       keepOffTaskbar();
       log('search focus on: focusable=', win.isFocusable(), 'focused=', win.isFocused());
       if (!win.isFocused()) {
-        // 某些系统/窗口管理器下 focus() 不生效，show() 会强制激活
-        log('search focus retry via show()');
-        try {
-          win.show();
-          win.webContents.focus();
-          keepOffTaskbar();
-        } catch {}
-        setTimeout(() => {
-          if (win && !win.isDestroyed()) log('search focus retry result: focused=', win.isFocused());
-        }, 150);
+        focusPanel();
       }
     }, 120);
   }

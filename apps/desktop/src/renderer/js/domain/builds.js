@@ -30,6 +30,39 @@
     return INSC[id] ? INSC[id].name : '—';
   }
 
+  /** 流派涉及的衣服/防具名 */
+  function armorNames(build) {
+    const a = build && build.gear && build.gear.armor;
+    return a && typeof a.name === 'string' && a.name.trim() ? [a.name.trim()] : [];
+  }
+
+  /** 流派涉及的武器名单（具体武器，用于按武器条目筛选） */
+  function weaponNames(build) {
+    const out = [];
+    const g = build && build.gear;
+    if (g && g.weapon && typeof g.weapon.name === 'string') out.push(g.weapon.name);
+    (build && build.weaponChoices || []).forEach((w) => { if (w && typeof w.name === 'string') out.push(w.name); });
+    (build && build.transition || []).forEach((w) => { if (w && typeof w.name === 'string') out.push(w.name); });
+    (build && build.core || []).forEach((n) => { if (typeof n === 'string') out.push(n); });
+    return out.filter((n) => n && n.trim()).map((n) => n.trim());
+  }
+
+  function treasureNames(build) {
+    return [
+      ...(build.treasures?.chaos || []),
+      ...(build.treasures?.gold || []),
+      ...(build.treasureOrder || []).map((item) => item?.n),
+      ...(build.cursed || []).map((item) => item?.name),
+    ].filter((name) => typeof name === 'string' && name.trim()).map((name) => name.trim());
+  }
+
+  function listTreasures(builds, query = '') {
+    const keyword = query.trim().toLowerCase();
+    const names = new Set(builds.flatMap(treasureNames));
+    return [...names].filter((name) => name.toLowerCase().includes(keyword))
+      .sort((a, b) => a.localeCompare(b, 'zh-CN'));
+  }
+
   /** 评分 → 5 颗星 HTML（四舍五入到每颗星 = 2 分） */
   function stars(rating) {
     var filled = Math.round(rating / 2);
@@ -48,9 +81,11 @@
       (build.core || []).join(' '),
       (build.features || []).join(' '),
       weaponName(build.wt),
+      weaponNames(build).join(' '),
+      armorNames(build).join(' '),
       inscriptionName(build.insc),
       build.author || '',
-      (build.treasureOrder || []).map(function (t) { return t.n || ''; }).join(' ')
+      treasureNames(build).join(' ')
     ].join(' ').toLowerCase();
   }
 
@@ -69,9 +104,21 @@
   function matches(build, filters) {
     var wantW = asList(filters.filterW);
     var wantI = asList(filters.filterI);
+    var wantEquip = asList(filters.filterEquip);
+    var wantArmor = asList(filters.filterArmor);
+    var wantTreasures = asList(filters.filterTreasures);
     var wantT = asList(filters.tag).concat(asList(filters.tags));
     if (wantW.length && wantW.indexOf(build.wt) === -1) return false;
+    if (wantEquip.length) {
+      const names = weaponNames(build);
+      if (!wantEquip.some((n) => names.indexOf(n) !== -1)) return false;
+    }
+    if (wantArmor.length && !wantArmor.some((n) => armorNames(build).indexOf(n) !== -1)) return false;
     if (wantI.length && wantI.indexOf(build.insc) === -1) return false;
+    if (wantTreasures.length) {
+      const names = treasureNames(build);
+      if (!wantTreasures.some((name) => names.includes(name))) return false;
+    }
     if (wantT.length) {
       var tags = build.tags || [];
       if (!wantT.some(function (t) { return tags.indexOf(t) !== -1; })) return false;
@@ -108,6 +155,7 @@
     weapon: weapon,
     weaponName: weaponName,
     inscriptionName: inscriptionName,
+    listTreasures: listTreasures,
     stars: stars,
     matches: matches,
     sortBuilds: sortBuilds,

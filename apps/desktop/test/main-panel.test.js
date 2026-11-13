@@ -18,6 +18,8 @@ class FakeWin {
     this.visible = false;
     this.destroyed = false;
     this.focusable = !!opts.focusable;
+    this.focusCalls = 0;
+    this.activeShowCalls = 0;
     this.opacity = 1;
     this.shapeCalls = 0;
     this.sent = [];
@@ -40,13 +42,13 @@ class FakeWin {
   setBounds(b) { this.bounds = { ...b }; }
   setPosition(x, y) { this.bounds.x = x; this.bounds.y = y; }
   showInactive() { this.visible = true; }
-  show() { this.visible = true; }
+  show() { this.activeShowCalls += 1; this.visible = true; }
   hide() { this.visible = false; }
   isVisible() { return this.visible; }
   isDestroyed() { return this.destroyed; }
   setFocusable(v) { this.focusable = v; }
   isFocusable() { return this.focusable; }
-  focus() {}
+  focus() { this.focusCalls += 1; }
   isFocused() { return false; }
   setOpacity(v) { this.opacity = v; }
   getOpacity() { return this.opacity; }
@@ -216,4 +218,45 @@ test('panel：唤醒后恢复可聚焦并通知渲染层退出休眠', () => {
   assert.equal(win.focusable, true);
   const dormantMsg = win.sent.find(([ch, p]) => ch === 'lc2:dormant' && p === false);
   assert.ok(dormantMsg);
+});
+
+test('panel：点击外部后取消上一次搜索获焦重试，再点搜索可重新获焦', async () => {
+  const { panel, win, keys } = makeHarness({ pinned: true });
+  panel.show();
+  panel.setSearchFocus(true);
+  assert.equal(win.focusCalls, 1);
+
+  panel.handleOutsideClick(0, 0);
+  await new Promise((resolve) => setTimeout(resolve, 160));
+  assert.equal(win.focusCalls, 1);
+  assert.equal(win.activeShowCalls, 0);
+  assert.equal(panel.isDormant(), true);
+  assert.equal(win.focusable, false);
+  assert.equal(keys.registered, false);
+
+  panel.setSearchFocus(true);
+  assert.equal(win.focusCalls, 2);
+  assert.equal(panel.isDormant(), false);
+  assert.equal(win.focusable, true);
+  panel.hide();
+});
+
+test('panel：唤醒回退不会在开始搜索输入后重新注册热键', async () => {
+  const { panel, keys } = makeHarness({ pinned: true });
+  panel.show();
+  panel.handleOutsideClick(0, 0);
+  panel.wake();
+  panel.setSearchFocus(true);
+  await new Promise((resolve) => setTimeout(resolve, 180));
+  assert.equal(keys.registered, false);
+  panel.hide();
+});
+
+test('panel：关闭后忽略迟到的搜索获焦请求', () => {
+  const { panel, win } = makeHarness();
+  panel.show();
+  panel.hide();
+  panel.setSearchFocus(true);
+  assert.equal(win.focusCalls, 0);
+  assert.equal(win.focusable, false);
 });

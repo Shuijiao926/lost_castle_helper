@@ -147,8 +147,11 @@ async function loadBuilds(opts = {}) {
 function loadStatic() {
   return {
     weapons: readLocalJSON('weapons.json', { weapons: [] }).weapons || [],
+    weaponItems: readLocalJSON('weapons.json', { items: [] }).items || [],
+    armors: readLocalJSON('armors.json', { armors: [] }).armors || [],
     inscriptions: readLocalJSON('inscriptions.json', { inscriptions: [] }).inscriptions || [],
     schools: readLocalJSON('schools.json', { schools: [] }).schools || [],
+    treasures: readLocalJSON('treasures.json', { treasures: [] }).treasures || [],
   };
 }
 

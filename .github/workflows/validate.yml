@@ -26,8 +26,14 @@ jobs:
       - name: 版本一致性
         run: node scripts/version.js check
 
-      - name: 数据校验
+      - name: 数据校验（流派）
         run: node scripts/validate-data.js
+
+      - name: 数据校验（宝藏目录）
+        run: node scripts/validate-data.js data/treasures.json
+
+      - name: 数据校验（衣服目录）
+        run: node scripts/validate-data.js data/armors.json
 
       - name: 文档内链检查
         run: node scripts/check-links.js

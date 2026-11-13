@@ -36,11 +36,12 @@ class WeaponType {
 }
 
 class Inscription {
-  constructor({ id, name, wt, kind }) {
+  constructor({ id, name, wt, kind, source }) {
     this.id = id;
     this.name = name;
     this.weaponTypeId = wt;
     this.kind = kind || 'normal'; // hunter = 宝藏猎人
+    if (source) this.source = { type: source.type, name: source.name, url: source.url, license: source.license };
   }
 
   static from(raw) {

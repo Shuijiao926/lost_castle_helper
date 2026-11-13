@@ -12,14 +12,16 @@
 (function () {
   'use strict';
 
-  const { INSC_DEF, WEAPONS, INSC, BUILDS, ALL_TAGS } = LC2.data.catalog;
-  const { ic, ICON_SVG, RC } = LC2.ui.icons;
+  const { WEAPONS, WEAPON_ITEMS, ARMORS, INSC, BUILDS, TREASURES, ALL_TAGS, loadInscriptions, loadTreasures, loadWeapons, loadArmors } = LC2.data.catalog;
+  const { ic, ICON, ICON_SVG, RC } = LC2.ui.icons;
   const { $, esc } = LC2.ui.dom;
   const refs = LC2.ui.dom.refs;
   const elFeed = refs.feed, elDetail = refs.detail, elSbar = refs.sbar, elBack = refs.back,
         elFilterbar = refs.filterbar, elListbar = refs.listbar,
         elTtl = refs.ttl, elModal = refs.modal, elGrid = refs.mgrid,
         elPanel = refs.panel, elBubble = refs.bubble, elTip = refs.bubbleTip;
+  const searchQuery = $('q'), searchQueryClear = $('qClear');
+  const modalQuery = $('mq'), modalQueryClear = $('mqClear');
   const elFbtn = elSbar;
   const domain = LC2.domain;
   const infra = LC2.infra;
@@ -32,7 +34,16 @@ let notesLoaded = false;
 
 const state={sort:'hot',view:'feed',detailId:null,expanded:{},cur:'',owned:new Set(),myVote:{},
   favs:new Set(),ratingOpen:null,notes:{},noteBid:null,
-  q:'',focusedInput:false,dormant:false,tags:[],filterW:[],filterI:[],modal:false,seg:'w',sideSel:null,mq:''};
+  q:'',focusedInput:false,dormant:false,tags:[],filterW:[],filterI:[],filterEquip:[],filterArmor:[],filterTreasures:[],modal:false,seg:'w',sideSel:null,mq:''};
+
+const filterSegments = {
+  w: { field: 'filterW', label: '武器' },
+  i: { field: 'filterI', label: '刻印' },
+  t: { field: 'tags', label: '标签' },
+  treasure: { field: 'filterTreasures', label: '宝藏' },
+  equip: { field: 'filterEquip', label: '装备' },
+  armor: { field: 'filterArmor', label: '衣服' },
+};
 
 /* ================= 数据加载提示 ================= */
 function logDataSummary(arr){
@@ -44,48 +55,60 @@ function logDataSummary(arr){
 
 /* ================= 领域调用（应用状态 → 领域参数） ================= */
 function currentFilters() {
-  return { q: state.q, filterW: state.filterW, filterI: state.filterI, tag: state.tags, sort: state.sort };
+  return { q: state.q, filterW: state.filterW, filterI: state.filterI, filterEquip: state.filterEquip, filterArmor: state.filterArmor, filterTreasures: state.filterTreasures, tag: state.tags, sort: state.sort };
 }
 function visible() {
   return domain.visibleBuilds(BUILDS, currentFilters());
 }
 
 /* ===== 搜索焦点：面板默认不抢焦点，输入时才临时获焦 ===== */
+let pendingInputFocus = null;
+
 function acquireFocusInput(el){
   state.focusedInput = true;
-  try{ console.log('[search] acquire api=' + !!(window.lc2&&window.lc2.searchFocus) + ' el=' + (el&&el.id)); }catch(e){}
-  if(typeof window.lc2!=='undefined' && window.lc2.searchFocus) window.lc2.searchFocus(true);
-  setTimeout(function(){ try{ el.focus(); }catch(e){} }, 20);
-  setTimeout(function(){ try{ if(document.activeElement!==el) el.focus(); }catch(e){} }, 90);
+  pendingInputFocus = document.hasFocus() ? null : el;
+  window.lc2?.searchFocus?.(true);
+  el.focus();
+}
+function resetInputFocus(){
+  pendingInputFocus = null;
+  if(!state.focusedInput) return;
+  state.focusedInput = false;
+  document.activeElement?.blur();
 }
 function releaseFocusInput(){
   if(!state.focusedInput) return;
-  state.focusedInput = false;
-  var ae=document.activeElement;
-  if(ae && ae.blur) { try{ ae.blur(); }catch(e){} }
-  if(typeof window.lc2!=='undefined' && window.lc2.searchFocus) window.lc2.searchFocus(false);
+  resetInputFocus();
+  window.lc2?.searchFocus?.(false);
 }
 
 
 /* ================= 筛选 chips（多选） ================= */
 function selectedCount(){
-  return state.filterW.length + state.filterI.length + state.tags.length;
+  return Object.values(filterSegments).reduce((count, { field }) => count + state[field].length, 0);
 }
 function activeFilters(){
   const out=[];
-  state.filterW.forEach(function(id){ out.push({k:'w', v:id, label:wName(id)}); });
+  state.filterW.forEach(function(id){
+    const it = WEAPON_ITEMS.find((x) => x.name === id || x.id === id);
+    out.push({k:'w', v:id, label: it ? it.name : wName(id)});
+  });
   state.filterI.forEach(function(id){ out.push({k:'i', v:id, label:inscName(id).replace('刻印','')}); });
   state.tags.forEach(function(t){ out.push({k:'t', v:t, label:'#'+t}); });
+  state.filterTreasures.forEach((name) => out.push({ k: 'treasure', v: name, label: name }));
+  state.filterEquip.forEach((name) => {
+    const it = WEAPON_ITEMS.find((x) => x.name === name);
+    out.push({ k: 'equip', v: name, label: it ? it.name : name });
+  });
+  state.filterArmor.forEach((name) => out.push({ k: 'armor', v: name, label: name }));
   return out;
 }
 function clearAllFilters(){
-  state.filterW=[]; state.filterI=[]; state.tags=[]; state.sort='hot';
-  render(); fbtnState();
+  for (const { field } of Object.values(filterSegments)) state[field] = [];
 }
 function removeFilter(k, v){
-  if(k==='w') state.filterW=state.filterW.filter(function(x){return x!==v;});
-  else if(k==='i') state.filterI=state.filterI.filter(function(x){return x!==v;});
-  else if(k==='t') state.tags=state.tags.filter(function(x){return x!==v;});
+  const { field } = filterSegments[k];
+  state[field] = state[field].filter((value) => value !== v);
   render(); fbtnState();
 }
 function renderFilterbar(isFeed){
@@ -402,7 +425,7 @@ function openModal(){
   elModal.classList.remove('closing');
   try{ if(document.activeElement && document.activeElement.blur) document.activeElement.blur(); }catch(e){}
   if(state.focusedInput) releaseFocusInput();
-  state.modal=true;state.mq='';$('mq').value='';
+  state.modal=true;state.mq='';modalQuery.value='';
   // 先在隐藏状态把内容渲染好，再加 .on 触发动画：避免动画第一帧是空弹层
   renderModal();
   var panelEl=document.getElementById('panel'); if(panelEl) panelEl.classList.add('modal-open');
@@ -444,16 +467,14 @@ function cell(key,label,sub,on){
 
 
 function segName(){
-  return state.seg==='t' ? '标签' : (state.seg==='w' ? '武器' : '刻印');
+  return filterSegments[state.seg].label;
 }
 
 function curSelList(){
-  return state.seg==='t' ? state.tags : (state.seg==='w' ? state.filterW : state.filterI);
+  return state[filterSegments[state.seg].field];
 }
 function setCurSelList(v){
-  if(state.seg==='t') state.tags=v;
-  else if(state.seg==='w') state.filterW=v;
-  else state.filterI=v;
+  state[filterSegments[state.seg].field] = v;
 }
 function refreshFootActions(){
   const clear=document.getElementById('mclear');
@@ -470,6 +491,25 @@ function refreshFootActions(){
   }
 }
 
+function syncModalSelection() {
+  const selected = new Set(curSelList());
+  for (const item of elGrid.querySelectorAll('.mg')) {
+    item.classList.toggle('on', selected.has(item.dataset.k));
+  }
+  refreshFootActions();
+}
+
+elGrid.addEventListener('click', (event) => {
+  const item = event.target.closest('.mg');
+  if (!item || !elGrid.contains(item)) return;
+  const key = item.dataset.k;
+  const selected = curSelList();
+  const isSelected = !selected.includes(key);
+  setCurSelList(isSelected ? [...selected, key] : selected.filter((value) => value !== key));
+  item.classList.toggle('on', isSelected);
+  refreshFootActions();
+});
+
 
 /* 分段控件滑动指示块 */
 function syncSegThumb(){
@@ -485,14 +525,44 @@ function syncSegThumb(){
   thumb.style.height=ar.height+'px';
 }
 
+
+/* 宝藏图标：把数据里的 icon 填进 ICON 映射，ic() 会优先用图片，失败回退首字 */
+
+/* 武器条目 / 刻印图标：数据里的 icon 填进 ICON 映射 */
+function applyCatalogIcons(){
+  WEAPON_ITEMS.forEach((it) => { if (it.icon) ICON[it.name] = it.icon; });
+  // 9 个武器类型图标在 wiki 上已失效：用该类型第一件装备的图标作为类型图标
+  WEAPONS.forEach((w) => {
+    const first = WEAPON_ITEMS.find((it) => it.wt === w.id && it.icon);
+    if (first) ICON[w.id] = first.icon;
+  });
+  Object.values(INSC).forEach((it) => { if (it.icon) ICON[it.id] = it.icon; });
+  ARMORS.forEach((it) => { if (it.icon) ICON[it.name] = it.icon; });
+}
+
+function applyTreasureIcons(){
+  TREASURES.forEach((t) => { if (t.icon) ICON[t.name] = t.icon; });
+}
+
 function renderModal(animate){
+  modalQueryClear.hidden = !state.mq;
   const q=state.mq.toLowerCase();
   if(animate){ elGrid.classList.remove('m-seg-in'); void elGrid.offsetWidth; elGrid.classList.add('m-seg-in'); }
   function finish(itemsLen){
     const count=document.getElementById('mcount');
-    const clear=document.getElementById('mclear');
     if(count) count.textContent = '共 ' + itemsLen + ' 项';
     refreshFootActions();
+  }
+  if (state.seg === 'treasure') {
+    // 全量宝藏目录优先；数据未就绪时退回流派里出现过的宝藏
+    const all = TREASURES.length ? TREASURES.map((t) => t.name) : domain.listTreasures(BUILDS, '');
+    const items = q ? all.filter((name) => name.toLowerCase().includes(q)) : all;
+    elGrid.innerHTML = items.length
+      ? items.map((name) => cell(name, name, '', state.filterTreasures.includes(name))).join('')
+      : emptyState(q ? '没有匹配的宝藏 (・_・;)' : '宝藏目录还没同步 (´･ω･`)',
+        q ? '换个关键词试试看' : '等下次数据更新，这里会自动出现', true);
+    finish(items.length);
+    return;
   }
   if(state.seg==='t'){
     const items=ALL_TAGS.filter(([t])=>!q||t.toLowerCase().includes(q));
@@ -501,11 +571,6 @@ function renderModal(animate){
       +'<div class="mg-label">'+esc(t)+'</div>'
       +'<div class="cc">'+arr.length+' 个玩法</div></div>').join('')
       :emptyState(q ? '没有匹配的标签 (・_・;)' : '标签还没长出来 (´･ω･`)', q ? '换个关键词试试看' : '资料还没搬完，它已经很努力了 汪～', true);
-    elGrid.querySelectorAll('.mg').forEach(n=>{n.onclick=()=>{
-      const t=n.dataset.k;
-      state.tags = state.tags.indexOf(t)>=0 ? state.tags.filter(x=>x!==t) : state.tags.concat([t]);
-      renderModal();
-    };});
     finish(items.length);
     return;
   }
@@ -513,28 +578,37 @@ function renderModal(animate){
     const items=WEAPONS.filter(w=>!q||(w.name+w.short).toLowerCase().includes(q));
     elGrid.innerHTML = items.length ? items.map(w=>cell(w.id,w.name,'',state.filterW.indexOf(w.id)>=0)).join('')
       : emptyState('没有匹配的武器 (・_・;)','换个关键词试试看', true);
-    elGrid.querySelectorAll('.mg').forEach(n=>{n.onclick=()=>{
-      const k=n.dataset.k;
-      state.filterW = state.filterW.indexOf(k)>=0 ? state.filterW.filter(x=>x!==k) : state.filterW.concat([k]);
-      renderModal();
-    };});
+    finish(items.length);
+  }else if(state.seg==='armor'){
+    const items = ARMORS.filter((it) => {
+      if(!q) return true;
+      return (it.name + ' ' + (it.kind||'')).toLowerCase().includes(q);
+    });
+    elGrid.innerHTML = items.length
+      ? items.map((it) => cell(it.name, it.name, it.kind || '', state.filterArmor.indexOf(it.name)>=0)).join('')
+      : emptyState('没有匹配的衣服 (・_・;)','换个关键词试试看', true);
+    finish(items.length);
+  }else if(state.seg==='equip'){
+    const items = WEAPON_ITEMS.filter((it) => {
+      if(!q) return true;
+      const t = W(it.wt);
+      return (it.name + ' ' + (t.name||'') + ' ' + (t.short||'')).toLowerCase().includes(q);
+    });
+    elGrid.innerHTML = items.length
+      ? items.map((it) => cell(it.name, it.name, W(it.wt).short, state.filterEquip.indexOf(it.name)>=0)).join('')
+      : emptyState('没有匹配的装备 (・_・;)','换个关键词试试看', true);
     finish(items.length);
   }else{
     const items=Object.values(INSC).filter(i=>!q||i.name.toLowerCase().includes(q));
     elGrid.innerHTML = items.length ? items.map(i=>cell(i.id,i.name.replace('刻印',''),W(i.wt).short,state.filterI.indexOf(i.id)>=0)).join('')
       : emptyState('没有匹配的刻印 (・_・;)','换个关键词试试看', true);
-    elGrid.querySelectorAll('.mg').forEach(n=>{n.onclick=()=>{
-      const k=n.dataset.k;
-      state.filterI = state.filterI.indexOf(k)>=0 ? state.filterI.filter(x=>x!==k) : state.filterI.concat([k]);
-      renderModal();
-    };});
     finish(items.length);
   }
 }
 elFbtn.onclick=(ev)=>{
   const t=ev.target;
   if(t && t.closest && (t.closest('#fopen') || t.closest('#fchev'))){ releaseFocusInput(); openModal(); return; }
-  acquireFocusInput($('q'));
+  acquireFocusInput(searchQuery);
 };
 const $pinbtn=$('pinbtn');
 $pinbtn.onclick=()=>{
@@ -555,7 +629,7 @@ if(typeof window.lc2!=='undefined' && window.lc2.onPin){
   const lclearBtn = document.getElementById('lclear');
   if (lclearBtn) lclearBtn.onclick = function(){
     if (!activeFilters().length) return;
-    state.filterW = []; state.filterI = []; state.tags = [];
+    clearAllFilters();
     render(); fbtnState();
     showToast('已清空全部筛选');
   };
@@ -657,14 +731,14 @@ if(mclearBtn) mclearBtn.onclick=function(){
   if(!curSelList().length) return;
   const name = segName();
   setCurSelList([]);
-  renderModal(); render(); fbtnState();
+  syncModalSelection(); render(); fbtnState();
   showToast('已清空' + name + '筛选');
 };
 const mallBtn=document.getElementById('mall');
 if(mallBtn) mallBtn.onclick=function(){
   if(!(selectedCount() - curSelList().length)) return;
-  state.filterW=[]; state.filterI=[]; state.tags=[];
-  renderModal(); render(); fbtnState();
+  clearAllFilters();
+  syncModalSelection(); render(); fbtnState();
   showToast('已清空全部筛选');
 };
 const mCloseBtn=document.getElementById('mClose');
@@ -677,33 +751,55 @@ document.querySelectorAll('.mseg div').forEach(d=>{d.onclick=()=>{
   syncSegThumb();
   renderModal(true);
 };});
-$('mq').addEventListener('input',e=>{state.mq=e.target.value;renderModal();});
-$('q').addEventListener('input',e=>{state.q=e.target.value;render();fbtnState();});
-$('q').addEventListener('keydown',e=>{
+function updateModalQuery(){
+  state.mq = modalQuery.value;
+  renderModal();
+}
+modalQuery.addEventListener('input', updateModalQuery);
+modalQueryClear.addEventListener('mousedown', (e) => e.preventDefault());
+modalQueryClear.addEventListener('click', () => {
+  modalQuery.value = '';
+  updateModalQuery();
+});
+function updateSearchQuery(){
+  state.q = searchQuery.value;
+  searchQueryClear.hidden = !state.q;
+  render();
+  fbtnState();
+}
+function clearSearchQuery(){
+  searchQuery.value = '';
+  updateSearchQuery();
+}
+searchQuery.addEventListener('input', updateSearchQuery);
+searchQueryClear.addEventListener('mousedown', (e) => e.preventDefault());
+searchQueryClear.addEventListener('click', clearSearchQuery);
+searchQuery.addEventListener('keydown',e=>{
+  if (e.isComposing) return;
   if(e.key==='Escape'){ e.preventDefault(); e.stopPropagation();
-    if(state.q){ state.q=''; e.target.value=''; render(); fbtnState(); }
+    if(state.q) clearSearchQuery();
     else e.target.blur();
   } else if(e.key==='Enter'){ e.preventDefault(); e.stopPropagation(); e.target.blur(); }
 });
-$('mq').addEventListener('keydown',e=>{
+modalQuery.addEventListener('keydown',e=>{
+    if (e.isComposing) return;
     if(e.key==='Escape'){ e.preventDefault(); e.stopPropagation(); closeModal(); }
   });
-  var msearchEl=document.querySelector('.msearch'); if(msearchEl) msearchEl.addEventListener('click',()=>acquireFocusInput($('mq')));
+modalQuery.parentElement.addEventListener('click', () => acquireFocusInput(modalQuery));
 function fbtnState(){
   elFbtn.classList.toggle('on', selectedCount() > 0);
-  const inp=$('q');
-  if(inp) inp.placeholder = '搜索流派 / 别名 / 武器 / 宝藏';
+  searchQuery.placeholder = '搜索流派 / 别名 / 武器 / 宝藏';
   syncSortUI();
 }
 elBubble.onclick=()=>{elPanel.classList.remove('hidden');elBubble.classList.add('hidden');elTip.classList.add('hidden');};
 
 /* 面板休眠时点击任意位置唤醒（捕获阶段，先恢复焦点再处理点击） */
 if (typeof window.lc2 !== 'undefined' && window.lc2) {
-  document.addEventListener('mousedown', () => {
-    if (state.dormant) {
-      state.dormant = false;
-      if (window.lc2.activatePanel) window.lc2.activatePanel();
-    }
+  document.addEventListener('mousedown', (event) => {
+    if (!state.dormant) return;
+    if (event.target.closest('.msearch, .searchbar input, .searchbar .search-clear')) return;
+    state.dormant = false;
+    if (window.lc2.activatePanel) window.lc2.activatePanel();
   }, true);
 }
 
@@ -789,6 +885,7 @@ document.addEventListener('keydown',e=>{
   const k=e.key;
   const tag=(e.target&&e.target.tagName)||'';
   if(tag==='INPUT'||tag==='TEXTAREA') return;   // 输入控件自己处理键盘
+  if(e.target===searchQueryClear && k==='Enter') return;
   if(k==='`'){e.preventDefault();
     if(typeof window.lc2!=='undefined'){ window.lc2.requestToggle(); return; }
     const hid=elPanel.classList.toggle('hidden');
@@ -809,8 +906,8 @@ document.addEventListener('keydown',e=>{
   if(k==='Escape'){e.preventDefault();
     $toast.classList.remove('on');
     if(state.view==='detail')closeDetail();
-    else if(state.q){state.q='';$('q').value='';render();}
-    else if(state.tags.length||state.filterW.length||state.filterI.length){state.tags=[];state.filterW=[];state.filterI=[];render();fbtnState();}
+    else if(state.q) clearSearchQuery();
+    else if(selectedCount()){clearAllFilters();render();fbtnState();}
     else if(typeof window.lc2!=='undefined'){ window.lc2.requestToggle(); }
     return;}
   if(k==='f'||k==='F'){e.preventDefault();motion.press($('sbar'));if(state.view==='feed')openModal();return;}
@@ -935,14 +1032,21 @@ document.addEventListener('click', function(ev){
   });
 
   /* 面板显隐由主进程通知 */
-  window.addEventListener('blur', () => {
-  if (state.focusedInput) releaseFocusInput();
+window.addEventListener('focus', () => {
+  const input = pendingInputFocus;
+  pendingInputFocus = null;
+  input?.focus();
+});
+
+window.addEventListener('blur', () => {
+  resetInputFocus();
   state.dormant = true;
 });
 
 if (window.lc2.onDormant) {
   window.lc2.onDormant(function(v){
     state.dormant = !!v;
+    if (state.dormant) resetInputFocus();
   });
 }
 
@@ -950,7 +1054,7 @@ window.lc2.onPanel(function(s){
     var payload = (s && typeof s === 'object') ? s : { open: s === 'open' };
     state.open = !!payload.open;
     if (!state.open) closeUpdateDialog();
-    if(!payload.open && state.focusedInput) releaseFocusInput();
+    if (!payload.open) resetInputFocus();
     if(typeof payload.pinned === 'boolean'){
       var pb = document.getElementById('pinbtn');
       if(pb) pb.classList.toggle('on', payload.pinned);
@@ -971,6 +1075,19 @@ window.lc2.onPanel(function(s){
       console.warn('[lc2] 数据为空，保留内置示例');
       return;
     }
+    loadInscriptions(d.inscriptions);
+  loadWeapons(d.weaponItems);
+  loadArmors(d.armors);
+  applyCatalogIcons();
+  loadTreasures(d.treasures);
+  applyTreasureIcons();
+    const attribution = Object.values(INSC).find((item) => item.source)?.source;
+    if (attribution) {
+      const source = $('catalogSource');
+      source.textContent = `图鉴来源：${attribution.name}（${attribution.license}）`;
+      source.title = attribution.url;
+      source.hidden = false;
+    }
     var arr = domain.normalizeBuilds(d.builds);
     BUILDS.length = 0;
     Array.prototype.push.apply(BUILDS, arr);
@@ -978,6 +1095,7 @@ window.lc2.onPanel(function(s){
     state.expanded = {};
     logDataSummary(arr);
     render(); fbtnState();
+    if (state.modal) renderModal();
   }).catch(function(e){
     console.error('[lc2] 数据加载失败', e);
   });

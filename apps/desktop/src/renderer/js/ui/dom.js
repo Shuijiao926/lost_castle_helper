@@ -11,8 +11,8 @@
     return document.getElementById(id);
   }
   function esc(s) {
-    return String(s == null ? '' : s).replace(/[<>&]/g, function (c) {
-      return { '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c];
+    return String(s == null ? '' : s).replace(/[<>&"]/g, function (c) {
+      return { '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c];
     });
   }
 

@@ -1,14 +1,2203 @@
 {
   "version": "1.0",
   "weapons": [
-    { "id": "THW",   "name": "双手武器", "short": "双手", "subs": ["重剑/大刀", "重斧/重锤"], "note": "蓄力型武器：蓄力值上限 180，分三槽（0–40 / 40–100 / 100–180），不到槽位放不出对应招式" },
-    { "id": "SHW",   "name": "单手武器", "short": "单手", "subs": ["单手剑", "单手斧/锤", "短枪"], "note": "带盾：架势值上限 200，12 帧精确防御可弹反并派生追击" },
-    { "id": "STAFF", "name": "法杖",     "short": "法杖", "subs": [], "note": "消耗法力施法，技能强度是主要成长方向" },
-    { "id": "DB",    "name": "双刀",     "short": "双刀", "subs": [], "note": "高段数快攻，位移段收益高" },
-    { "id": "BOW",   "name": "弓箭",     "short": "弓",   "subs": [], "note": "远程蓄力射击" },
-    { "id": "FD",    "name": "涡炉枪",   "short": "涡炉", "subs": [], "note": "涡炉能量驱动的重火力" },
-    { "id": "GUN",   "name": "火枪",     "short": "火枪", "subs": [], "note": "远程爆发，装填节奏关键" },
-    { "id": "PL",    "name": "幽影提灯", "short": "提灯", "subs": [], "note": "召唤与幽能机制" },
-    { "id": "KA",    "name": "太刀",     "short": "太刀", "subs": [], "note": "段位判定与见切" }
-  ]
+    {
+      "id": "THW",
+      "name": "双手武器",
+      "short": "双手",
+      "subs": [
+        "重剑/大刀",
+        "重斧/重锤"
+      ],
+      "note": "蓄力型武器：蓄力值上限 180，分三槽（0–40 / 40–100 / 100–180），不到槽位放不出对应招式"
+    },
+    {
+      "id": "SHW",
+      "name": "单手武器",
+      "short": "单手",
+      "subs": [
+        "单手剑",
+        "单手斧/锤",
+        "短枪"
+      ],
+      "note": "带盾：架势值上限 200，12 帧精确防御可弹反并派生追击"
+    },
+    {
+      "id": "STAFF",
+      "name": "法杖",
+      "short": "法杖",
+      "subs": [],
+      "note": "消耗法力施法，技能强度是主要成长方向"
+    },
+    {
+      "id": "DB",
+      "name": "双刀",
+      "short": "双刀",
+      "subs": [],
+      "note": "高段数快攻，位移段收益高"
+    },
+    {
+      "id": "BOW",
+      "name": "弓箭",
+      "short": "弓",
+      "subs": [],
+      "note": "远程蓄力射击"
+    },
+    {
+      "id": "FD",
+      "name": "涡炉枪",
+      "short": "涡炉",
+      "subs": [],
+      "note": "涡炉能量驱动的重火力"
+    },
+    {
+      "id": "GUN",
+      "name": "火枪",
+      "short": "火枪",
+      "subs": [],
+      "note": "远程爆发，装填节奏关键"
+    },
+    {
+      "id": "PL",
+      "name": "幽影提灯",
+      "short": "提灯",
+      "subs": [],
+      "note": "召唤与幽能机制"
+    },
+    {
+      "id": "KA",
+      "name": "太刀",
+      "short": "太刀",
+      "subs": [],
+      "note": "段位判定与见切"
+    }
+  ],
+  "items": [
+    {
+      "id": "THW_001",
+      "name": "生铁大剑",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f4/Icon_THW_N001.png"
+    },
+    {
+      "id": "THW_002",
+      "name": "铁木大剑",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/32/Icon_THW_N002.png"
+    },
+    {
+      "id": "THW_003",
+      "name": "皇家大剑",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/ca/Icon_THW_N003.png"
+    },
+    {
+      "id": "THW_004",
+      "name": "终始巨刃",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a7/Icon_THW_N004.png"
+    },
+    {
+      "id": "THW_005",
+      "name": "圣堂大剑",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7f/Icon_THW_N005.png"
+    },
+    {
+      "id": "THW_007",
+      "name": "巨人的火焰剑",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d5/Icon_THW_N007.png"
+    },
+    {
+      "id": "THW_008",
+      "name": "英雄史诗",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d6/Icon_THW_N008.png"
+    },
+    {
+      "id": "THW_009",
+      "name": "斩马大刀",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/39/Icon_THW_N009.png"
+    },
+    {
+      "id": "THW_010",
+      "name": "烈焰骑士巨剑",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/6c/Icon_THW_N010.png"
+    },
+    {
+      "id": "THW_011",
+      "name": "坚冰之锋",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7d/Icon_THW_N011.png"
+    },
+    {
+      "id": "THW_012",
+      "name": "邪灵仪式大剑",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/ab/Icon_THW_N012.png"
+    },
+    {
+      "id": "THW_013",
+      "name": "铁制巨斧",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c1/Icon_THW_N013.png"
+    },
+    {
+      "id": "THW_014",
+      "name": "黄铜图腾巨刃",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/79/Icon_THW_N014.png"
+    },
+    {
+      "id": "THW_015",
+      "name": "岩石巨锤",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/bc/Icon_THW_N015.png"
+    },
+    {
+      "id": "THW_016",
+      "name": "蝠灵骑士大剑",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f7/Icon_THW_N016.png"
+    },
+    {
+      "id": "THW_017",
+      "name": "烈焰巨斧",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/6d/Icon_THW_N017.png"
+    },
+    {
+      "id": "THW_018",
+      "name": "魔晶守卫斧",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/90/Icon_THW_N018.png"
+    },
+    {
+      "id": "THW_019",
+      "name": "猩红之锋",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/74/Icon_THW_N019.png"
+    },
+    {
+      "id": "THW_020",
+      "name": "黑金矿巨锤",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/55/Icon_THW_N020.png"
+    },
+    {
+      "id": "THW_024",
+      "name": "哥布林奖杯",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/04/Icon_THW_N024.png"
+    },
+    {
+      "id": "THW_025",
+      "name": "腐蚀守卫之剑",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d3/Icon_THW_N025.png"
+    },
+    {
+      "id": "THW_026",
+      "name": "异兽之骨",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d4/Icon_THW_N026.png"
+    },
+    {
+      "id": "THW_027",
+      "name": "龙鳞结晶巨剑",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c4/Icon_THW_N027.png"
+    },
+    {
+      "id": "THW_028",
+      "name": "铁质大砍刀",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/2a/Icon_THW_N028.png"
+    },
+    {
+      "id": "THW_034",
+      "name": "覆石之剑",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/73/Icon_THW_N034.png"
+    },
+    {
+      "id": "THW_036",
+      "name": "破坏者",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/19/Icon_THW_N036.png"
+    },
+    {
+      "id": "THW_037",
+      "name": "裁决之剑",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b1/Icon_THW_N037.png"
+    },
+    {
+      "id": "THW_038",
+      "name": "腐蚀帝国骑士断剑",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/6d/Icon_THW_N038.png"
+    },
+    {
+      "id": "THW_039",
+      "name": "灵木核心",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/25/Icon_THW_N039.png"
+    },
+    {
+      "id": "THW_040",
+      "name": "磐岩巨锤",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/80/Icon_THW_N040.png"
+    },
+    {
+      "id": "THW_041",
+      "name": "斩魔",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/ef/Icon_THW_N041.png"
+    },
+    {
+      "id": "THW_043",
+      "name": "机关旋刃斧",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b0/Icon_THW_N043.png"
+    },
+    {
+      "id": "THW_044",
+      "name": "首领重斧",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/6f/Icon_THW_N044.png"
+    },
+    {
+      "id": "THW_045",
+      "name": "硝石锈钢刃",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7f/Icon_THW_N045.png"
+    },
+    {
+      "id": "THW_046",
+      "name": "坚冰碎片",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a0/Icon_THW_N046.png"
+    },
+    {
+      "id": "THW_048",
+      "name": "切割者",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4d/Icon_THW_N048.png"
+    },
+    {
+      "id": "THW_049",
+      "name": "猛毒猎爪",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5c/Icon_THW_N049.png"
+    },
+    {
+      "id": "THW_050",
+      "name": "扭曲大剑",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/49/Icon_THW_N050.png"
+    },
+    {
+      "id": "THW_051",
+      "name": "诡谲毁灭者",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/42/Icon_THW_N051.png"
+    },
+    {
+      "id": "THW_052",
+      "name": "终极大剑",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/02/Icon_THW_N052.png"
+    },
+    {
+      "id": "THW_055",
+      "name": "狼头锤",
+      "wt": "THW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/da/Icon_THW_N055.png"
+    },
+    {
+      "id": "SHW_001",
+      "name": "铁制剑装",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/31/Icon_SHW_N001.png"
+    },
+    {
+      "id": "SHW_002",
+      "name": "铁木剑装",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/56/Icon_SHW_N002.png"
+    },
+    {
+      "id": "SHW_003",
+      "name": "皇家剑装",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/57/Icon_SHW_N003.png"
+    },
+    {
+      "id": "SHW_004",
+      "name": "终始剑装",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b2/Icon_SHW_N004.png"
+    },
+    {
+      "id": "SHW_005",
+      "name": "圣堂剑装",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/63/Icon_SHW_N005.png"
+    },
+    {
+      "id": "SHW_006",
+      "name": "恶魔凝视",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0f/Icon_SHW_N006.png"
+    },
+    {
+      "id": "SHW_007",
+      "name": "魔法学徒剑装",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/da/Icon_SHW_N007.png"
+    },
+    {
+      "id": "SHW_008",
+      "name": "守护方盾",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c8/Icon_SHW_N008.png"
+    },
+    {
+      "id": "SHW_009",
+      "name": "黑铁刺锤",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a9/Icon_SHW_N009.png"
+    },
+    {
+      "id": "SHW_010",
+      "name": "熔炉剑装",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c0/Icon_SHW_N010.png"
+    },
+    {
+      "id": "SHW_011",
+      "name": "堡垒战斧",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/86/Icon_SHW_N011.png"
+    },
+    {
+      "id": "SHW_012",
+      "name": "邪魔之骨",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/6f/Icon_SHW_N012.png"
+    },
+    {
+      "id": "SHW_013",
+      "name": "船长之遗",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/df/Icon_SHW_N013.png"
+    },
+    {
+      "id": "SHW_014",
+      "name": "料理器具",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/63/Icon_SHW_N014.png"
+    },
+    {
+      "id": "SHW_015",
+      "name": "骑兵短枪",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b8/Icon_SHW_N015.png"
+    },
+    {
+      "id": "SHW_016",
+      "name": "荒野住民",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/88/Icon_SHW_N016.png"
+    },
+    {
+      "id": "SHW_017",
+      "name": "炎龙之怒",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_SHW_N017.png"
+    },
+    {
+      "id": "SHW_018",
+      "name": "冰霜剑装",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0c/Icon_SHW_N018.png"
+    },
+    {
+      "id": "SHW_019",
+      "name": "英勇战魂",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/56/Icon_SHW_N019.png"
+    },
+    {
+      "id": "SHW_020",
+      "name": "恶魔屠戮者",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_SHW_N020.png"
+    },
+    {
+      "id": "SHW_021",
+      "name": "腐蚀守卫之盾",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/da/Icon_SHW_N021.png"
+    },
+    {
+      "id": "SHW_022",
+      "name": "龙鳞结晶盾剑",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/92/Icon_SHW_N022.png"
+    },
+    {
+      "id": "SHW_023",
+      "name": "腐坏寄生短枪",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/6b/Icon_SHW_N023.png"
+    },
+    {
+      "id": "SHW_024",
+      "name": "钢铁短枪",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b2/Icon_SHW_N024.png"
+    },
+    {
+      "id": "SHW_025",
+      "name": "英雄之枪",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/39/Icon_SHW_N025.png"
+    },
+    {
+      "id": "SHW_026",
+      "name": "附魔之刃",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/66/Icon_SHW_N026.png"
+    },
+    {
+      "id": "SHW_027",
+      "name": "哥布林短刀",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/25/Icon_SHW_N027.png"
+    },
+    {
+      "id": "SHW_028",
+      "name": "帝国制式剑装",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d3/Icon_SHW_N028.png"
+    },
+    {
+      "id": "SHW_029",
+      "name": "树藤手斧",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_SHW_N029.png"
+    },
+    {
+      "id": "SHW_030",
+      "name": "星陨钢短剑",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7c/Icon_SHW_N030.png"
+    },
+    {
+      "id": "SHW_032",
+      "name": "蛮族骨斧",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/85/Icon_SHW_N032.png"
+    },
+    {
+      "id": "SHW_033",
+      "name": "冰川短枪",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9a/Icon_SHW_N033.png"
+    },
+    {
+      "id": "SHW_034",
+      "name": "岩雷枪",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/6f/Icon_SHW_N034.png"
+    },
+    {
+      "id": "SHW_035",
+      "name": "大渔猎手",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b3/Icon_SHW_N035.png"
+    },
+    {
+      "id": "SHW_036",
+      "name": "卡利昂之枪",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/43/Icon_SHW_N036.png"
+    },
+    {
+      "id": "SHW_037",
+      "name": "军团标枪",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b9/Icon_SHW_N037.png"
+    },
+    {
+      "id": "SHW_038",
+      "name": "毒棘短枪",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/1f/Icon_SHW_N038.png"
+    },
+    {
+      "id": "SHW_039",
+      "name": "虚空引力短剑",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b5/Icon_SHW_N039.png"
+    },
+    {
+      "id": "SHW_040",
+      "name": "磐石之碑",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c9/Icon_SHW_N040.png"
+    },
+    {
+      "id": "SHW_041",
+      "name": "大工匠之锤",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/11/Icon_SHW_N041.png"
+    },
+    {
+      "id": "SHW_042",
+      "name": "永冻坚冰",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/cb/Icon_SHW_N042.png"
+    },
+    {
+      "id": "SHW_043",
+      "name": "穿沙枪",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/27/Icon_SHW_N043.png"
+    },
+    {
+      "id": "SHW_045",
+      "name": "噩梦碎片",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/86/Icon_SHW_N045.png"
+    },
+    {
+      "id": "SHW_046",
+      "name": "扭曲之刃",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/76/Icon_SHW_N046.png"
+    },
+    {
+      "id": "SHW_047",
+      "name": "诅咒之刃",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7c/Icon_SHW_N047.png"
+    },
+    {
+      "id": "SHW_048",
+      "name": "诡谲之刃",
+      "wt": "SHW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/eb/Icon_SHW_N048.png"
+    },
+    {
+      "id": "STAFF_001",
+      "name": "橡木法杖",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/89/Icon_STAFF_N001.png"
+    },
+    {
+      "id": "STAFF_002",
+      "name": "铁木之蜥",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7b/Icon_STAFF_N002.png"
+    },
+    {
+      "id": "STAFF_003",
+      "name": "贵族法杖",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/87/Icon_STAFF_N003.png"
+    },
+    {
+      "id": "STAFF_004",
+      "name": "封印之眼",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/19/Icon_STAFF_N004.png"
+    },
+    {
+      "id": "STAFF_005",
+      "name": "圣堂法杖",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/75/Icon_STAFF_N005.png"
+    },
+    {
+      "id": "STAFF_006",
+      "name": "风暴之眼",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b3/Icon_STAFF_N006.png"
+    },
+    {
+      "id": "STAFF_007",
+      "name": "祝福之翼",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/ca/Icon_STAFF_N007.png"
+    },
+    {
+      "id": "STAFF_008",
+      "name": "蓝晶石铜杖",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f6/Icon_STAFF_N008.png"
+    },
+    {
+      "id": "STAFF_009",
+      "name": "邪恶凝视",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b2/Icon_STAFF_N009.png"
+    },
+    {
+      "id": "STAFF_010",
+      "name": "恶魔宝珠",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a8/Icon_STAFF_N010.png"
+    },
+    {
+      "id": "STAFF_011",
+      "name": "冰霜低语",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/af/Icon_STAFF_N011.png"
+    },
+    {
+      "id": "STAFF_012",
+      "name": "纯晶魔杖",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/45/Icon_STAFF_N012.png"
+    },
+    {
+      "id": "STAFF_013",
+      "name": "剧毒孢子之杖",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/39/Icon_STAFF_N013.png"
+    },
+    {
+      "id": "STAFF_014",
+      "name": "熔岩手杖",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/2e/Icon_STAFF_N014.png"
+    },
+    {
+      "id": "STAFF_015",
+      "name": "终始之视",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/3f/Icon_STAFF_N015.png"
+    },
+    {
+      "id": "STAFF_016",
+      "name": "灵石手杖",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/ad/Icon_STAFF_N016.png"
+    },
+    {
+      "id": "STAFF_017",
+      "name": "月神之杖",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/cf/Icon_STAFF_N017.png"
+    },
+    {
+      "id": "STAFF_018",
+      "name": "巫毒祭祀手杖",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/3b/Icon_STAFF_N018.png"
+    },
+    {
+      "id": "STAFF_019",
+      "name": "日神之杖",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/1d/Icon_STAFF_N019.png"
+    },
+    {
+      "id": "STAFF_020",
+      "name": "献祭之杖",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/24/Icon_STAFF_N020.png"
+    },
+    {
+      "id": "STAFF_021",
+      "name": "恶龙的雷电晶核",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0a/Icon_STAFF_N021.png"
+    },
+    {
+      "id": "STAFF_022",
+      "name": "收割者·原型",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4d/Icon_STAFF_N022.png"
+    },
+    {
+      "id": "STAFF_023",
+      "name": "试验型炼金催化器",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/70/Icon_STAFF_N023.png"
+    },
+    {
+      "id": "STAFF_024",
+      "name": "烈焰凝晶",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/07/Icon_STAFF_N024.png"
+    },
+    {
+      "id": "STAFF_025",
+      "name": "极寒凝晶",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/aa/Icon_STAFF_N025.png"
+    },
+    {
+      "id": "STAFF_026",
+      "name": "黑暗生机",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/76/Icon_STAFF_N026.png"
+    },
+    {
+      "id": "STAFF_027",
+      "name": "闪耀之杖",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/20/Icon_STAFF_N027.png"
+    },
+    {
+      "id": "STAFF_028",
+      "name": "冠军之证",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/34/Icon_STAFF_N028.png"
+    },
+    {
+      "id": "STAFF_029",
+      "name": "帝国制式法杖",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/09/Icon_STAFF_N029.png"
+    },
+    {
+      "id": "STAFF_031",
+      "name": "流星之力",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/27/Icon_STAFF_N031.png"
+    },
+    {
+      "id": "STAFF_032",
+      "name": "剧毒喷吐者",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/07/Icon_STAFF_N032.png"
+    },
+    {
+      "id": "STAFF_033",
+      "name": "雷电结晶",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c1/Icon_STAFF_N033.png"
+    },
+    {
+      "id": "STAFF_034",
+      "name": "腐蚀圣职者权杖",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5b/Icon_STAFF_N034.png"
+    },
+    {
+      "id": "STAFF_035",
+      "name": "君王子嗣",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e7/Icon_STAFF_N035.png"
+    },
+    {
+      "id": "STAFF_036",
+      "name": "补给发信手杖",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/11/Icon_STAFF_N036.png"
+    },
+    {
+      "id": "STAFF_037",
+      "name": "神秘传送权杖",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/65/Icon_STAFF_N037.png"
+    },
+    {
+      "id": "STAFF_038",
+      "name": "虚空引力宝珠",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e1/Icon_STAFF_N038.png"
+    },
+    {
+      "id": "STAFF_039",
+      "name": "槐木老枝",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c7/Icon_STAFF_N039.png"
+    },
+    {
+      "id": "STAFF_040",
+      "name": "生命水晶",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b7/Icon_STAFF_N040.png"
+    },
+    {
+      "id": "STAFF_041",
+      "name": "吞噬者手杖",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/03/Icon_STAFF_N041.png"
+    },
+    {
+      "id": "STAFF_042",
+      "name": "迫击杖",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/10/Icon_STAFF_N042.png"
+    },
+    {
+      "id": "STAFF_043",
+      "name": "纵冰之杖",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_STAFF_N043.png"
+    },
+    {
+      "id": "STAFF_044",
+      "name": "噩梦幻象",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4a/Icon_STAFF_N044.png"
+    },
+    {
+      "id": "STAFF_045",
+      "name": "禁咒魔杖",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/3f/Icon_STAFF_N045.png"
+    },
+    {
+      "id": "STAFF_046",
+      "name": "扭曲之杖",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/20/Icon_STAFF_N046.png"
+    },
+    {
+      "id": "STAFF_047",
+      "name": "瑞亚多追踪者之杖",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d0/Icon_STAFF_N047.png"
+    },
+    {
+      "id": "STAFF_048",
+      "name": "神奇摄像机",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5b/Icon_STAFF_N048.png"
+    },
+    {
+      "id": "STAFF_049",
+      "name": "诡谲灭魂杖",
+      "wt": "STAFF",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/db/Icon_STAFF_N049.png"
+    },
+    {
+      "id": "DB_001",
+      "name": "铁制双刀",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b3/Icon_DB_N001.png"
+    },
+    {
+      "id": "DB_002",
+      "name": "铁木双刀",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/3a/Icon_DB_N002.png"
+    },
+    {
+      "id": "DB_003",
+      "name": "终始双刃",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/27/Icon_DB_N003.png"
+    },
+    {
+      "id": "DB_004",
+      "name": "贵族双匕",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/75/Icon_DB_N004.png"
+    },
+    {
+      "id": "DB_005",
+      "name": "圣堂双匕",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d8/Icon_DB_N005.png"
+    },
+    {
+      "id": "DB_006",
+      "name": "恶魔双刃",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/1f/Icon_DB_N006.png"
+    },
+    {
+      "id": "DB_007",
+      "name": "铁制双斧",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f4/Icon_DB_N007.png"
+    },
+    {
+      "id": "DB_008",
+      "name": "仪典黄铜锤",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b4/Icon_DB_N008.png"
+    },
+    {
+      "id": "DB_009",
+      "name": "双狼牙棒",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d0/Icon_DB_N009.png"
+    },
+    {
+      "id": "DB_010",
+      "name": "黑铁双锤",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/37/Icon_DB_N010.png"
+    },
+    {
+      "id": "DB_011",
+      "name": "寂日之冰",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/00/Icon_DB_N011.png"
+    },
+    {
+      "id": "DB_012",
+      "name": "满月之炎",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/3a/Icon_DB_N012.png"
+    },
+    {
+      "id": "DB_013",
+      "name": "琥珀之刃",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4a/Icon_DB_N013.png"
+    },
+    {
+      "id": "DB_014",
+      "name": "帝国卫队双刀",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8d/Icon_DB_N014.png"
+    },
+    {
+      "id": "DB_015",
+      "name": "铁制双勾",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5a/Icon_DB_N015.png"
+    },
+    {
+      "id": "DB_016",
+      "name": "神圣秘银短剑",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c4/Icon_DB_N016.png"
+    },
+    {
+      "id": "DB_017",
+      "name": "逆刃双刀",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f1/Icon_DB_N017.png"
+    },
+    {
+      "id": "DB_018",
+      "name": "河流双煞",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/37/Icon_DB_N018.png"
+    },
+    {
+      "id": "DB_019",
+      "name": "冰与火之舞",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/bc/Icon_DB_N019.png"
+    },
+    {
+      "id": "DB_020",
+      "name": "黑白世界",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/86/Icon_DB_N020.png"
+    },
+    {
+      "id": "DB_022",
+      "name": "肉馅制造者",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a4/Icon_DB_N022.png"
+    },
+    {
+      "id": "DB_023",
+      "name": "腐蚀守卫双刀",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/54/Icon_DB_N023.png"
+    },
+    {
+      "id": "DB_027",
+      "name": "纯钧·胜邪",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b4/Icon_DB_N027.png"
+    },
+    {
+      "id": "DB_028",
+      "name": "邪铁双刃",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/cc/Icon_DB_N028.png"
+    },
+    {
+      "id": "DB_029",
+      "name": "巨大的剪刀",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/42/Icon_DB_N029.png"
+    },
+    {
+      "id": "DB_030",
+      "name": "巨岩碎片",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/78/Icon_DB_N030.png"
+    },
+    {
+      "id": "DB_031",
+      "name": "闪电之锋",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c1/Icon_DB_N031.png"
+    },
+    {
+      "id": "DB_032",
+      "name": "古戟巨刃碎片",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/19/Icon_DB_N032.png"
+    },
+    {
+      "id": "DB_033",
+      "name": "蛮族骨锥",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/81/Icon_DB_N033.png"
+    },
+    {
+      "id": "DB_034",
+      "name": "锋锐之羽",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8b/Icon_DB_N034.png"
+    },
+    {
+      "id": "DB_035",
+      "name": "狂战士血斧",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/64/Icon_DB_N035.png"
+    },
+    {
+      "id": "DB_036",
+      "name": "风暴之斧",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/2e/Icon_DB_N036.png"
+    },
+    {
+      "id": "DB_038",
+      "name": "坚冰双刃",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7a/Icon_DB_N038.png"
+    },
+    {
+      "id": "DB_039",
+      "name": "游沙之鳍",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/bf/Icon_DB_N039.png"
+    },
+    {
+      "id": "DB_040",
+      "name": "傀儡熊爪",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8d/Icon_DB_N040.png"
+    },
+    {
+      "id": "DB_041",
+      "name": "巫术骨刺",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/49/Icon_DB_N041.png"
+    },
+    {
+      "id": "DB_042",
+      "name": "诡谲与欺诈",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/2f/Icon_DB_N042.png"
+    },
+    {
+      "id": "DB_043",
+      "name": "戮魔对剑",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/48/Icon_DB_N043.png"
+    },
+    {
+      "id": "DB_044",
+      "name": "狼刃斧",
+      "wt": "DB",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e0/Icon_DB_N044.png"
+    },
+    {
+      "id": "BOW_001",
+      "name": "木制猎弓",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/48/Icon_BOW_N001.png"
+    },
+    {
+      "id": "BOW_002",
+      "name": "铁木游侠弓",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8e/Icon_BOW_N002.png"
+    },
+    {
+      "id": "BOW_003",
+      "name": "灵木强弓",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/83/Icon_BOW_N003.png"
+    },
+    {
+      "id": "BOW_004",
+      "name": "腐蚀之翼",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d1/Icon_BOW_N004.png"
+    },
+    {
+      "id": "BOW_005",
+      "name": "圣堂之弓",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/82/Icon_BOW_N005.png"
+    },
+    {
+      "id": "BOW_006",
+      "name": "恶魔强弓",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a7/Icon_BOW_N006.png"
+    },
+    {
+      "id": "BOW_007",
+      "name": "帝国仪典弓",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f5/Icon_BOW_N007.png"
+    },
+    {
+      "id": "BOW_008",
+      "name": "黄铜硬弓",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/fe/Icon_BOW_N008.png"
+    },
+    {
+      "id": "BOW_009",
+      "name": "魔晶之弓",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f4/Icon_BOW_N009.png"
+    },
+    {
+      "id": "BOW_010",
+      "name": "熔岩之击",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/ee/Icon_BOW_N010.png"
+    },
+    {
+      "id": "BOW_011",
+      "name": "狂牛之角",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d8/Icon_BOW_N011.png"
+    },
+    {
+      "id": "BOW_012",
+      "name": "闪电快弓",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d4/Icon_BOW_N012.png"
+    },
+    {
+      "id": "BOW_013",
+      "name": "坚冰之矢",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/89/Icon_BOW_N013.png"
+    },
+    {
+      "id": "BOW_014",
+      "name": "猩红荆棘",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4e/Icon_BOW_N014.png"
+    },
+    {
+      "id": "BOW_015",
+      "name": "绿宝石机关弓",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/34/Icon_BOW_N015.png"
+    },
+    {
+      "id": "BOW_016",
+      "name": "邪魅之矢",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b5/Icon_BOW_N016.png"
+    },
+    {
+      "id": "BOW_017",
+      "name": "蔷薇藤蔓",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7a/Icon_BOW_N017.png"
+    },
+    {
+      "id": "BOW_018",
+      "name": "孢子长木弓",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a0/Icon_BOW_N018.png"
+    },
+    {
+      "id": "BOW_019",
+      "name": "疾风之弓",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f5/Icon_BOW_N019.png"
+    },
+    {
+      "id": "BOW_020",
+      "name": "深渊凝视",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_BOW_N020.png"
+    },
+    {
+      "id": "BOW_021",
+      "name": "复合弓十一式改",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/3a/Icon_BOW_N021.png"
+    },
+    {
+      "id": "BOW_022",
+      "name": "炼金注射器",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c2/Icon_BOW_N022.png"
+    },
+    {
+      "id": "BOW_023",
+      "name": "圣木弓",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/99/Icon_BOW_N023.png"
+    },
+    {
+      "id": "BOW_024",
+      "name": "虚空引力长弓",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/df/Icon_BOW_N024.png"
+    },
+    {
+      "id": "BOW_025",
+      "name": "黄金战弓",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/ef/Icon_BOW_N025.png"
+    },
+    {
+      "id": "BOW_026",
+      "name": "木灵藤弓",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/3c/Icon_BOW_N026.png"
+    },
+    {
+      "id": "BOW_027",
+      "name": "异化骨弓",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c7/Icon_BOW_N027.png"
+    },
+    {
+      "id": "BOW_028",
+      "name": "电光之弧",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7d/Icon_BOW_N028.png"
+    },
+    {
+      "id": "BOW_029",
+      "name": "帝国制式长弓",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b0/Icon_BOW_N029.png"
+    },
+    {
+      "id": "BOW_030",
+      "name": "极地猎弓",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8d/Icon_BOW_N030.png"
+    },
+    {
+      "id": "BOW_031",
+      "name": "吞噬者长弓",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a3/Icon_BOW_N031.png"
+    },
+    {
+      "id": "BOW_032",
+      "name": "幽狐弓",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/84/Icon_BOW_N032.png"
+    },
+    {
+      "id": "BOW_033",
+      "name": "噩梦降临",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/ac/Icon_BOW_N033.png"
+    },
+    {
+      "id": "BOW_034",
+      "name": "噩梦残影",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/fe/Icon_BOW_N034.png"
+    },
+    {
+      "id": "BOW_035",
+      "name": "猛毒猎弓",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_BOW_N035.png"
+    },
+    {
+      "id": "BOW_036",
+      "name": "堕落领主战弓",
+      "wt": "BOW",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/6f/Icon_BOW_N036.png"
+    },
+    {
+      "id": "FD_001",
+      "name": "铁炉枪",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d4/Icon_FistDrill_N001.png"
+    },
+    {
+      "id": "FD_002",
+      "name": "铁木之枪",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/34/Icon_FistDrill_N002.png"
+    },
+    {
+      "id": "FD_003",
+      "name": "贵族魔晶枪",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/ce/Icon_FistDrill_N003.png"
+    },
+    {
+      "id": "FD_004",
+      "name": "终始熔炉",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/37/Icon_FistDrill_N004.png"
+    },
+    {
+      "id": "FD_005",
+      "name": "圣堂炉枪",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/84/Icon_FistDrill_N005.png"
+    },
+    {
+      "id": "FD_006",
+      "name": "青瓷炉枪",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8a/Icon_FistDrill_N006.png"
+    },
+    {
+      "id": "FD_007",
+      "name": "骑士炉枪",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/ac/Icon_FistDrill_N007.png"
+    },
+    {
+      "id": "FD_008",
+      "name": "黄铜炉枪",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/ae/Icon_FistDrill_N008.png"
+    },
+    {
+      "id": "FD_009",
+      "name": "陨铁炉枪",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/55/Icon_FistDrill_N009.png"
+    },
+    {
+      "id": "FD_010",
+      "name": "灭魔之枪",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/75/Icon_FistDrill_N010.png"
+    },
+    {
+      "id": "FD_011",
+      "name": "铁棘枪",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/aa/Icon_FistDrill_N011.png"
+    },
+    {
+      "id": "FD_012",
+      "name": "邪魔脊椎",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/79/Icon_FistDrill_N012.png"
+    },
+    {
+      "id": "FD_013",
+      "name": "南瓜炉",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a1/Icon_FistDrill_N013.png"
+    },
+    {
+      "id": "FD_014",
+      "name": "河流蛊枪",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a9/Icon_FistDrill_N014.png"
+    },
+    {
+      "id": "FD_015",
+      "name": "锈炉之枪",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/44/Icon_FistDrill_N015.png"
+    },
+    {
+      "id": "FD_016",
+      "name": "熔炉斧枪",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/12/Icon_FistDrill_N016.png"
+    },
+    {
+      "id": "FD_017",
+      "name": "寒冰吐息",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e1/Icon_FistDrill_N017.png"
+    },
+    {
+      "id": "FD_018",
+      "name": "火山之怒",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8a/Icon_FistDrill_N018.png"
+    },
+    {
+      "id": "FD_019",
+      "name": "密林新芽",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/40/Icon_FistDrill_N019.png"
+    },
+    {
+      "id": "FD_020",
+      "name": "恶鬼炉心",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8c/Icon_FistDrill_N020.png"
+    },
+    {
+      "id": "FD_021",
+      "name": "增压涡炉三式",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a9/Icon_FistDrill_N021.png"
+    },
+    {
+      "id": "FD_022",
+      "name": "精铁涡炉枪",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/00/Icon_FistDrill_N022.png"
+    },
+    {
+      "id": "FD_023",
+      "name": "涡炉火箭",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/27/Icon_FistDrill_N023.png"
+    },
+    {
+      "id": "FD_024",
+      "name": "剧毒盆栽",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/6a/Icon_FistDrill_N024.png"
+    },
+    {
+      "id": "FD_025",
+      "name": "邪恶炼金装置",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/bb/Icon_FistDrill_N025.png"
+    },
+    {
+      "id": "FD_026",
+      "name": "腐化侵蚀炉枪",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/08/Icon_FistDrill_N026.png"
+    },
+    {
+      "id": "FD_027",
+      "name": "磐岩魔炮枪",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/1b/Icon_FistDrill_N027.png"
+    },
+    {
+      "id": "FD_028",
+      "name": "锈炉巨戟",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/28/Icon_FistDrill_N028.png"
+    },
+    {
+      "id": "FD_029",
+      "name": "炎龙引擎",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/1d/Icon_FistDrill_N029.png"
+    },
+    {
+      "id": "FD_030",
+      "name": "君王之爪",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/85/Icon_FistDrill_N030.png"
+    },
+    {
+      "id": "FD_031",
+      "name": "虚空引擎",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e6/Icon_FistDrill_N031.png"
+    },
+    {
+      "id": "FD_032",
+      "name": "急冻炉",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0a/Icon_FistDrill_N032.png"
+    },
+    {
+      "id": "FD_033",
+      "name": "爆破之爪",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f4/Icon_FistDrill_N033.png"
+    },
+    {
+      "id": "FD_034",
+      "name": "坚冰引擎",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/57/Icon_FistDrill_N034.png"
+    },
+    {
+      "id": "FD_035",
+      "name": "轰击者",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7f/Icon_FistDrill_N035.png"
+    },
+    {
+      "id": "FD_036",
+      "name": "魔神邪焰熔炉",
+      "wt": "FD",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/19/Icon_FistDrill_N036.png"
+    },
+    {
+      "id": "GUN_001",
+      "name": "制式短管火枪",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/ca/Icon_GUN_N001.png"
+    },
+    {
+      "id": "GUN_002",
+      "name": "铁木大炮",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/86/Icon_GUN_N002.png"
+    },
+    {
+      "id": "GUN_003",
+      "name": "制式滑膛枪",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f6/Icon_GUN_N003.png"
+    },
+    {
+      "id": "GUN_004",
+      "name": "炼金发射器",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/2a/Icon_GUN_N004.png"
+    },
+    {
+      "id": "GUN_005",
+      "name": "蒸汽速射枪",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e8/Icon_GUN_N005.png"
+    },
+    {
+      "id": "GUN_006",
+      "name": "河流蛊铳",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d6/Icon_GUN_N006.png"
+    },
+    {
+      "id": "GUN_007",
+      "name": "木灵之手",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/35/Icon_GUN_N007.png"
+    },
+    {
+      "id": "GUN_008",
+      "name": "贵族短铳",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/db/Icon_GUN_N008.png"
+    },
+    {
+      "id": "GUN_009",
+      "name": "火山轰击者",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/6a/Icon_GUN_N009.png"
+    },
+    {
+      "id": "GUN_010",
+      "name": "邪龙之骨",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b6/Icon_GUN_N010.png"
+    },
+    {
+      "id": "GUN_013",
+      "name": "竹筒火枪",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4e/Icon_GUN_N013.png"
+    },
+    {
+      "id": "GUN_014",
+      "name": "贵族长管铳",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5f/Icon_GUN_N014.png"
+    },
+    {
+      "id": "GUN_015",
+      "name": "狙射长铳",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e4/Icon_GUN_N015.png"
+    },
+    {
+      "id": "GUN_020",
+      "name": "冰川发射器",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c4/Icon_GUN_N020.png"
+    },
+    {
+      "id": "GUN_021",
+      "name": "低音号",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/1e/Icon_GUN_N021.png"
+    },
+    {
+      "id": "GUN_022",
+      "name": "蒸汽轰击炮",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4d/Icon_GUN_N022.png"
+    },
+    {
+      "id": "GUN_023",
+      "name": "哥布林大炮",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/75/Icon_GUN_N023.png"
+    },
+    {
+      "id": "GUN_025",
+      "name": "炎龙炮",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a3/Icon_GUN_N025.png"
+    },
+    {
+      "id": "GUN_026",
+      "name": "荒漠仙人掌",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/13/Icon_GUN_N026.png"
+    },
+    {
+      "id": "GUN_027",
+      "name": "魔晶聚焦器",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/bf/Icon_GUN_N027.png"
+    },
+    {
+      "id": "GUN_028",
+      "name": "终始火炮",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b1/Icon_GUN_N028.png"
+    },
+    {
+      "id": "GUN_029",
+      "name": "噬元猛兽",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f5/Icon_GUN_N029.png"
+    },
+    {
+      "id": "GUN_030",
+      "name": "异型鱼骨",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/72/Icon_GUN_N030.png"
+    },
+    {
+      "id": "GUN_031",
+      "name": "玉米射手",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f9/Icon_GUN_N031.png"
+    },
+    {
+      "id": "GUN_032",
+      "name": "改造手炮七式",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8c/Icon_GUN_N032.png"
+    },
+    {
+      "id": "GUN_033",
+      "name": "魔导线圈",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f4/Icon_GUN_N033.png"
+    },
+    {
+      "id": "GUN_034",
+      "name": "暗物质火炮",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/84/Icon_GUN_N034.png"
+    },
+    {
+      "id": "GUN_035",
+      "name": "荒漠暴徒手炮",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/cf/Icon_GUN_N035.png"
+    },
+    {
+      "id": "GUN_036",
+      "name": "猎鱼人",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/3a/Icon_GUN_N036.png"
+    },
+    {
+      "id": "GUN_037",
+      "name": "蜥蜴人火铳",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/84/Icon_GUN_N037.png"
+    },
+    {
+      "id": "GUN_038",
+      "name": "钢铁切割者",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/2a/Icon_GUN_N038.png"
+    },
+    {
+      "id": "GUN_040",
+      "name": "结晶恶龙之首",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/50/Icon_GUN_N040.png"
+    },
+    {
+      "id": "GUN_041",
+      "name": "黄金毁灭者",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0a/Icon_GUN_N041.png"
+    },
+    {
+      "id": "GUN_042",
+      "name": "寒地速射枪",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/ba/Icon_GUN_N042.png"
+    },
+    {
+      "id": "GUN_043",
+      "name": "锈钢炮",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/56/Icon_GUN_N043.png"
+    },
+    {
+      "id": "GUN_045",
+      "name": "镇压者",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/dd/Icon_GUN_N045.png"
+    },
+    {
+      "id": "GUN_046",
+      "name": "魔神能量火炮",
+      "wt": "GUN",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/55/Icon_GUN_N046.png"
+    },
+    {
+      "id": "PL_001",
+      "name": "生锈的提灯",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f3/Icon_PL_N001.png"
+    },
+    {
+      "id": "PL_002",
+      "name": "蛮牛之魂",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/86/Icon_PL_N002.png"
+    },
+    {
+      "id": "PL_003",
+      "name": "虚空引力提灯",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_PL_N003.png"
+    },
+    {
+      "id": "PL_004",
+      "name": "邪龙之眼",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/59/Icon_PL_N004.png"
+    },
+    {
+      "id": "PL_006",
+      "name": "终始引路灯",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b4/Icon_PL_N006.png"
+    },
+    {
+      "id": "PL_007",
+      "name": "异变提灯",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5b/Icon_PL_N007.png"
+    },
+    {
+      "id": "PL_008",
+      "name": "炎龙之魂",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a5/Icon_PL_N008.png"
+    },
+    {
+      "id": "PL_009",
+      "name": "试作秘法提灯",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c0/Icon_PL_N009.png"
+    },
+    {
+      "id": "PL_010",
+      "name": "木灵幽魂",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/3b/Icon_PL_N010.png"
+    },
+    {
+      "id": "PL_011",
+      "name": "诱饵晶石",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/2b/Icon_PL_N011.png"
+    },
+    {
+      "id": "PL_012",
+      "name": "枯藤提灯",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e8/Icon_PL_N012.png"
+    },
+    {
+      "id": "PL_013",
+      "name": "河流蛊灯",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4b/Icon_PL_N013.png"
+    },
+    {
+      "id": "PL_014",
+      "name": "磐石提灯",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f1/Icon_PL_N014.png"
+    },
+    {
+      "id": "PL_015",
+      "name": "军团火炬",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8e/Icon_PL_N015.png"
+    },
+    {
+      "id": "PL_016",
+      "name": "堡垒提灯",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/01/Icon_PL_N016.png"
+    },
+    {
+      "id": "PL_017",
+      "name": "学徒提灯",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a9/Icon_PL_N017.png"
+    },
+    {
+      "id": "PL_018",
+      "name": "君王之心",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c4/Icon_PL_N018.png"
+    },
+    {
+      "id": "PL_019",
+      "name": "坚冰之障",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/13/Icon_PL_N019.png"
+    },
+    {
+      "id": "PL_020",
+      "name": "闪电之核",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f4/Icon_PL_N020.png"
+    },
+    {
+      "id": "PL_021",
+      "name": "磁暴线圈",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9c/Icon_PL_N021.png"
+    },
+    {
+      "id": "PL_022",
+      "name": "荒蛮之炬",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/46/Icon_PL_N022.png"
+    },
+    {
+      "id": "PL_023",
+      "name": "钢铁提灯",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f0/Icon_PL_N023.png"
+    },
+    {
+      "id": "PL_024",
+      "name": "幻象提灯",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/06/Icon_PL_N024.png"
+    },
+    {
+      "id": "PL_025",
+      "name": "寒冰提灯",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5e/Icon_PL_N025.png"
+    },
+    {
+      "id": "PL_026",
+      "name": "利刃提灯",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b5/Icon_PL_N026.png"
+    },
+    {
+      "id": "PL_028",
+      "name": "雷神之锤",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/38/Icon_PL_N028.png"
+    },
+    {
+      "id": "PL_029",
+      "name": "腐蚀帝国骑士之盔",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/28/Icon_PL_N029.png"
+    },
+    {
+      "id": "PL_030",
+      "name": "铁炉灯",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/90/Icon_PL_N030.png"
+    },
+    {
+      "id": "PL_031",
+      "name": "坚冰魔炉",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/aa/Icon_PL_N031.png"
+    },
+    {
+      "id": "PL_032",
+      "name": "剑客之遗",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/76/Icon_PL_N032.png"
+    },
+    {
+      "id": "PL_033",
+      "name": "遗迹核心",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/fe/Icon_PL_N033.png"
+    },
+    {
+      "id": "PL_034",
+      "name": "陈旧的头盔",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d2/Icon_PL_N034.png"
+    },
+    {
+      "id": "PL_035",
+      "name": "噩梦傀儡",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/27/Icon_PL_N035.png"
+    },
+    {
+      "id": "PL_036",
+      "name": "诡谲之影",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/2d/Icon_PL_N036.png"
+    },
+    {
+      "id": "PL_037",
+      "name": "诅咒狼首",
+      "wt": "PL",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_PL_N037.png"
+    },
+    {
+      "id": "KA_001",
+      "name": "大太刀",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/be/Icon_KATANA_N001.png"
+    },
+    {
+      "id": "KA_002",
+      "name": "重晶长刀",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/bc/Icon_KATANA_N002.png"
+    },
+    {
+      "id": "KA_003",
+      "name": "能量刃",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/2c/Icon_KATANA_N003.png"
+    },
+    {
+      "id": "KA_004",
+      "name": "灵木长枝",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/30/Icon_KATANA_N004.png"
+    },
+    {
+      "id": "KA_005",
+      "name": "羽刃斩",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e0/Icon_KATANA_N005.png"
+    },
+    {
+      "id": "KA_006",
+      "name": "蒸汽动力锯",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/db/Icon_KATANA_N006.png"
+    },
+    {
+      "id": "KA_007",
+      "name": "训练木刀",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a6/Icon_KATANA_N007.png"
+    },
+    {
+      "id": "KA_008",
+      "name": "兽首黑刀",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/bd/Icon_KATANA_N008.png"
+    },
+    {
+      "id": "KA_009",
+      "name": "长枝",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b0/Icon_KATANA_N009.png"
+    },
+    {
+      "id": "KA_010",
+      "name": "腌制长剑",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4d/Icon_KATANA_N010.png"
+    },
+    {
+      "id": "KA_011",
+      "name": "般若一文字",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e8/Icon_KATANA_N011.png"
+    },
+    {
+      "id": "KA_013",
+      "name": "疾风之刃",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b2/Icon_KATANA_N013.png"
+    },
+    {
+      "id": "KA_014",
+      "name": "冷月",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/18/Icon_KATANA_N014.png"
+    },
+    {
+      "id": "KA_015",
+      "name": "日轮",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/56/Icon_KATANA_N015.png"
+    },
+    {
+      "id": "KA_016",
+      "name": "镰鼬切",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/40/Icon_KATANA_N016.png"
+    },
+    {
+      "id": "KA_017",
+      "name": "破竹",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a7/Icon_KATANA_N017.png"
+    },
+    {
+      "id": "KA_018",
+      "name": "恶魔脊椎剑",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0c/Icon_KATANA_N018.png"
+    },
+    {
+      "id": "KA_019",
+      "name": "幽斩",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/ca/Icon_KATANA_N019.png"
+    },
+    {
+      "id": "KA_020",
+      "name": "锯齿残刃",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c3/Icon_KATANA_N020.png"
+    },
+    {
+      "id": "KA_021",
+      "name": "炼金手术刀",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/67/Icon_KATANA_N021.png"
+    },
+    {
+      "id": "KA_022",
+      "name": "噩梦之锋",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/07/Icon_KATANA_N022.png"
+    },
+    {
+      "id": "KA_023",
+      "name": "荒漠鳍刃",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/de/Icon_KATANA_N023.png"
+    },
+    {
+      "id": "KA_024",
+      "name": "永冻",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a5/Icon_KATANA_N024.png"
+    },
+    {
+      "id": "KA_025",
+      "name": "龙炎",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/fb/Icon_KATANA_N025.png"
+    },
+    {
+      "id": "KA_026",
+      "name": "巫术鱼骨",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a0/Icon_KATANA_N026.png"
+    },
+    {
+      "id": "KA_027",
+      "name": "终始晶刃",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0c/Icon_KATANA_N027.png"
+    },
+    {
+      "id": "KA_028",
+      "name": "雷鸣刀",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4a/Icon_KATANA_N028.png"
+    },
+    {
+      "id": "KA_029",
+      "name": "邪龙之髓",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e9/Icon_KATANA_N029.png"
+    },
+    {
+      "id": "KA_030",
+      "name": "邪灵村正",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a2/Icon_KATANA_N030.png"
+    },
+    {
+      "id": "KA_031",
+      "name": "贵族长刀",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8c/Icon_KATANA_N031.png"
+    },
+    {
+      "id": "KA_032",
+      "name": "妖之牙",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b1/Icon_KATANA_N032.png"
+    },
+    {
+      "id": "KA_033",
+      "name": "傀儡织针",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8d/Icon_KATANA_N033.png"
+    },
+    {
+      "id": "KA_034",
+      "name": "猛毒猎刃",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9e/Icon_KATANA_N034.png"
+    },
+    {
+      "id": "KA_035",
+      "name": "诡谲斩魂刀",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/08/Icon_KATANA_N035.png"
+    },
+    {
+      "id": "KA_036",
+      "name": "激流拾貳式",
+      "wt": "KA",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/de/Icon_KATANA_N036.png"
+    }
+  ],
+  "itemSource": {
+    "type": "wiki",
+    "name": "失落城堡2中文维基（灰机）",
+    "page": "武器",
+    "license": "CC-BY-NC-SA-4.0",
+    "fetchedAt": "2026-11-13",
+    "file": "data/sources/wiki-weapons.json"
+  }
 }

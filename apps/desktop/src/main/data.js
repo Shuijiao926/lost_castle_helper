@@ -16,8 +16,11 @@ function createDataLoader({ source, configStore, log }) {
     return {
       builds,
       weapons: statics.weapons,
+      weaponItems: statics.weaponItems || [],
+      armors: statics.armors || [],
       inscriptions: statics.inscriptions,
       schools: statics.schools,
+      treasures: statics.treasures || [],
       meta: {
         version: file.version || '0',
         gameVersion: file.gameVersion || '—',

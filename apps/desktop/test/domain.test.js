@@ -93,6 +93,28 @@ test('多选筛选：同类取「或」，不同类取「且」', () => {
   assert.equal(domain.matches(a, { filterW: a.wt }), true);
 });
 
+test('装备筛选：按具体武器名匹配 gear / weaponChoices', () => {
+  const b = makeBuild({
+    gear: { weapon: { name: '生铁大剑' } },
+    weaponChoices: [{ name: '生铁大剑', tag: '核心' }],
+  });
+  assert.equal(domain.matches(b, { filterEquip: ['生铁大剑'] }), true);
+  assert.equal(domain.matches(b, { filterEquip: ['铁木大剑'] }), false);
+  // 多选装备：命中任一即可
+  assert.equal(domain.matches(b, { filterEquip: ['铁木大剑', '生铁大剑'] }), true);
+  // 与武器类型/刻印是「且」关系
+  assert.equal(domain.matches(b, { filterEquip: ['生铁大剑'], filterW: [b.wt] }), true);
+  assert.equal(domain.matches(b, { filterEquip: ['生铁大剑'], filterW: ['STAFF'] }), false);
+});
+
+test('衣服筛选：按 gear.armor 名称匹配', () => {
+  const b = makeBuild({ gear: { armor: { name: '黑骑士板甲', kind: '重甲' } } });
+  assert.equal(domain.matches(b, { filterArmor: ['黑骑士板甲'] }), true);
+  assert.equal(domain.matches(b, { filterArmor: ['白骑士板甲'] }), false);
+  assert.equal(domain.matches(b, { filterArmor: ['黑骑士板甲'], filterW: [b.wt] }), true);
+  assert.equal(domain.matches(b, { filterArmor: ['黑骑士板甲'], filterW: ['STAFF'] }), false);
+});
+
 test('visibleBuilds：人气 / 评分排序 + 过滤（空列表也安全）', () => {
   assert.deepEqual(domain.visibleBuilds([], { sort: 'hot' }), []);
 
@@ -104,6 +126,24 @@ test('visibleBuilds：人气 / 评分排序 + 过滤（空列表也安全）', (
   for (let i = 1; i < rating.length; i++) assert.ok(rating[i - 1].rating >= rating[i].rating);
 
   assert.equal(domain.visibleBuilds(FIXTURE_BUILDS, { sort: 'hot', q: '绝对不存在的词' }).length, 0);
+});
+
+test('宝藏选项合并流派宝藏、去重并支持名称搜索', () => {
+  const builds = [makeBuild({
+    treasures: { chaos: ['混沌符文石'], gold: ['闪电增幅装置'] },
+    cursed: [{ name: '诅咒的魔晶石' }],
+  }), makeBuild()];
+  assert.deepEqual(new Set(domain.listTreasures(builds)), new Set(['不融冰', '混沌符文石', '闪电增幅装置', '诅咒的魔晶石']));
+  assert.deepEqual(domain.listTreasures(builds, ' 符文 '), ['混沌符文石']);
+  assert.deepEqual(domain.listTreasures([]), []);
+});
+
+test('宝藏多选命中任意一项，并和武器等其他条件一起生效', () => {
+  const build = makeBuild({ treasures: { gold: ['闪电增幅装置'] }, cursed: [{ name: '诅咒的魔晶石' }] });
+  assert.equal(domain.matches(build, { filterTreasures: ['其他宝藏', '闪电增幅装置'], filterW: 'SHW' }), true);
+  assert.equal(domain.matches(build, { filterTreasures: ['诅咒的魔晶石'], filterW: 'BOW' }), false);
+  assert.equal(domain.matches(build, { filterTreasures: ['融冰'] }), false);
+  assert.equal(domain.matches(build, { q: '魔晶石' }), true);
 });
 
 test('normalizeBuilds：服务端 DTO 归一化（空数据安全）', () => {

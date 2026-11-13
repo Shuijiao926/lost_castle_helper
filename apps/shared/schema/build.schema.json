@@ -36,6 +36,8 @@
         },
         "author": { "type": "string", "maxLength": 24, "description": "投稿人昵称" },
         "source": { "type": "string", "description": "来源链接（社区原帖 / TapTap / 抖音等）" },
+        "sourceType": { "enum": ["wiki", "self-test", "authorized-submission", "pr", "maintainer"] },
+        "license": { "const": "CC-BY-NC-SA-4.0" },
         "updatedAt": { "type": "string", "description": "本流派最后更新日期 YYYY-MM-DD" },
         "gameVersion": { "type": "string", "description": "本流派适用的游戏版本" },
         "contributors": { "type": "array", "items": { "type": "string" } },

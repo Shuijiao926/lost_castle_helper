@@ -1,0 +1,2005 @@
+{
+  "version": "1.0",
+  "gameVersion": "—",
+  "updatedAt": "2026-11-13",
+  "source": {
+    "type": "wiki",
+    "name": "失落城堡2中文维基（灰机）",
+    "url": "https://lc2.huijiwiki.com/wiki/%E5%AE%9D%E8%97%8F",
+    "license": "CC-BY-NC-SA-4.0",
+    "revid": 139825
+  },
+  "treasures": [
+    {
+      "id": "tr_001",
+      "name": "阿瓦莉的坚冰盾",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7e/Icon_PassivePropsIcon_TheShieldOfIce.png"
+    },
+    {
+      "id": "tr_002",
+      "name": "阿西尔符文吊坠",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7e/Icon_PassiveProps_FakeProps_AlphaPendant.png"
+    },
+    {
+      "id": "tr_003",
+      "name": "阿希尔红刃斧",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/71/Icon_PassivePropsIcon_AxeOfAkhil.png"
+    },
+    {
+      "id": "tr_004",
+      "name": "阿希尔枪尖",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/29/Icon_PassivePropsIcon_SpearOfAkhil.png"
+    },
+    {
+      "id": "tr_005",
+      "name": "阿希尔权杖",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f3/Icon_PassivePropsIcon_SwordStaffOfAkhil.png"
+    },
+    {
+      "id": "tr_006",
+      "name": "黯色冰冠",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/80/Icon_PassivePropsIcon_TheCrownOfIce_Lv3.png"
+    },
+    {
+      "id": "tr_007",
+      "name": "孢子虫巢",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/1e/Icon_PassivePropsIcon_SpiderNest.png"
+    },
+    {
+      "id": "tr_008",
+      "name": "孢子蒲公英",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0e/Icon_PassivePropsIcon_PoisonSpringMove.png"
+    },
+    {
+      "id": "tr_009",
+      "name": "暴虐战鼓",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/3d/Icon_PassivePropsIcon_ViolentWarDrum.png"
+    },
+    {
+      "id": "tr_010",
+      "name": "爆裂芯片",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/77/Icon_PassivePropsIcon_ShardOfDetonation.png"
+    },
+    {
+      "id": "tr_011",
+      "name": "北风号角",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/05/Icon_PassiveProps_NorthWindHorn.png"
+    },
+    {
+      "id": "tr_012",
+      "name": "背包扩充口袋",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b4/Icon_PassiveProps_BagExpansion.png"
+    },
+    {
+      "id": "tr_013",
+      "name": "背水护腕",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5c/Icon_PassivePropsIcon_BackWaterWristGuard.png"
+    },
+    {
+      "id": "tr_014",
+      "name": "背水头巾",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d4/Icon_PassiveProps_Moonstone.png"
+    },
+    {
+      "id": "tr_015",
+      "name": "被封印的冰灵",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e7/Icon_PassiveProps_IceSpiritPendant.png"
+    },
+    {
+      "id": "tr_016",
+      "name": "被侵蚀的护腕",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e2/Icon_PassiveProps_DemonWristband.png"
+    },
+    {
+      "id": "tr_017",
+      "name": "被侵蚀的圣典",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a8/Icon_PassiveProps_DevilBible.png"
+    },
+    {
+      "id": "tr_018",
+      "name": "被诅咒的符文盾",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a1/Icon_PassiveProps_CurseParathiShield.png"
+    },
+    {
+      "id": "tr_019",
+      "name": "被诅咒的冠冕",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a8/Icon_PassiveProps_CrownOfCurse.png"
+    },
+    {
+      "id": "tr_020",
+      "name": "被诅咒的怀表",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/df/Icon_PassiveProps_CursePocketWatch.png"
+    },
+    {
+      "id": "tr_021",
+      "name": "被诅咒的魔法书",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/53/Icon_PassiveProps_CurseMagicBook.png"
+    },
+    {
+      "id": "tr_022",
+      "name": "被诅咒的锈刃",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/73/Icon_PassiveProps_CurseRustBlade.png"
+    },
+    {
+      "id": "tr_023",
+      "name": "被诅咒的硬币",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/00/Icon_PassiveProps_CurseCoin.png"
+    },
+    {
+      "id": "tr_024",
+      "name": "被诅咒的云母盾",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/36/Icon_PassiveProps_CurseMicaShield.png"
+    },
+    {
+      "id": "tr_025",
+      "name": "奔雷核心",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/de/Icon_PassivePropsIcon_shockCore.png"
+    },
+    {
+      "id": "tr_026",
+      "name": "臂刃",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7e/Icon_PassiveProps_FirstAid.png"
+    },
+    {
+      "id": "tr_027",
+      "name": "便携黑洞",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b0/Icon_PassiveProps_MoveGetThrowItem.png"
+    },
+    {
+      "id": "tr_028",
+      "name": "冰川胸章",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c0/Icon_PassiveProps_BlessingBadge.png"
+    },
+    {
+      "id": "tr_029",
+      "name": "冰封魔杖",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c1/Icon_PassiveProps_Frozen_Wand.png"
+    },
+    {
+      "id": "tr_030",
+      "name": "冰晶匕首",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f7/Icon_PassiveProps_IceCrystalDagger.png"
+    },
+    {
+      "id": "tr_031",
+      "name": "冰晶饰片",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/93/Icon_PassivePropsIcon_TheCrownOfIce_Lv1.png"
+    },
+    {
+      "id": "tr_032",
+      "name": "补给发信器",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/44/Icon_PassiveProps_BirdCallingMachine.png"
+    },
+    {
+      "id": "tr_033",
+      "name": "不老泉水",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/ee/Icon_PassiveProps_ProtectorOfLife.png"
+    },
+    {
+      "id": "tr_034",
+      "name": "不融冰",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0b/Icon_PassivePropsIcon_NotMeltingIce.png"
+    },
+    {
+      "id": "tr_035",
+      "name": "布甲装备手册",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/ac/Icon_PassiveProps_ClothArmorStrength.png"
+    },
+    {
+      "id": "tr_036",
+      "name": "残缺的阿希尔徽记",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5b/Icon_PassivePropsIcon_ProofOfAkhil_Lv3.png"
+    },
+    {
+      "id": "tr_037",
+      "name": "残缺的法师之饰",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/19/Icon_PassivePropsIcon_SkillAtkUp_Lv3.png"
+    },
+    {
+      "id": "tr_038",
+      "name": "残缺的剑士手套",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/49/Icon_PassivePropsIcon_SwordsmanshipGloves_Lv3.png"
+    },
+    {
+      "id": "tr_039",
+      "name": "残缺的剧毒法球",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/75/Icon_PassivePropsIcon_PoisonDmgUp_Lv3.png"
+    },
+    {
+      "id": "tr_040",
+      "name": "残缺的纳伊鲁徽记",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/2b/Icon_PassivePropsIcon_RuneBulletDamageUP_Lv3.png"
+    },
+    {
+      "id": "tr_041",
+      "name": "残缺的帕拉提徽记",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/2c/Icon_PassivePropsIcon_RuneBreakDmgUp_Lv3.png"
+    },
+    {
+      "id": "tr_042",
+      "name": "残缺的夜枭徽章",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f3/Icon_PassivePropsIcon_MaxMana_Lv3.png"
+    },
+    {
+      "id": "tr_043",
+      "name": "残缺的印盘",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/04/Icon_PassivePropsIcon_LifeJadeSeal_Lv3.png"
+    },
+    {
+      "id": "tr_044",
+      "name": "残缺的勇者之剑",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4a/Icon_PassivePropsIcon_SwordOfTheBrave_Lv3_1.png"
+    },
+    {
+      "id": "tr_045",
+      "name": "残缺的游侠兜帽",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9f/Icon_PassivePropsIcon_RangerHood_Lv3.png"
+    },
+    {
+      "id": "tr_046",
+      "name": "残缺的增幅电容",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/20/Icon_PassiveProps_ElectricBall_Lv3.png"
+    },
+    {
+      "id": "tr_047",
+      "name": "缠雷军刀",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_PassiveProps_EntangledThunderArmyBlade.png"
+    },
+    {
+      "id": "tr_048",
+      "name": "充能符文",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/1c/Icon_PassiveProps_ChaserRune.png"
+    },
+    {
+      "id": "tr_049",
+      "name": "充能权杖",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5f/Icon_PassivePropsIcon_ChargingStaff.png"
+    },
+    {
+      "id": "tr_050",
+      "name": "充能型信号发射器",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_PassiveProps_UseManaGetThrowItem.png"
+    },
+    {
+      "id": "tr_051",
+      "name": "穿刺之种",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/65/Icon_PassiveProps_RingOfBerserker.png"
+    },
+    {
+      "id": "tr_052",
+      "name": "传奇游侠风衣",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7a/Icon_PassivePropsIcon_RangerHood_Lv3_12.png"
+    },
+    {
+      "id": "tr_053",
+      "name": "磁化孢子囊",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/06/Icon_PassivePropsIcon_MagnetizedSporangia.png"
+    },
+    {
+      "id": "tr_054",
+      "name": "磁化毒针",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b4/Icon_PassivePropsIcon_MagnetizedPoisonousNeedle.png"
+    },
+    {
+      "id": "tr_055",
+      "name": "刺客面罩",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5a/Icon_PassiveProps_NecklaceOfBerserker.png"
+    },
+    {
+      "id": "tr_056",
+      "name": "脆弱的护身符",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/ce/Icon_PassiveProps_BorkenAmulet.png"
+    },
+    {
+      "id": "tr_057",
+      "name": "脆弱的军鼓",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/57/Icon_PassiveProps_IceBlast.png"
+    },
+    {
+      "id": "tr_058",
+      "name": "大黑火药瓶",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e5/Icon_PassivePropsIcon_BlackPowder_Lv3.png"
+    },
+    {
+      "id": "tr_059",
+      "name": "胆汁戒指",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e7/Icon_PassiveProps_TheRingOfBile.png"
+    },
+    {
+      "id": "tr_060",
+      "name": "倒钩短匕",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e6/Icon_PassiveProps_HeartOfStone.png"
+    },
+    {
+      "id": "tr_061",
+      "name": "电弧花蕾",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/67/Icon_PassivePropsIcon_ElectricArcFlowerBud.png"
+    },
+    {
+      "id": "tr_062",
+      "name": "电流增幅装置",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/57/Icon_PassivePropsIcon_ElectricFlowerGetMoreElecAttr.png"
+    },
+    {
+      "id": "tr_063",
+      "name": "电能晶石",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b4/Icon_PassiveProps_Electrocrystallization.png"
+    },
+    {
+      "id": "tr_064",
+      "name": "电涌指环",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/3b/Icon_PassiveProps_KryssRing.png"
+    },
+    {
+      "id": "tr_065",
+      "name": "动能回收背带",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a5/Icon_PassivePropsIcon_EnergyRecoveryHarness.png"
+    },
+    {
+      "id": "tr_066",
+      "name": "动能手套",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e3/Icon_PassiveProps_kineticEnergyGloves.png"
+    },
+    {
+      "id": "tr_067",
+      "name": "动能转换炉",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/32/Icon_PassiveProps_KineticEnergyConversionFurnace.png"
+    },
+    {
+      "id": "tr_068",
+      "name": "毒气蘑菇",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/90/Icon_PassivePropsIcon_PoisonGetPoisonSpring.png"
+    },
+    {
+      "id": "tr_069",
+      "name": "毒蛙脚蹼",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/fe/Icon_PassiveProps_Frogflipper.png"
+    },
+    {
+      "id": "tr_070",
+      "name": "毒液吊坠",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4e/Icon_PassiveProps_CritUp.png"
+    },
+    {
+      "id": "tr_071",
+      "name": "断刃碎片",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/64/Icon_PassivePropsIcon_SwordOfTheBrave_Lv1.png"
+    },
+    {
+      "id": "tr_072",
+      "name": "堕落法师斗篷",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0b/Icon_PassivePropsIcon_Curse_Enforcer_Cape.png"
+    },
+    {
+      "id": "tr_073",
+      "name": "堕落火龙之心",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/28/Icon_PassiveProps_HeartOfFallenFlamDragon.png"
+    },
+    {
+      "id": "tr_074",
+      "name": "恶臭皮肩垫",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0d/Icon_PassivePropsIcon_StinkyLeatherShoulderPad.png"
+    },
+    {
+      "id": "tr_075",
+      "name": "恶灵孢子",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/69/Icon_PassiveProps_EvilBlade.png"
+    },
+    {
+      "id": "tr_076",
+      "name": "恶魔的披风",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b2/Icon_PassiveProps_Devil%27sCloak.png"
+    },
+    {
+      "id": "tr_077",
+      "name": "恶魔士兵契约",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0e/Icon_PassiveProps_ContractOfDemonSoldier.png"
+    },
+    {
+      "id": "tr_078",
+      "name": "恶魔水晶球",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/11/Icon_PassivePropsIcon_RuneBulletGetSkillAtkUp.png"
+    },
+    {
+      "id": "tr_079",
+      "name": "恶语南瓜",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b8/Icon_PassiveProps_Flintstone.png"
+    },
+    {
+      "id": "tr_080",
+      "name": "噩梦骑士玩偶",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4e/Icon_PassiveProps_MaidKnight.png"
+    },
+    {
+      "id": "tr_081",
+      "name": "法弹增幅仪",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e0/Icon_PassiveProps_MagicAmplifier.png"
+    },
+    {
+      "id": "tr_082",
+      "name": "法刀圣杯",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8b/Icon_PassiveProps_FakeProps_MagicHolyGrail.png"
+    },
+    {
+      "id": "tr_083",
+      "name": "法力电芯",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f2/Icon_PassivePropsIcon_HitGetElectricFlower.png"
+    },
+    {
+      "id": "tr_084",
+      "name": "法力徽章纹饰",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/20/Icon_PassivePropsIcon_MaxMana_Lv2.png"
+    },
+    {
+      "id": "tr_085",
+      "name": "法力圣杯",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a3/Icon_PassiveProps_Ruiyaduograil.png"
+    },
+    {
+      "id": "tr_086",
+      "name": "法师学徒护符",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/14/Icon_PassiveProps_MaxMPUp.png"
+    },
+    {
+      "id": "tr_087",
+      "name": "法师之饰",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d5/Icon_PassiveProps_AtkUp.png"
+    },
+    {
+      "id": "tr_088",
+      "name": "分解精通"
+    },
+    {
+      "id": "tr_089",
+      "name": "风暴之角",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/85/Icon_PassivePropsIcon_CapeOfStorms.png"
+    },
+    {
+      "id": "tr_090",
+      "name": "符能迸发装置",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d1/Icon_PassiveProps_SymbolEnergyInjectionDevice.png"
+    },
+    {
+      "id": "tr_091",
+      "name": "符文匕首",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/31/Icon_PassiveProps_61.png"
+    },
+    {
+      "id": "tr_092",
+      "name": "符文飞刀",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/34/Icon_PassiveProps_RuneFlyingKnife.png"
+    },
+    {
+      "id": "tr_093",
+      "name": "符文回响石",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5a/Icon_PassivePropsIcon_RuneEchoStone.png"
+    },
+    {
+      "id": "tr_094",
+      "name": "符文雷引石",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c7/Icon_PassiveProps_ElectricFlowerEnemiesMove.png"
+    },
+    {
+      "id": "tr_095",
+      "name": "符文刃鞘",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/33/Icon_PassivePropsIcon_RunBladeSheath.png"
+    },
+    {
+      "id": "tr_096",
+      "name": "符文手套",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/01/Icon_PassiveProps_RuneGloves.png"
+    },
+    {
+      "id": "tr_097",
+      "name": "符文长靴",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/33/Icon_PassivePropsIcon_MoveRuneQuake.png"
+    },
+    {
+      "id": "tr_098",
+      "name": "符文竹节",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f4/Icon_PassivePropsIcon_NewRoomRuneQuake.png"
+    },
+    {
+      "id": "tr_099",
+      "name": "腐毒娃娃",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/79/Icon_PassiveProps_PoisonElement.png"
+    },
+    {
+      "id": "tr_100",
+      "name": "腐骨咒盘",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b1/Icon_PassivePropsIcon_DecayedBoneCursePlate.png"
+    },
+    {
+      "id": "tr_101",
+      "name": "腐蚀的雪兽之牙",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5a/Icon_PassivePropsIcon_Curse_CryovoresIvory.png"
+    },
+    {
+      "id": "tr_102",
+      "name": "负重降低",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/36/UI_Icon_Fever_LessMaxWeight.png"
+    },
+    {
+      "id": "tr_103",
+      "name": "附魔配重环",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/85/Icon_PassivePropsIcon_EnchantedCounterweightRing.png"
+    },
+    {
+      "id": "tr_104",
+      "name": "复仇荆棘之种",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/77/Icon_PassivePropsIcon_TheSeedOfThorns.png"
+    },
+    {
+      "id": "tr_105",
+      "name": "干瘪的橘子",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/54/Icon_PassiveProps_SoulCrystalCore.png"
+    },
+    {
+      "id": "tr_106",
+      "name": "高爆火药粉",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/2c/Icon_PassivePropsIcon_HighExplosivePowder.png"
+    },
+    {
+      "id": "tr_107",
+      "name": "高纯硝石",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/41/Icon_PassiveProps_HighpuritySaltpeter.png"
+    },
+    {
+      "id": "tr_108",
+      "name": "哥布林号角",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/11/Icon_PassiveProps_GoblinClarion.png"
+    },
+    {
+      "id": "tr_109",
+      "name": "古旧油壶",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/ff/Icon_PassivePropsIcon_OilJar.png"
+    },
+    {
+      "id": "tr_110",
+      "name": "古老的护符",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d4/Icon_PassiveProps_FightToStronger.png"
+    },
+    {
+      "id": "tr_111",
+      "name": "古老的剑柄",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/2c/Icon_PassiveProps_AcientHandle.png"
+    },
+    {
+      "id": "tr_112",
+      "name": "冠军腰带",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b6/Icon_PassiveProps_ChampionBelt.png"
+    },
+    {
+      "id": "tr_113",
+      "name": "诡异的坩埚",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/85/Icon_PassivePropsIcon_PoisonSpringAttr.png"
+    },
+    {
+      "id": "tr_114",
+      "name": "诡异的手风琴",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/11/Icon_PassivePropsIcon_LargePoisonSpring.png"
+    },
+    {
+      "id": "tr_115",
+      "name": "诡异的眼镜",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/ff/Icon_PassiveProps_BrokenGlasses.png"
+    },
+    {
+      "id": "tr_116",
+      "name": "诡异的种子袋",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/37/Icon_PassiveProps_GrowingSeedBag.png"
+    },
+    {
+      "id": "tr_117",
+      "name": "过载魔符",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f4/Icon_PassivePropsIcon_OverloadMagicTalisman.png"
+    },
+    {
+      "id": "tr_118",
+      "name": "寒冰砥石",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9c/Icon_PassivePropsIcon_FrostWhetstone.png"
+    },
+    {
+      "id": "tr_119",
+      "name": "寒冰邪刃",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/28/Icon_PassiveProps_ColdIceEvilBlade.png"
+    },
+    {
+      "id": "tr_120",
+      "name": "撼地手套",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/01/Icon_PassivePropsIcon_JumpRuneQuake.png"
+    },
+    {
+      "id": "tr_121",
+      "name": "黑魔法师之杖",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8e/Icon_PassivePropsIcon_RuneBulletDmgUpBySA.png"
+    },
+    {
+      "id": "tr_122",
+      "name": "红刃刺剑",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/54/Icon_PassivePropsIcon_RapierOfAkhil.png"
+    },
+    {
+      "id": "tr_123",
+      "name": "红色符文石",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/07/Icon_Power_Red.png"
+    },
+    {
+      "id": "tr_124",
+      "name": "红色徽记底座",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e5/Icon_PassivePropsIcon_ProofOfAkhil_Lv1.png"
+    },
+    {
+      "id": "tr_125",
+      "name": "红色纹章部件",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/fe/Icon_PassivePropsIcon_ProofOfAkhil_Lv2.png"
+    },
+    {
+      "id": "tr_126",
+      "name": "红色鱼人图腾",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7c/Icon_PassiveProps_FishManPillarRed.png"
+    },
+    {
+      "id": "tr_127",
+      "name": "红石刻刀",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e8/Icon_PassivePropsIcon_RedstoneCarvingKnife.png"
+    },
+    {
+      "id": "tr_128",
+      "name": "红石指虎",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/dc/Icon_PassivePropsIcon_RedstoneRefersToTheTiger.png"
+    },
+    {
+      "id": "tr_129",
+      "name": "红之魂器",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c6/Icon_PassivePropsIcon_RedSoulArtifact.png"
+    },
+    {
+      "id": "tr_130",
+      "name": "厚实皮靴",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/39/Icon_PassiveProps_SpeedUp.png"
+    },
+    {
+      "id": "tr_131",
+      "name": "壶中灵",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b2/Icon_PassiveProps_SourceOfFlame.png"
+    },
+    {
+      "id": "tr_132",
+      "name": "护盾充能器",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c8/Icon_PassivePropsIcon_DamageReducePerRoom.png"
+    },
+    {
+      "id": "tr_133",
+      "name": "华丽的剑柄",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/76/Icon_PassivePropsIcon_SwordOfTheBrave_Lv3.png"
+    },
+    {
+      "id": "tr_134",
+      "name": "黄铜徽章底座",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4e/Icon_PassivePropsIcon_MaxMana_Lv1.png"
+    },
+    {
+      "id": "tr_135",
+      "name": "灰熊护符",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f6/Icon_PassiveProps_MaxHpToAtk.png"
+    },
+    {
+      "id": "tr_136",
+      "name": "回收惩罚",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4d/UI_Icon_Fever_LessRecycleCrystal.png"
+    },
+    {
+      "id": "tr_137",
+      "name": "回收手套",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/14/Icon_PassiveProps_RecyclingGloves.png"
+    },
+    {
+      "id": "tr_138",
+      "name": "毁伤魔锥",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/3b/Icon_PassivePropsIcon_DestroyingTheMagicCone.png"
+    },
+    {
+      "id": "tr_139",
+      "name": "魂晶块",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/06/Icon_PassiveProps_HugeCrystal.png"
+    },
+    {
+      "id": "tr_140",
+      "name": "混沌的防具",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5d/Icon_UnknownEquipment1.png"
+    },
+    {
+      "id": "tr_141",
+      "name": "混沌的武器",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/87/Icon_Unknownweapon1.png"
+    },
+    {
+      "id": "tr_142",
+      "name": "混沌符文晶球",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f0/Icon_PassivePropsIcon_TheVoidPearl.png"
+    },
+    {
+      "id": "tr_143",
+      "name": "混沌符文石",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/85/Icon_Power_All.png"
+    },
+    {
+      "id": "tr_144",
+      "name": "混沌之茧",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/34/Icon_PassivePropsIcon_Curse_TheCocoonOfChaos.png"
+    },
+    {
+      "id": "tr_145",
+      "name": "活力的灵魂祝福",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4d/Icon_Soul_3.png"
+    },
+    {
+      "id": "tr_146",
+      "name": "火龙鳞片",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/77/Icon_PassivePropsIcon_FireDragonScale.png"
+    },
+    {
+      "id": "tr_147",
+      "name": "火龙鳞手（右）",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f6/Icon_PassiveProps_RingOfEarth.png"
+    },
+    {
+      "id": "tr_148",
+      "name": "火龙鳞手（左）",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f4/Icon_PassiveProps_PiggyBank.png"
+    },
+    {
+      "id": "tr_149",
+      "name": "火龙踏炎足（右）",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/07/Icon_PassiveProps_DragonFootRight.png"
+    },
+    {
+      "id": "tr_150",
+      "name": "火龙踏炎足（左）",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e9/Icon_PassiveProps_DragonFootLeft.png"
+    },
+    {
+      "id": "tr_151",
+      "name": "火龙焰首",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/22/Icon_PassiveProps_Firefaucet.png"
+    },
+    {
+      "id": "tr_152",
+      "name": "火龙之魂",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/73/Icon_PassivePropsIcon_FireDragonSoul.png"
+    },
+    {
+      "id": "tr_153",
+      "name": "火龙之血",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b7/Icon_PassivePropsIcon_FireDragonBloodI.png"
+    },
+    {
+      "id": "tr_154",
+      "name": "火枪徽章",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/bf/Icon_PassivePropsIcon_MarkOfMusket.png"
+    },
+    {
+      "id": "tr_155",
+      "name": "火石匕首",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/dd/Icon_PassivePropsIcon_FireShard.png"
+    },
+    {
+      "id": "tr_156",
+      "name": "火焰风衣",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c1/Icon_PassivePropsIcon_FlameCoat.png"
+    },
+    {
+      "id": "tr_157",
+      "name": "激励菇",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/64/Icon_PassiveProps_FoodForPower.png"
+    },
+    {
+      "id": "tr_158",
+      "name": "汲魔刀油",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7d/Icon_PassivePropsIcon_SuckingMagicKnifeOil.png"
+    },
+    {
+      "id": "tr_159",
+      "name": "极地磁环",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d0/Icon_PassiveProps_ElectricFrozenExtraTime.png"
+    },
+    {
+      "id": "tr_160",
+      "name": "极地寄生虫",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a8/Icon_PassivePropsIcon_PolarParasites.png"
+    },
+    {
+      "id": "tr_161",
+      "name": "集电瓶",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/ca/Icon_PassiveProps_AbosorbElectricMachine.png"
+    },
+    {
+      "id": "tr_162",
+      "name": "坚守之盾徽",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/04/Icon_PassiveProps_PunishImprint.png"
+    },
+    {
+      "id": "tr_163",
+      "name": "坚毅的灵魂祝福",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9d/Icon_Soul_2.png"
+    },
+    {
+      "id": "tr_164",
+      "name": "剑士腕甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/da/Icon_PassivePropsIcon_SwordsmanshipGloves_Lv1.png"
+    },
+    {
+      "id": "tr_165",
+      "name": "剑士之饰",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/dd/Icon_PassiveProps_ForceWave.png"
+    },
+    {
+      "id": "tr_166",
+      "name": "节魔护符",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/16/Icon_PassiveProps_SkillCDUp.png"
+    },
+    {
+      "id": "tr_167",
+      "name": "结晶龙爪",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/ed/Icon_PassiveProps_CrystalDragonClaw.png"
+    },
+    {
+      "id": "tr_168",
+      "name": "结晶石粉末",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f5/Icon_PassivePropsIcon_ElecRuneQuake.png"
+    },
+    {
+      "id": "tr_169",
+      "name": "禁咒羊皮纸",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8b/Icon_PassiveProps_ProhibitedCurseSheepskin.png"
+    },
+    {
+      "id": "tr_170",
+      "name": "惊喜盒",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e0/Icon_PassiveProps_KillGetThrowItem.png"
+    },
+    {
+      "id": "tr_171",
+      "name": "精密点火器",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/04/Icon_PassivePropsIcon_Igniter.png"
+    },
+    {
+      "id": "tr_172",
+      "name": "静电符文手巾",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/ac/Icon_PassiveProps_ElectricAttrRuneBullet.png"
+    },
+    {
+      "id": "tr_173",
+      "name": "静电腿饰",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e8/Icon_PassivePropsIcon_MoveGetElectricFlower.png"
+    },
+    {
+      "id": "tr_174",
+      "name": "巨蛾残翅",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/57/Icon_PassivePropsIcon_PoisonRuneQuake.png"
+    },
+    {
+      "id": "tr_175",
+      "name": "巨斧印记",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/3e/Icon_PassiveProps_GiantKiller.png"
+    },
+    {
+      "id": "tr_176",
+      "name": "剧毒砥石",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9f/Icon_PassivePropsIcon_PoisonousGrindingstone.png"
+    },
+    {
+      "id": "tr_177",
+      "name": "剧毒古龙水",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/11/Icon_PassivePropsIcon_PoisonSpringRunner.png"
+    },
+    {
+      "id": "tr_178",
+      "name": "剧毒凝珠",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/94/Icon_PassivePropsIcon_PoisonDmgUp_Lv2.png"
+    },
+    {
+      "id": "tr_179",
+      "name": "剧毒喷雾器",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7d/Icon_PassivePropsIcon_TimeGetPoisonSpring.png"
+    },
+    {
+      "id": "tr_180",
+      "name": "剧毒气溶胶",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4a/Icon_PassivePropsIcon_PoisonSpringSpdDown.png"
+    },
+    {
+      "id": "tr_181",
+      "name": "锯齿匕首",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/63/Icon_PassiveProps_AssassinDagger.png"
+    },
+    {
+      "id": "tr_182",
+      "name": "聚魂袋",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8b/Icon_PassiveProps_SoulGatheringFurnace.png"
+    },
+    {
+      "id": "tr_183",
+      "name": "聚能之冠",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/85/Icon_PassivePropsIcon_CrownOfEnergyGathering.png"
+    },
+    {
+      "id": "tr_184",
+      "name": "狂奔之靴",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/30/Icon_PassiveProps_BootsOfDash.png"
+    },
+    {
+      "id": "tr_185",
+      "name": "狂徒护腕",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/69/Icon_PassiveProps_MadmanWristGuard.png"
+    },
+    {
+      "id": "tr_186",
+      "name": "狂战士臂甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/36/Icon_PassiveProps_BerserkerArmplates.png"
+    },
+    {
+      "id": "tr_187",
+      "name": "蓝色符文石",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/fe/Icon_Power_blue.png"
+    },
+    {
+      "id": "tr_188",
+      "name": "蓝色徽记底座",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8c/Icon_PassivePropsIcon_RuneBulletDamageUP_Lv1.png"
+    },
+    {
+      "id": "tr_189",
+      "name": "蓝色纹饰部件",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/6e/Icon_PassivePropsIcon_RuneBulletDamageUP_Lv2.png"
+    },
+    {
+      "id": "tr_190",
+      "name": "蓝色鱼人图腾",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/74/Icon_PassiveProps_FishManPillarBule.png"
+    },
+    {
+      "id": "tr_191",
+      "name": "蓝纹刺剑",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0c/Icon_PassivePropsIcon_BlueveinedRapier.png"
+    },
+    {
+      "id": "tr_192",
+      "name": "蓝之魂器",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/29/Icon_PassivePropsIcon_BlueSoulArtifact.png"
+    },
+    {
+      "id": "tr_193",
+      "name": "老旧的鸟嘴",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/40/Icon_PassiveProps_Old_Bird_beak.png"
+    },
+    {
+      "id": "tr_194",
+      "name": "雷电枪",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8d/Icon_PassivePropsIcon_thunderGun.png"
+    },
+    {
+      "id": "tr_195",
+      "name": "雷晶石耳饰",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/bc/Icon_PassiveProps_ThunderCrystalEarrings.png"
+    },
+    {
+      "id": "tr_196",
+      "name": "雷离之环",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f3/Icon_PassiveProps_BrokenRing.png"
+    },
+    {
+      "id": "tr_197",
+      "name": "雷灵的舞鞋",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/3e/Icon_PassiveProps_DodgeGetElectricFlower.png"
+    },
+    {
+      "id": "tr_198",
+      "name": "雷灵头环",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b5/Icon_PassiveProps_LeiLingCrown.png"
+    },
+    {
+      "id": "tr_199",
+      "name": "雷龙翼膜",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/55/Icon_PassiveProps_DodgeThunder.png"
+    },
+    {
+      "id": "tr_200",
+      "name": "雷鸣砥石",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b6/Icon_PassivePropsIcon_ThunderWhetstone.png"
+    },
+    {
+      "id": "tr_201",
+      "name": "雷霆锁链",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7a/Icon_PassiveProps_BoneResistance.png"
+    },
+    {
+      "id": "tr_202",
+      "name": "雷霆胸针",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/75/Icon_PassiveProps_AddForceTimeStop.png"
+    },
+    {
+      "id": "tr_203",
+      "name": "雷纹印记",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7b/Icon_PassivePropsIcon_KillGetElectricFLower.png"
+    },
+    {
+      "id": "tr_204",
+      "name": "雷之法典",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/77/Icon_PassiveProps_ElectricMagicBook.png"
+    },
+    {
+      "id": "tr_205",
+      "name": "离群木木猪契约",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b5/Icon_PassiveProps_FakeProps_ForestPigContract.png"
+    },
+    {
+      "id": "tr_206",
+      "name": "离群野猪契约",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/48/Icon_PassiveProps_BoarCall.png"
+    },
+    {
+      "id": "tr_207",
+      "name": "力量药水",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/3c/Icon_PassiveProps_269.png"
+    },
+    {
+      "id": "tr_208",
+      "name": "量产飞刃",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8b/Icon_PassivePropsIcon_MassProductionFlyingBlade.png"
+    },
+    {
+      "id": "tr_209",
+      "name": "烈焰砥石",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b6/Icon_PassivePropsIcon_FlameWhetstone.png"
+    },
+    {
+      "id": "tr_210",
+      "name": "猎人印记",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/12/Icon_PassiveProps_DemonHand.png"
+    },
+    {
+      "id": "tr_211",
+      "name": "磷石碎块",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b8/Icon_PassivePropsIcon_PhosphoriteFragment.png"
+    },
+    {
+      "id": "tr_212",
+      "name": "灵狐护符",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0d/Icon_PassiveProps_MaxMpToAtk.png"
+    },
+    {
+      "id": "tr_213",
+      "name": "灵药护带",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/89/Icon_PassiveProps_Lanyard.png"
+    },
+    {
+      "id": "tr_214",
+      "name": "流星碎片",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b9/Icon_PassivePropsIcon_MeteorFragments.png"
+    },
+    {
+      "id": "tr_215",
+      "name": "硫磺结晶",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/99/Icon_PassivePropsIcon_SulfurCrystal.png"
+    },
+    {
+      "id": "tr_216",
+      "name": "鲁伊纳符文护符",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/65/Icon_PassiveProps_FakeProps_NairuTalisman.png"
+    },
+    {
+      "id": "tr_217",
+      "name": "绿色符文石",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/69/Icon_Power_Green.png"
+    },
+    {
+      "id": "tr_218",
+      "name": "绿色徽记底座",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f8/Icon_PassivePropsIcon_RuneBreakDmgUp_Lv1.png"
+    },
+    {
+      "id": "tr_219",
+      "name": "绿色纹饰部件",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/80/Icon_PassivePropsIcon_RuneBreakDmgUp_Lv2.png"
+    },
+    {
+      "id": "tr_220",
+      "name": "绿色鱼人图腾",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/58/Icon_PassiveProps_FishManPillarGreen.png"
+    },
+    {
+      "id": "tr_221",
+      "name": "绿之魂器",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d1/Icon_PassivePropsIcon_GreenSoulWeapon.png"
+    },
+    {
+      "id": "tr_222",
+      "name": "麻痹毒剂",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/3a/Icon_PassivePropsIcon_PoisonAtkDownDebuff.png"
+    },
+    {
+      "id": "tr_223",
+      "name": "猛毒催化剂",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b8/Icon_PassivePropsIcon_PoisonousCatalyst.png"
+    },
+    {
+      "id": "tr_224",
+      "name": "猛毒蛛螯",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f0/Icon_PassiveProps_QueenSpider.png"
+    },
+    {
+      "id": "tr_225",
+      "name": "灭世之楔",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/fd/Icon_PassivePropsIcon_Curse_RuneBladeSheath.png"
+    },
+    {
+      "id": "tr_226",
+      "name": "命运硬币",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/43/Icon_PassiveProps_DestinyCoin.png"
+    },
+    {
+      "id": "tr_227",
+      "name": "磨刀石",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0b/Icon_PassivePropsIcon_AtkUpByTime.png"
+    },
+    {
+      "id": "tr_228",
+      "name": "魔导师之靴",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f7/Icon_PassiveProps_PropMasterOfRunning.png"
+    },
+    {
+      "id": "tr_229",
+      "name": "魔法充能手套",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/16/Icon_PassiveProps_250.png"
+    },
+    {
+      "id": "tr_230",
+      "name": "魔法沙漏",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a2/Icon_PassiveProps_HeartOfRevenge.png"
+    },
+    {
+      "id": "tr_231",
+      "name": "魔晶护心镜",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/ba/Icon_PassiveProps_SoulArmor.png"
+    },
+    {
+      "id": "tr_232",
+      "name": "魔力催化石",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b3/Icon_PassiveProps_MagicCatalyticStone.png"
+    },
+    {
+      "id": "tr_233",
+      "name": "魔力灌注护符",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/ca/Icon_PassiveProps_SkillDmgUp.png"
+    },
+    {
+      "id": "tr_234",
+      "name": "魔力回路",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/ec/Icon_PassivePropsIcon_MagicCircuit.png"
+    },
+    {
+      "id": "tr_235",
+      "name": "魔力回收炉",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f2/Icon_PassiveProps_MagicRecyclingFurnace.png"
+    },
+    {
+      "id": "tr_236",
+      "name": "魔力蓝宝石",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9a/Icon_PassivePropsIcon_SkillAtkUp_Lv2.png"
+    },
+    {
+      "id": "tr_237",
+      "name": "魔力玛瑙",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7d/Icon_PassivePropsIcon_SkillAtkUp_Lv1.png"
+    },
+    {
+      "id": "tr_238",
+      "name": "魔能电极",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/91/Icon_PassiveProps_ElectricBall_Lv2.png"
+    },
+    {
+      "id": "tr_239",
+      "name": "魔能电容器",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9a/Icon_PassiveProps_ElectricBall_Lv1.png"
+    },
+    {
+      "id": "tr_240",
+      "name": "魔能钉鞋",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/18/Icon_PassiveProps_PlatformHeels.png"
+    },
+    {
+      "id": "tr_241",
+      "name": "魔能锯刃碎片",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/99/Icon_PassivePropsIcon_SawbladeFragments.png"
+    },
+    {
+      "id": "tr_242",
+      "name": "魔偶的断臂",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/58/Icon_PassivePropsIcon_DollArm.png"
+    },
+    {
+      "id": "tr_243",
+      "name": "魔术口袋",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/87/Icon_PassivePropsIcon_magicBag.png"
+    },
+    {
+      "id": "tr_244",
+      "name": "魔物通缉令",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/50/Icon_PassiveProps_Rebirth.png"
+    },
+    {
+      "id": "tr_245",
+      "name": "魔杖吊坠",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/31/Icon_PassiveProps_Mjolnir.png"
+    },
+    {
+      "id": "tr_246",
+      "name": "纳伊鲁符文护符",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/91/Icon_PassiveProps_NairuTalisman.png"
+    },
+    {
+      "id": "tr_247",
+      "name": "纳伊鲁之戒",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/78/Icon_PassivePropsIcon_BlueRuneRing.png"
+    },
+    {
+      "id": "tr_248",
+      "name": "纳伊鲁之印",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7f/Icon_PassiveProps_SealofNairu.png"
+    },
+    {
+      "id": "tr_249",
+      "name": "纳伊鲁之杖",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/02/Icon_PassivePropsIcon_BlueRuneStaff.png"
+    },
+    {
+      "id": "tr_250",
+      "name": "能量法球",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/24/Icon_PassiveProps_Energy_serve.png"
+    },
+    {
+      "id": "tr_251",
+      "name": "黏液护甲片",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d5/Icon_PassiveProps_MucousArmorTablets.png"
+    },
+    {
+      "id": "tr_252",
+      "name": "孽者之石",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/95/Icon_PassivePropsIcon_EvilSpirit.png"
+    },
+    {
+      "id": "tr_253",
+      "name": "牛虻戒指",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/be/Icon_PassiveProps_TheGadFly.png"
+    },
+    {
+      "id": "tr_254",
+      "name": "帕拉提的符文短剑",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b2/Icon_PassivePropsIcon_RuneQuakeMark.png"
+    },
+    {
+      "id": "tr_255",
+      "name": "帕拉提的符文腰带",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e7/Icon_PassivePropsIcon_SurroundRuneQuake.png"
+    },
+    {
+      "id": "tr_256",
+      "name": "帕拉提之冕",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/15/Icon_PassiveProps_Crownof_Palati.png"
+    },
+    {
+      "id": "tr_257",
+      "name": "帕拉提之靴",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/6e/Icon_PassiveProps_Palati_Boots.png"
+    },
+    {
+      "id": "tr_258",
+      "name": "帕拉提之钥",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/ba/Icon_PassiveProps_Parati_Staff.png"
+    },
+    {
+      "id": "tr_259",
+      "name": "磐石日晷",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/05/Icon_PassivePropsIcon_AllRuneQuakeByTime.png"
+    },
+    {
+      "id": "tr_260",
+      "name": "瓶中冰霜",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/94/Icon_PassiveProps_IceElement.png"
+    },
+    {
+      "id": "tr_261",
+      "name": "瓶中雷霆",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5e/Icon_PassiveProps_ThunderElement.png"
+    },
+    {
+      "id": "tr_262",
+      "name": "瓶中炎灵",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b6/Icon_PassiveProps_FireElement.png"
+    },
+    {
+      "id": "tr_263",
+      "name": "破坏重拳徽章",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/18/Icon_PassivePropsIcon_DestroyTheHeavyFistBadge.png"
+    },
+    {
+      "id": "tr_264",
+      "name": "破碎的重生护符",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/6f/Icon_PassiveProps_RebirthTalismanB.png"
+    },
+    {
+      "id": "tr_265",
+      "name": "普拉提之钥",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/66/Icon_PassiveProps_FakeProps_TheKeyToPilates.png"
+    },
+    {
+      "id": "tr_266",
+      "name": "强磁手套",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9d/Icon_PassiveProps_ElectricGlove.png"
+    },
+    {
+      "id": "tr_267",
+      "name": "强攻之剑徽",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5f/Icon_PassiveProps_PunishEmble.png"
+    },
+    {
+      "id": "tr_268",
+      "name": "强健护膝",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/95/Icon_PassiveProps_Strongmankneepad.png"
+    },
+    {
+      "id": "tr_269",
+      "name": "强健手套",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8d/Icon_PassiveProps_Strongmangloves.png"
+    },
+    {
+      "id": "tr_270",
+      "name": "强韧甲壳",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5e/Icon_PassiveProps_RobustShell.png"
+    },
+    {
+      "id": "tr_271",
+      "name": "强效毒药瓶",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/81/Icon_PassivePropsIcon_MorePoisonTime.png"
+    },
+    {
+      "id": "tr_272",
+      "name": "青玉饰片",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/da/Icon_PassivePropsIcon_LifeJadeSeal_Lv1.png"
+    },
+    {
+      "id": "tr_273",
+      "name": "轻甲装备手册",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f1/Icon_PassiveProps_NormalArmorStrength.png"
+    },
+    {
+      "id": "tr_274",
+      "name": "拳师腰带",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/53/Icon_PassivePropsIcon_BoxerBelt.png"
+    },
+    {
+      "id": "tr_275",
+      "name": "染血的冠军腰带",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9a/Icon_PassiveProps_BloodstainedChampionBelt.png"
+    },
+    {
+      "id": "tr_276",
+      "name": "忍耐护符",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d5/Icon_PassiveProps_PatientAmulet.png"
+    },
+    {
+      "id": "tr_277",
+      "name": "瑞亚多能量晶石",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/59/Icon_PassivePropsIcon_MaxMpGetDef.png"
+    },
+    {
+      "id": "tr_278",
+      "name": "散发怪味的头环",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/25/Icon_PassiveProps_SmellHeadBand.png"
+    },
+    {
+      "id": "tr_279",
+      "name": "闪电护腕",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/bf/Icon_PassiveProps_LightningWristband.png"
+    },
+    {
+      "id": "tr_280",
+      "name": "闪电环扣",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b5/Icon_PassivePropsIcon_ElectricFlowerLighteningChain.png"
+    },
+    {
+      "id": "tr_281",
+      "name": "闪电魔瓶",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e0/Icon_PassiveProps_EyePatch.png"
+    },
+    {
+      "id": "tr_282",
+      "name": "闪电双生链",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e0/Icon_PassivePropsIcon_TriggerGetElectricFlower.png"
+    },
+    {
+      "id": "tr_283",
+      "name": "闪电之鳞",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/ad/Icon_PassivePropsIcon_LightningScale.png"
+    },
+    {
+      "id": "tr_284",
+      "name": "闪电之书",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/61/Icon_PassiveProps_FlashBook.png"
+    },
+    {
+      "id": "tr_285",
+      "name": "深红鼓动之心",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a3/Icon_PassiveProps_ProtectNecklace.png"
+    },
+    {
+      "id": "tr_286",
+      "name": "神秘的灵魂祝福",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e5/Icon_Soul_4.png"
+    },
+    {
+      "id": "tr_287",
+      "name": "审判沙漏",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/89/Icon_PassiveProps_BootsOfSwiftness.png"
+    },
+    {
+      "id": "tr_288",
+      "name": "生命符文晶石",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b7/Icon_PassivePropsIcon_MoreRuneQuakeStack.png"
+    },
+    {
+      "id": "tr_289",
+      "name": "生命禾少表",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c0/Icon_PassiveProps_FakeProps_LifeStopwatch.png"
+    },
+    {
+      "id": "tr_290",
+      "name": "生命结晶簇",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/47/Icon_ItemLifeGem_a03.png"
+    },
+    {
+      "id": "tr_291",
+      "name": "生命露珠",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/29/Icon_PassiveProps_ProtectOfPotion.png"
+    },
+    {
+      "id": "tr_292",
+      "name": "生命秘法之戒",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/42/Icon_PassiveProps_VineRing.png"
+    },
+    {
+      "id": "tr_293",
+      "name": "生命秒表",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/dd/Icon_PassiveProps_EmergencyEscape.png"
+    },
+    {
+      "id": "tr_294",
+      "name": "生命束带",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/20/Icon_PassiveProps_LifeBand.png"
+    },
+    {
+      "id": "tr_295",
+      "name": "生命玉石",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/05/Icon_PassivePropsIcon_LifeJadeSeal_Lv2.png"
+    },
+    {
+      "id": "tr_296",
+      "name": "生命之心",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/cb/Icon_PassiveProps_SourceOfPoison.png"
+    },
+    {
+      "id": "tr_297",
+      "name": "生命之芯",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/16/Icon_PassiveProps_FakeProps_HeartOfLife.png"
+    },
+    {
+      "id": "tr_298",
+      "name": "生锈的宝刀",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/ec/Icon_PassivePropsIcon_RustyTreasureKnife.png"
+    },
+    {
+      "id": "tr_299",
+      "name": "圣子像",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/cc/Icon_PassiveProps_RingOfThief.png"
+    },
+    {
+      "id": "tr_300",
+      "name": "失去光泽的魂晶块",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/07/Icon_PassiveProps_HugeCrystalB.png"
+    },
+    {
+      "id": "tr_301",
+      "name": "施虐指环",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/ba/Icon_PassiveProps_TheRingOfAbuser.png"
+    },
+    {
+      "id": "tr_302",
+      "name": "时光沙漏",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/10/Icon_PassivePropsIcon_FasterTimeInterval.png"
+    },
+    {
+      "id": "tr_303",
+      "name": "蚀骨毒液",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7e/Icon_PassivePropsIcon_BoneLossVenom.png"
+    },
+    {
+      "id": "tr_304",
+      "name": "弑魔胁差",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0a/Icon_PassiveProps_Wakizashi.png"
+    },
+    {
+      "id": "tr_305",
+      "name": "噬毒凶魂",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7d/Icon_PassivePropsIcon_PoisonDevouringEvilSoul.png"
+    },
+    {
+      "id": "tr_306",
+      "name": "噬魂魔戒",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d8/Icon_PassivePropsIcon_TheLordOfSouls.png"
+    },
+    {
+      "id": "tr_307",
+      "name": "守护护符",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a9/Icon_PassiveProps_113.png"
+    },
+    {
+      "id": "tr_308",
+      "name": "守护者议会徽章",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c7/Icon_PassiveProps_MagicBook.png"
+    },
+    {
+      "id": "tr_309",
+      "name": "兽骨护指",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/43/Icon_PassiveProps_Fingerstall.png"
+    },
+    {
+      "id": "tr_310",
+      "name": "兽人英雄之证",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/55/Icon_PassiveProps_VoucherOfOrcishHero.png"
+    },
+    {
+      "id": "tr_311",
+      "name": "鼠之尾",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/49/Icon_PassiveProps_MouseTail.png"
+    },
+    {
+      "id": "tr_312",
+      "name": "术士护符",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/94/Icon_PassiveProps_RecoverUp.png"
+    },
+    {
+      "id": "tr_313",
+      "name": "死神的硬币",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/ee/Icon_PassiveProps_TheDeathCoin.png"
+    },
+    {
+      "id": "tr_314",
+      "name": "四叶草",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0a/Icon_PassiveProps_PotionProbe.png"
+    },
+    {
+      "id": "tr_315",
+      "name": "踏雷之靴",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b9/Icon_PassivePropsIcon_TriggerElectricFlowerGetSpd.png"
+    },
+    {
+      "id": "tr_316",
+      "name": "贪吃魔灵",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5e/Icon_PassiveProps_IronCaliga.png"
+    },
+    {
+      "id": "tr_317",
+      "name": "贪欲之壶",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f5/Icon_PassivePropsIcon_Curse_FourLeafClover.png"
+    },
+    {
+      "id": "tr_318",
+      "name": "跳动的树瘤",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/75/Icon_PassiveProps_WoodKnightBurl.png"
+    },
+    {
+      "id": "tr_319",
+      "name": "突击背心",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/94/Icon_PassivePropsIcon_AssaultVest.png"
+    },
+    {
+      "id": "tr_320",
+      "name": "屠夫的弯钩",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e1/Icon_PassivePropsIcon_Curse_Butcher_Hook.png"
+    },
+    {
+      "id": "tr_321",
+      "name": "土鳞腰带",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8a/Icon_PassiveProps_BeHitLittleBomb.png"
+    },
+    {
+      "id": "tr_322",
+      "name": "吞噬之牙",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9d/Icon_PassiveProps_DevouringTeeth.png"
+    },
+    {
+      "id": "tr_323",
+      "name": "完美的魔力核心",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c9/Icon_PassiveProps_SmallCore.png"
+    },
+    {
+      "id": "tr_324",
+      "name": "完整的豪猪皮",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/46/Icon_PassiveProps_PerfectPorcupine.png"
+    },
+    {
+      "id": "tr_325",
+      "name": "危险的针管",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/12/Icon_PassivePropsIcon_PoisonLowerAttrR.png"
+    },
+    {
+      "id": "tr_326",
+      "name": "危险的蒸馏瓶",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/51/Icon_PassivePropsIcon_PoisonStack.png"
+    },
+    {
+      "id": "tr_327",
+      "name": "危险的助燃药剂",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/cd/Icon_PassivePropsIcon_HazardousOxidizingAgent.png"
+    },
+    {
+      "id": "tr_328",
+      "name": "维护工具箱",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/17/Icon_PassivePropsIcon_MaintainToolbox.png"
+    },
+    {
+      "id": "tr_329",
+      "name": "维特的无瑕水晶球",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/35/Icon_PassivePropsIcon_ReduceDamageByMP.png"
+    },
+    {
+      "id": "tr_330",
+      "name": "无尽黄金口袋",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/de/Icon_PassiveProps_BloodCollectionBottle.png"
+    },
+    {
+      "id": "tr_331",
+      "name": "无尽魂晶口袋",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0a/Icon_PassiveProps_WeirdCarapax.png"
+    },
+    {
+      "id": "tr_332",
+      "name": "无形之刃",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/1a/Icon_PassiveProps_Sunstone.png"
+    },
+    {
+      "id": "tr_333",
+      "name": "吸魂之楔",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/79/Icon_PassiveProps_SoulNail.png"
+    },
+    {
+      "id": "tr_334",
+      "name": "希拉的宝石之剑",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/20/Icon_PassiveProps_GemSword.png"
+    },
+    {
+      "id": "tr_335",
+      "name": "硝化电晶吊坠",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a2/Icon_PassivePropsIcon_RuneBulleGetElectricFlower2.png"
+    },
+    {
+      "id": "tr_336",
+      "name": "硝化蘑菇",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/54/Icon_PassivePropsIcon_NitrifyingMushroom.png"
+    },
+    {
+      "id": "tr_337",
+      "name": "硝石之刃",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/51/Icon_PassivePropsIcon_NitrateBlade.png"
+    },
+    {
+      "id": "tr_338",
+      "name": "小颗毒珠",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/99/Icon_PassivePropsIcon_PoisonDmgUp_Lv1.png"
+    },
+    {
+      "id": "tr_339",
+      "name": "小瓶黑火药",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a6/Icon_PassivePropsIcon_BlackPowder_Lv1.png"
+    },
+    {
+      "id": "tr_340",
+      "name": "邪恶的锢灵瓶",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4e/Icon_PassiveProps_EvilSpiritBottle.png"
+    },
+    {
+      "id": "tr_341",
+      "name": "邪恶的敛魂瓶",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a3/Icon_PassiveProps_EvilSoulBottle.png"
+    },
+    {
+      "id": "tr_342",
+      "name": "邪兽的钝角",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/3a/Icon_PassiveProps_EvilBeastObtuseAngle.png"
+    },
+    {
+      "id": "tr_343",
+      "name": "幸运硬币",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b8/Icon_PassiveProps_LuckyCoin.png"
+    },
+    {
+      "id": "tr_344",
+      "name": "虚灵断刃",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/20/Icon_PassivePropsIcon_DaggerOfAkhil.png"
+    },
+    {
+      "id": "tr_345",
+      "name": "蓄电石",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/2d/Icon_PassivePropsIcon_MoreElectricFlowerLimit.png"
+    },
+    {
+      "id": "tr_346",
+      "name": "蓄雷戒指",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/3d/Icon_PassiveProps_MaxMPUp_5.png"
+    },
+    {
+      "id": "tr_347",
+      "name": "蓄力手套",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c9/Icon_PassiveProps_CloneMachine.png"
+    },
+    {
+      "id": "tr_348",
+      "name": "雪兽皮手套",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/86/Icon_PassivePropsIcon_BehitGetRuneBullet.png"
+    },
+    {
+      "id": "tr_349",
+      "name": "雪兽之牙",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/ee/Icon_PassiveProps_ShieldArmlet.png"
+    },
+    {
+      "id": "tr_350",
+      "name": "亚军腰带",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/14/Icon_PassiveProps_FakeProps_RunnerUpBelt.png"
+    },
+    {
+      "id": "tr_351",
+      "name": "湮灭之爪",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/17/Icon_PassiveProps_AnnihilationClaw.png"
+    },
+    {
+      "id": "tr_352",
+      "name": "伊夫利亚的黄金蛋",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/59/Icon_PassiveProps_GoldenEgg.png"
+    },
+    {
+      "id": "tr_353",
+      "name": "伊夫利亚的徽章",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/57/Icon_PassivePropsIcon_SummonRebirthFaster.png"
+    },
+    {
+      "id": "tr_354",
+      "name": "伊夫利亚的激流提灯",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7e/Icon_PassiveProps_Shocklamp.png"
+    },
+    {
+      "id": "tr_355",
+      "name": "伊夫利亚的振奋宝石",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a4/Icon_PassivePropsIcon_CyclicalSummonAtkUp.png"
+    },
+    {
+      "id": "tr_356",
+      "name": "遗失的剑徽",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4d/Icon_PassivePropsIcon_SwordsmanshipGloves_Lv2.png"
+    },
+    {
+      "id": "tr_357",
+      "name": "异端法师护手",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/bc/Icon_PassiveProps_MageWristGuard.png"
+    },
+    {
+      "id": "tr_358",
+      "name": "异端救治手册",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/58/Icon_PassivePropsIcon_FasterPoisonDmg.png"
+    },
+    {
+      "id": "tr_359",
+      "name": "异兽头骨",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4b/Icon_PassiveProps_AcientAmulet.png"
+    },
+    {
+      "id": "tr_360",
+      "name": "异兽之心",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/14/Icon_PassiveProps_ProofOfHero.png"
+    },
+    {
+      "id": "tr_361",
+      "name": "易爆的毒囊",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/fd/Icon_PassivePropsIcon_FireDebuffEndPoisonDebuff.png"
+    },
+    {
+      "id": "tr_362",
+      "name": "溢出的炼金瓶",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c7/Icon_PassiveProps_OverflowAlchemyBottle.png"
+    },
+    {
+      "id": "tr_363",
+      "name": "溢雷符咒",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/39/Icon_PassivePropsIcon_ElecDebuffTgrElectricFlower.png"
+    },
+    {
+      "id": "tr_364",
+      "name": "阴险匕首",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4a/Icon_PassiveProps_SourceOfFreeze.png"
+    },
+    {
+      "id": "tr_365",
+      "name": "银白薄荷叶",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/59/Icon_PassiveProps_SilverWhiteMintLeaves.png"
+    },
+    {
+      "id": "tr_366",
+      "name": "引雷飞镖",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/1f/Icon_PassivePropsIcon_ThunderDart.png"
+    },
+    {
+      "id": "tr_367",
+      "name": "引雷针",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/85/Icon_PassiveProps_ThunderGatherNeedle.png"
+    },
+    {
+      "id": "tr_368",
+      "name": "佣兵法师的手册",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e8/Icon_PassiveProps_PropManual.png"
+    },
+    {
+      "id": "tr_369",
+      "name": "永冻宝珠",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b8/Icon_PassivePropsIcon_TheCrownOfIce_Lv2.png"
+    },
+    {
+      "id": "tr_370",
+      "name": "勇气纹章",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/15/Icon_PassiveProps_CourageEscutcheon.png"
+    },
+    {
+      "id": "tr_371",
+      "name": "勇气之鞘",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5e/Icon_PassivePropsIcon_SwordOfTheBrave_Lv2.png"
+    },
+    {
+      "id": "tr_372",
+      "name": "勇者之剑",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/87/Icon_PassivePropsIcon_SwordOfTheBrave_Lv3_12.png"
+    },
+    {
+      "id": "tr_373",
+      "name": "尤金的手巾",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/65/Icon_PassivePropsIcon_PoisonAttrByTime.png"
+    },
+    {
+      "id": "tr_374",
+      "name": "游荡异灵契约",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d9/Icon_PassiveProps_ContractOfSoulSoldier.png"
+    },
+    {
+      "id": "tr_375",
+      "name": "游侠披肩",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d3/Icon_PassivePropsIcon_RangerHood_Lv2.png"
+    },
+    {
+      "id": "tr_376",
+      "name": "游侠羽饰",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b2/Icon_PassivePropsIcon_RangerHood_Lv1.png"
+    },
+    {
+      "id": "tr_377",
+      "name": "诱爆试剂",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_PassivePropsIcon_DetonationAgent.png"
+    },
+    {
+      "id": "tr_378",
+      "name": "元素王冠",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/46/Icon_PassivePropsIcon_ElementCrown.png"
+    },
+    {
+      "id": "tr_379",
+      "name": "园丁的园艺手套",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/ae/Icon_PassivePropsIcon_PoisonBomberBySlash.png"
+    },
+    {
+      "id": "tr_380",
+      "name": "再生腰带",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c8/Icon_PassiveProps_BeHitFire.png"
+    },
+    {
+      "id": "tr_381",
+      "name": "增援发信仪",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/ea/Icon_PassivePropsIcon_RemoteControl.png"
+    },
+    {
+      "id": "tr_382",
+      "name": "瘴染手锤",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b1/Icon_PassivePropsIcon_MiasmaTaintedHandHammer.png"
+    },
+    {
+      "id": "tr_383",
+      "name": "折断的妖刀",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4f/Icon_PassiveProps_BrokenDemonSword.png"
+    },
+    {
+      "id": "tr_384",
+      "name": "镇压徽章",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f8/Icon_PassiveProps_ProofOfZealot.png"
+    },
+    {
+      "id": "tr_385",
+      "name": "治愈的灵魂祝福",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4f/Icon_Soul_1.png"
+    },
+    {
+      "id": "tr_386",
+      "name": "中瓶黑火药",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b3/Icon_PassivePropsIcon_BlackPowder_Lv2.png"
+    },
+    {
+      "id": "tr_387",
+      "name": "重构手套",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/fc/Icon_PassiveProps_RefactoringGloves.png"
+    },
+    {
+      "id": "tr_388",
+      "name": "重甲装备手册",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/92/Icon_PassiveProps_HeavyArmorStrength.png"
+    },
+    {
+      "id": "tr_389",
+      "name": "重剑徽章",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/80/Icon_PassivePropsIcon_MarkOfGreatsword.png"
+    },
+    {
+      "id": "tr_390",
+      "name": "重伤之魔匕",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f2/Icon_PassivePropsIcon_TheDemonDaggerOfSevereInjury.png"
+    },
+    {
+      "id": "tr_391",
+      "name": "重生护符",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c7/Icon_PassiveProps_RebirthTalisman.png"
+    },
+    {
+      "id": "tr_392",
+      "name": "转魔护符",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/73/Icon_PassiveProps_CritDmgUp.png"
+    },
+    {
+      "id": "tr_393",
+      "name": "灼热燧石",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/89/Icon_PassivePropsIcon_PremiumMatchbox.png"
+    },
+    {
+      "id": "tr_394",
+      "name": "自动维护装置",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e8/Icon_PassivePropsIcon_AutomaticMaintenanceDevice.png"
+    },
+    {
+      "id": "tr_395",
+      "name": "诅咒的魔盒",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/61/Icon_PassivePropsIcon_Curse_TheCursedbox.png"
+    },
+    {
+      "id": "tr_396",
+      "name": "诅咒的魔晶石",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5b/Icon_PassiveProps_CurseMagicCrystal.png"
+    },
+    {
+      "id": "tr_397",
+      "name": "诅咒的凝晶瓶",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/3f/Icon_PassiveProps_CurseCrystalBottle.png"
+    }
+  ],
+  "iconSource": {
+    "type": "wiki-data",
+    "name": "失落城堡2中文维基（灰机）",
+    "note": "Data:Item/PassiveProps* 等结构化记录（NameText → IconPath）",
+    "license": "CC-BY-NC-SA-4.0",
+    "file": "data/sources/wiki-treasure-icons.json"
+  }
+}

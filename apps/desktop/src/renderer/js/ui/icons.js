@@ -35,10 +35,21 @@ const ICON={
   '兽骨护指':CDN+'4/43/Icon_PassiveProps_Fingerstall.png/60px-Icon_PassiveProps_Fingerstall.png'
 };
 const RC={'初始':'#5b6274','普通':'#5b6274','优秀':'#3f6b52','稀有':'#3d5382','史诗':'#6b4a86','传奇':'#8a6a32','诅咒':'#6b3f6b'};
+
+/* 旧数据里存的是 huiji-thumb 缩略图路径，现已大量 404；
+   文件本身还在，统一转成 Special:FilePath 直链 */
+function fixIconUrl(src){
+  if (typeof src !== 'string' || !src) return src;
+  const m = src.match(/\/thumb\/[^/]+\/[^/]+\/([^/]+)\/\d+px-(.+)$/);
+  if (m) return 'https://lc2.huijiwiki.com/wiki/Special:FilePath/' + encodeURIComponent(m[2]);
+  return src;
+}
+
 function ic(key,label,size,color){
-  const src=ICON[key]||ICON[label],ch=String(label||'?').slice(0,1),c=color||'#3b4a63';
+  const src=fixIconUrl(Object.hasOwn(ICON,key)?ICON[key]:Object.hasOwn(ICON,label)?ICON[label]:null);
+  const ch=window.LC2.ui.dom.esc(String(label||'?').slice(0,1)),c=color||'#3b4a63';
   return '<span class="ic '+(size||'s34')+'" style="--c:'+c+'">'
-    +(src?'<img src="'+src+'" alt="" loading="lazy" onerror="this.remove()">':'')
+    +(src?'<img src="'+src+'" alt="" loading="lazy" onload="this.classList.add(&#39;i-ok&#39;)" onerror="this.remove()">':'')
     +'<i>'+ch+'</i></span>';
 }
 

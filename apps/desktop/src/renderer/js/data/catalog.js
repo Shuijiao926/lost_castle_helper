@@ -40,9 +40,57 @@ WEAPONS.forEach(w=>{w.inscriptions=(INSC_DEF[w.id]||[]).map(([code,name])=>{
    客户端运行时会通过 IPC 从 data/builds.json（或数据包）加载并替换这里。 */
 const BUILDS=[];
 
+/* 全量宝藏目录：运行时由 data/treasures.json 通过 loadTreasures() 填充 */
+const TREASURES=[];
+
+/* 全量武器条目：运行时由 data/weapons.json 的 items 通过 loadWeapons() 填充 */
+const WEAPON_ITEMS=[];
+
+/* 全量衣服/防具：运行时由 data/armors.json 通过 loadArmors() 填充 */
+const ARMORS=[];
+
 const ALL_TAGS=(()=>{const m=new Map();BUILDS.forEach(b=>(b.tags||[]).forEach(t=>{
   if(!m.has(t))m.set(t,[]);m.get(t).push(b);}));
   return [...m.entries()].sort((a,b)=>b[1].length-a[1].length||a[0].localeCompare(b[0],'zh'));})();
 
-  return { INSC_DEF: INSC_DEF, WEAPONS: WEAPONS, INSC: INSC, BUILDS: BUILDS, ALL_TAGS: ALL_TAGS };
+  function loadTreasures(entries) {
+    if (!Array.isArray(entries)) return;
+    TREASURES.length = 0;
+    for (const entry of entries) {
+      if (entry && typeof entry.name === 'string' && entry.name.trim()) {
+        TREASURES.push({ id: entry.id || entry.name, name: entry.name.trim(), icon: entry.icon || '' });
+      }
+    }
+  }
+
+  function loadArmors(items) {
+    if (!Array.isArray(items)) return;
+    ARMORS.length = 0;
+    for (const item of items) {
+      if (item && typeof item.name === 'string' && item.name.trim()) {
+        ARMORS.push({ id: item.id || item.name, name: item.name.trim(), kind: item.kind || '', icon: item.icon || '' });
+      }
+    }
+  }
+
+  function loadWeapons(items) {
+    if (!Array.isArray(items)) return;
+    WEAPON_ITEMS.length = 0;
+    for (const item of items) {
+      if (item && typeof item.name === 'string' && item.name.trim()) {
+        WEAPON_ITEMS.push({ id: item.id || item.name, name: item.name.trim(), wt: item.wt || '', icon: item.icon || '' });
+      }
+    }
+  }
+
+  function loadInscriptions(entries) {
+    if (!Array.isArray(entries) || !entries.length) return;
+    for (const entry of entries) {
+      if (entry && Object.hasOwn(INSC, entry.id) && INSC[entry.id].wt === entry.wt && typeof entry.name === 'string' && entry.name) {
+        Object.assign(INSC[entry.id], { name: entry.name, source: entry.source, icon: entry.icon || '' });
+      }
+    }
+  }
+
+  return { INSC_DEF: INSC_DEF, WEAPONS: WEAPONS, WEAPON_ITEMS: WEAPON_ITEMS, ARMORS: ARMORS, INSC: INSC, BUILDS: BUILDS, TREASURES: TREASURES, ALL_TAGS: ALL_TAGS, loadInscriptions: loadInscriptions, loadTreasures: loadTreasures, loadWeapons: loadWeapons, loadArmors: loadArmors };
 }));

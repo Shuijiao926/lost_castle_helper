@@ -1,0 +1,733 @@
+{
+  "version": "1.0",
+  "updatedAt": "2026-11-13",
+  "source": {
+    "type": "wiki",
+    "name": "失落城堡2中文维基（灰机）",
+    "page": "防具",
+    "license": "CC-BY-NC-SA-4.0",
+    "file": "data/sources/wiki-armors.json"
+  },
+  "armors": [
+    {
+      "id": "NA_000",
+      "name": "朴素的内衬",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/12/Icon_suit_NA_000.png"
+    },
+    {
+      "id": "NA_001",
+      "name": "猎手轻甲",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/ac/Icon_suit_NA_001.png"
+    },
+    {
+      "id": "NA_032",
+      "name": "见习猎人轻甲",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/6c/Icon_suit_NA_032.png"
+    },
+    {
+      "id": "NA_031",
+      "name": "木精灵树衣",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4f/Icon_suit_NA_031.png"
+    },
+    {
+      "id": "NA_002",
+      "name": "探险者皮甲",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/6f/Icon_suit_NA_002.png"
+    },
+    {
+      "id": "NA_010",
+      "name": "帝国士兵轻甲",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/fa/Icon_suit_NA_010.png"
+    },
+    {
+      "id": "NA_011",
+      "name": "流浪剑士皮甲",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/51/Icon_suit_NA_011.png"
+    },
+    {
+      "id": "NA_012",
+      "name": "役卒兵装",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f6/Icon_suit_NA_012.png"
+    },
+    {
+      "id": "NA_014",
+      "name": "密探罩袍",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8b/Icon_suit_NA_014.png"
+    },
+    {
+      "id": "NA_029",
+      "name": "园丁工作服",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/ee/Icon_suit_NA_029.png"
+    },
+    {
+      "id": "NA_033",
+      "name": "冠军战衣",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/cc/Icon_suit_NA_033.png"
+    },
+    {
+      "id": "NA_034",
+      "name": "遗落的布偶装",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/32/Icon_suit_NA_034.png"
+    },
+    {
+      "id": "NA_003",
+      "name": "守卫轻甲",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c4/Icon_suit_NA_003.png"
+    },
+    {
+      "id": "NA_004",
+      "name": "典礼皮衣",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/eb/Icon_suit_NA_004.png"
+    },
+    {
+      "id": "NA_013",
+      "name": "剑士战服",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a5/Icon_suit_NA_013.png"
+    },
+    {
+      "id": "NA_009",
+      "name": "山贼轻甲",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d3/Icon_suit_NA_009.png"
+    },
+    {
+      "id": "NA_019",
+      "name": "掮客帽",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/11/Icon_suit_NA_019.png"
+    },
+    {
+      "id": "NA_021",
+      "name": "步人甲",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/19/Icon_suit_NA_021.png"
+    },
+    {
+      "id": "NA_026",
+      "name": "山民之衣",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f0/Icon_suit_NA_026.png"
+    },
+    {
+      "id": "NA_020",
+      "name": "流浪者皮甲",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f8/Icon_suit_NA_020.png"
+    },
+    {
+      "id": "NA_040",
+      "name": "可怕的玩偶装",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7b/Icon_suit_NA_040.png"
+    },
+    {
+      "id": "NA_041",
+      "name": "吞食之铠",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/bc/Icon_suit_NA_041.png"
+    },
+    {
+      "id": "NA_008",
+      "name": "游侠正装",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/60/Icon_suit_NA_008.png"
+    },
+    {
+      "id": "NA_015",
+      "name": "云纹兜鍪",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/cf/Icon_suit_NA_015.png"
+    },
+    {
+      "id": "NA_016",
+      "name": "侠客袍",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/74/Icon_suit_NA_016.png"
+    },
+    {
+      "id": "NA_017",
+      "name": "窃贼兜帽",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b7/Icon_suit_NA_017.png"
+    },
+    {
+      "id": "NA_022",
+      "name": "玄铁甲",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5c/Icon_suit_NA_022.png"
+    },
+    {
+      "id": "NA_023",
+      "name": "龟壳轻甲",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c4/Icon_suit_NA_023.png"
+    },
+    {
+      "id": "NA_030",
+      "name": "兽人短袍",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/10/Icon_suit_NA_030.png"
+    },
+    {
+      "id": "NA_038",
+      "name": "诅咒蛮骨甲",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/96/Icon_suit_NA_038.png"
+    },
+    {
+      "id": "NA_042",
+      "name": "神秘剑客短袍",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/18/Icon_suit_NA_042.png"
+    },
+    {
+      "id": "NA_024",
+      "name": "阿希尔的符文之甲",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/bf/Icon_suit_NA_024.png"
+    },
+    {
+      "id": "NA_028",
+      "name": "华丽掮客服",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/67/Icon_suit_NA_028.png"
+    },
+    {
+      "id": "NA_006",
+      "name": "白蝠骑士骨甲",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/91/Icon_suit_NA_006.png"
+    },
+    {
+      "id": "NA_007",
+      "name": "虚灵隐匿者",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d7/Icon_suit_NA_007.png"
+    },
+    {
+      "id": "NA_018",
+      "name": "看守者轻甲",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/27/Icon_suit_NA_018.png"
+    },
+    {
+      "id": "NA_005",
+      "name": "恶龙皮甲",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/97/Icon_suit_NA_005.png"
+    },
+    {
+      "id": "NA_025",
+      "name": "阴影潜藏者",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/64/Icon_suit_NA_025.png"
+    },
+    {
+      "id": "NA_027",
+      "name": "恶毒者面具",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/1e/Icon_suit_NA_027.png"
+    },
+    {
+      "id": "NA_039",
+      "name": "风暴团长之铠",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e9/Icon_suit_NA_039.png"
+    },
+    {
+      "id": "NA_037",
+      "name": "猩红符文甲",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/20/Icon_suit_NA_037.png"
+    },
+    {
+      "id": "NA_035",
+      "name": "神圣武士之傲",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e8/Icon_suit_NA_035.png"
+    },
+    {
+      "id": "NA_036",
+      "name": "恶魔君王甲壳",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5f/Icon_suit_NA_036.png"
+    },
+    {
+      "id": "NA_046",
+      "name": "诡谲混沌之铠",
+      "kind": "轻甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/cb/Icon_suit_NA_046.png"
+    },
+    {
+      "id": "CA_008",
+      "name": "追踪者面具",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/99/Icon_suit_CA_008.png"
+    },
+    {
+      "id": "CA_007",
+      "name": "村民先知服饰",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/39/Icon_suit_CA_007.png"
+    },
+    {
+      "id": "CA_014",
+      "name": "佣兵法师袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/94/Icon_suit_CA_014.png"
+    },
+    {
+      "id": "CA_018",
+      "name": "流浪法师长袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a6/Icon_suit_CA_018.png"
+    },
+    {
+      "id": "CA_022",
+      "name": "守护者黑袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0f/Icon_suit_CA_022.png"
+    },
+    {
+      "id": "CA_005",
+      "name": "腐化圣职者短袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e0/Icon_suit_CA_005.png"
+    },
+    {
+      "id": "CA_009",
+      "name": "邪恶炼金长袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a6/Icon_suit_CA_009.png"
+    },
+    {
+      "id": "CA_013",
+      "name": "祈雨服",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/57/Icon_suit_CA_013.png"
+    },
+    {
+      "id": "CA_015",
+      "name": "战地牧师套装",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0b/Icon_suit_CA_015.png"
+    },
+    {
+      "id": "CA_020",
+      "name": "魔导士兵短袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e2/Icon_suit_CA_020.png"
+    },
+    {
+      "id": "CA_001",
+      "name": "圣礼法袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_suit_CA_001.png"
+    },
+    {
+      "id": "CA_006",
+      "name": "堕落学徒法袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/eb/Icon_suit_CA_006.png"
+    },
+    {
+      "id": "CA_031",
+      "name": "陈旧的女仆装",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b2/Icon_suit_CA_031.png"
+    },
+    {
+      "id": "CA_041",
+      "name": "鱼骨面具",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/92/Icon_suit_CA_041.png"
+    },
+    {
+      "id": "CA_035",
+      "name": "圣诞老人",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/ff/Icon_suit_CA_035.png"
+    },
+    {
+      "id": "CA_002",
+      "name": "守护者灰袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c3/Icon_suit_CA_002.png"
+    },
+    {
+      "id": "CA_003",
+      "name": "维特的欺诈法袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/56/Icon_suit_CA_003.png"
+    },
+    {
+      "id": "CA_011",
+      "name": "雷电法袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4f/Icon_suit_CA_011.png"
+    },
+    {
+      "id": "CA_012",
+      "name": "忧伤南瓜",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5b/Icon_suit_CA_012.png"
+    },
+    {
+      "id": "CA_021",
+      "name": "玄冥阴阳服",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/66/Icon_suit_CA_021.png"
+    },
+    {
+      "id": "CA_034",
+      "name": "邪恶稻草人",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d0/Icon_suit_CA_034.png"
+    },
+    {
+      "id": "CA_036",
+      "name": "寒地巫师服",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c6/Icon_suit_CA_036.png"
+    },
+    {
+      "id": "CA_023",
+      "name": "纳伊鲁的符文长袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/72/Icon_suit_CA_023.png"
+    },
+    {
+      "id": "CA_030",
+      "name": "纯蓝符文袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d2/Icon_suit_CA_030.png"
+    },
+    {
+      "id": "CA_017",
+      "name": "红石法师长袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/11/Icon_suit_CA_017.png"
+    },
+    {
+      "id": "CA_019",
+      "name": "赤玉巫师面具",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4c/Icon_suit_CA_019.png"
+    },
+    {
+      "id": "CA_004",
+      "name": "占卜师法袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0f/Icon_suit_CA_004.png"
+    },
+    {
+      "id": "CA_024",
+      "name": "魔导战斗法袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/37/Icon_suit_CA_024.png"
+    },
+    {
+      "id": "CA_025",
+      "name": "白魔法师长袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/85/Icon_suit_CA_025.png"
+    },
+    {
+      "id": "CA_026",
+      "name": "黑魔法师长袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/13/Icon_suit_CA_026.png"
+    },
+    {
+      "id": "CA_029",
+      "name": "叛逆领主法袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9f/Icon_suit_CA_029.png"
+    },
+    {
+      "id": "CA_033",
+      "name": "吸血鬼礼服",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/46/Icon_suit_CA_033.png"
+    },
+    {
+      "id": "CA_037",
+      "name": "冻结法袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/1f/Icon_suit_CA_037.png"
+    },
+    {
+      "id": "CA_038",
+      "name": "幽羽长袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/92/Icon_suit_CA_038.png"
+    },
+    {
+      "id": "CA_039",
+      "name": "不祥的女仆装",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5a/Icon_suit_CA_039.png"
+    },
+    {
+      "id": "CA_040",
+      "name": "噩梦法袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b6/Icon_suit_CA_040.png"
+    },
+    {
+      "id": "CA_016",
+      "name": "守护者白袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4e/Icon_suit_CA_016.png"
+    },
+    {
+      "id": "CA_027",
+      "name": "焚天",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/47/Icon_suit_CA_027.png"
+    },
+    {
+      "id": "CA_028",
+      "name": "传奇法师法袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/35/Icon_suit_CA_028.png"
+    },
+    {
+      "id": "CA_042",
+      "name": "虚空法袍",
+      "kind": "布甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f8/Icon_suit_CA_042.png"
+    },
+    {
+      "id": "HA_024",
+      "name": "佣兵板甲",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f0/Icon_suit_HA_024.png"
+    },
+    {
+      "id": "HA_013",
+      "name": "树灵藤甲",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b1/Icon_suit_HA_013.png"
+    },
+    {
+      "id": "HA_002",
+      "name": "北境骑士重铠",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/2f/Icon_suit_HA_002.png"
+    },
+    {
+      "id": "HA_025",
+      "name": "陈旧骑士甲",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_suit_HA_025.png"
+    },
+    {
+      "id": "HA_001",
+      "name": "堡垒重甲",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/06/Icon_suit_HA_001.png"
+    },
+    {
+      "id": "HA_004",
+      "name": "武士大铠",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/95/Icon_suit_HA_004.png"
+    },
+    {
+      "id": "HA_026",
+      "name": "流浪骑士重甲",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/58/Icon_suit_HA_026.png"
+    },
+    {
+      "id": "HA_015",
+      "name": "噬魂铠甲",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/24/Icon_suit_HA_015.png"
+    },
+    {
+      "id": "HA_032",
+      "name": "废土暴徒",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/38/Icon_suit_HA_032.png"
+    },
+    {
+      "id": "HA_033",
+      "name": "废土锈铠",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/11/Icon_suit_HA_033.png"
+    },
+    {
+      "id": "HA_036",
+      "name": "沼地猎兵",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d3/Icon_suit_HA_036.png"
+    },
+    {
+      "id": "HA_006",
+      "name": "鹰铁卫",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/60/Icon_suit_HA_006.png"
+    },
+    {
+      "id": "HA_007",
+      "name": "铁骑士铠甲",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5b/Icon_suit_HA_007.png"
+    },
+    {
+      "id": "HA_005",
+      "name": "鬼武者大铠",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/76/Icon_suit_HA_005.png"
+    },
+    {
+      "id": "HA_012",
+      "name": "恶神重铠",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/02/Icon_suit_HA_012.png"
+    },
+    {
+      "id": "HA_018",
+      "name": "玄铁红线甲",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/54/Icon_suit_HA_018.png"
+    },
+    {
+      "id": "HA_023",
+      "name": "熔铁骑士铠甲",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d6/Icon_suit_HA_023.png"
+    },
+    {
+      "id": "HA_021",
+      "name": "破魔者铠甲",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b3/Icon_suit_HA_021.png"
+    },
+    {
+      "id": "HA_014",
+      "name": "磐岩坚铠",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/dd/Icon_suit_HA_014.png"
+    },
+    {
+      "id": "HA_016",
+      "name": "腐鳞重甲",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/34/Icon_suit_HA_016.png"
+    },
+    {
+      "id": "HA_034",
+      "name": "冰灵机关铠",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f2/Icon_suit_HA_034.png"
+    },
+    {
+      "id": "HA_020",
+      "name": "帕拉提的符文之铠",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a6/Icon_suit_HA_020.png"
+    },
+    {
+      "id": "HA_029",
+      "name": "圣骑士重甲",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/af/Icon_suit_HA_029.png"
+    },
+    {
+      "id": "HA_008",
+      "name": "屠魔者重甲",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7d/Icon_suit_HA_008.png"
+    },
+    {
+      "id": "HA_009",
+      "name": "铁炉骑士重甲",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/57/Icon_suit_HA_009.png"
+    },
+    {
+      "id": "HA_010",
+      "name": "黑骑士板甲",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c0/Icon_suit_HA_010.png"
+    },
+    {
+      "id": "HA_011",
+      "name": "蛮牛拘束器",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0b/Icon_suit_HA_011.png"
+    },
+    {
+      "id": "HA_003",
+      "name": "黄金骑士重甲",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/17/Icon_suit_HA_003.png"
+    },
+    {
+      "id": "HA_027",
+      "name": "血骑士重甲",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/fb/Icon_suit_HA_027.png"
+    },
+    {
+      "id": "HA_028",
+      "name": "遗忘守护之铠",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c6/Icon_suit_HA_028.png"
+    },
+    {
+      "id": "HA_031",
+      "name": "深绿符文铠",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/03/Icon_suit_HA_031.png"
+    },
+    {
+      "id": "HA_017",
+      "name": "堕落骑士重甲",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/67/Icon_suit_HA_017.png"
+    },
+    {
+      "id": "HA_035",
+      "name": "淬魔黄铜重铠",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/41/Icon_suit_HA_035.png"
+    },
+    {
+      "id": "HA_022",
+      "name": "守誓者之力",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a7/Icon_suit_HA_022.png"
+    },
+    {
+      "id": "HA_019",
+      "name": "兽面吞头连环铠",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5e/Icon_suit_HA_019.png"
+    },
+    {
+      "id": "HA_038",
+      "name": "罪孽领主重袍",
+      "kind": "重甲",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/54/Icon_suit_HA_038.png"
+    }
+  ]
+}
