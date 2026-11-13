@@ -9,8 +9,8 @@
 #   3. 逐像素合成 + 超采样抗锯齿，边缘平滑。
 #
 # 与 Electron 的行协议（stdin/stdout）：
-#   PS -> Electron : READY | CLICK | MOVE x,y
-#   Electron -> PS : QUIT
+#   PS -> Electron : READY | CLICK | RCLICK x,y,width,height | DRAGSTART | MOVE x,y
+#   Electron -> PS : QUIT | HIDE | SHOW
 #
 # 手动调试：
 #   powershell -NoProfile -ExecutionPolicy Bypass -File bubble.ps1 -Icon <icon.png> -Size 90
@@ -109,6 +109,8 @@ public class Lc2Bubble : Form
     private bool moved;
     private Point dragAnchor;
     private Point winAnchor;
+
+    protected override bool ShowWithoutActivation { get { return true; } }
 
     protected override CreateParams CreateParams
     {
@@ -576,14 +578,25 @@ public class Lc2Bubble : Form
         Point p = Cursor.Position;
         int dx = p.X - dragAnchor.X;
         int dy = p.Y - dragAnchor.Y;
-        if (Math.Abs(dx) + Math.Abs(dy) > 3) moved = true;
+        if (!moved && Math.Abs(dx) + Math.Abs(dy) > 3)
+        {
+            moved = true;
+            Console.WriteLine("DRAGSTART");
+            Console.Out.Flush();
+        }
         if (moved) Location = new Point(winAnchor.X + dx, winAnchor.Y + dy);
     }
 
     protected override void OnMouseUp(MouseEventArgs e)
     {
         base.OnMouseUp(e);
-        if (!dragging) return;
+        if (e.Button == MouseButtons.Right)
+        {
+            Console.WriteLine("RCLICK " + Left + "," + Top + "," + Width + "," + Height);
+            Console.Out.Flush();
+            return;
+        }
+        if (e.Button != MouseButtons.Left || !dragging) return;
         dragging = false;
         if (moved)
         {
@@ -645,11 +658,21 @@ public class Lc2Bubble : Form
             string line;
             while ((line = Console.ReadLine()) != null)
             {
-                    if (line == "QUIT")
+                if (line == "QUIT")
                 {
                     try { Instance.BeginInvoke(new MethodInvoker(delegate() { Instance.Close(); })); }
                     catch { }
                     break;
+                }
+                else if (line == "HIDE")
+                {
+                    try { Instance.BeginInvoke(new MethodInvoker(delegate() { Instance.Hide(); })); }
+                    catch { }
+                }
+                else if (line == "SHOW")
+                {
+                    try { Instance.BeginInvoke(new MethodInvoker(delegate() { Instance.Show(); })); }
+                    catch { }
                 }
             }
         });

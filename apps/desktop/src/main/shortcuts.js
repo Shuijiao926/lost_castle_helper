@@ -7,6 +7,27 @@
 function createShortcuts({ globalShortcut, log, BASE_KEYS, PANEL_KEYS }) {
   let baseKey = null;
   let panelKeysRegistered = false;
+  let panelEscape = null;
+  let menuEscape = null;
+  let escapeRegistered = false;
+
+  function updateEscapeShortcut() {
+    try {
+      if ((panelEscape || menuEscape) && !escapeRegistered) {
+        escapeRegistered = globalShortcut.register('Escape', () => (menuEscape || panelEscape)?.());
+      } else if (!panelEscape && !menuEscape && escapeRegistered) {
+        globalShortcut.unregister('Escape');
+        escapeRegistered = false;
+      }
+    } catch (e) {
+      log('register fail Escape', e.message);
+    }
+  }
+
+  function setMenuEscape(handler) {
+    menuEscape = handler;
+    updateEscapeShortcut();
+  }
 
   function registerBaseKey(handler) {
     for (const key of BASE_KEYS) {
@@ -28,13 +49,17 @@ function createShortcuts({ globalShortcut, log, BASE_KEYS, PANEL_KEYS }) {
     if (panelKeysRegistered) return;
     panelKeysRegistered = true;
     for (const [acc, name] of Object.entries(PANEL_KEYS)) {
+      const handler = () => {
+        const win = getWindow();
+        if (win && !win.isDestroyed() && isOpen()) win.webContents.send('lc2:key', name);
+      };
+      if (acc === 'Escape') {
+        panelEscape = handler;
+        updateEscapeShortcut();
+        continue;
+      }
       try {
-        globalShortcut.register(acc, () => {
-          const win = getWindow();
-          if (win && !win.isDestroyed() && isOpen()) {
-            win.webContents.send('lc2:key', name);
-          }
-        });
+        globalShortcut.register(acc, handler);
       } catch (e) {
         log('panel key fail', acc, e.message);
       }
@@ -44,7 +69,10 @@ function createShortcuts({ globalShortcut, log, BASE_KEYS, PANEL_KEYS }) {
   function disablePanelKeys() {
     if (!panelKeysRegistered) return;
     panelKeysRegistered = false;
+    panelEscape = null;
+    updateEscapeShortcut();
     for (const acc of Object.keys(PANEL_KEYS)) {
+      if (acc === 'Escape') continue;
       try {
         globalShortcut.unregister(acc);
       } catch {}
@@ -56,12 +84,16 @@ function createShortcuts({ globalShortcut, log, BASE_KEYS, PANEL_KEYS }) {
       globalShortcut.unregisterAll();
     } catch {}
     panelKeysRegistered = false;
+    escapeRegistered = false;
+    panelEscape = null;
+    menuEscape = null;
   }
 
   return {
     registerBaseKey,
     enablePanelKeys,
     disablePanelKeys,
+    setMenuEscape,
     unregisterAll,
     getBaseKey: () => baseKey,
     isPanelKeysRegistered: () => panelKeysRegistered,

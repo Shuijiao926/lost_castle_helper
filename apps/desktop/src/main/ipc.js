@@ -11,6 +11,7 @@ function registerIpc({
   notesStore,
   configStore,
   panel,
+  getAppVersion,
   getBaseKey,
   getBubbleWindow,
   setBubblePosition,
@@ -21,7 +22,7 @@ function registerIpc({
 
   /* ---------------- 数据 / 配置 ---------------- */
   ipcMain.handle('lc2:getData', () => dataLoader.load());
-  ipcMain.handle('lc2:getConfig', () => ({ baseKey: getBaseKey(), panelOpen: panel.isOpen() }));
+  ipcMain.handle('lc2:getConfig', () => ({ version: getAppVersion(), baseKey: getBaseKey(), panelOpen: panel.isOpen() }));
 
   /* ---------------- 用户印象 ---------------- */
   ipcMain.handle('lc2:notes:get', () => notesStore.readAll());

@@ -61,6 +61,8 @@ if (WIN_MODE === 'alpha') {
 
 /* ---------------- 常量 ---------------- */
 const BUBBLE = { w: 72, h: 72, inset: 4 };
+// Electron 没有菜单尺寸查询接口，按当前两项菜单的 Windows DIP 尺寸预留空间。
+const BUBBLE_MENU = { width: 64, height: 80, gap: 4 };
 const PANEL = { w: 440, h: 680 };
 const MARGIN = 20;
 const PANEL_RADIUS = 16;
@@ -107,6 +109,9 @@ app.isQuitting = false;
 
 let panel = null;
 let bubbleWin = null;
+let bubbleHidden = false;
+let bubbleMenu = null;
+let bubbleMenuBounds = null;
 let trayHandle = null;
 let configStore = null;
 let shortcuts = null;
@@ -130,6 +135,7 @@ function currentBubbleBounds() {
 
 function setBubblePosition(x, y) {
   if (!bubbleWin || bubbleWin.isDestroyed()) return;
+  closeBubbleMenu();
   const disp = screen.getDisplayNearestPoint({ x: Math.round(x), y: Math.round(y) });
   const wa = disp.workArea;
   const nx = geometry.clamp(x, wa.x, wa.x + wa.width - BUBBLE.w);
@@ -167,6 +173,8 @@ function createElectronBubble() {
     bounds: currentBubbleBounds(),
     preloadPath: PRELOAD_PATH,
     rendererDir: RENDERER_DIR,
+    canReveal: () => !bubbleHidden,
+    onContextMenu: (win) => showBubbleMenu(win, win.getBounds()),
     topmostLevel: 'floating',
     applyShape: (win) => {
       if (USE_SHAPE_CLIP) shapeRounded(win, BUBBLE.w, BUBBLE.h, BUBBLE.w / 2, log);
@@ -183,24 +191,45 @@ function createElectronBubble() {
 async function startNativeBubble() {
   const b = currentBubbleBounds();
   try {
-    return await nativeBubble.start({
+    const started = await nativeBubble.start({
       x: b.x,
       y: b.y,
-      onClick: () => panel.toggle(),
+      onClick: () => {
+        closeBubbleMenu();
+        panel.toggle();
+      },
+      onRightClick: (bounds) => showBubbleMenu(panel.getWindow(), bounds),
+      onDragStart: closeBubbleMenu,
       onMove: (x, y) => {
+        closeBubbleMenu();
         // 拖拽期间高频回调：只更新内存 + 防抖落盘，避免每 8ms 写一次磁盘
         configStore.state.bubble = { x, y, width: BUBBLE.w, height: BUBBLE.h };
         configStore.saveDebounced();
       },
       onExit: () => {
+        closeBubbleMenu();
         // 原生进程意外退出：拉起 Electron 气泡兜底，保证热键仍可用
         log('原生气泡退出，切换 Electron 气泡');
         if (!app.isQuitting) createElectronBubble();
       },
     });
+    if (started && bubbleHidden) nativeBubble.hide();
+    return started;
   } catch (e) {
     log('startNativeBubble failed:', e.message);
     return false;
+  }
+}
+
+async function initializeBubble() {
+  const started = USE_NATIVE_BUBBLE && await startNativeBubble();
+  if (!started) {
+    if (USE_NATIVE_BUBBLE) log('原生启动失败，回退 Electron 气泡窗口');
+    if (!app.isQuitting) createElectronBubble();
+  } else if (bubbleWin && !bubbleWin.isDestroyed()) {
+    // 原生接管成功后销毁备用窗口，避免两个气泡叠在一起。
+    bubbleWin.destroy();
+    bubbleWin = null;
   }
 }
 
@@ -231,19 +260,75 @@ function cleanupOrphanHelpers() {
   });
 }
 
+/* ---------------- 气泡右键菜单 ---------------- */
+function restartApp() {
+  if (app.isQuitting) return;
+  // 便携版退出后会删除解包目录，需要从启动器重新运行。
+  const launcher = app.isPackaged && process.env.PORTABLE_EXECUTABLE_FILE;
+  app.relaunch(launcher ? { execPath: launcher } : {});
+  app.quit();
+}
+
+function showBubbleMenu(window, bounds = currentBubbleBounds()) {
+  if (app.isQuitting || bubbleHidden || !window || window.isDestroyed()) return;
+  closeBubbleMenu();
+  if (!bubbleMenu) {
+    bubbleMenu = Menu.buildFromTemplate([
+      { label: '重启', click: restartApp },
+      { label: '隐藏', click: hideBubbleAndPanel },
+    ]);
+  }
+  const bubble = { width: BUBBLE.w, height: BUBBLE.h, ...bounds };
+  const { workArea } = screen.getDisplayMatching(bubble);
+  const position = geometry.bubbleMenuPosition(bubble, workArea, BUBBLE_MENU);
+  const origin = window.getContentBounds();
+  // Electron 将相对坐标 -1 解释为光标位置。
+  const x = position.x === origin.x - 1 ? 0 : position.x - origin.x;
+  const y = position.y === origin.y - 1 ? 0 : position.y - origin.y;
+  const menuBounds = { x: origin.x + x, y: origin.y + y, width: BUBBLE_MENU.width, height: BUBBLE_MENU.height };
+  bubbleMenuBounds = menuBounds;
+  shortcuts.setMenuEscape(closeBubbleMenu);
+  bubbleMenu.popup({ window, x, y, callback: () => {
+    if (bubbleMenuBounds !== menuBounds) return;
+    bubbleMenuBounds = null;
+    shortcuts.setMenuEscape(null);
+  } });
+}
+
+function closeBubbleMenu() {
+  if (!bubbleMenuBounds) return;
+  bubbleMenuBounds = null;
+  shortcuts.setMenuEscape(null);
+  bubbleMenu.closePopup();
+}
+
+function handleOutsideClick(px, py) {
+  if (bubbleMenuBounds) {
+    const point = screen.screenToDipPoint({ x: px, y: py });
+    const { x, y, width, height } = bubbleMenuBounds;
+    // 让菜单内的点击交给 Electron，避免在选项触发前关闭菜单。
+    if (point.x >= x && point.x < x + width && point.y >= y && point.y < y + height) return;
+    closeBubbleMenu();
+  }
+  panel.handleOutsideClick(px, py);
+}
+
+function hideBubbleAndPanel() {
+  closeBubbleMenu();
+  bubbleHidden = true;
+  if (nativeBubble.isRunning()) nativeBubble.hide();
+  if (bubbleWin && !bubbleWin.isDestroyed()) bubbleWin.hide();
+  panel.hide();
+}
+
 /* ---------------- 托盘动作 ---------------- */
-function showBubbleAndPanel() {
+function showBubble() {
+  bubbleHidden = false;
+  if (nativeBubble.isRunning()) nativeBubble.show();
   if (bubbleWin && !bubbleWin.isDestroyed() && !bubbleWin.isVisible()) {
     const b = currentBubbleBounds();
     bubbleWin.setBounds({ x: b.x, y: b.y, width: BUBBLE.w, height: BUBBLE.h });
     bubbleWin.showInactive();
-  }
-  if (!panel.isOpen()) panel.show();
-  else {
-    const pw = panel.getWindow();
-    if (pw && !pw.isDestroyed()) {
-      try { pw.setAlwaysOnTop(true, 'floating'); } catch {}
-    }
   }
 }
 
@@ -315,6 +400,7 @@ if (!gotLock) {
       notesStore,
       configStore,
       panel,
+      getAppVersion: () => app.getVersion(),
       getBaseKey: () => shortcuts.getBaseKey(),
       getBubbleWindow: () => bubbleWin,
       setBubblePosition,
@@ -324,7 +410,7 @@ if (!gotLock) {
     // 辅助进程必须常驻：即使不显示阴影，它也负责
     //   1) 给面板窗口设置 DWM 系统圆角/描边
     //   2) 全局左键轮询 → 点外部收起 / 置顶时休眠
-    panelShadow.onClick((px, py) => panel.handleOutsideClick(px, py));
+    panelShadow.onClick(handleOutsideClick);
     panelShadow.onDrag((px, py) => panel.dragToPhysical(px, py));
     panelShadow.onDragEnd(() => panel.finalizeDrag());
     panelShadow
@@ -339,16 +425,7 @@ if (!gotLock) {
     log('面板窗口已创建');
 
     log('启动气泡：' + (USE_NATIVE_BUBBLE ? 'native' : 'electron'));
-    const bubbleOk = USE_NATIVE_BUBBLE ? await startNativeBubble() : false;
-    if (!bubbleOk) {
-      if (USE_NATIVE_BUBBLE) log('原生启动失败，回退 Electron 气泡窗口（CSS 光环：默认静止，悬停旋转）');
-      createElectronBubble();
-    } else if (bubbleWin && !bubbleWin.isDestroyed()) {
-      // 原生接管成功：销毁可能残留的 Electron 气泡，避免两个气泡叠在一起
-      log('原生气泡接管成功，销毁残留 Electron 气泡窗口');
-      bubbleWin.destroy();
-      bubbleWin = null;
-    }
+    await initializeBubble();
 
     shortcuts.registerBaseKey(() => panel.toggle());
     log('window mode =', WIN_MODE, '| panel shadow =', USE_PANEL_SHADOW, '| shadow pad =', SHADOW_PAD, '| pinned =', panel.isPinned());
@@ -360,7 +437,7 @@ if (!gotLock) {
       path,
       assetsDir: ASSETS_DIR,
       getBaseKey: () => shortcuts.getBaseKey(),
-      onShow: showBubbleAndPanel,
+      onShowBubble: showBubble,
       onToggle: () => panel.toggle(),
       onQuit: () => app.quit(),
       log,
@@ -390,12 +467,10 @@ if (!gotLock) {
           },
           async restartNativeHelpers() {
             log('hot reload: native scripts changed, restarting helpers');
+            closeBubbleMenu();
             try { nativeBubble.stop(); } catch {}
             try { panelShadow.stop(); } catch {}
-            if (USE_NATIVE_BUBBLE) {
-              const ok = await startNativeBubble();
-              if (!ok) log('native bubble restart failed');
-            }
+            if (USE_NATIVE_BUBBLE) await initializeBubble();
             await panelShadow.ensureStarted({ panelW: PANEL.w, panelH: PANEL.h, radius: PANEL_RADIUS, pad: SHADOW_PAD });
             panel.onNativeRestart();
           },
@@ -416,6 +491,7 @@ if (!gotLock) {
 
   app.on('before-quit', () => {
     app.isQuitting = true;
+    closeBubbleMenu();
       if (disposeHotReload) {
       try { disposeHotReload(); } catch {}
     }

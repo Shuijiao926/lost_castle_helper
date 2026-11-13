@@ -3,7 +3,7 @@
  *
  * 图标按候选顺序取第一个存在的文件（打包后 assets 走 extraResources）。
  */
-function createTray({ Tray, Menu, nativeImage, fs, path, assetsDir, getBaseKey, onShow, onToggle, onQuit, log }) {
+function createTray({ Tray, Menu, nativeImage, fs, path, assetsDir, getBaseKey, onShowBubble, onToggle, onQuit, log }) {
   const candidates = [
     path.join(assetsDir, 'tray-32.png'), // 官方客户端图标提亮版（16/32px 可辨认）
     path.join(assetsDir, 'tray-16.png'),
@@ -32,7 +32,7 @@ function createTray({ Tray, Menu, nativeImage, fs, path, assetsDir, getBaseKey, 
   refreshTooltip();
   tray.setContextMenu(
     Menu.buildFromTemplate([
-      { label: '显示气泡', click: onShow },
+      { label: '显示气泡', click: onShowBubble },
       { type: 'separator' },
       { label: '退出', click: onQuit },
     ])

@@ -54,8 +54,6 @@ function visible() {
 function acquireFocusInput(el){
   state.focusedInput = true;
   try{ console.log('[search] acquire api=' + !!(window.lc2&&window.lc2.searchFocus) + ' el=' + (el&&el.id)); }catch(e){}
-  var sb=document.getElementById('sbar');
-  if(sb && el && el.id==='q') sb.classList.add('searching');
   if(typeof window.lc2!=='undefined' && window.lc2.searchFocus) window.lc2.searchFocus(true);
   setTimeout(function(){ try{ el.focus(); }catch(e){} }, 20);
   setTimeout(function(){ try{ if(document.activeElement!==el) el.focus(); }catch(e){} }, 90);
@@ -63,8 +61,6 @@ function acquireFocusInput(el){
 function releaseFocusInput(){
   if(!state.focusedInput) return;
   state.focusedInput = false;
-  var sb=document.getElementById('sbar');
-  if(sb) sb.classList.remove('searching');
   var ae=document.activeElement;
   if(ae && ae.blur) { try{ ae.blur(); }catch(e){} }
   if(typeof window.lc2!=='undefined' && window.lc2.searchFocus) window.lc2.searchFocus(false);
@@ -375,7 +371,7 @@ function renderDetail(){
   }
 
   h+='<div class="footline"><span>作者 '+esc(b.author||'—')+' · 来源：'+esc(b.src)+'</span><span>更新 '+esc(b.updated)+'</span></div>';
-  
+
   elDetail.innerHTML=h;elDetail.scrollTop=0;
   elDetail.querySelectorAll('[data-tag]').forEach(n=>{n.onclick=()=>{state.tags=[n.dataset.tag];closeDetail();render();fbtnState();};});
 }
@@ -441,7 +437,7 @@ function emptyState(title, sub, compact){
 
 function cell(key,label,sub,on){
   return '<div class="mg'+(on?' on':'')+'" data-k="'+esc(key)+'">'
-    +ic(key,label,'s46',RC['传奇'])
+    +ic(key,label,'s46')
     +'<div class="cn">'+esc(label)+'</div>'
     +(sub?'<div class="cc">'+esc(sub)+'</div>':'')+'</div>';
 }
@@ -502,7 +498,7 @@ function renderModal(animate){
     const items=ALL_TAGS.filter(([t])=>!q||t.toLowerCase().includes(q));
     elGrid.innerHTML=items.length?items.map(([t,arr])=>
       '<div class="mg'+(state.tags.indexOf(t)>=0?' on':'')+'" data-k="'+esc(t)+'">'
-      +'<div style="background:#2c3346;color:#c2ceec;border-radius:8px;padding:8px 4px;font-size:11.5px">'+esc(t)+'</div>'
+      +'<div class="mg-label">'+esc(t)+'</div>'
       +'<div class="cc">'+arr.length+' 个玩法</div></div>').join('')
       :emptyState(q ? '没有匹配的标签 (・_・;)' : '标签还没长出来 (´･ω･`)', q ? '换个关键词试试看' : '资料还没搬完，它已经很努力了 汪～', true);
     elGrid.querySelectorAll('.mg').forEach(n=>{n.onclick=()=>{
@@ -545,12 +541,12 @@ $pinbtn.onclick=()=>{
   motion.press($pinbtn);
   $pinbtn.classList.toggle('on');   // 立即反馈，主进程回包再校正
   if(typeof window.lc2!=='undefined' && window.lc2.pinToggle){ window.lc2.pinToggle(); }
-  else { const on=$pinbtn.classList.toggle('on'); showToast(on?'已置顶：点击外部不收起':'已取消置顶'); }
+  else { const on=$pinbtn.classList.toggle('on'); showToast(on?'已置顶':'已取消置顶'); }
 };
 if(typeof window.lc2!=='undefined' && window.lc2.onPin){
   window.lc2.onPin(function(p){
     $pinbtn.classList.toggle('on',!!p);
-    showToast(p?'已置顶：点击外部不收起':'已取消置顶');
+    showToast(p?'已置顶':'已取消置顶');
   });
 }
 
@@ -606,6 +602,49 @@ function closeHelp(){$help.classList.remove('on');}
 $hbtn.onclick=openHelp;
 $helpClose.onclick=closeHelp;
 $help.onclick=ev=>{if(ev.target===$help)closeHelp();};
+
+const updateBtn = $('updateBtn');
+const updateDialog = $('updateDialog');
+const updateVersion = $('updateVersion');
+
+for (const note of LC2.data.updateNotes) {
+  const item = document.createElement('li');
+  item.textContent = note;
+  $('updateNotes').append(item);
+}
+
+async function openUpdateDialog() {
+  const api = window.lc2;
+  updateDialog.classList.add('on');
+  updateBtn.setAttribute('aria-expanded', 'true');
+  if (updateVersion.dataset.loaded) return;
+  if (!api) {
+    updateVersion.textContent = '网页原型';
+    return;
+  }
+
+  updateVersion.textContent = '读取中…';
+  try {
+    const { version } = await api.getConfig();
+    updateVersion.textContent = version ? `v${version}` : '版本未知';
+    if (version) updateVersion.dataset.loaded = 'true';
+  } catch (error) {
+    console.error('[lc2] 读取客户端版本失败', error);
+    updateVersion.textContent = '暂时无法读取';
+  }
+}
+
+function closeUpdateDialog() {
+  updateDialog.classList.remove('on');
+  updateBtn.setAttribute('aria-expanded', 'false');
+}
+
+updateBtn.onclick = openUpdateDialog;
+$('updateClose').onclick = closeUpdateDialog;
+updateDialog.onclick = (event) => {
+  if (event.target === updateDialog) closeUpdateDialog();
+};
+
 $('noteCancel').onclick=closeNote;
 $('noteSave').onclick=saveNote;
 $('noteText').addEventListener('input',function(){ var c=$('noteCount'); if(c) c.textContent=String(this.value.length); });
@@ -640,9 +679,6 @@ document.querySelectorAll('.mseg div').forEach(d=>{d.onclick=()=>{
 };});
 $('mq').addEventListener('input',e=>{state.mq=e.target.value;renderModal();});
 $('q').addEventListener('input',e=>{state.q=e.target.value;render();fbtnState();});
-$('q').addEventListener('blur',()=>{
-  var sb=document.getElementById('sbar'); if(sb) sb.classList.remove('searching');
-});
 $('q').addEventListener('keydown',e=>{
   if(e.key==='Escape'){ e.preventDefault(); e.stopPropagation();
     if(state.q){ state.q=''; e.target.value=''; render(); fbtnState(); }
@@ -758,6 +794,13 @@ document.addEventListener('keydown',e=>{
     const hid=elPanel.classList.toggle('hidden');
     elBubble.classList.toggle('hidden',!hid);elTip.classList.toggle('hidden',!hid);return;}
   if(elPanel.classList.contains('hidden'))return;
+  if (updateDialog.classList.contains('on')) {
+    if (k === 'Escape') {
+      e.preventDefault();
+      closeUpdateDialog();
+    }
+    return;
+  }
   if($help.classList.contains('on')){
     if(k==='Escape'||k==='h'||k==='H'){e.preventDefault();closeHelp();}
     return;
@@ -775,7 +818,7 @@ document.addEventListener('keydown',e=>{
   if(k==='h'||k==='H'){e.preventDefault();motion.press($('hbtn'));openHelp();return;}
   if(k==='p'||k==='P'){e.preventDefault();motion.press($('pinbtn'));
     if(typeof window.lc2!=='undefined'&&window.lc2.pinToggle){ window.lc2.pinToggle(); }
-    else { const on=$('pinbtn').classList.toggle('on'); showToast(on?'已置顶：点击外部不收起':'已取消置顶'); }
+    else { const on=$('pinbtn').classList.toggle('on'); showToast(on?'已置顶':'已取消置顶'); }
     return;}
   if(k==='d'||k==='D'){e.preventDefault();if(state.view==='feed'&&!state.cur)return;state.view==='feed'?openDetail(state.cur):closeDetail();return;}
   if(k==='ArrowDown'||k==='ArrowUp'){
@@ -900,14 +943,13 @@ document.addEventListener('click', function(ev){
 if (window.lc2.onDormant) {
   window.lc2.onDormant(function(v){
     state.dormant = !!v;
-    var sb=document.getElementById('sbar');
-    if (sb && v) sb.classList.remove('searching');
   });
 }
 
 window.lc2.onPanel(function(s){
     var payload = (s && typeof s === 'object') ? s : { open: s === 'open' };
     state.open = !!payload.open;
+    if (!state.open) closeUpdateDialog();
     if(!payload.open && state.focusedInput) releaseFocusInput();
     if(typeof payload.pinned === 'boolean'){
       var pb = document.getElementById('pinbtn');

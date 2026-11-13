@@ -459,7 +459,7 @@ public class PanelShadow : Form
             bool prevDown = false;
             while (true)
             {
-                Thread.Sleep(60);
+                Thread.Sleep(16);
                 short state = GetAsyncKeyState(0x01);   // VK_LBUTTON
                 bool down = (state & 0x8000) != 0;
                 if (down && !prevDown)

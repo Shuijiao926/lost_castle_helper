@@ -114,6 +114,28 @@ test('geometry：气泡默认位置在右侧垂直居中', () => {
   assert.equal(b.y, Math.round(1080 / 2 - 36));
 });
 
+test('geometry：气泡菜单默认在气泡正下方居中', () => {
+  const g = createGeometry({ BUBBLE, PANEL, MARGIN });
+  const bubble = { x: 500, y: 400, width: 72, height: 72 };
+  const menu = { width: 64, height: 80, gap: 4 };
+  assert.deepEqual(g.bubbleMenuPosition(bubble, HD, menu), { x: 504, y: 476 });
+});
+
+test('geometry：气泡底部空间不足时菜单显示在上方', () => {
+  const g = createGeometry({ BUBBLE, PANEL, MARGIN });
+  const bubble = { x: 500, y: 1000, width: 72, height: 72 };
+  const menu = { width: 64, height: 80, gap: 4 };
+  assert.deepEqual(g.bubbleMenuPosition(bubble, HD, menu), { x: 504, y: 916 });
+});
+
+test('geometry：气泡菜单贴边时留在当前屏幕的工作区内', () => {
+  const g = createGeometry({ BUBBLE, PANEL, MARGIN });
+  const workArea = { x: -1280, y: 0, width: 1280, height: 800 };
+  const bubble = { x: -48, y: 300, width: 72, height: 72 };
+  const menu = { width: 64, height: 80, gap: 4 };
+  assert.deepEqual(g.bubbleMenuPosition(bubble, workArea, menu), { x: -64, y: 376 });
+});
+
 test('geometry：面板默认向左展开，左边界不够时向右并夹紧', () => {
   const g = createGeometry({ BUBBLE, PANEL, MARGIN });
   const display = { workArea: HD };

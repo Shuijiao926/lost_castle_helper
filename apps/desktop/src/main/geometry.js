@@ -17,6 +17,17 @@ function createGeometry({ BUBBLE, PANEL, MARGIN }) {
     };
   }
 
+  function bubbleMenuPosition(bubble, workArea, menu) {
+    const x = Math.round(bubble.x + (bubble.width - menu.width) / 2);
+    const below = bubble.y + bubble.height + menu.gap;
+    const above = bubble.y - menu.gap - menu.height;
+    const bottom = workArea.y + workArea.height;
+    return {
+      x: clamp(x, workArea.x, workArea.x + workArea.width - menu.width),
+      y: below + menu.height <= bottom ? below : Math.max(workArea.y, above),
+    };
+  }
+
   /** 面板锚定气泡：默认向左展开，左侧不够则向右；垂直居中并夹紧 */
   function panelBoundsFrom(bubble, display) {
     const wa = display.workArea;
@@ -64,7 +75,7 @@ function createGeometry({ BUBBLE, PANEL, MARGIN }) {
     };
   }
 
-  return { clamp, defaultBubbleBounds, panelBoundsFrom, panelVisibleSomewhere, resolvePanelBounds };
+  return { clamp, defaultBubbleBounds, bubbleMenuPosition, panelBoundsFrom, panelVisibleSomewhere, resolvePanelBounds };
 }
 
 module.exports = createGeometry;

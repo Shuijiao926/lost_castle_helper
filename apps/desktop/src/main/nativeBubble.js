@@ -8,8 +8,8 @@
  *   既平滑又没有白角 —— uTools 的悬浮球就是这条路线。
  *
  * 与脚本的行协议：
- *   PS -> Electron : READY | CLICK | MOVE x,y
- *   Electron -> PS : QUIT
+ *   PS -> Electron : READY | CLICK | RCLICK x,y,width,height | DRAGSTART | MOVE x,y
+ *   Electron -> PS : QUIT | HIDE | SHOW
  *
  * 坐标约定：脚本回调的是**物理像素**，这里统一换算成 Electron 的 DIP。
  */
@@ -24,10 +24,7 @@ const BUBBLE_DIP = 72;      // 逻辑尺寸（和原先 Electron 窗口一致）
 const READY_TIMEOUT = 8000; // 冷启动编译 C# 需要一点时间
 
 let child = null;
-let stopping = false;
 let ready = false;
-let cbs = {};
-let scale = 1;
 
 /* ---------------- 路径 ---------------- */
 function dirInApp(name) {
@@ -41,17 +38,13 @@ function iconPath() { return path.join(dirInApp('assets'), 'icon.png'); }
 
 /* ---------------- 启动 ---------------- */
 /**
- * @param {{x:number,y:number,onClick?:Function,onMove?:Function,onFail?:Function}} opts
+ * @param {{x:number,y:number,onClick?:Function,onRightClick?:Function,onDragStart?:Function,onMove?:Function,onExit?:Function}} opts
  *        x / y 为 DIP 坐标
  * @returns {Promise<boolean>} 脚本是否成功进入 READY
  */
 function start(opts = {}) {
-  cbs = opts;
-  stopping = false;
-  ready = false;
-
   const scr = screen.getPrimaryDisplay();
-  scale = scr.scaleFactor || 1;
+  const scale = scr.scaleFactor || 1;
   const size = Math.round(BUBBLE_DIP * scale);
   const px = Math.round((opts.x ?? 0) * scale);
   const py = Math.round((opts.y ?? 0) * scale);
@@ -74,25 +67,28 @@ function start(opts = {}) {
   ];
 
   log('spawn size=' + size + ' scale=' + scale);
-  child = spawn('powershell.exe', args, { windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'] });
+  const proc = spawn('powershell.exe', args, { windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'] });
+  child = proc;
+  ready = false;
 
   return new Promise((resolve) => {
-    let settled = false;
     const finish = (ok) => {
-      if (settled) return;
-      settled = true;
+      clearTimeout(timer);
       resolve(ok);
     };
 
     const timer = setTimeout(() => {
-      log('timeout waiting READY');
-      stop();
+      if (child === proc) {
+        log('timeout waiting READY');
+        stop();
+      }
       finish(false);
     }, READY_TIMEOUT);
 
     let buf = '';
-    child.stdout.setEncoding('utf8');
-    child.stdout.on('data', (chunk) => {
+    proc.stdout.setEncoding('utf8');
+    proc.stdout.on('data', (chunk) => {
+      if (child !== proc) return;
       buf += chunk;
       let idx;
       while ((idx = buf.indexOf('\n')) >= 0) {
@@ -102,15 +98,25 @@ function start(opts = {}) {
 
         if (line === 'READY') {
           ready = true;
-          clearTimeout(timer);
           log('ready');
           finish(true);
         } else if (line === 'CLICK') {
-          if (typeof cbs.onClick === 'function') cbs.onClick();
+          opts.onClick?.();
+        } else if (line === 'RCLICK') {
+          // 热重载期间仍可收到旧 helper 的右键事件。
+          opts.onRightClick?.();
+        } else if (line.startsWith('RCLICK ')) {
+          const [x, y, width, height] = line.slice(7).split(',').map(Number);
+          if (Number.isFinite(x) && Number.isFinite(y) && width > 0 && height > 0 &&
+              Number.isFinite(width) && Number.isFinite(height)) {
+            opts.onRightClick?.(screen.screenToDipRect(null, { x, y, width, height }));
+          }
+        } else if (line === 'DRAGSTART') {
+          opts.onDragStart?.();
         } else if (line.startsWith('MOVE ')) {
           const [x, y] = line.slice(5).split(',').map(Number);
-          if (Number.isFinite(x) && Number.isFinite(y) && typeof cbs.onMove === 'function') {
-            cbs.onMove(Math.round(x / scale), Math.round(y / scale));
+          if (Number.isFinite(x) && Number.isFinite(y)) {
+            opts.onMove?.(Math.round(x / scale), Math.round(y / scale));
           }
         } else {
           log('stdout:', line);
@@ -118,27 +124,32 @@ function start(opts = {}) {
       }
     });
 
-    child.stderr.setEncoding('utf8');
-    child.stderr.on('data', (d) => {
+    proc.stderr.setEncoding('utf8');
+    proc.stderr.on('data', (d) => {
       const text = String(d).trim();
       if (text) log('stderr:', text.slice(0, 400));
     });
 
-    child.on('error', (e) => {
+    proc.stdin.on('error', (e) => log('command pipe error:', e.message));
+    proc.on('error', (e) => {
       log('spawn error:', e.message);
-      clearTimeout(timer);
+      if (child === proc) {
+        child = null;
+        ready = false;
+      }
       finish(false);
     });
 
-    child.on('exit', (code) => {
-      clearTimeout(timer);
+    proc.on('exit', (code) => {
+      finish(false);
+      // 热重载时旧 helper 可能晚于新 helper 退出。
+      if (child !== proc) return;
       const wasReady = ready;
       ready = false;
       child = null;
-      if (!wasReady) finish(false);
-      else if (!stopping) {
+      if (wasReady) {
         log('exited unexpectedly, code=' + code);
-        if (typeof cbs.onExit === 'function') cbs.onExit(code);
+        opts.onExit?.(code);
       }
     });
   });
@@ -151,7 +162,6 @@ function send(cmd) {
 }
 
 function stop() {
-  stopping = true;
   if (!child) return;
   send('QUIT');
   const c = child;
@@ -161,8 +171,11 @@ function stop() {
     }
   }, 1200);
   child = null;
+  ready = false;
 }
 
 function isRunning() { return Boolean(child) && ready; }
+function hide() { return send('HIDE'); }
+function show() { return send('SHOW'); }
 
-module.exports = { start, stop, send, isRunning, BUBBLE_DIP };
+module.exports = { start, stop, send, hide, show, isRunning, BUBBLE_DIP };

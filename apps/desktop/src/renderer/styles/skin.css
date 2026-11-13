@@ -85,7 +85,7 @@
   .searchbar{background:linear-gradient(180deg,rgba(24,18,40,.92),rgba(16,12,28,.94));
     border:1px solid rgba(255,214,146,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 2px 10px rgba(0,0,0,.35)}
   .searchbar:hover{border-color:rgba(255,214,146,.32);background:linear-gradient(180deg,rgba(30,22,50,.95),rgba(18,13,32,.95))}
-  .searchbar.on,.searchbar.searching{border-color:rgba(176,138,255,.55);
+  .searchbar.on,.searchbar:focus-within{border-color:rgba(176,138,255,.55);
     background:linear-gradient(180deg,rgba(40,28,66,.96),rgba(24,17,42,.96));
     box-shadow:0 0 0 1px rgba(176,138,255,.16),0 0 18px rgba(150,100,255,.18)}
   .searchbar .schev::before{border-color:#D9C8EA}
@@ -145,6 +145,10 @@
   #modal .msheet > *{position:relative;z-index:1}
   .mh{border-bottom:1px solid rgba(255,214,146,.14)}
   .mh span.ok{color:#F2C878}
+  #updateDialog .msheet,.update-version{border-color:rgba(255,214,146,.18)}
+  .update-version{background:rgba(255,214,146,.04);color:#D8CDE5}
+  .update-version strong,.update-body h2,.update-body li::marker{color:#F2C878}
+  .update-body ul{color:#D8CDE5}
   .msearch input{background:rgba(20,15,34,.9);border-color:rgba(255,214,146,.14)}
   .mseg div{border-color:transparent;color:#A99FC0}
   .mseg div.on{background:transparent;color:#FFE6B0;border-color:transparent}
