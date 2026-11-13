@@ -9,6 +9,9 @@ contextBridge.exposeInMainWorld('lc2', {
   getData: () => ipcRenderer.invoke('lc2:getData'),
   getConfig: () => ipcRenderer.invoke('lc2:getConfig'),
 
+  /* ---- 投稿草稿 ---- */
+  submitBuild: (payload) => ipcRenderer.invoke('lc2:submitBuild', payload),
+
   /* ---- 面板 ---- */
   /** 主进程通知面板打开/关闭（只有 mode=panel 的窗口会收到） */
   onPanel: (cb) => {

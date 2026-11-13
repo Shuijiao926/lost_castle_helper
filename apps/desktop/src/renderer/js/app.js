@@ -12,7 +12,7 @@
 (function () {
   'use strict';
 
-  const { WEAPONS, WEAPON_ITEMS, ARMORS, INSC, BUILDS, TREASURES, ALL_TAGS, loadInscriptions, loadTreasures, loadWeapons, loadArmors } = LC2.data.catalog;
+  const { WEAPONS, WEAPON_ITEMS, ARMORS, SOUL_STONES, CURSED_TREASURES, INSC, BUILDS, TREASURES, ALL_TAGS, loadInscriptions, loadTreasures, loadWeapons, loadArmors, loadSoulStones, loadCursedTreasures } = LC2.data.catalog;
   const { ic, ICON, ICON_SVG, RC } = LC2.ui.icons;
   const { $, esc } = LC2.ui.dom;
   const refs = LC2.ui.dom.refs;
@@ -513,7 +513,7 @@ elGrid.addEventListener('click', (event) => {
 
 /* 分段控件滑动指示块 */
 function syncSegThumb(){
-  const seg=document.querySelector('.mseg');
+  const seg=document.querySelector('#modal .mseg');
   const thumb=seg && seg.querySelector('.seg-thumb');
   const active=seg && seg.querySelector('div.on');
   if(!seg || !thumb || !active) return;
@@ -538,6 +538,8 @@ function applyCatalogIcons(){
   });
   Object.values(INSC).forEach((it) => { if (it.icon) ICON[it.id] = it.icon; });
   ARMORS.forEach((it) => { if (it.icon) ICON[it.name] = it.icon; });
+  SOUL_STONES.forEach((it) => { if (it.icon) ICON[it.name] = it.icon; });
+  CURSED_TREASURES.forEach((it) => { if (it.icon) ICON[it.name] = it.icon; });
 }
 
 function applyTreasureIcons(){
@@ -655,7 +657,7 @@ document.querySelectorAll('#sorter .sbtn').forEach(d=>{
   d.onclick=()=>{state.sort=d.dataset.sort;syncSortUI();render();fbtnState();};
 });
 
-/* 投稿（v1 仅入口提示，详情页 v2 做） */
+/* ================= 投稿编辑器：从图鉴选内容，降低录入门槛 ================= */
 const $sbtn=$('sbtn'),$toast=$('toast');
 let toastTimer=null;
 function showToast(msg,ms){
@@ -663,11 +665,324 @@ function showToast(msg,ms){
   clearTimeout(toastTimer);
   toastTimer=setTimeout(()=>$toast.classList.remove('on'),ms||4200);
 }
-$sbtn.onclick=()=>{
-  showToast('<b style="color:#c8d8f5">投稿功能将在 v2 开放</b><br>'
-   +'流程：填写流派表单 → 审核 → 上线，投稿人署名<br>'
-   +'需填：流派名 / 别名 / 武器+刻印 / 特色 / 秒伤 / 刻印共鸣 / 灵魂石 / 毕业装备 / 宝藏 / 诅咒宝藏 / 炼金 / 梦魇加点');
+
+const submit = { wt: '', insc: '', transition: [], graduation: [], slot: 'graduation', armor: null, treasures: [], soulStones: [], cursed: [], cursedVerdict: {} };
+const SLOT_ICON = {
+  transition: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 6l6 6-6 6M14 6l6 6-6 6"/></svg>',
+  graduation: '<svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 3 14.7 9 21 9.8 16.5 14 17.6 20.3 12 17.2 6.4 20.3 7.5 14 3 9.8 9.3 9 12 3"/></svg>',
 };
+state.submitOpen = false;
+const $subModal = $('submitModal');
+
+function subSet(id, v){ const el = $(id); if (el) el.textContent = String(v); }
+
+function subSplit(v){
+  return String(v || '').split(/[,，、\s]+/).map((x) => x.trim()).filter(Boolean);
+}
+
+function subCell(item, selected, onClick, iconKey, label){
+  const el = document.createElement('div');
+  el.className = 'subcell' + (selected ? ' on' : '');
+  el.innerHTML = ic(iconKey || item.name, item.name, 's46') + `<div class="sn">${esc(label || item.name)}</div>`;
+  el.title = item.eff ? (item.name + '：' + item.eff) : item.name;
+  el.onclick = onClick;
+  return el;
+}
+
+function subRenderWt(){
+  const grid = $('subWtGrid');
+  grid.innerHTML = '';
+  WEAPONS.forEach((it) => {
+    grid.appendChild(subCell(it, submit.wt === it.id, () => {
+      submit.wt = submit.wt === it.id ? '' : it.id;
+      subRenderWt(); subStatus();
+    }, it.id, it.name));
+  });
+  subSet('subWtVal', submit.wt ? wName(submit.wt) : '');
+}
+
+function subInscList(){
+  return Object.keys(INSC).map((id) => ({ id, name: INSC[id].name || id }));
+}
+
+function subRenderInsc(){
+  const grid = $('subInscGrid');
+  grid.innerHTML = '';
+  subInscList().forEach((it) => {
+    grid.appendChild(subCell(it, submit.insc === it.id, () => {
+      submit.insc = submit.insc === it.id ? '' : it.id;
+      subRenderInsc(); subStatus();
+    }, it.id, it.name.replace('刻印', '')));
+  });
+  subSet('subInscVal', submit.insc ? (INSC[submit.insc]?.name || submit.insc) : '');
+}
+
+function subRenderEquip(){
+  const q = ($('subEquipSearch').value || '').trim().toLowerCase();
+  const active = submit[submit.slot];
+  const grid = $('subEquipGrid');
+  grid.innerHTML = '';
+  WEAPON_ITEMS.filter((it) => !q || it.name.toLowerCase().includes(q)).forEach((it) => {
+    const inTransition = submit.transition.includes(it.name);
+    const inGraduation = submit.graduation.includes(it.name);
+    const el = subCell(it, inTransition || inGraduation, () => {
+      const list = submit[submit.slot];
+      const at = list.indexOf(it.name);
+      if (at >= 0) list.splice(at, 1);
+      else {
+        const otherKey = submit.slot === 'graduation' ? 'transition' : 'graduation';
+        const oi = submit[otherKey].indexOf(it.name);
+        if (oi >= 0) submit[otherKey].splice(oi, 1);
+        list.push(it.name);
+      }
+      subRenderEquip(); subRenderSlots(); subStatus();
+    });
+    el.classList.add('eqcell');
+    if (inTransition) el.classList.add('transition');
+    if (inGraduation) el.classList.add('graduation');
+    const slot = inTransition ? 'transition' : inGraduation ? 'graduation' : null;
+    if (slot) {
+      const badge = document.createElement('span');
+      badge.className = 'slotbadge ' + slot;
+      badge.innerHTML = SLOT_ICON[slot];
+      el.appendChild(badge);
+    }
+    grid.appendChild(el);
+  });
+}
+
+function subRenderSlots(){
+  document.querySelectorAll('#submitModal .subslot').forEach((box) => {
+    box.classList.toggle('on', box.dataset.slot === submit.slot);
+  });
+}
+
+function subRenderArmor(){
+  const q = ($('subArmorSearch').value || '').trim().toLowerCase();
+  const grid = $('subArmorGrid');
+  grid.innerHTML = '';
+  ARMORS.filter((it) => !q || it.name.toLowerCase().includes(q)).forEach((it) => {
+    grid.appendChild(subCell(it, submit.armor === it.name, () => {
+      submit.armor = submit.armor === it.name ? null : it.name;
+      subRenderArmor(); subStatus();
+    }));
+  });
+  subSet('subArmorName', submit.armor || '');
+}
+
+function subRenderTreasures(){
+  const q = ($('subTreasureSearch').value || '').trim().toLowerCase();
+  const grid = $('subTreasureGrid');
+  grid.innerHTML = '';
+  TREASURES.filter((it) => !q || it.name.toLowerCase().includes(q)).forEach((it) => {
+    grid.appendChild(subCell(it, submit.treasures.includes(it.name), () => {
+      if (!submit.treasures.includes(it.name)) submit.treasures.push(it.name);
+      subRenderTreasures(); subRenderList(); subStatus();
+    }));
+  });
+  subSet('subTreasureCount', submit.treasures.length);
+}
+
+function subRenderSoul(){
+  const q = ($('subSoulSearch').value || '').trim().toLowerCase();
+  const grid = $('subSoulGrid');
+  grid.innerHTML = '';
+  SOUL_STONES.filter((it) => !it.unavailable && (!q || it.name.toLowerCase().includes(q))).forEach((it) => {
+    grid.appendChild(subCell(it, submit.soulStones.includes(it.name), () => {
+      const at = submit.soulStones.indexOf(it.name);
+      if (at >= 0) submit.soulStones.splice(at, 1); else submit.soulStones.push(it.name);
+      subRenderSoul(); subRenderSel(); subStatus();
+    }, it.name, it.name));
+  });
+  subSet('subSoulCount', submit.soulStones.length);
+}
+
+function subRenderCursed(){
+  const q = ($('subCursedSearch').value || '').trim().toLowerCase();
+  const grid = $('subCursedGrid');
+  grid.innerHTML = '';
+  CURSED_TREASURES.filter((it) => !it.removed && (!q || it.name.toLowerCase().includes(q))).forEach((it) => {
+    grid.appendChild(subCell(it, submit.cursed.includes(it.name), () => {
+      const at = submit.cursed.indexOf(it.name);
+      if (at >= 0) submit.cursed.splice(at, 1); else { submit.cursed.push(it.name); submit.cursedVerdict[it.name] = '净化'; }
+      subRenderCursed(); subRenderCursedList(); subStatus();
+    }, it.name, it.name));
+  });
+  subSet('subCursedCount', submit.cursed.length);
+}
+
+function subRenderSel(){
+  const soulBox = $('subSoulSel');
+  soulBox.innerHTML = submit.soulStones.map((n) =>
+    `<span class="subtag" data-name="${esc(n)}">${esc(n)} ×</span>`).join('');
+  soulBox.querySelectorAll('.subtag').forEach((el) => {
+    el.onclick = () => { submit.soulStones = submit.soulStones.filter((x) => x !== el.dataset.name); subRenderSoul(); subRenderSel(); subStatus(); };
+  });
+}
+
+function subRenderList(){
+  const box = $('subTreasureList');
+  box.innerHTML = submit.treasures.map((n, i) => `
+    <div class="subt" data-i="${i}">
+      <span class="ord">${i + 1}</span><span>${esc(n)}</span>
+      <span class="subup" title="上移">↑</span><span class="subdown" title="下移">↓</span>
+      <span class="subx" title="移除">×</span>
+    </div>`).join('');
+  box.querySelectorAll('.subt').forEach((row) => {
+    const i = Number(row.dataset.i);
+    row.querySelector('.subup').onclick = () => { if (i > 0) { const t = submit.treasures[i - 1]; submit.treasures[i - 1] = submit.treasures[i]; submit.treasures[i] = t; subRenderList(); subRenderTreasures(); } };
+    row.querySelector('.subdown').onclick = () => { if (i < submit.treasures.length - 1) { const t = submit.treasures[i + 1]; submit.treasures[i + 1] = submit.treasures[i]; submit.treasures[i] = t; subRenderList(); subRenderTreasures(); } };
+    row.querySelector('.subx').onclick = () => { submit.treasures.splice(i, 1); subRenderList(); subRenderTreasures(); subStatus(); };
+  });
+}
+
+function subRenderCursedList(){
+  const box = $('subCursedList');
+  box.innerHTML = submit.cursed.map((n, i) => `
+    <div class="subt" data-name="${esc(n)}">
+      <span class="ord">${i + 1}</span><span>${esc(n)}</span>
+      <span class="subverdict" title="点击切换净化/不净化">${esc(submit.cursedVerdict[n] || '净化')}</span>
+      <span class="subx" title="移除">×</span>
+    </div>`).join('');
+  box.querySelectorAll('.subt').forEach((row) => {
+    const n = row.dataset.name;
+    row.querySelector('.subverdict').onclick = () => {
+      submit.cursedVerdict[n] = (submit.cursedVerdict[n] || '净化') === '净化' ? '不净化' : '净化';
+      subRenderCursedList();
+    };
+    row.querySelector('.subx').onclick = () => {
+      submit.cursed = submit.cursed.filter((x) => x !== n);
+      delete submit.cursedVerdict[n];
+      subRenderCursed(); subRenderCursedList(); subStatus();
+    };
+  });
+}
+
+function subStatus(){}
+
+function openSubmit(){
+  $('subName').value = '';
+  $('subVersion').value = '';
+  $('subAuthor').value = '';
+  $('subTags').value = '';
+  $('subTip').value = '';
+  submit.wt = ''; submit.insc = ''; submit.transition = []; submit.graduation = []; submit.slot = 'graduation'; submit.armor = null; submit.treasures = [];
+  submit.soulStones = []; submit.cursed = []; submit.cursedVerdict = {};
+  subRenderWt(); subRenderInsc(); subRenderEquip(); subRenderSlots(); subRenderArmor(); subRenderTreasures();
+  subRenderSoul(); subRenderCursed(); subRenderSel(); subRenderList(); subRenderCursedList(); subStatus();
+  subGo(0);
+  state.submitOpen = true;
+  $subModal.classList.add('on');
+  requestAnimationFrame(syncSubThumb);
+  acquireFocusInput($('subName'));
+}
+
+function closeSubmit(){
+  state.submitOpen = false;
+  $subModal.classList.remove('on');
+  releaseFocusInput();
+}
+
+async function saveSubmit(){
+  const name = ($('subName').value || '').trim();
+  const author = ($('subAuthor').value || '').trim();
+  const gameVersion = ($('subVersion').value || '').trim();
+  const tags = subSplit($('subTags').value);
+  const tip = ($('subTip').value || '').trim();
+  if (name.length < 2 || name.length > 20) return showToast('流派名需要 2-20 个字');
+  if (!submit.wt) return showToast('请选择武器类型');
+  if (!submit.insc) return showToast('请选择主刻印');
+  if (!author) return showToast('请填写作者');
+  if (!gameVersion) return showToast('请填写游戏版本');
+  if (!tags.length) return showToast('请至少填一个标签');
+  if (tip.length < 6) return showToast('一句话技巧至少 6 个字');
+
+  const today = new Date().toISOString().slice(0, 10);
+  const war = W(submit.wt);
+  const gear = {};
+  const primary = submit.graduation[0] || submit.transition[0];
+  if (primary) gear.weapon = { name: primary, type: war.name };
+  if (submit.armor) {
+    const a = ARMORS.find((x) => x.name === submit.armor);
+    gear.armor = { name: submit.armor, type: a ? a.kind : '' };
+  }
+  const features = tags.slice(0, 5).map((t) => t.slice(0, 8));
+  const record = {
+    id: 'sub_' + Date.now().toString(36),
+    name, wt: submit.wt, insc: submit.insc,
+    rating: 0, votes: 0,
+    features, tags, tip, author, gameVersion,
+    updatedAt: today,
+    sourceType: 'self-test',
+    license: 'CC-BY-NC-SA-4.0',
+    ...(Object.keys(gear).length ? { gear } : {}),
+    weaponChoices: submit.graduation.map((n, i) => ({ name: n, tag: i === 0 ? '核心' : '毕业' })),
+    transition: submit.transition.map((n) => ({ name: n, tag: '过渡' })),
+    treasureOrder: submit.treasures.map((n) => ({ n, r: '普通' })),
+    soulStones: submit.soulStones.map((n) => {
+      const s = SOUL_STONES.find((x) => x.name === n);
+      return { name: n, ...(s && s.eff ? { eff: s.eff } : {}) };
+    }),
+    cursed: submit.cursed.map((n) => {
+      const c = CURSED_TREASURES.find((x) => x.name === n);
+      return { name: n, ...(c && c.eff ? { eff: c.eff } : {}), verdict: submit.cursedVerdict[n] || '净化' };
+    }),
+  };
+  try {
+    const res = await window.lc2?.submitBuild?.(record);
+    if (!res || !res.ok) throw new Error('保存失败');
+    showToast('<b style="color:#c8d8f5">投稿已保存并加入本地图鉴</b><br>' + esc(res.path));
+    closeSubmit();
+    if (window.__lc2RefreshData) window.__lc2RefreshData();
+  } catch (err) {
+    showToast('保存失败：' + esc(err && err.message ? err.message : String(err)));
+  }
+}
+
+/* 多页切换 */
+const SUB_PAGES = ['basic', 'wt', 'insc', 'equip', 'armor', 'treasure', 'soul', 'cursed'];
+let subPage = 0;
+function subGo(i){
+  subPage = Math.max(0, Math.min(SUB_PAGES.length - 1, i));
+  const page = SUB_PAGES[subPage];
+  const prev = $('subPrev'), next = $('subNext');
+  if (prev) prev.disabled = subPage === 0;
+  if (next) next.disabled = subPage === SUB_PAGES.length - 1;
+  document.querySelectorAll('#submitModal .subpage').forEach((el) => el.classList.toggle('on', el.dataset.page === page));
+  document.querySelectorAll('#submitModal .subpages > div').forEach((el) => el.classList.toggle('on', el.dataset.page === page));
+  requestAnimationFrame(syncSubThumb);
+}
+
+function syncSubThumb(){
+  const row = $('subPages');
+  const thumb = row && row.querySelector('.seg-thumb');
+  const active = row && row.querySelector('div.on');
+  if (!row || !thumb || !active) return;
+  const rr = row.getBoundingClientRect(), ar = active.getBoundingClientRect();
+  if (!ar.width) return;
+  thumb.style.left = (ar.left - rr.left) + 'px';
+  thumb.style.top = (ar.top - rr.top) + 'px';
+  thumb.style.width = ar.width + 'px';
+  thumb.style.height = ar.height + 'px';
+}
+window.addEventListener('resize', () => { if (state.submitOpen) syncSubThumb(); });
+document.querySelectorAll('#submitModal .subpages > div').forEach((btn) => {
+  btn.onclick = () => subGo(SUB_PAGES.indexOf(btn.dataset.page));
+});
+document.querySelectorAll('#submitModal .subslot').forEach((slot) => {
+  slot.onclick = () => { submit.slot = slot.dataset.slot; subRenderEquip(); subRenderSlots(); };
+});
+$('subPrev').onclick = () => subGo(subPage - 1);
+$('subNext').onclick = () => subGo(subPage + 1);
+$sbtn.onclick = openSubmit;
+$('subClose').onclick = closeSubmit;
+$('subSave').onclick = saveSubmit;
+$('subEquipSearch').addEventListener('input', subRenderEquip);
+$('subArmorSearch').addEventListener('input', subRenderArmor);
+$('subTreasureSearch').addEventListener('input', subRenderTreasures);
+$('subSoulSearch').addEventListener('input', subRenderSoul);
+$('subCursedSearch').addEventListener('input', subRenderCursed);
+$subModal.addEventListener('click', (e) => { if (e.target === $subModal) closeSubmit(); });
 
 /* 帮助 */
 const $hbtn=$('hbtn'),$help=$('help'),$helpClose=$('helpClose');
@@ -744,10 +1059,10 @@ if(mallBtn) mallBtn.onclick=function(){
 const mCloseBtn=document.getElementById('mClose');
 if(mCloseBtn) mCloseBtn.onclick=()=>closeModal();
 elModal.onclick=ev=>{if(ev.target===elModal)closeModal();};
-document.querySelectorAll('.mseg div').forEach(d=>{d.onclick=()=>{
+document.querySelectorAll('#modal .mseg div').forEach(d=>{d.onclick=()=>{
   state.seg=d.dataset.seg;
-  const seg=document.querySelector('.mseg'); if(seg) seg.dataset.seg=state.seg;
-  document.querySelectorAll('.mseg div').forEach(x=>x.classList.toggle('on',x.dataset.seg===state.seg));
+  const seg=document.querySelector('#modal .mseg'); if(seg) seg.dataset.seg=state.seg;
+  document.querySelectorAll('#modal .mseg div').forEach(x=>x.classList.toggle('on',x.dataset.seg===state.seg));
   syncSegThumb();
   renderModal(true);
 };});
@@ -884,7 +1199,7 @@ function saveNote(){
 document.addEventListener('keydown',e=>{
   const k=e.key;
   const tag=(e.target&&e.target.tagName)||'';
-  if(tag==='INPUT'||tag==='TEXTAREA') return;   // 输入控件自己处理键盘
+  if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT') return;   // 输入控件自己处理键盘
   if(e.target===searchQueryClear && k==='Enter') return;
   if(k==='`'){e.preventDefault();
     if(typeof window.lc2!=='undefined'){ window.lc2.requestToggle(); return; }
@@ -902,6 +1217,7 @@ document.addEventListener('keydown',e=>{
     if(k==='Escape'||k==='h'||k==='H'){e.preventDefault();closeHelp();}
     return;
   }
+  if(state.submitOpen){if(k==='Escape'){e.preventDefault();closeSubmit();}return;}
   if(state.modal){if(k==='Escape'){e.preventDefault();closeModal();}return;}
   if(k==='Escape'){e.preventDefault();
     $toast.classList.remove('on');
@@ -1070,17 +1386,15 @@ window.lc2.onPanel(function(s){
   bootNotes();
 
 /* 载入真实数据（Electron 面板窗口） */
-  infra.data.load().then(function(d){
-    if(!d){
-      console.warn('[lc2] 数据为空，保留内置示例');
-      return;
-    }
+  function applyPayload(d){
     loadInscriptions(d.inscriptions);
-  loadWeapons(d.weaponItems);
-  loadArmors(d.armors);
-  applyCatalogIcons();
-  loadTreasures(d.treasures);
-  applyTreasureIcons();
+    loadWeapons(d.weaponItems);
+    loadArmors(d.armors);
+    loadSoulStones(d.soulStones);
+    loadCursedTreasures(d.cursedTreasures);
+    applyCatalogIcons();
+    loadTreasures(d.treasures);
+    applyTreasureIcons();
     const attribution = Object.values(INSC).find((item) => item.source)?.source;
     if (attribution) {
       const source = $('catalogSource');
@@ -1096,6 +1410,17 @@ window.lc2.onPanel(function(s){
     logDataSummary(arr);
     render(); fbtnState();
     if (state.modal) renderModal();
+  }
+  window.__lc2ApplyPayload = applyPayload;
+  window.__lc2RefreshData = function(){
+    return infra.data.load().then(function(d){ if(d) applyPayload(d); return d; }).catch(function(e){ console.error('[lc2] 数据刷新失败', e); });
+  };
+  infra.data.load().then(function(d){
+    if(!d){
+      console.warn('[lc2] 数据为空，保留内置示例');
+      return;
+    }
+    applyPayload(d);
   }).catch(function(e){
     console.error('[lc2] 数据加载失败', e);
   });

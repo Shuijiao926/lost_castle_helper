@@ -16,6 +16,7 @@ function registerIpc({
   getBubbleWindow,
   setBubblePosition,
   persistBubbleBounds,
+  onSubmitBuild,
 }) {
   let dragState = null;
   const finite = (v) => Number.isFinite(v);
@@ -32,6 +33,12 @@ function registerIpc({
     if (ok) log('note saved:', buildId, typeof text === 'string' && text.trim() ? '(len ' + text.trim().length + ')' : '(cleared)');
     else log('note rejected: invalid buildId');
     return all;
+  });
+
+  /* ---------------- 投稿草稿 ---------------- */
+  ipcMain.handle('lc2:submitBuild', async (_e, payload) => {
+    if (typeof onSubmitBuild !== 'function') throw new Error('投稿保存不可用');
+    return onSubmitBuild(payload);
   });
 
   /* ---------------- 面板 ---------------- */

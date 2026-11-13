@@ -1,0 +1,1195 @@
+{
+  "source": {
+    "type": "wiki",
+    "name": "失落城堡2中文维基（灰机）",
+    "page": "灵魂石",
+    "url": "https://lc2.huijiwiki.com/wiki/%E7%81%B5%E9%AD%82%E7%9F%B3",
+    "license": "CC-BY-NC-SA-4.0",
+    "fetchedAt": "2026-11-13",
+    "generator": "Module:Item getGemPower / Module:GemDesc 渲染入口 + Data:Gem/*.json + Module:LC2/Gem{SlotType,SkillRare}",
+    "note": "全量 146 条（Data:Gem 共 146 个记录；X_024 在 wiki 上不存在）。icon 取自词条信息框实际使用的资源名（三角形/方形/圆形=Icon_Gem_*_Lv6，六边形=Icon_Gem_Hexagon_Lv7），按灰机 uploads 的 md5 目录规则还原 huiji-public 原图直链。minLevel/dropWeight 见 Data:Gem，weight=0 的 13 条以 unavailable:true 标注（词条信息框显示“无法生成”）。eff 见 skipped：效果数值需逐条渲染 {{灵魂石自描述|ID=Gem#X_NNN}}（Data:Power/<id>.json 的 IntroText+Args），未纳入本快照。"
+  },
+  "soulStones": [
+    {
+      "id": "Gem#A_001",
+      "name": "闪避距离",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "A",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_002",
+      "name": "法力强化",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "A",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_003",
+      "name": "生命强化",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "A",
+      "slot": "方形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_004",
+      "name": "防御",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "A",
+      "slot": "方形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_005",
+      "name": "移速",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "A",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_006",
+      "name": "昏厥",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "A",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": true
+    },
+    {
+      "id": "Gem#A_007",
+      "name": "背刺",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_008",
+      "name": "远程",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_009",
+      "name": "近战",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_010",
+      "name": "极速救援",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "A",
+      "slot": "圆形槽位",
+      "maxLevel": 5
+    },
+    {
+      "id": "Gem#A_011",
+      "name": "元素持久",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "A",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_012",
+      "name": "法能回收",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_013",
+      "name": "闪避性能",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "A",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_014",
+      "name": "元素使",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_015",
+      "name": "自愈",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "A",
+      "slot": "方形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_016",
+      "name": "符文亲和",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_017",
+      "name": "勇士",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_018",
+      "name": "技能消耗",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "A",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_019",
+      "name": "侥幸",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "A",
+      "slot": "方形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_020",
+      "name": "铁匠",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "A",
+      "slot": "圆形槽位",
+      "maxLevel": 5
+    },
+    {
+      "id": "Gem#A_021",
+      "name": "老练",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "A",
+      "slot": "方形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_022",
+      "name": "活化",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "A",
+      "slot": "方形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_023",
+      "name": "救赎",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "A",
+      "slot": "方形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_024",
+      "name": "不屈",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "A",
+      "slot": "方形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_025",
+      "name": "闪避回魔",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "A",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_026",
+      "name": "召唤师",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_027",
+      "name": "巫术",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_028",
+      "name": "大剑精粹Ⅰ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_029",
+      "name": "弓箭精粹Ⅰ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "A",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_030",
+      "name": "涡炉枪精粹Ⅰ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 5
+    },
+    {
+      "id": "Gem#A_031",
+      "name": "火枪精粹Ⅰ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_032",
+      "name": "法杖精粹V",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "A",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#A_033",
+      "name": "双刀精粹III",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#B_001",
+      "name": "友爱",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": true
+    },
+    {
+      "id": "Gem#B_002",
+      "name": "后背防御",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "B",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": true
+    },
+    {
+      "id": "Gem#B_003",
+      "name": "法力值",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#B_004",
+      "name": "生命值",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "B",
+      "slot": "方形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#B_005",
+      "name": "狩猎巨人",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "B",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#B_006",
+      "name": "终结一击",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "B",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": true
+    },
+    {
+      "id": "Gem#B_007",
+      "name": "投掷强化",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "B",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#B_008",
+      "name": "普攻增伤",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "B",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#B_009",
+      "name": "特殊增伤",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "B",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#B_010",
+      "name": "医生",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#B_011",
+      "name": "心里暗示",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "B",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#B_012",
+      "name": "精锐",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "B",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": true
+    },
+    {
+      "id": "Gem#B_013",
+      "name": "拾荒",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 5,
+      "unavailable": true
+    },
+    {
+      "id": "Gem#B_014",
+      "name": "折磨",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "B",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#B_015",
+      "name": "法力值回复",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#B_016",
+      "name": "斩杀",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "B",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#B_017",
+      "name": "防护盾",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "B",
+      "slot": "方形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#B_018",
+      "name": "健将",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": true
+    },
+    {
+      "id": "Gem#B_019",
+      "name": "求生意志",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#B_020",
+      "name": "跳跃",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#B_021",
+      "name": "动能回收",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 5
+    },
+    {
+      "id": "Gem#B_022",
+      "name": "单手剑精粹Ⅰ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "B",
+      "slot": "方形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#B_023",
+      "name": "单手剑精粹Ⅱ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#B_024",
+      "name": "提灯精粹Ⅰ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#B_025",
+      "name": "太刀精粹Ⅰ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#B_026",
+      "name": "法杖精粹VI",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "B",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#B_027",
+      "name": "双刀精粹IV",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#B_028",
+      "name": "提灯精粹V",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "B",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#C_001",
+      "name": "哥布林专家",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "C",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": true
+    },
+    {
+      "id": "Gem#C_002",
+      "name": "不死族克星",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "C",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": true
+    },
+    {
+      "id": "Gem#C_003",
+      "name": "恶魔猎人",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "C",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": true
+    },
+    {
+      "id": "Gem#C_004",
+      "name": "矿工",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "C",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": true
+    },
+    {
+      "id": "Gem#C_005",
+      "name": "猎龙者",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "C",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": true
+    },
+    {
+      "id": "Gem#C_006",
+      "name": "冷血动物",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "C",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": true
+    },
+    {
+      "id": "Gem#C_007",
+      "name": "跳跃连击",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "C",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#C_008",
+      "name": "灵药扩容",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "C",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#C_009",
+      "name": "灵药护盾",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "C",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#C_010",
+      "name": "灵药回复",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "C",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#C_011",
+      "name": "道具精通",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "C",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#C_012",
+      "name": "偷袭",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "C",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#C_013",
+      "name": "沉稳",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "C",
+      "slot": "方形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#C_014",
+      "name": "毒抗性",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "C",
+      "slot": "方形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#C_015",
+      "name": "冰抗性",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "C",
+      "slot": "方形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#C_016",
+      "name": "火抗性",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "C",
+      "slot": "方形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#C_017",
+      "name": "电抗性",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "C",
+      "slot": "方形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#C_018",
+      "name": "胡吃海喝",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "C",
+      "slot": "圆形槽位",
+      "maxLevel": 5
+    },
+    {
+      "id": "Gem#C_019",
+      "name": "涡炉枪精粹Ⅱ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "C",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#C_020",
+      "name": "提灯精粹Ⅱ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "C",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#C_021",
+      "name": "火枪精粹Ⅱ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "C",
+      "slot": "圆形槽位",
+      "maxLevel": 15
+    },
+    {
+      "id": "Gem#C_022",
+      "name": "火枪精粹Ⅲ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "C",
+      "slot": "圆形槽位",
+      "maxLevel": 15
+    },
+    {
+      "id": "Gem#C_023",
+      "name": "法杖精粹Ⅰ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "C",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#C_024",
+      "name": "法杖精粹Ⅱ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "C",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#S_001",
+      "name": "攻击强化",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#S_002",
+      "name": "暴击强化",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#S_003",
+      "name": "技能伤害",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#S_004",
+      "name": "暴击伤害强化",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#S_005",
+      "name": "减伤",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "S",
+      "slot": "方形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#S_006",
+      "name": "背水",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#S_007",
+      "name": "法力回复",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "S",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#S_008",
+      "name": "法力护盾",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "S",
+      "slot": "方形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#S_009",
+      "name": "法力值获取",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "S",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#S_010",
+      "name": "复苏",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "S",
+      "slot": "方形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#S_011",
+      "name": "白虎",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#S_012",
+      "name": "青龙",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 5
+    },
+    {
+      "id": "Gem#S_013",
+      "name": "狂战士",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#S_014",
+      "name": "嗜血",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "S",
+      "slot": "方形槽位",
+      "maxLevel": 5
+    },
+    {
+      "id": "Gem#S_015",
+      "name": "首领减伤",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "S",
+      "slot": "方形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#S_016",
+      "name": "狂热",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "S",
+      "slot": "方形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#S_017",
+      "name": "坚韧",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "S",
+      "slot": "方形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#S_018",
+      "name": "猎具整备",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "S",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#S_019",
+      "name": "飞扑",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "S",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#S_020",
+      "name": "无伤",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#S_021",
+      "name": "回复效果提升",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "S",
+      "slot": "方形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#S_022",
+      "name": "分解精通",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "S",
+      "slot": "圆形槽位",
+      "maxLevel": 5
+    },
+    {
+      "id": "Gem#S_023",
+      "name": "太刀精粹Ⅱ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 20
+    },
+    {
+      "id": "Gem#S_024",
+      "name": "大剑精粹Ⅳ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "S",
+      "slot": "圆形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#S_025",
+      "name": "大剑精粹Ⅴ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png",
+      "grade": "S",
+      "slot": "方形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#S_026",
+      "name": "弓箭精粹Ⅴ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#S_027",
+      "name": "涡炉枪精粹Ⅵ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "S",
+      "slot": "圆形槽位",
+      "maxLevel": 20
+    },
+    {
+      "id": "Gem#S_028",
+      "name": "火枪精粹Ⅴ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 20
+    },
+    {
+      "id": "Gem#S_029",
+      "name": "太刀精粹Ⅴ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "S",
+      "slot": "圆形槽位",
+      "maxLevel": 5
+    },
+    {
+      "id": "Gem#S_030",
+      "name": "单手剑精粹ⅤI",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png",
+      "grade": "S",
+      "slot": "圆形槽位",
+      "maxLevel": 20
+    },
+    {
+      "id": "Gem#S_031",
+      "name": "双刀精粹II",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 10
+    },
+    {
+      "id": "Gem#X_001",
+      "name": "简易附魔",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_002",
+      "name": "骤死",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_003",
+      "name": "医龙",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_004",
+      "name": "幻影",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_005",
+      "name": "忍耐",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_006",
+      "name": "战场医师",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_007",
+      "name": "单手剑精粹Ⅲ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_008",
+      "name": "单手剑精粹Ⅳ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_009",
+      "name": "单手剑精粹Ⅴ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_010",
+      "name": "大剑精粹Ⅱ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_011",
+      "name": "大剑精粹Ⅲ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_012",
+      "name": "弓箭精粹Ⅱ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_013",
+      "name": "弓箭精粹Ⅲ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_014",
+      "name": "弓箭精粹Ⅳ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_015",
+      "name": "涡炉枪精粹Ⅲ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_016",
+      "name": "涡炉枪精粹Ⅳ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_017",
+      "name": "涡炉枪精粹Ⅴ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_018",
+      "name": "双刀精粹Ⅰ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_019",
+      "name": "提灯精粹Ⅲ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_020",
+      "name": "提灯精粹Ⅳ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_021",
+      "name": "火枪精粹Ⅳ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_022",
+      "name": "法杖精粹Ⅲ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_023",
+      "name": "法杖精粹Ⅳ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_025",
+      "name": "太刀精粹Ⅲ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_026",
+      "name": "太刀精粹Ⅳ",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_027",
+      "name": "玄武",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_028",
+      "name": "火枪精粹VI",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_029",
+      "name": "双刀精粹V",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_030",
+      "name": "提灯精粹VI",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    },
+    {
+      "id": "Gem#X_031",
+      "name": "枪手精粹VII",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1
+    }
+  ]
+}

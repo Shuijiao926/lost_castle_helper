@@ -130,7 +130,76 @@
       </div>
     </div>
   </div>
-</div>
+  <div class="modal" id="submitModal">
+    <div class="msheet submsheet">
+      <div class="mh"><span class="mh-spacer"></span><b>记录流派</b><span class="mh-close" id="subClose" title="关闭" aria-label="关闭"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></span></div>
+      <div class="mseg subpages" id="subPages">
+        <span class="seg-thumb"></span>
+        <div class="on" data-page="basic">基础</div>
+        <div data-page="wt">武器</div>
+        <div data-page="insc">刻印</div>
+        <div data-page="equip">装备</div>
+        <div data-page="armor">衣服</div>
+        <div data-page="treasure">宝藏</div>
+        <div data-page="soul">灵魂石</div>
+        <div data-page="cursed">诅咒</div>
+      </div>
+      <div class="subbody" id="subBody">
+        <div class="subpage on" data-page="basic">
+          <div class="subrow"><input id="subName" class="subinp" placeholder="流派名"><input id="subVersion" class="subinp" placeholder="游戏版本"></div>
+          <div class="subrow"><input id="subAuthor" class="subinp" placeholder="作者"><input id="subTags" class="subinp" placeholder="标签，用逗号分开"></div>
+          <input id="subTip" class="subinp" placeholder="一句话玩法技巧">
+        </div>
+
+        <div class="subpage" data-page="wt">
+          <div class="subgrid" id="subWtGrid"></div>
+        </div>
+
+        <div class="subpage" data-page="insc">
+          <div class="subgrid" id="subInscGrid"></div>
+        </div>
+
+        <div class="subpage" data-page="equip">
+          <div class="subslots">
+            <button type="button" class="subslot" data-slot="transition"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 6l6 6-6 6M14 6l6 6-6 6"/></svg><span>过渡装备</span></button>
+            <button type="button" class="subslot on" data-slot="graduation"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 3 14.7 9 21 9.8 16.5 14 17.6 20.3 12 17.2 6.4 20.3 7.5 14 3 9.8 9.3 9 12 3"/></svg><span>毕业装备</span></button>
+          </div>
+          <input id="subEquipSearch" class="subinp subsearch" placeholder="搜索装备">
+          <div class="subgrid" id="subEquipGrid"></div>
+        </div>
+
+        <div class="subpage" data-page="armor">
+          <input id="subArmorSearch" class="subinp subsearch" placeholder="搜索衣服">
+          <div class="subgrid" id="subArmorGrid"></div>
+        </div>
+
+        <div class="subpage" data-page="treasure">
+          <input id="subTreasureSearch" class="subinp subsearch" placeholder="搜索宝藏">
+          <div class="subgrid" id="subTreasureGrid"></div>
+          <div class="sublist" id="subTreasureList"></div>
+        </div>
+
+        <div class="subpage" data-page="soul">
+          <input id="subSoulSearch" class="subinp subsearch" placeholder="搜索灵魂石">
+          <div class="subgrid" id="subSoulGrid"></div>
+          <div class="subsel" id="subSoulSel"></div>
+        </div>
+
+        <div class="subpage" data-page="cursed">
+          <input id="subCursedSearch" class="subinp subsearch" placeholder="搜索诅咒宝藏">
+          <div class="subgrid" id="subCursedGrid"></div>
+          <div class="sublist" id="subCursedList"></div>
+        </div>
+      </div>
+      <div class="mfoot subfoot">
+        <span class="subnav">
+          <button type="button" class="subarrow" id="subPrev" aria-label="上一页"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg></button>
+          <button type="button" class="subarrow" id="subNext" aria-label="下一页"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 5.5 6.5 6.5-6.5 6.5"/></svg></button>
+        </span>
+        <span class="msubmit" id="subSave">提交</span>
+      </div>
+    </div>
+  </div>
 
 <script src="js/data/catalog.js"></script>
 <script src="js/data/update-notes.js"></script>

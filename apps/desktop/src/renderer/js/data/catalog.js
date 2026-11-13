@@ -49,6 +49,10 @@ const WEAPON_ITEMS=[];
 /* 全量衣服/防具：运行时由 data/armors.json 通过 loadArmors() 填充 */
 const ARMORS=[];
 
+/* 全量灵魂石 / 诅咒宝藏：运行时由 data/*.json 填充 */
+const SOUL_STONES=[];
+const CURSED_TREASURES=[];
+
 const ALL_TAGS=(()=>{const m=new Map();BUILDS.forEach(b=>(b.tags||[]).forEach(t=>{
   if(!m.has(t))m.set(t,[]);m.get(t).push(b);}));
   return [...m.entries()].sort((a,b)=>b[1].length-a[1].length||a[0].localeCompare(b[0],'zh'));})();
@@ -59,6 +63,26 @@ const ALL_TAGS=(()=>{const m=new Map();BUILDS.forEach(b=>(b.tags||[]).forEach(t=
     for (const entry of entries) {
       if (entry && typeof entry.name === 'string' && entry.name.trim()) {
         TREASURES.push({ id: entry.id || entry.name, name: entry.name.trim(), icon: entry.icon || '' });
+      }
+    }
+  }
+
+  function loadSoulStones(items) {
+    if (!Array.isArray(items)) return;
+    SOUL_STONES.length = 0;
+    for (const it of items) {
+      if (it && typeof it.name === 'string' && it.name.trim()) {
+        SOUL_STONES.push({ id: it.id || it.name, name: it.name.trim(), grade: it.grade || '', slot: it.slot || '', maxLevel: it.maxLevel || 0, unavailable: !!it.unavailable, eff: it.eff || '', icon: it.icon || '' });
+      }
+    }
+  }
+
+  function loadCursedTreasures(items) {
+    if (!Array.isArray(items)) return;
+    CURSED_TREASURES.length = 0;
+    for (const it of items) {
+      if (it && typeof it.name === 'string' && it.name.trim()) {
+        CURSED_TREASURES.push({ id: it.id || it.name, code: it.code || '', name: it.name.trim(), eff: it.eff || '', removed: !!it.removed, icon: it.icon || '' });
       }
     }
   }
@@ -92,5 +116,5 @@ const ALL_TAGS=(()=>{const m=new Map();BUILDS.forEach(b=>(b.tags||[]).forEach(t=
     }
   }
 
-  return { INSC_DEF: INSC_DEF, WEAPONS: WEAPONS, WEAPON_ITEMS: WEAPON_ITEMS, ARMORS: ARMORS, INSC: INSC, BUILDS: BUILDS, TREASURES: TREASURES, ALL_TAGS: ALL_TAGS, loadInscriptions: loadInscriptions, loadTreasures: loadTreasures, loadWeapons: loadWeapons, loadArmors: loadArmors };
+  return { INSC_DEF: INSC_DEF, WEAPONS: WEAPONS, WEAPON_ITEMS: WEAPON_ITEMS, ARMORS: ARMORS, SOUL_STONES: SOUL_STONES, CURSED_TREASURES: CURSED_TREASURES, INSC: INSC, BUILDS: BUILDS, TREASURES: TREASURES, ALL_TAGS: ALL_TAGS, loadInscriptions: loadInscriptions, loadTreasures: loadTreasures, loadWeapons: loadWeapons, loadArmors: loadArmors, loadSoulStones: loadSoulStones, loadCursedTreasures: loadCursedTreasures };
 }));

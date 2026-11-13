@@ -1,0 +1,205 @@
+{
+  "source": {
+    "type": "wiki",
+    "name": "失落城堡2中文维基（灰机）",
+    "page": "诅咒宝藏",
+    "url": "https://lc2.huijiwiki.com/api.php?action=query&generator=allpages&gapnamespace=3500&gapprefix=Item/PassiveProps%20Curse",
+    "license": "CC-BY-NC-SA-4.0",
+    "fetchedAt": "2026-11-13",
+    "criterion": "判定依据（数据字段，非名称猜测）：Data:Item/PassiveProps*.json 中 ManualID 以 \"CU-\" 开头的图鉴系列 = 诅咒宝藏；这些记录的 SubItemType 均为 1（普通宝藏为 0），ID/PowerEntry.mPowerType 含 \"Curse\" 段，词条信息框 typeName 渲染为“诅咒”。名称含“诅咒”但不在 CU 系列的一律不计入。",
+    "note": "共 27 条（CU-001…CU-025 编号，其中 CU-008、CU-016 各被两个条目复用，系游戏数据内部编号冲突，故以 PassiveProps_Curse_* 作为主键）。Category:诅咒宝藏 仅收录 19 个图标文件、且缺 CU-001/002/003/017/020–025，属过期分类，未用作判定依据。eff = 词条信息框主效果 + “诅咒”负面效果原文（{{物品自描述|ID=…}} 渲染）。removed:true = 当前版本已从游戏移除。净化机制为通用系统（净化后移除诅咒效果），维基未提供逐条净化说明；CU-021 的诅咒文本涉及“未被净化”的条件。"
+  },
+  "cursedTreasures": [
+    {
+      "id": "PassiveProps_Curse_ExecutorCloak",
+      "code": "CU-001",
+      "name": "堕落法师斗篷",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0b/Icon_PassivePropsIcon_Curse_Enforcer_Cape.png",
+      "eff": "使任意目标获得感电、爆燃、中毒、冻结时触发所有击杀效果，每种属性异常触发有 5 秒独立冷却；诅咒：每隔 10 秒使自己获得感电"
+    },
+    {
+      "id": "PassiveProps_Curse_SoulNail",
+      "code": "CU-002",
+      "name": "吸魂之楔",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/79/Icon_PassiveProps_SoulNail.png",
+      "eff": "直接攻击造成暴击时回复 3 点生命值；诅咒：生命值上限 65% 受到锁定"
+    },
+    {
+      "id": "PassiveProps_Curse_FourLeafClover",
+      "code": "CU-003",
+      "name": "贪欲之壶",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f5/Icon_PassivePropsIcon_Curse_FourLeafClover.png",
+      "eff": "每清空 5 个区域的敌人后获得 1 个随机宝物（混沌宝藏 / 符文石 / 背包扩充口袋 / 魂晶）；诅咒：混沌首领宝藏的选择有 50% 概率从 3 个变为 2 个"
+    },
+    {
+      "id": "PassiveProps_Curse_BluntHorn",
+      "code": "CU-004",
+      "name": "邪兽的钝角",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/3a/Icon_PassiveProps_EvilBeastObtuseAngle.png",
+      "eff": "当前每损失 15 点生命值，造成的最终伤害提高 1%；诅咒：所有生命值恢复效果下降 50%"
+    },
+    {
+      "id": "PassiveProps_Curse_BrokenMagicCrown",
+      "code": "CU-005",
+      "name": "诅咒的魔晶石",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5b/Icon_PassiveProps_CurseMagicCrystal.png",
+      "eff": "法力值上限提升 80%；诅咒：所有法力值消耗提升 50%"
+    },
+    {
+      "id": "PassiveProps_Curse_CrystalBag",
+      "code": "CU-006",
+      "name": "诅咒的凝晶瓶",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/3f/Icon_PassiveProps_CurseCrystalBottle.png",
+      "eff": "进入虚灵商人聚落时获得 10 魂晶，并在进入新关卡时按当前魂晶额外获得 20%；诅咒：每次受到攻击都会使当前魂晶减少 5%"
+    },
+    {
+      "id": "PassiveProps_Curse_DeepDarkFantasicBook",
+      "code": "CU-007",
+      "name": "被诅咒的魔法书",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/53/Icon_PassiveProps_CurseMagicBook.png",
+      "eff": "符文法弹最终伤害提升 30%；诅咒：红符石与绿符石各下降 5 点"
+    },
+    {
+      "id": "PassiveProps_Curse_FieryDragonHeart",
+      "code": "CU-008",
+      "name": "堕落火龙之心",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/28/Icon_PassiveProps_HeartOfFallenFlamDragon.png",
+      "eff": "火龙之魂 +1，获得 1 层火焰光环，且火焰光环最终伤害提高 50%；诅咒：按火焰光环层数持续消耗法力值，法力值低于 80 时失去加成"
+    },
+    {
+      "id": "PassiveProps_Curse_LightningHelmet",
+      "code": "CU-008",
+      "name": "被诅咒的冠冕",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a8/Icon_PassiveProps_CrownOfCurse.png",
+      "eff": "每消耗 20 点法力值上限，技能强度提高 5%，持续 2 秒，可叠加，最高 50%；诅咒：消耗法力值上限时在身边随机落雷，间隔 2 秒",
+      "removed": true
+    },
+    {
+      "id": "PassiveProps_Curse_LastChampionBelt",
+      "code": "CU-009",
+      "name": "染血的冠军腰带",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9a/Icon_PassiveProps_BloodstainedChampionBelt.png",
+      "eff": "攻击力提高 18 点；诅咒：生命值上限减少 40%"
+    },
+    {
+      "id": "PassiveProps_Curse_LuckyCoin",
+      "code": "CU-010",
+      "name": "被诅咒的硬币",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/00/Icon_PassiveProps_CurseCoin.png",
+      "eff": "每清空 2 个区域的敌人后获得一枚虚灵硬币；诅咒：虚灵商店的刷新价格提高 10 魂晶"
+    },
+    {
+      "id": "PassiveProps_Curse_MicaShield",
+      "code": "CU-011",
+      "name": "被诅咒的云母盾",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/36/Icon_PassiveProps_CurseMicaShield.png",
+      "eff": "防御力提高 5 点，不会因敌人攻击而产生受击硬直或击飞（特定招式除外）；诅咒：受到来自敌人的攻击使防御力降低 1 点，进入新区域后恢复"
+    },
+    {
+      "id": "PassiveProps_Curse_MuramasaDebris",
+      "code": "CU-012",
+      "name": "折断的妖刀",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4f/Icon_PassiveProps_BrokenDemonSword.png",
+      "eff": "直接攻击击中敌人一定次数可释放 5 个怨魂攻击，怨魂攻击也被视为直接攻击（但不触发自身被动）；诅咒：触发怨魂攻击时，将当前生命值的 15% 转为伤势生命值，视作受到一次攻击"
+    },
+    {
+      "id": "PassiveProps_Curse_RecoverMPByTIme",
+      "code": "CU-013",
+      "name": "被诅咒的怀表",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/df/Icon_PassiveProps_CursePocketWatch.png",
+      "eff": "周期性触发：每隔 20 秒回复所有法力值，进入新区域的第一次触发等待时间减半；诅咒：无法再通过其他方式回复法力值"
+    },
+    {
+      "id": "PassiveProps_Curse_RustedKnife",
+      "code": "CU-014",
+      "name": "被诅咒的锈刃",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/73/Icon_PassiveProps_CurseRustBlade.png",
+      "eff": "符文斩击最终伤害提升 30%；诅咒：绿符石与蓝符石各下降 5 点"
+    },
+    {
+      "id": "PassiveProps_Curse_SealedSpiritVesse",
+      "code": "CU-015",
+      "name": "邪恶的锢灵瓶",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4e/Icon_PassiveProps_EvilSpiritBottle.png",
+      "eff": "炼金灵药低于上限的 25% 时，击中敌人可恢复 1%；诅咒：炼金灵药容量上限的 75% 被诅咒封印"
+    },
+    {
+      "id": "PassiveProps_Curse_SoulCollector",
+      "code": "CU-016",
+      "name": "邪恶的敛魂瓶",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a3/Icon_PassiveProps_EvilSoulBottle.png",
+      "eff": "附近有敌人被击杀时提升 1 点生命值上限，最多提升 80 点；诅咒：受到伤害时受伤害提高 30% 且失去少量加成"
+    },
+    {
+      "id": "PassiveProps_Curse_WeaponMasterBelt",
+      "code": "CU-016",
+      "name": "恶魔的披风",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b2/Icon_PassiveProps_Devil'sCloak.png",
+      "eff": "闪避穿过敌人后的闪避攻击获得大量武器能量，冷却 2 秒；诅咒：连续闪避动作间隔延长至 1 秒",
+      "removed": true
+    },
+    {
+      "id": "PassiveProps_CurseGreenRuneShield",
+      "code": "CU-017",
+      "name": "被诅咒的符文盾",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a1/Icon_PassiveProps_CurseParathiShield.png",
+      "eff": "防御力超过 0 的部分减为 0，每点减少的防御力使符文震击基础伤害提升 25 点；诅咒：受到伤害提高 25%"
+    },
+    {
+      "id": "PassiveProps_Curse_ClawofAnnihilation",
+      "code": "CU-018",
+      "name": "湮灭之爪",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/17/Icon_PassiveProps_AnnihilationClaw.png",
+      "eff": "投掷击中时生成一个小型黑洞；保持交互举起状态 1.5 秒后，投掷击中生成的黑洞变得更大；诅咒：每隔 10 秒在自己身上生成一个会吸引周围敌人和物件的黑洞"
+    },
+    {
+      "id": "PassiveProps_Curse_FrostBlade",
+      "code": "CU-019",
+      "name": "寒冰邪刃",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/28/Icon_PassiveProps_ColdIceEvilBlade.png",
+      "eff": "直接攻击附加 350% 护盾值的冰伤害（1 秒冷却），进入新的有效区域时获得已损失生命值 35% 的护盾；诅咒：护盾无法抵消伤害"
+    },
+    {
+      "id": "PassiveProps_Curse_SummonDeath",
+      "code": "CU-020",
+      "name": "屠夫的弯钩",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e1/Icon_PassivePropsIcon_Curse_Butcher_Hook.png",
+      "eff": "每只召唤生物死亡或撤离时，使你和所有召唤生物攻击力提高 4%，持续 15 秒，最高叠加 10 次，每层独立计时；诅咒：每次直接攻击击中时都有概率对随机 3 个召唤生物造成一次伤害"
+    },
+    {
+      "id": "PassiveProps_Curse_PandorasInkBox",
+      "code": "CU-021",
+      "name": "诅咒的魔盒",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/61/Icon_PassivePropsIcon_Curse_TheCursedbox.png",
+      "eff": "背包里每有一个诅咒宝藏，造成的最终伤害提高 4%；诅咒：该效果只计算未被净化的诅咒宝藏"
+    },
+    {
+      "id": "PassiveProps_Curse_RedHpRecover",
+      "code": "CU-022",
+      "name": "腐蚀的雪兽之牙",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5a/Icon_PassivePropsIcon_Curse_CryovoresIvory.png",
+      "eff": "伤势生命值转化率提升 30%，伤势生命值恢复速度提升 200%，受伤后伤势生命值会立刻开始恢复；诅咒：消耗法力值时将当前生命值的 20% 转为伤势生命值（视作受到一次攻击），冷却 3 秒"
+    },
+    {
+      "id": "PassiveProps_Curse_GetCommonProps",
+      "code": "CU-023",
+      "name": "混沌之茧",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/34/Icon_PassivePropsIcon_Curse_TheCocoonOfChaos.png",
+      "eff": "进入新的大关卡时自我销毁并产生一个混沌的首领宝藏；诅咒：有 50% 概率产生的混沌首领宝藏变为一般的混沌宝藏"
+    },
+    {
+      "id": "PassiveProps_Curse_ForbiddenSpell",
+      "code": "CU-024",
+      "name": "禁咒羊皮纸",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8b/Icon_PassiveProps_ProhibitedCurseSheepskin.png",
+      "eff": "普通攻击、特殊动作和投掷攻击击中时有 25% 概率按攻击倍率消耗法力值，每消耗 1 点法力值使该次攻击额外增加攻击力 3% 的伤害；诅咒：无法通过攻击恢复法力值"
+    },
+    {
+      "id": "PassiveProps_Curse_ArmageddonSpear",
+      "code": "CU-025",
+      "name": "灭世之楔",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/fd/Icon_PassivePropsIcon_Curse_RuneBladeSheath.png",
+      "eff": "周期性触发：每隔 20 秒生成一个可投掷的灭世邪枪，当前生命值越低邪枪伤害越高；诅咒：手持灭世邪枪时每秒燃烧生命值上限 15% 的生命值"
+    }
+  ]
+}

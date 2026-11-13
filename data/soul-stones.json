@@ -1,0 +1,1475 @@
+{
+  "version": "1.1",
+  "updatedAt": "2026-11-13",
+  "source": {
+    "type": "wiki",
+    "name": "失落城堡2中文维基（灰机）",
+    "page": "灵魂石",
+    "license": "CC-BY-NC-SA-4.0",
+    "file": "data/sources/wiki-soul-stones.json",
+    "note": "全量 146 条（Data:Gem 共 146 个记录；X_024 在 wiki 上不存在）。icon 取自词条信息框实际使用的资源名（三角形/方形/圆形=Icon_Gem_*_Lv6，六边形=Icon_Gem_Hexagon_Lv7），按灰机 uploads 的 md5 目录规则还原 huiji-public 原图直链。minLevel/dropWeight 见 Data:Gem，weight=0 的 13 条以 unavailable:true 标注（词条信息框显示“无法生成”）。eff 见 skipped：效果数值需逐条渲染 {{灵魂石自描述|ID=Gem#X_NNN}}（Data:Power/<id>.json 的 IntroText+Args），未纳入本快照。",
+    "effectsFile": "data/sources/wiki-soul-stone-effects.json"
+  },
+  "soulStones": [
+    {
+      "id": "Gem#A_001",
+      "name": "闪避距离",
+      "grade": "A",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 闪避距离增加2.0% / Lv.2 闪避距离增加4.0% / Lv.3 闪避距离增加6.0% / Lv.4 闪避距离增加8.0% / Lv.5 闪避距离增加10.0% / Lv.6 闪避距离增加12.0% / Lv.7 闪避距离增加14.0% / Lv.8 闪避距离增加16.0% / Lv.9 闪避距离增加18.0% / Lv.10 闪避距离增加20.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#A_002",
+      "name": "法力强化",
+      "grade": "A",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 法力值上限增加1.0% / Lv.2 法力值上限增加2.0% / Lv.3 法力值上限增加3.0% / Lv.4 法力值上限增加4.0% / Lv.5 法力值上限增加5.0% / Lv.6 法力值上限增加6.0% / Lv.7 法力值上限增加7.0% / Lv.8 法力值上限增加8.0% / Lv.9 法力值上限增加9.0% / Lv.10 法力值上限增加10.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#A_003",
+      "name": "生命强化",
+      "grade": "A",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 生命值上限增加1.0% / Lv.2 生命值上限增加2.0% / Lv.3 生命值上限增加3.0% / Lv.4 生命值上限增加4.0% / Lv.5 生命值上限增加5.0% / Lv.6 生命值上限增加6.0% / Lv.7 生命值上限增加7.0% / Lv.8 生命值上限增加8.0% / Lv.9 生命值上限增加9.0% / Lv.10 生命值上限增加10.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#A_004",
+      "name": "防御",
+      "grade": "A",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 防御力增加0.4 / Lv.2 防御力增加0.8 / Lv.3 防御力增加1.2 / Lv.4 防御力增加1.6 / Lv.5 防御力增加2 / Lv.6 防御力增加2.4 / Lv.7 防御力增加2.8 / Lv.8 防御力增加3.2 / Lv.9 防御力增加3.6 / Lv.10 防御力增加4",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#A_005",
+      "name": "移速",
+      "grade": "A",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 移动速度增加1.0% / Lv.2 移动速度增加2.0% / Lv.3 移动速度增加3.0% / Lv.4 移动速度增加4.0% / Lv.5 移动速度增加5.0% / Lv.6 移动速度增加6.0% / Lv.7 移动速度增加7.0% / Lv.8 移动速度增加8.0% / Lv.9 移动速度增加9.0% / Lv.10 移动速度增加10.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#A_006",
+      "name": "昏厥",
+      "grade": "A",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": true,
+      "eff": "Lv.1 攻击失衡值增加2.5% / Lv.2 攻击失衡值增加5.0% / Lv.3 攻击失衡值增加7.5% / Lv.4 攻击失衡值增加10.0% / Lv.5 攻击失衡值增加12.5% / Lv.6 攻击失衡值增加15.0% / Lv.7 攻击失衡值增加17.5% / Lv.8 攻击失衡值增加20.0% / Lv.9 攻击失衡值增加22.5% / Lv.10 攻击失衡值增加25.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#A_007",
+      "name": "背刺",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 攻击敌人后背时伤害增加3.0% / Lv.2 攻击敌人后背时伤害增加6.0% / Lv.3 攻击敌人后背时伤害增加9.0% / Lv.4 攻击敌人后背时伤害增加12.0% / Lv.5 攻击敌人后背时伤害增加15.0% / Lv.6 攻击敌人后背时伤害增加18.0% / Lv.7 攻击敌人后背时伤害增加21.0% / Lv.8 攻击敌人后背时伤害增加24.0% / Lv.9 攻击敌人后背时伤害增加27.0% / Lv.10 攻击敌人后背时伤害增加30.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#A_008",
+      "name": "远程",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 4米以外的攻击伤害增加2.0% / Lv.2 4米以外的攻击伤害增加4.0% / Lv.3 4米以外的攻击伤害增加6.0% / Lv.4 4米以外的攻击伤害增加8.0% / Lv.5 4米以外的攻击伤害增加10.0% / Lv.6 4米以外的攻击伤害增加12.0% / Lv.7 4米以外的攻击伤害增加14.0% / Lv.8 4米以外的攻击伤害增加16.0% / Lv.9 4米以外的攻击伤害增加18.0% / Lv.10 4米以外的攻击伤害增加20.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#A_009",
+      "name": "近战",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 3米以内攻击伤害增加1.5% / Lv.2 3米以内攻击伤害增加3.0% / Lv.3 3米以内攻击伤害增加4.5% / Lv.4 3米以内攻击伤害增加6.0% / Lv.5 3米以内攻击伤害增加7.5% / Lv.6 3米以内攻击伤害增加9.0% / Lv.7 3米以内攻击伤害增加10.5% / Lv.8 3米以内攻击伤害增加12.0% / Lv.9 3米以内攻击伤害增加13.5% / Lv.10 3米以内攻击伤害增加15.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#A_010",
+      "name": "极速救援",
+      "grade": "A",
+      "slot": "圆形槽位",
+      "maxLevel": 5,
+      "unavailable": false,
+      "eff": "Lv.1 救援时间缩短3.0% / Lv.2 救援时间缩短6.0% / Lv.3 救援时间缩短9.0% / Lv.4 救援时间缩短12.0% / Lv.5 救援时间缩短15.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#A_011",
+      "name": "元素持久",
+      "grade": "A",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1-10 造成元素异常时回复一定的法力值（不同异常回复的法力值不同）",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#A_012",
+      "name": "法能回收",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 击杀后回复0.8%法力值 / Lv.2 击杀后回复1.6%法力值 / Lv.3 击杀后回复2.4%法力值 / Lv.4 击杀后回复3.2%法力值 / Lv.5 击杀后回复4.0%法力值 / Lv.6 击杀后回复4.8%法力值 / Lv.7 击杀后回复5.6%法力值 / Lv.8 击杀后回复6.4%法力值 / Lv.9 击杀后回复7.2%法力值 / Lv.10 击杀后回复8.0%法力值",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#A_013",
+      "name": "闪避性能",
+      "grade": "A",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 闪避无敌时间延长1.0% / Lv.2 闪避无敌时间延长2.0% / Lv.3 闪避无敌时间延长3.0% / Lv.4 闪避无敌时间延长4.0% / Lv.5 闪避无敌时间延长5.0% / Lv.6 闪避无敌时间延长6.0% / Lv.7 闪避无敌时间延长7.0% / Lv.8 闪避无敌时间延长8.0% / Lv.9 闪避无敌时间延长9.0% / Lv.10 闪避无敌时间延长10.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#A_014",
+      "name": "元素使",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 全元素增伤增加2.0% / Lv.2 全元素增伤增加4.0% / Lv.3 全元素增伤增加6.0% / Lv.4 全元素增伤增加8.0% / Lv.5 全元素增伤增加10.0% / Lv.6 全元素增伤增加12.0% / Lv.7 全元素增伤增加14.0% / Lv.8 全元素增伤增加16.0% / Lv.9 全元素增伤增加18.0% / Lv.10 全元素增伤增加20.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#A_015",
+      "name": "自愈",
+      "grade": "A",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 当生命值低于35%时，每秒回复0.1点生命值 / Lv.2 当生命值低于35%时，每秒回复0.2点生命值 / Lv.3 当生命值低于35%时，每秒回复0.3点生命值 / Lv.4 当生命值低于35%时，每秒回复0.4点生命值 / Lv.5 当生命值低于35%时，每秒回复0.5点生命值 / Lv.6 当生命值低于35%时，每秒回复0.6点生命值 / Lv.7 当生命值低于35%时，每秒回复0.7点生命值 / Lv.8 当生命值低于35%时，每秒回复0.8点生命值 / Lv.9 当生命值低于35%时，每秒回复0.9点生命值 / Lv.10 当生命值低于35%时，每秒回复1点生命值",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#A_016",
+      "name": "符文亲和",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 符文攻击伤害增加2.0% / Lv.2 符文攻击伤害增加4.0% / Lv.3 符文攻击伤害增加6.0% / Lv.4 符文攻击伤害增加8.0% / Lv.5 符文攻击伤害增加10.0% / Lv.6 符文攻击伤害增加12.0% / Lv.7 符文攻击伤害增加14.0% / Lv.8 符文攻击伤害增加16.0% / Lv.9 符文攻击伤害增加18.0% / Lv.10 符文攻击伤害增加20.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#A_017",
+      "name": "勇士",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 击杀敌人后攻击力提高1.2%，持续10秒 / Lv.2 击杀敌人后攻击力提高2.4%，持续10秒 / Lv.3 击杀敌人后攻击力提高3.6%，持续10秒 / Lv.4 击杀敌人后攻击力提高4.8%，持续10秒 / Lv.5 击杀敌人后攻击力提高6.0%，持续10秒 / Lv.6 击杀敌人后攻击力提高7.2%，持续10秒 / Lv.7 击杀敌人后攻击力提高8.4%，持续10秒 / Lv.8 击杀敌人后攻击力提高9.6%，持续10秒 / Lv.9 击杀敌人后攻击力提高10.8%，持续10秒 / Lv.10 击杀敌人后攻击力提高12.0%，持续10秒",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#A_018",
+      "name": "技能消耗",
+      "grade": "A",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 武器技能的法力值消耗降低1.0% / Lv.2 武器技能的法力值消耗降低2.0% / Lv.3 武器技能的法力值消耗降低3.0% / Lv.4 武器技能的法力值消耗降低4.0% / Lv.5 武器技能的法力值消耗降低5.0% / Lv.6 武器技能的法力值消耗降低6.0% / Lv.7 武器技能的法力值消耗降低7.0% / Lv.8 武器技能的法力值消耗降低8.0% / Lv.9 武器技能的法力值消耗降低9.0% / Lv.10 武器技能的法力值消耗降低10.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#A_019",
+      "name": "侥幸",
+      "grade": "A",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 受伤时1.0%概率降低50%伤害 / Lv.2 受伤时2.0%概率降低50%伤害 / Lv.3 受伤时3.0%概率降低50%伤害 / Lv.4 受伤时4.0%概率降低50%伤害 / Lv.5 受伤时5.0%概率降低50%伤害 / Lv.6 受伤时6.0%概率降低50%伤害 / Lv.7 受伤时7.0%概率降低50%伤害 / Lv.8 受伤时8.0%概率降低50%伤害 / Lv.9 受伤时9.0%概率降低50%伤害 / Lv.10 受伤时10.0%概率降低50%伤害",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#A_020",
+      "name": "铁匠",
+      "grade": "A",
+      "slot": "圆形槽位",
+      "maxLevel": 5,
+      "unavailable": false,
+      "eff": "Lv.1 新增武器附魔的消耗减少1铁 / Lv.2 新增武器附魔的消耗减少2铁 / Lv.3 新增武器附魔的消耗减少3铁 / Lv.4 新增武器附魔的消耗减少4铁 / Lv.5 新增武器附魔的消耗减少5铁",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#A_021",
+      "name": "老练",
+      "grade": "A",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 伤势生命值转化比例增加1.0% / Lv.2 伤势生命值转化比例增加2.0% / Lv.3 伤势生命值转化比例增加3.0% / Lv.4 伤势生命值转化比例增加4.0% / Lv.5 伤势生命值转化比例增加5.0% / Lv.6 伤势生命值转化比例增加6.0% / Lv.7 伤势生命值转化比例增加7.0% / Lv.8 伤势生命值转化比例增加8.0% / Lv.9 伤势生命值转化比例增加9.0% / Lv.10 伤势生命值转化比例增加10.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#A_022",
+      "name": "活化",
+      "grade": "A",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 伤势生命值恢复速度增加10% / Lv.2 伤势生命值恢复速度增加20% / Lv.3 伤势生命值恢复速度增加30% / Lv.4 伤势生命值恢复速度增加40% / Lv.5 伤势生命值恢复速度增加50% / Lv.6 伤势生命值恢复速度增加60% / Lv.7 伤势生命值恢复速度增加70% / Lv.8 伤势生命值恢复速度增加80% / Lv.9 伤势生命值恢复速度增加90% / Lv.10 伤势生命值恢复速度增加100%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#A_023",
+      "name": "救赎",
+      "grade": "A",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 被救援成功恢复的生命值增加1.0% / Lv.2 被救援成功恢复的生命值增加2.0% / Lv.3 被救援成功恢复的生命值增加3.0% / Lv.4 被救援成功恢复的生命值增加4.0% / Lv.5 被救援成功恢复的生命值增加5.0% / Lv.6 被救援成功恢复的生命值增加6.0% / Lv.7 被救援成功恢复的生命值增加7.0% / Lv.8 被救援成功恢复的生命值增加8.0% / Lv.9 被救援成功恢复的生命值增加9.0% / Lv.10 被救援成功恢复的生命值增加10.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#A_024",
+      "name": "不屈",
+      "grade": "A",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 力竭再起后30秒内攻击力增加1.5% / Lv.2 力竭再起后30秒内攻击力增加3.0% / Lv.3 力竭再起后30秒内攻击力增加4.5% / Lv.4 力竭再起后30秒内攻击力增加6.0% / Lv.5 力竭再起后30秒内攻击力增加7.5% / Lv.6 力竭再起后30秒内攻击力增加9.0% / Lv.7 力竭再起后30秒内攻击力增加10.5% / Lv.8 力竭再起后30秒内攻击力增加12.0% / Lv.9 力竭再起后30秒内攻击力增加13.5% / Lv.10 力竭再起后30秒内攻击力增加15.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#A_025",
+      "name": "闪避回魔",
+      "grade": "A",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 完美闪避后恢复5点法力值 / Lv.2 完美闪避后恢复10点法力值 / Lv.3 完美闪避后恢复15点法力值 / Lv.4 完美闪避后恢复20点法力值 / Lv.5 完美闪避后恢复25点法力值 / Lv.6 完美闪避后恢复30点法力值 / Lv.7 完美闪避后恢复35点法力值 / Lv.8 完美闪避后恢复40点法力值 / Lv.9 完美闪避后恢复45点法力值 / Lv.10 完美闪避后恢复50点法力值",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#A_026",
+      "name": "召唤师",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 召唤生物的攻击力提高3% / Lv.2 召唤生物的攻击力提高6% / Lv.3 召唤生物的攻击力提高9% / Lv.4 召唤生物的攻击力提高12% / Lv.5 召唤生物的攻击力提高15% / Lv.6 召唤生物的攻击力提高18% / Lv.7 召唤生物的攻击力提高21% / Lv.8 召唤生物的攻击力提高24% / Lv.9 召唤生物的攻击力提高27% / Lv.10 召唤生物的攻击力提高30%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#A_027",
+      "name": "巫术",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 元素异常积累速度提高3% / Lv.2 元素异常积累速度提高6% / Lv.3 元素异常积累速度提高9% / Lv.4 元素异常积累速度提高12% / Lv.5 元素异常积累速度提高15% / Lv.6 元素异常积累速度提高18% / Lv.7 元素异常积累速度提高21% / Lv.8 元素异常积累速度提高24% / Lv.9 元素异常积累速度提高27% / Lv.10 元素异常积累速度提高30%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#A_028",
+      "name": "大剑精粹Ⅰ",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 长按攻击 旋风斩和长按特殊动作 蓄力斩的伤害提高3% / Lv.2 长按攻击 旋风斩和长按特殊动作 蓄力斩的伤害提高6% / Lv.3 长按攻击 旋风斩和长按特殊动作 蓄力斩的伤害提高9% / Lv.4 长按攻击 旋风斩和长按特殊动作 蓄力斩的伤害提高12% / Lv.5 长按攻击 旋风斩和长按特殊动作 蓄力斩的伤害提高15% / Lv.6 长按攻击 旋风斩和长按特殊动作 蓄力斩的伤害提高18% / Lv.7 长按攻击 旋风斩和长按特殊动作 蓄力斩的伤害提高21% / Lv.8 长按攻击 旋风斩和长按特殊动作 蓄力斩的伤害提高24% / Lv.9 长按攻击 旋风斩和长按特殊动作 蓄力斩的伤害提高27% / Lv.10 长按攻击 旋风斩和长按特殊动作 蓄力斩的伤害提高30%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#A_029",
+      "name": "弓箭精粹Ⅰ",
+      "grade": "A",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 长按攻击 蓄力射击额外会获得1点集中值 / Lv.2 长按攻击 蓄力射击额外会获得2点集中值 / Lv.3 长按攻击 蓄力射击额外会获得3点集中值 / Lv.4 长按攻击 蓄力射击额外会获得4点集中值 / Lv.5 长按攻击 蓄力射击额外会获得5点集中值 / Lv.6 长按攻击 蓄力射击额外会获得6点集中值 / Lv.7 长按攻击 蓄力射击额外会获得7点集中值 / Lv.8 长按攻击 蓄力射击额外会获得8点集中值 / Lv.9 长按攻击 蓄力射击额外会获得9点集中值 / Lv.10 长按攻击 蓄力射击额外会获得10点集中值",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#A_030",
+      "name": "涡炉枪精粹Ⅰ",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 5,
+      "unavailable": false,
+      "eff": "Lv.1 泄压炮伤害提升5% / Lv.2 泄压炮伤害提升10% / Lv.3 泄压炮伤害提升15% / Lv.4 泄压炮伤害提升20% / Lv.5 泄压炮伤害提升25%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#A_031",
+      "name": "火枪精粹Ⅰ",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 手雷伤害提高4% / Lv.2 手雷伤害提高8% / Lv.3 手雷伤害提高12% / Lv.4 手雷伤害提高16% / Lv.5 手雷伤害提高20% / Lv.6 手雷伤害提高24% / Lv.7 手雷伤害提高28% / Lv.8 手雷伤害提高32% / Lv.9 手雷伤害提高36% / Lv.10 手雷伤害提高40%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#A_032",
+      "name": "法杖精粹V",
+      "grade": "A",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 当前每拥有1个能量点使移动速度提升0.4% / Lv.2 当前每拥有1个能量点使移动速度提升0.8% / Lv.3 当前每拥有1个能量点使移动速度提升1.2% / Lv.4 当前每拥有1个能量点使移动速度提升1.6% / Lv.5 当前每拥有1个能量点使移动速度提升2.0% / Lv.6 当前每拥有1个能量点使移动速度提升2.4% / Lv.7 当前每拥有1个能量点使移动速度提升2.8% / Lv.8 当前每拥有1个能量点使移动速度提升3.2% / Lv.9 当前每拥有1个能量点使移动速度提升3.6% / Lv.10 当前每拥有1个能量点使移动速度提升4.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#A_033",
+      "name": "双刀精粹III",
+      "grade": "A",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 极限闪避成功后攻击力提高1.2%，持续10秒 / Lv.2 极限闪避成功后攻击力提高2.4%，持续10秒 / Lv.3 极限闪避成功后攻击力提高3.6%，持续10秒 / Lv.4 极限闪避成功后攻击力提高4.8%，持续10秒 / Lv.5 极限闪避成功后攻击力提高6.0%，持续10秒 / Lv.6 极限闪避成功后攻击力提高7.2%，持续10秒 / Lv.7 极限闪避成功后攻击力提高8.4%，持续10秒 / Lv.8 极限闪避成功后攻击力提高9.6%，持续10秒 / Lv.9 极限闪避成功后攻击力提高10.8%，持续10秒 / Lv.10 极限闪避成功后攻击力提高12.0%，持续10秒",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#B_001",
+      "name": "友爱",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": true,
+      "eff": "Lv.1 炼金灵药回复效果的3.0%会对周围所有的友方生效 / Lv.2 炼金灵药回复效果的6.0%会对周围所有的友方生效 / Lv.3 炼金灵药回复效果的9.0%会对周围所有的友方生效 / Lv.4 炼金灵药回复效果的12.0%会对周围所有的友方生效 / Lv.5 炼金灵药回复效果的15.0%会对周围所有的友方生效 / Lv.6 炼金灵药回复效果的18.0%会对周围所有的友方生效 / Lv.7 炼金灵药回复效果的21.0%会对周围所有的友方生效 / Lv.8 炼金灵药回复效果的24.0%会对周围所有的友方生效 / Lv.9 炼金灵药回复效果的27.0%会对周围所有的友方生效 / Lv.10 炼金灵药回复效果的30.0%会对周围所有的友方生效",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#B_002",
+      "name": "后背防御",
+      "grade": "B",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": true,
+      "eff": "Lv.1 来自背后的攻击伤害降低0.5% / Lv.2 来自背后的攻击伤害降低1.0% / Lv.3 来自背后的攻击伤害降低1.5% / Lv.4 来自背后的攻击伤害降低2.0% / Lv.5 来自背后的攻击伤害降低2.5% / Lv.6 来自背后的攻击伤害降低3.0% / Lv.7 来自背后的攻击伤害降低3.5% / Lv.8 来自背后的攻击伤害降低4.0% / Lv.9 来自背后的攻击伤害降低4.5% / Lv.10 来自背后的攻击伤害降低5.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#B_003",
+      "name": "法力值",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 法力值上限增加2点 / Lv.2 法力值上限增加4点 / Lv.3 法力值上限增加6点 / Lv.4 法力值上限增加8点 / Lv.5 法力值上限增加10点 / Lv.6 法力值上限增加12点 / Lv.7 法力值上限增加14点 / Lv.8 法力值上限增加16点 / Lv.9 法力值上限增加18点 / Lv.10 法力值上限增加20点",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#B_004",
+      "name": "生命值",
+      "grade": "B",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 生命值上限增加3点 / Lv.2 生命值上限增加6点 / Lv.3 生命值上限增加9点 / Lv.4 生命值上限增加12点 / Lv.5 生命值上限增加15点 / Lv.6 生命值上限增加18点 / Lv.7 生命值上限增加21点 / Lv.8 生命值上限增加24点 / Lv.9 生命值上限增加27点 / Lv.10 生命值上限增加30点",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#B_005",
+      "name": "狩猎巨人",
+      "grade": "B",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 对首领级怪物伤害增加2.0% / Lv.2 对首领级怪物伤害增加4.0% / Lv.3 对首领级怪物伤害增加6.0% / Lv.4 对首领级怪物伤害增加8.0% / Lv.5 对首领级怪物伤害增加10.0% / Lv.6 对首领级怪物伤害增加12.0% / Lv.7 对首领级怪物伤害增加14.0% / Lv.8 对首领级怪物伤害增加16.0% / Lv.9 对首领级怪物伤害增加18.0% / Lv.10 对首领级怪物伤害增加20.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#B_006",
+      "name": "终结一击",
+      "grade": "B",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": true,
+      "eff": "Lv.1 连招最后一击伤害增加1.5% / Lv.2 连招最后一击伤害增加3.0% / Lv.3 连招最后一击伤害增加4.5% / Lv.4 连招最后一击伤害增加6.0% / Lv.5 连招最后一击伤害增加7.5% / Lv.6 连招最后一击伤害增加9.0% / Lv.7 连招最后一击伤害增加10.5% / Lv.8 连招最后一击伤害增加12.0% / Lv.9 连招最后一击伤害增加13.5% / Lv.10 连招最后一击伤害增加15.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#B_007",
+      "name": "投掷强化",
+      "grade": "B",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 投掷攻击伤害增加3.0% / Lv.2 投掷攻击伤害增加6.0% / Lv.3 投掷攻击伤害增加9.0% / Lv.4 投掷攻击伤害增加12.0% / Lv.5 投掷攻击伤害增加15.0% / Lv.6 投掷攻击伤害增加18.0% / Lv.7 投掷攻击伤害增加21.0% / Lv.8 投掷攻击伤害增加24.0% / Lv.9 投掷攻击伤害增加27.0% / Lv.10 投掷攻击伤害增加30.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#B_008",
+      "name": "普攻增伤",
+      "grade": "B",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 普通攻击伤害增加3.0% / Lv.2 普通攻击伤害增加6.0% / Lv.3 普通攻击伤害增加9.0% / Lv.4 普通攻击伤害增加12.0% / Lv.5 普通攻击伤害增加15.0% / Lv.6 普通攻击伤害增加18.0% / Lv.7 普通攻击伤害增加21.0% / Lv.8 普通攻击伤害增加24.0% / Lv.9 普通攻击伤害增加27.0% / Lv.10 普通攻击伤害增加30.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#B_009",
+      "name": "特殊增伤",
+      "grade": "B",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 特殊动作伤害增加3.0% / Lv.2 特殊动作伤害增加6.0% / Lv.3 特殊动作伤害增加9.0% / Lv.4 特殊动作伤害增加12.0% / Lv.5 特殊动作伤害增加15.0% / Lv.6 特殊动作伤害增加18.0% / Lv.7 特殊动作伤害增加21.0% / Lv.8 特殊动作伤害增加24.0% / Lv.9 特殊动作伤害增加27.0% / Lv.10 特殊动作伤害增加30.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#B_010",
+      "name": "医生",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 救援队友成功时，队友恢复的生命值增加2.0% / Lv.2 救援队友成功时，队友恢复的生命值增加4.0% / Lv.3 救援队友成功时，队友恢复的生命值增加6.0% / Lv.4 救援队友成功时，队友恢复的生命值增加8.0% / Lv.5 救援队友成功时，队友恢复的生命值增加10.0% / Lv.6 救援队友成功时，队友恢复的生命值增加12.0% / Lv.7 救援队友成功时，队友恢复的生命值增加14.0% / Lv.8 救援队友成功时，队友恢复的生命值增加16.0% / Lv.9 救援队友成功时，队友恢复的生命值增加18.0% / Lv.10 救援队友成功时，队友恢复的生命值增加20.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#B_011",
+      "name": "心里暗示",
+      "grade": "B",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 使用表情“出发”后攻击力增加1.5%，持续20秒 / Lv.2 使用表情“出发”后攻击力增加3.0%，持续20秒 / Lv.3 使用表情“出发”后攻击力增加4.5%，持续20秒 / Lv.4 使用表情“出发”后攻击力增加6.0%，持续20秒 / Lv.5 使用表情“出发”后攻击力增加7.5%，持续20秒 / Lv.6 使用表情“出发”后攻击力增加9.0%，持续20秒 / Lv.7 使用表情“出发”后攻击力增加10.5%，持续20秒 / Lv.8 使用表情“出发”后攻击力增加12.0%，持续20秒 / Lv.9 使用表情“出发”后攻击力增加13.5%，持续20秒 / Lv.10 使用表情“出发”后攻击力增加15.0%，持续20秒",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#B_012",
+      "name": "精锐",
+      "grade": "B",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": true,
+      "eff": "Lv.1 对精英敌人伤害增加1.2% / Lv.2 对精英敌人伤害增加2.4% / Lv.3 对精英敌人伤害增加3.6% / Lv.4 对精英敌人伤害增加4.8% / Lv.5 对精英敌人伤害增加6.0% / Lv.6 对精英敌人伤害增加7.2% / Lv.7 对精英敌人伤害增加8.4% / Lv.8 对精英敌人伤害增加9.6% / Lv.9 对精英敌人伤害增加10.8% / Lv.10 对精英敌人伤害增加12.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#B_013",
+      "name": "拾荒",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 5,
+      "unavailable": true,
+      "eff": "Lv.1 破坏可破坏物体有1.0%概率掉落生命能量 / Lv.2 破坏可破坏物体有2.0%概率掉落生命能量 / Lv.3 破坏可破坏物体有3.0%概率掉落生命能量 / Lv.4 破坏可破坏物体有4.0%概率掉落生命能量 / Lv.5 破坏可破坏物体有5.0%概率掉落生命能量",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#B_014",
+      "name": "折磨",
+      "grade": "B",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 对受到异常效果影响的敌人伤害增加2.0% / Lv.2 对受到异常效果影响的敌人伤害增加4.0% / Lv.3 对受到异常效果影响的敌人伤害增加6.0% / Lv.4 对受到异常效果影响的敌人伤害增加8.0% / Lv.5 对受到异常效果影响的敌人伤害增加10.0% / Lv.6 对受到异常效果影响的敌人伤害增加12.0% / Lv.7 对受到异常效果影响的敌人伤害增加14.0% / Lv.8 对受到异常效果影响的敌人伤害增加16.0% / Lv.9 对受到异常效果影响的敌人伤害增加18.0% / Lv.10 对受到异常效果影响的敌人伤害增加20.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#B_015",
+      "name": "法力值回复",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 每秒回复0.2点法力值 / Lv.2 每秒回复0.4点法力值 / Lv.3 每秒回复0.6点法力值 / Lv.4 每秒回复0.8点法力值 / Lv.5 每秒回复1点法力值 / Lv.6 每秒回复1.2点法力值 / Lv.7 每秒回复1.4点法力值 / Lv.8 每秒回复1.6点法力值 / Lv.9 每秒回复1.8点法力值 / Lv.10 每秒回复2点法力值",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#B_016",
+      "name": "斩杀",
+      "grade": "B",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 对生命值低于30%的敌人伤害提高4.0% / Lv.2 对生命值低于30%的敌人伤害提高8.0% / Lv.3 对生命值低于30%的敌人伤害提高12.0% / Lv.4 对生命值低于30%的敌人伤害提高16.0% / Lv.5 对生命值低于30%的敌人伤害提高20.0% / Lv.6 对生命值低于30%的敌人伤害提高24.0% / Lv.7 对生命值低于30%的敌人伤害提高28.0% / Lv.8 对生命值低于30%的敌人伤害提高32.0% / Lv.9 对生命值低于30%的敌人伤害提高36.0% / Lv.10 对生命值低于30%的敌人伤害提高40.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#B_017",
+      "name": "防护盾",
+      "grade": "B",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 进入新区域时获得生命值上限1.0%的临时护盾 / Lv.2 进入新区域时获得生命值上限2.0%的临时护盾 / Lv.3 进入新区域时获得生命值上限3.0%的临时护盾 / Lv.4 进入新区域时获得生命值上限4.0%的临时护盾 / Lv.5 进入新区域时获得生命值上限5.0%的临时护盾 / Lv.6 进入新区域时获得生命值上限6.0%的临时护盾 / Lv.7 进入新区域时获得生命值上限7.0%的临时护盾 / Lv.8 进入新区域时获得生命值上限8.0%的临时护盾 / Lv.9 进入新区域时获得生命值上限9.0%的临时护盾 / Lv.10 进入新区域时获得生命值上限10.0%的临时护盾",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#B_018",
+      "name": "健将",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": true,
+      "eff": "Lv.1 举着物体时移动速度提升1.5% / Lv.2 举着物体时移动速度提升3.0% / Lv.3 举着物体时移动速度提升4.5% / Lv.4 举着物体时移动速度提升6.0% / Lv.5 举着物体时移动速度提升7.5% / Lv.6 举着物体时移动速度提升9.0% / Lv.7 举着物体时移动速度提升10.5% / Lv.8 举着物体时移动速度提升12.0% / Lv.9 举着物体时移动速度提升13.5% / Lv.10 举着物体时移动速度提升15.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#B_019",
+      "name": "求生意志",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 力竭时爬行速度提升50.0% / Lv.2 力竭时爬行速度提升100% / Lv.3 力竭时爬行速度提升150.0% / Lv.4 力竭时爬行速度提升200% / Lv.5 力竭时爬行速度提升250.0% / Lv.6 力竭时爬行速度提升300% / Lv.7 力竭时爬行速度提升350.0% / Lv.8 力竭时爬行速度提升400% / Lv.9 力竭时爬行速度提升450.0% / Lv.10 力竭时爬行速度提升500%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#B_020",
+      "name": "跳跃",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 跳跃距离增加2.0% / Lv.2 跳跃距离增加4.0% / Lv.3 跳跃距离增加6.0% / Lv.4 跳跃距离增加8.0% / Lv.5 跳跃距离增加10.0% / Lv.6 跳跃距离增加12.0% / Lv.7 跳跃距离增加14.0% / Lv.8 跳跃距离增加16.0% / Lv.9 跳跃距离增加18.0% / Lv.10 跳跃距离增加20.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#B_021",
+      "name": "动能回收",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 5,
+      "unavailable": false,
+      "eff": "Lv.1 闪避后回复2点法力值 / Lv.2 闪避后回复4点法力值 / Lv.3 闪避后回复6点法力值 / Lv.4 闪避后回复8点法力值 / Lv.5 闪避后回复10点法力值",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#B_022",
+      "name": "单手剑精粹Ⅰ",
+      "grade": "B",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 架势值提高5点 / Lv.2 架势值提高10点 / Lv.3 架势值提高15点 / Lv.4 架势值提高20点 / Lv.5 架势值提高25点 / Lv.6 架势值提高30点 / Lv.7 架势值提高35点 / Lv.8 架势值提高40点 / Lv.9 架势值提高45点 / Lv.10 架势值提高50点",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#B_023",
+      "name": "单手剑精粹Ⅱ",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 架势值回复速度提高3% / Lv.2 架势值回复速度提高6% / Lv.3 架势值回复速度提高9% / Lv.4 架势值回复速度提高12% / Lv.5 架势值回复速度提高15% / Lv.6 架势值回复速度提高18% / Lv.7 架势值回复速度提高21% / Lv.8 架势值回复速度提高24% / Lv.9 架势值回复速度提高27% / Lv.10 架势值回复速度提高30%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#B_024",
+      "name": "提灯精粹Ⅰ",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 幽影复活速度提升2% / Lv.2 幽影复活速度提升4% / Lv.3 幽影复活速度提升6% / Lv.4 幽影复活速度提升8% / Lv.5 幽影复活速度提升10% / Lv.6 幽影复活速度提升12% / Lv.7 幽影复活速度提升14% / Lv.8 幽影复活速度提升16% / Lv.9 幽影复活速度提升18% / Lv.10 幽影复活速度提升20%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#B_025",
+      "name": "太刀精粹Ⅰ",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 格挡成功获得7点聚气能量 / Lv.2 格挡成功获得14点聚气能量 / Lv.3 格挡成功获得21点聚气能量 / Lv.4 格挡成功获得28点聚气能量 / Lv.5 格挡成功获得35点聚气能量 / Lv.6 格挡成功获得42点聚气能量 / Lv.7 格挡成功获得49点聚气能量 / Lv.8 格挡成功获得56点聚气能量 / Lv.9 格挡成功获得63点聚气能量 / Lv.10 格挡成功获得70点聚气能量",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#B_026",
+      "name": "法杖精粹VI",
+      "grade": "B",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 消耗法力值获得的法力能量提升5% / Lv.2 消耗法力值获得的法力能量提升10% / Lv.3 消耗法力值获得的法力能量提升15% / Lv.4 消耗法力值获得的法力能量提升20% / Lv.5 消耗法力值获得的法力能量提升25% / Lv.6 消耗法力值获得的法力能量提升30% / Lv.7 消耗法力值获得的法力能量提升35% / Lv.8 消耗法力值获得的法力能量提升40% / Lv.9 消耗法力值获得的法力能量提升45% / Lv.10 消耗法力值获得的法力能量提升50%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#B_027",
+      "name": "双刀精粹IV",
+      "grade": "B",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 极限闪避成功获得10点连击积蓄 / Lv.2 极限闪避成功获得20点连击积蓄 / Lv.3 极限闪避成功获得30点连击积蓄 / Lv.4 极限闪避成功获得40点连击积蓄 / Lv.5 极限闪避成功获得50点连击积蓄 / Lv.6 极限闪避成功获得60点连击积蓄 / Lv.7 极限闪避成功获得70点连击积蓄 / Lv.8 极限闪避成功获得80点连击积蓄 / Lv.9 极限闪避成功获得90点连击积蓄 / Lv.10 极限闪避成功获得100点连击积蓄",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#B_028",
+      "name": "提灯精粹V",
+      "grade": "B",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 附近每有1名友方，直接攻击伤害提升0.6%，最高3.0% / Lv.2 附近每有1名友方，直接攻击伤害提升1.2%，最高6.0% / Lv.3 附近每有1名友方，直接攻击伤害提升1.8%，最高9.0% / Lv.4 附近每有1名友方，直接攻击伤害提升2.4%，最高12.0% / Lv.5 附近每有1名友方，直接攻击伤害提升3.0%，最高15.0% / Lv.6 附近每有1名友方，直接攻击伤害提升3.6%，最高18.0% / Lv.7 附近每有1名友方，直接攻击伤害提升4.2%，最高21.0% / Lv.8 附近每有1名友方，直接攻击伤害提升4.8%，最高24.0% / Lv.9 附近每有1名友方，直接攻击伤害提升5.4%，最高27.0% / Lv.10 附近每有1名友方，直接攻击伤害提升6.0%，最高30.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#C_001",
+      "name": "哥布林专家",
+      "grade": "C",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": true,
+      "eff": "Lv.1 对哥布林种族伤害增加1.2% / Lv.2 对哥布林种族伤害增加2.4% / Lv.3 对哥布林种族伤害增加3.6% / Lv.4 对哥布林种族伤害增加4.8% / Lv.5 对哥布林种族伤害增加6.0% / Lv.6 对哥布林种族伤害增加7.2% / Lv.7 对哥布林种族伤害增加8.4% / Lv.8 对哥布林种族伤害增加9.6% / Lv.9 对哥布林种族伤害增加10.8% / Lv.10 对哥布林种族伤害增加12.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#C_002",
+      "name": "不死族克星",
+      "grade": "C",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": true,
+      "eff": "Lv.1 对不死族伤害增加1.2% / Lv.2 对不死族伤害增加2.4% / Lv.3 对不死族伤害增加3.6% / Lv.4 对不死族伤害增加4.8% / Lv.5 对不死族伤害增加6.0% / Lv.6 对不死族伤害增加7.2% / Lv.7 对不死族伤害增加8.4% / Lv.8 对不死族伤害增加9.6% / Lv.9 对不死族伤害增加10.8% / Lv.10 对不死族伤害增加12.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#C_003",
+      "name": "恶魔猎人",
+      "grade": "C",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": true,
+      "eff": "Lv.1 对恶魔族伤害增加1.2% / Lv.2 对恶魔族伤害增加2.4% / Lv.3 对恶魔族伤害增加3.6% / Lv.4 对恶魔族伤害增加4.8% / Lv.5 对恶魔族伤害增加6.0% / Lv.6 对恶魔族伤害增加7.2% / Lv.7 对恶魔族伤害增加8.4% / Lv.8 对恶魔族伤害增加9.6% / Lv.9 对恶魔族伤害增加10.8% / Lv.10 对恶魔族伤害增加12.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#C_004",
+      "name": "矿工",
+      "grade": "C",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": true,
+      "eff": "Lv.1 对岩石傀儡伤害增加1.2% / Lv.2 对岩石傀儡伤害增加2.4% / Lv.3 对岩石傀儡伤害增加3.6% / Lv.4 对岩石傀儡伤害增加4.8% / Lv.5 对岩石傀儡伤害增加6.0% / Lv.6 对岩石傀儡伤害增加7.2% / Lv.7 对岩石傀儡伤害增加8.4% / Lv.8 对岩石傀儡伤害增加9.6% / Lv.9 对岩石傀儡伤害增加10.8% / Lv.10 对岩石傀儡伤害增加12.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#C_005",
+      "name": "猎龙者",
+      "grade": "C",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": true,
+      "eff": "Lv.1 对龙类伤害增加1.2% / Lv.2 对龙类伤害增加2.4% / Lv.3 对龙类伤害增加3.6% / Lv.4 对龙类伤害增加4.8% / Lv.5 对龙类伤害增加6.0% / Lv.6 对龙类伤害增加7.2% / Lv.7 对龙类伤害增加8.4% / Lv.8 对龙类伤害增加9.6% / Lv.9 对龙类伤害增加10.8% / Lv.10 对龙类伤害增加12.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#C_006",
+      "name": "冷血动物",
+      "grade": "C",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": true,
+      "eff": "Lv.1 对蜥蜴人伤害增加1.2% / Lv.2 对蜥蜴人伤害增加2.4% / Lv.3 对蜥蜴人伤害增加3.6% / Lv.4 对蜥蜴人伤害增加4.8% / Lv.5 对蜥蜴人伤害增加6.0% / Lv.6 对蜥蜴人伤害增加7.2% / Lv.7 对蜥蜴人伤害增加8.4% / Lv.8 对蜥蜴人伤害增加9.6% / Lv.9 对蜥蜴人伤害增加10.8% / Lv.10 对蜥蜴人伤害增加12.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#C_007",
+      "name": "跳跃连击",
+      "grade": "C",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 跳跃攻击伤害增加3.0% / Lv.2 跳跃攻击伤害增加6.0% / Lv.3 跳跃攻击伤害增加9.0% / Lv.4 跳跃攻击伤害增加12.0% / Lv.5 跳跃攻击伤害增加15.0% / Lv.6 跳跃攻击伤害增加18.0% / Lv.7 跳跃攻击伤害增加21.0% / Lv.8 跳跃攻击伤害增加24.0% / Lv.9 跳跃攻击伤害增加27.0% / Lv.10 跳跃攻击伤害增加30.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#C_008",
+      "name": "灵药扩容",
+      "grade": "C",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 炼金灵药上限增加2% / Lv.2 炼金灵药上限增加4% / Lv.3 炼金灵药上限增加6% / Lv.4 炼金灵药上限增加8% / Lv.5 炼金灵药上限增加10% / Lv.6 炼金灵药上限增加12% / Lv.7 炼金灵药上限增加14% / Lv.8 炼金灵药上限增加16% / Lv.9 炼金灵药上限增加18% / Lv.10 炼金灵药上限增加20%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#C_009",
+      "name": "灵药护盾",
+      "grade": "C",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 喝下炼金灵药时获得等于回复量2.5%的临时护盾 / Lv.2 喝下炼金灵药时获得等于回复量5.0%的临时护盾 / Lv.3 喝下炼金灵药时获得等于回复量7.5%的临时护盾 / Lv.4 喝下炼金灵药时获得等于回复量10.0%的临时护盾 / Lv.5 喝下炼金灵药时获得等于回复量12.5%的临时护盾 / Lv.6 喝下炼金灵药时获得等于回复量15.0%的临时护盾 / Lv.7 喝下炼金灵药时获得等于回复量17.5%的临时护盾 / Lv.8 喝下炼金灵药时获得等于回复量20.0%的临时护盾 / Lv.9 喝下炼金灵药时获得等于回复量22.5%的临时护盾 / Lv.10 喝下炼金灵药时获得等于回复量25.0%的临时护盾",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#C_010",
+      "name": "灵药回复",
+      "grade": "C",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 进入新区域时回复1炼金灵药 / Lv.2 进入新区域时回复2炼金灵药 / Lv.3 进入新区域时回复3炼金灵药 / Lv.4 进入新区域时回复4炼金灵药 / Lv.5 进入新区域时回复5炼金灵药 / Lv.6 进入新区域时回复6炼金灵药 / Lv.7 进入新区域时回复7炼金灵药 / Lv.8 进入新区域时回复8炼金灵药 / Lv.9 进入新区域时回复9炼金灵药 / Lv.10 进入新区域时回复10炼金灵药",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#C_011",
+      "name": "道具精通",
+      "grade": "C",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 猎人道具伤害增加3% / Lv.2 猎人道具伤害增加6% / Lv.3 猎人道具伤害增加9% / Lv.4 猎人道具伤害增加12% / Lv.5 猎人道具伤害增加15% / Lv.6 猎人道具伤害增加18% / Lv.7 猎人道具伤害增加21% / Lv.8 猎人道具伤害增加24% / Lv.9 猎人道具伤害增加27% / Lv.10 猎人道具伤害增加30%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#C_012",
+      "name": "偷袭",
+      "grade": "C",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 对未受到伤害的敌人伤害提高4.0% / Lv.2 对未受到伤害的敌人伤害提高8.0% / Lv.3 对未受到伤害的敌人伤害提高12.0% / Lv.4 对未受到伤害的敌人伤害提高16.0% / Lv.5 对未受到伤害的敌人伤害提高20.0% / Lv.6 对未受到伤害的敌人伤害提高24.0% / Lv.7 对未受到伤害的敌人伤害提高28.0% / Lv.8 对未受到伤害的敌人伤害提高32.0% / Lv.9 对未受到伤害的敌人伤害提高36.0% / Lv.10 对未受到伤害的敌人伤害提高40.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#C_013",
+      "name": "沉稳",
+      "grade": "C",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 喝炼金灵药时受到伤害降低1.5% / Lv.2 喝炼金灵药时受到伤害降低3.0% / Lv.3 喝炼金灵药时受到伤害降低4.5% / Lv.4 喝炼金灵药时受到伤害降低6.0% / Lv.5 喝炼金灵药时受到伤害降低7.5% / Lv.6 喝炼金灵药时受到伤害降低9.0% / Lv.7 喝炼金灵药时受到伤害降低10.5% / Lv.8 喝炼金灵药时受到伤害降低12.0% / Lv.9 喝炼金灵药时受到伤害降低13.5% / Lv.10 喝炼金灵药时受到伤害降低15.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#C_014",
+      "name": "毒抗性",
+      "grade": "C",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1-10 受中毒效果降低（满级时免疫）",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#C_015",
+      "name": "冰抗性",
+      "grade": "C",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1-10 受冻结效果降低（满级时免疫）",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#C_016",
+      "name": "火抗性",
+      "grade": "C",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1-10 受燃烧效果降低（满级时免疫）",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#C_017",
+      "name": "电抗性",
+      "grade": "C",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1-10 受感电效果降低（满级时免疫）",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#C_018",
+      "name": "胡吃海喝",
+      "grade": "C",
+      "slot": "圆形槽位",
+      "maxLevel": 5,
+      "unavailable": false,
+      "eff": "Lv.1 喝炼金灵药时有2%概率产生香蕉皮 / Lv.2 喝炼金灵药时有4%概率产生香蕉皮 / Lv.3 喝炼金灵药时有6%概率产生香蕉皮 / Lv.4 喝炼金灵药时有8%概率产生香蕉皮 / Lv.5 喝炼金灵药时有10%概率产生香蕉皮",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#C_019",
+      "name": "涡炉枪精粹Ⅱ",
+      "grade": "C",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 每秒获得0.5点压力值 / Lv.2 每秒获得1点压力值 / Lv.3 每秒获得1.5点压力值 / Lv.4 每秒获得2点压力值 / Lv.5 每秒获得2.5点压力值 / Lv.6 每秒获得3点压力值 / Lv.7 每秒获得3.5点压力值 / Lv.8 每秒获得4点压力值 / Lv.9 每秒获得4.5点压力值 / Lv.10 每秒获得5点压力值",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#C_020",
+      "name": "提灯精粹Ⅱ",
+      "grade": "C",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 投掷幽影造成的伤害提升3.5% / Lv.2 投掷幽影造成的伤害提升7.0% / Lv.3 投掷幽影造成的伤害提升10.5% / Lv.4 投掷幽影造成的伤害提升14.0% / Lv.5 投掷幽影造成的伤害提升17.5% / Lv.6 投掷幽影造成的伤害提升21.0% / Lv.7 投掷幽影造成的伤害提升24.5% / Lv.8 投掷幽影造成的伤害提升28.0% / Lv.9 投掷幽影造成的伤害提升31.5% / Lv.10 投掷幽影造成的伤害提升35.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#C_021",
+      "name": "火枪精粹Ⅱ",
+      "grade": "C",
+      "slot": "圆形槽位",
+      "maxLevel": 15,
+      "unavailable": false,
+      "eff": "Lv.1 弹药上限减少0（最少1颗） / Lv.2 弹药上限减少0（最少1颗） / Lv.3 弹药上限减少0（最少1颗） / Lv.4 弹药上限减少0（最少1颗） / Lv.5 弹药上限减少1（最少1颗） / Lv.6 弹药上限减少1（最少1颗） / Lv.7 弹药上限减少1（最少1颗） / Lv.8 弹药上限减少1（最少1颗） / Lv.9 弹药上限减少1（最少1颗） / Lv.10 弹药上限减少2（最少1颗） / Lv.11 弹药上限减少2（最少1颗） / Lv.12 弹药上限减少2（最少1颗） / Lv.13 弹药上限减少2（最少1颗） / Lv.14 弹药上限减少2（最少1颗） / Lv.15 弹药上限减少3（最少1颗）",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#C_022",
+      "name": "火枪精粹Ⅲ",
+      "grade": "C",
+      "slot": "圆形槽位",
+      "maxLevel": 15,
+      "unavailable": false,
+      "eff": "Lv.1 弹药上限增加0 / Lv.2 弹药上限增加0 / Lv.3 弹药上限增加0 / Lv.4 弹药上限增加0 / Lv.5 弹药上限增加1 / Lv.6 弹药上限增加1 / Lv.7 弹药上限增加1 / Lv.8 弹药上限增加1 / Lv.9 弹药上限增加1 / Lv.10 弹药上限增加2 / Lv.11 弹药上限增加2 / Lv.12 弹药上限增加2 / Lv.13 弹药上限增加2 / Lv.14 弹药上限增加2 / Lv.15 弹药上限增加3",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#C_023",
+      "name": "法杖精粹Ⅰ",
+      "grade": "C",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 普通攻击获得法力能量的效率提升5% / Lv.2 普通攻击获得法力能量的效率提升10% / Lv.3 普通攻击获得法力能量的效率提升15% / Lv.4 普通攻击获得法力能量的效率提升20% / Lv.5 普通攻击获得法力能量的效率提升25% / Lv.6 普通攻击获得法力能量的效率提升30% / Lv.7 普通攻击获得法力能量的效率提升35% / Lv.8 普通攻击获得法力能量的效率提升40% / Lv.9 普通攻击获得法力能量的效率提升45% / Lv.10 普通攻击获得法力能量的效率提升50%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#C_024",
+      "name": "法杖精粹Ⅱ",
+      "grade": "C",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 消耗能量点恢复的法力值提升5% / Lv.2 消耗能量点恢复的法力值提升10% / Lv.3 消耗能量点恢复的法力值提升15% / Lv.4 消耗能量点恢复的法力值提升20% / Lv.5 消耗能量点恢复的法力值提升25% / Lv.6 消耗能量点恢复的法力值提升30% / Lv.7 消耗能量点恢复的法力值提升35% / Lv.8 消耗能量点恢复的法力值提升40% / Lv.9 消耗能量点恢复的法力值提升45% / Lv.10 消耗能量点恢复的法力值提升50%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#S_001",
+      "name": "攻击强化",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 攻击力增加1% / Lv.2 攻击力增加2% / Lv.3 攻击力增加3% / Lv.4 攻击力增加4% / Lv.5 攻击力增加5% / Lv.6 攻击力增加6% / Lv.7 攻击力增加7% / Lv.8 攻击力增加8% / Lv.9 攻击力增加9% / Lv.10 攻击力增加10%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#S_002",
+      "name": "暴击强化",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 暴击率增加0.5% / Lv.2 暴击率增加1.0% / Lv.3 暴击率增加1.5% / Lv.4 暴击率增加2.0% / Lv.5 暴击率增加2.5% / Lv.6 暴击率增加3.0% / Lv.7 暴击率增加3.5% / Lv.8 暴击率增加4.0% / Lv.9 暴击率增加4.5% / Lv.10 暴击率增加5.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#S_003",
+      "name": "技能伤害",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 技能强度增加1% / Lv.2 技能强度增加2% / Lv.3 技能强度增加3% / Lv.4 技能强度增加4% / Lv.5 技能强度增加5% / Lv.6 技能强度增加6% / Lv.7 技能强度增加7% / Lv.8 技能强度增加8% / Lv.9 技能强度增加9% / Lv.10 技能强度增加10%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#S_004",
+      "name": "暴击伤害强化",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 暴击伤害增加1% / Lv.2 暴击伤害增加2% / Lv.3 暴击伤害增加3% / Lv.4 暴击伤害增加4% / Lv.5 暴击伤害增加5% / Lv.6 暴击伤害增加6% / Lv.7 暴击伤害增加7% / Lv.8 暴击伤害增加8% / Lv.9 暴击伤害增加9% / Lv.10 暴击伤害增加10%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#S_005",
+      "name": "减伤",
+      "grade": "S",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 受到来自敌人的伤害降低1% / Lv.2 受到来自敌人的伤害降低2% / Lv.3 受到来自敌人的伤害降低3% / Lv.4 受到来自敌人的伤害降低4% / Lv.5 受到来自敌人的伤害降低5% / Lv.6 受到来自敌人的伤害降低6% / Lv.7 受到来自敌人的伤害降低7% / Lv.8 受到来自敌人的伤害降低8% / Lv.9 受到来自敌人的伤害降低9% / Lv.10 受到来自敌人的伤害降低10%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#S_006",
+      "name": "背水",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 生命值低于50%时，攻击力增加1.2% / Lv.2 生命值低于50%时，攻击力增加2.4% / Lv.3 生命值低于50%时，攻击力增加3.6% / Lv.4 生命值低于50%时，攻击力增加4.8% / Lv.5 生命值低于50%时，攻击力增加6.0% / Lv.6 生命值低于50%时，攻击力增加7.2% / Lv.7 生命值低于50%时，攻击力增加8.4% / Lv.8 生命值低于50%时，攻击力增加9.6% / Lv.9 生命值低于50%时，攻击力增加10.8% / Lv.10 生命值低于50%时，攻击力增加12.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#S_007",
+      "name": "法力回复",
+      "grade": "S",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 所有法力值恢复效果额外提升2.0% / Lv.2 所有法力值恢复效果额外提升4.0% / Lv.3 所有法力值恢复效果额外提升6.0% / Lv.4 所有法力值恢复效果额外提升8.0% / Lv.5 所有法力值恢复效果额外提升10.0% / Lv.6 所有法力值恢复效果额外提升12.0% / Lv.7 所有法力值恢复效果额外提升14.0% / Lv.8 所有法力值恢复效果额外提升16.0% / Lv.9 所有法力值恢复效果额外提升18.0% / Lv.10 所有法力值恢复效果额外提升20.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#S_008",
+      "name": "法力护盾",
+      "grade": "S",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 每进入一个新的有效区域，获得相当于自身法力值0.8%的护盾 / Lv.2 每进入一个新的有效区域，获得相当于自身法力值1.6%的护盾 / Lv.3 每进入一个新的有效区域，获得相当于自身法力值2.4%的护盾 / Lv.4 每进入一个新的有效区域，获得相当于自身法力值3.2%的护盾 / Lv.5 每进入一个新的有效区域，获得相当于自身法力值4.0%的护盾 / Lv.6 每进入一个新的有效区域，获得相当于自身法力值4.8%的护盾 / Lv.7 每进入一个新的有效区域，获得相当于自身法力值5.6%的护盾 / Lv.8 每进入一个新的有效区域，获得相当于自身法力值6.4%的护盾 / Lv.9 每进入一个新的有效区域，获得相当于自身法力值7.2%的护盾 / Lv.10 每进入一个新的有效区域，获得相当于自身法力值8.0%的护盾",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#S_009",
+      "name": "法力值获取",
+      "grade": "S",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 攻击回复法力值提高3% / Lv.2 攻击回复法力值提高6% / Lv.3 攻击回复法力值提高9% / Lv.4 攻击回复法力值提高12% / Lv.5 攻击回复法力值提高15% / Lv.6 攻击回复法力值提高18% / Lv.7 攻击回复法力值提高21% / Lv.8 攻击回复法力值提高24% / Lv.9 攻击回复法力值提高27% / Lv.10 攻击回复法力值提高30%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#S_010",
+      "name": "复苏",
+      "grade": "S",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 生命值低于50%时，所有生命值恢复效果额外提升2.4% / Lv.2 生命值低于50%时，所有生命值恢复效果额外提升4.8% / Lv.3 生命值低于50%时，所有生命值恢复效果额外提升7.2% / Lv.4 生命值低于50%时，所有生命值恢复效果额外提升9.6% / Lv.5 生命值低于50%时，所有生命值恢复效果额外提升12.0% / Lv.6 生命值低于50%时，所有生命值恢复效果额外提升14.4% / Lv.7 生命值低于50%时，所有生命值恢复效果额外提升16.8% / Lv.8 生命值低于50%时，所有生命值恢复效果额外提升19.2% / Lv.9 生命值低于50%时，所有生命值恢复效果额外提升21.6% / Lv.10 生命值低于50%时，所有生命值恢复效果额外提升24.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#S_011",
+      "name": "白虎",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 直接攻击伤害提高2% / Lv.2 直接攻击伤害提高4% / Lv.3 直接攻击伤害提高6% / Lv.4 直接攻击伤害提高8% / Lv.5 直接攻击伤害提高10% / Lv.6 直接攻击伤害提高12% / Lv.7 直接攻击伤害提高14% / Lv.8 直接攻击伤害提高16% / Lv.9 直接攻击伤害提高18% / Lv.10 直接攻击伤害提高20%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#S_012",
+      "name": "青龙",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 5,
+      "unavailable": false,
+      "eff": "Lv.1 每移动20米，攻击力提高1%，持续5秒 / Lv.2 每移动20米，攻击力提高2%，持续5秒 / Lv.3 每移动20米，攻击力提高3%，持续5秒 / Lv.4 每移动20米，攻击力提高4%，持续5秒 / Lv.5 每移动20米，攻击力提高5%，持续5秒",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#S_013",
+      "name": "狂战士",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 攻击力增加1.2%，受到来自敌人的伤害提高2.0% / Lv.2 攻击力增加2.4%，受到来自敌人的伤害提高4.0% / Lv.3 攻击力增加3.6%，受到来自敌人的伤害提高6.0% / Lv.4 攻击力增加4.8%，受到来自敌人的伤害提高8.0% / Lv.5 攻击力增加6.0%，受到来自敌人的伤害提高10.0% / Lv.6 攻击力增加7.2%，受到来自敌人的伤害提高12.0% / Lv.7 攻击力增加8.4%，受到来自敌人的伤害提高14.0% / Lv.8 攻击力增加9.6%，受到来自敌人的伤害提高16.0% / Lv.9 攻击力增加10.8%，受到来自敌人的伤害提高18.0% / Lv.10 攻击力增加12.0%，受到来自敌人的伤害提高20.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#S_014",
+      "name": "嗜血",
+      "grade": "S",
+      "slot": "方形槽位",
+      "maxLevel": 5,
+      "unavailable": false,
+      "eff": "Lv.1 击杀怪物有10.0%的概率回复1点生命值 / Lv.2 击杀怪物有20.0%的概率回复1点生命值 / Lv.3 击杀怪物有30.0%的概率回复1点生命值 / Lv.4 击杀怪物有40.0%的概率回复1点生命值 / Lv.5 击杀怪物有50.0%的概率回复1点生命值",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#S_015",
+      "name": "首领减伤",
+      "grade": "S",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 受到首领级怪物的伤害降低1.2% / Lv.2 受到首领级怪物的伤害降低2.4% / Lv.3 受到首领级怪物的伤害降低3.6% / Lv.4 受到首领级怪物的伤害降低4.8% / Lv.5 受到首领级怪物的伤害降低6.0% / Lv.6 受到首领级怪物的伤害降低7.2% / Lv.7 受到首领级怪物的伤害降低8.4% / Lv.8 受到首领级怪物的伤害降低9.6% / Lv.9 受到首领级怪物的伤害降低10.8% / Lv.10 受到首领级怪物的伤害降低12.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#S_016",
+      "name": "狂热",
+      "grade": "S",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 暴击有5.0%的概率回复1点生命值 / Lv.2 暴击有10.0%的概率回复1点生命值 / Lv.3 暴击有15.0%的概率回复1点生命值 / Lv.4 暴击有20.0%的概率回复1点生命值 / Lv.5 暴击有25.0%的概率回复1点生命值 / Lv.6 暴击有30.0%的概率回复1点生命值 / Lv.7 暴击有35.0%的概率回复1点生命值 / Lv.8 暴击有40.0%的概率回复1点生命值 / Lv.9 暴击有45.0%的概率回复1点生命值 / Lv.10 暴击有50.0%的概率回复1点生命值",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#S_017",
+      "name": "坚韧",
+      "grade": "S",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 受到伤害降低0.4点 / Lv.2 受到伤害降低0.8点 / Lv.3 受到伤害降低1.2点 / Lv.4 受到伤害降低1.6点 / Lv.5 受到伤害降低2点 / Lv.6 受到伤害降低2.4点 / Lv.7 受到伤害降低2.8点 / Lv.8 受到伤害降低3.2点 / Lv.9 受到伤害降低3.6点 / Lv.10 受到伤害降低4点",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#S_018",
+      "name": "猎具整备",
+      "grade": "S",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 猎人道具充能间隔减少2.0% / Lv.2 猎人道具充能间隔减少4.0% / Lv.3 猎人道具充能间隔减少6.0% / Lv.4 猎人道具充能间隔减少8.0% / Lv.5 猎人道具充能间隔减少10.0% / Lv.6 猎人道具充能间隔减少12.0% / Lv.7 猎人道具充能间隔减少14.0% / Lv.8 猎人道具充能间隔减少16.0% / Lv.9 猎人道具充能间隔减少18.0% / Lv.10 猎人道具充能间隔减少20.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#S_019",
+      "name": "飞扑",
+      "grade": "S",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 力竭后的飞扑伤害提升20点 / Lv.2 力竭后的飞扑伤害提升40点 / Lv.3 力竭后的飞扑伤害提升60点 / Lv.4 力竭后的飞扑伤害提升80点 / Lv.5 力竭后的飞扑伤害提升100点 / Lv.6 力竭后的飞扑伤害提升120点 / Lv.7 力竭后的飞扑伤害提升140点 / Lv.8 力竭后的飞扑伤害提升160点 / Lv.9 力竭后的飞扑伤害提升180点 / Lv.10 力竭后的飞扑伤害提升200点",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#S_020",
+      "name": "无伤",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 生命值满时攻击力提高1.2% / Lv.2 生命值满时攻击力提高2.4% / Lv.3 生命值满时攻击力提高3.6% / Lv.4 生命值满时攻击力提高4.8% / Lv.5 生命值满时攻击力提高6.0% / Lv.6 生命值满时攻击力提高7.2% / Lv.7 生命值满时攻击力提高8.4% / Lv.8 生命值满时攻击力提高9.6% / Lv.9 生命值满时攻击力提高10.8% / Lv.10 生命值满时攻击力提高12.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#S_021",
+      "name": "回复效果提升",
+      "grade": "S",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 所有生命值恢复效果额外提升2.0% / Lv.2 所有生命值恢复效果额外提升4.0% / Lv.3 所有生命值恢复效果额外提升6.0% / Lv.4 所有生命值恢复效果额外提升8.0% / Lv.5 所有生命值恢复效果额外提升10.0% / Lv.6 所有生命值恢复效果额外提升12.0% / Lv.7 所有生命值恢复效果额外提升14.0% / Lv.8 所有生命值恢复效果额外提升16.0% / Lv.9 所有生命值恢复效果额外提升18.0% / Lv.10 所有生命值恢复效果额外提升20.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#S_022",
+      "name": "分解精通",
+      "grade": "S",
+      "slot": "圆形槽位",
+      "maxLevel": 5,
+      "unavailable": false,
+      "eff": "Lv.1 分解宝藏返还的灵魂水晶增加1 / Lv.2 分解宝藏返还的灵魂水晶增加2 / Lv.3 分解宝藏返还的灵魂水晶增加3 / Lv.4 分解宝藏返还的灵魂水晶增加4 / Lv.5 分解宝藏返还的灵魂水晶增加5",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#S_023",
+      "name": "太刀精粹Ⅱ",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 20,
+      "unavailable": false,
+      "eff": "Lv.1 普通攻击额外获得0.4点聚气能量 / Lv.2 普通攻击额外获得0.8点聚气能量 / Lv.3 普通攻击额外获得1.2点聚气能量 / Lv.4 普通攻击额外获得1.6点聚气能量 / Lv.5 普通攻击额外获得2点聚气能量 / Lv.6 普通攻击额外获得2.4点聚气能量 / Lv.7 普通攻击额外获得2.8点聚气能量 / Lv.8 普通攻击额外获得3.2点聚气能量 / Lv.9 普通攻击额外获得3.6点聚气能量 / Lv.10 普通攻击额外获得4点聚气能量 / Lv.11 普通攻击额外获得4.4点聚气能量 / Lv.12 普通攻击额外获得4.8点聚气能量 / Lv.13 普通攻击额外获得5.2点聚气能量 / Lv.14 普通攻击额外获得5.6点聚气能量 / Lv.15 普通攻击额外获得6点聚气能量 / Lv.16 普通攻击额外获得6.4点聚气能量 / Lv.17 普通攻击额外获得6.8点聚气能量 / Lv.18 普通攻击额外获得7.2点聚气能量 / Lv.19 普通攻击额外获得7.6点聚气能量 / Lv.20 普通攻击额外获得8点聚气能量",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#S_024",
+      "name": "大剑精粹Ⅳ",
+      "grade": "S",
+      "slot": "圆形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 蓄力速度提升3% / Lv.2 蓄力速度提升6% / Lv.3 蓄力速度提升9% / Lv.4 蓄力速度提升12% / Lv.5 蓄力速度提升15% / Lv.6 蓄力速度提升18% / Lv.7 蓄力速度提升21% / Lv.8 蓄力速度提升24% / Lv.9 蓄力速度提升27% / Lv.10 蓄力速度提升30%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#S_025",
+      "name": "大剑精粹Ⅴ",
+      "grade": "S",
+      "slot": "方形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 蓄力和蓄力攻击期间受到伤害降低1.2% / Lv.2 蓄力和蓄力攻击期间受到伤害降低2.4% / Lv.3 蓄力和蓄力攻击期间受到伤害降低3.6% / Lv.4 蓄力和蓄力攻击期间受到伤害降低4.8% / Lv.5 蓄力和蓄力攻击期间受到伤害降低6.0% / Lv.6 蓄力和蓄力攻击期间受到伤害降低7.2% / Lv.7 蓄力和蓄力攻击期间受到伤害降低8.4% / Lv.8 蓄力和蓄力攻击期间受到伤害降低9.6% / Lv.9 蓄力和蓄力攻击期间受到伤害降低10.8% / Lv.10 蓄力和蓄力攻击期间受到伤害降低12.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/62/Icon_Gem_Square_Lv6.png"
+    },
+    {
+      "id": "Gem#S_026",
+      "name": "弓箭精粹Ⅴ",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 直接攻击击中敌人触发爆裂的概率提高0.6% / Lv.2 直接攻击击中敌人触发爆裂的概率提高1.2% / Lv.3 直接攻击击中敌人触发爆裂的概率提高1.8% / Lv.4 直接攻击击中敌人触发爆裂的概率提高2.4% / Lv.5 直接攻击击中敌人触发爆裂的概率提高3.0% / Lv.6 直接攻击击中敌人触发爆裂的概率提高3.6% / Lv.7 直接攻击击中敌人触发爆裂的概率提高4.2% / Lv.8 直接攻击击中敌人触发爆裂的概率提高4.8% / Lv.9 直接攻击击中敌人触发爆裂的概率提高5.4% / Lv.10 直接攻击击中敌人触发爆裂的概率提高6.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#S_027",
+      "name": "涡炉枪精粹Ⅵ",
+      "grade": "S",
+      "slot": "圆形槽位",
+      "maxLevel": 20,
+      "unavailable": false,
+      "eff": "Lv.1 闪避 → 转身 特殊动作 动能转换额外增加1点的压力值 / Lv.2 闪避 → 转身 特殊动作 动能转换额外增加2点的压力值 / Lv.3 闪避 → 转身 特殊动作 动能转换额外增加3点的压力值 / Lv.4 闪避 → 转身 特殊动作 动能转换额外增加4点的压力值 / Lv.5 闪避 → 转身 特殊动作 动能转换额外增加5点的压力值 / Lv.6 闪避 → 转身 特殊动作 动能转换额外增加6点的压力值 / Lv.7 闪避 → 转身 特殊动作 动能转换额外增加7点的压力值 / Lv.8 闪避 → 转身 特殊动作 动能转换额外增加8点的压力值 / Lv.9 闪避 → 转身 特殊动作 动能转换额外增加9点的压力值 / Lv.10 闪避 → 转身 特殊动作 动能转换额外增加10点的压力值 / Lv.11 闪避 → 转身 特殊动作 动能转换额外增加11点的压力值 / Lv.12 闪避 → 转身 特殊动作 动能转换额外增加12点的压力值 / Lv.13 闪避 → 转身 特殊动作 动能转换额外增加13点的压力值 / Lv.14 闪避 → 转身 特殊动作 动能转换额外增加14点的压力值 / Lv.15 闪避 → 转身 特殊动作 动能转换额外增加15点的压力值 / Lv.16 闪避 → 转身 特殊动作 动能转换额外增加16点的压力值 / Lv.17 闪避 → 转身 特殊动作 动能转换额外增加17点的压力值 / Lv.18 闪避 → 转身 特殊动作 动能转换额外增加18点的压力值 / Lv.19 闪避 → 转身 特殊动作 动能转换额外增加19点的压力值 / Lv.20 闪避 → 转身 特殊动作 动能转换额外增加20点的压力值",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#S_028",
+      "name": "火枪精粹Ⅴ",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 20,
+      "unavailable": false,
+      "eff": "Lv.1 首发弹药的幸运子弹触发概率增加2.0% / Lv.2 首发弹药的幸运子弹触发概率增加4.0% / Lv.3 首发弹药的幸运子弹触发概率增加6.0% / Lv.4 首发弹药的幸运子弹触发概率增加8.0% / Lv.5 首发弹药的幸运子弹触发概率增加10.0% / Lv.6 首发弹药的幸运子弹触发概率增加12.0% / Lv.7 首发弹药的幸运子弹触发概率增加14.0% / Lv.8 首发弹药的幸运子弹触发概率增加16.0% / Lv.9 首发弹药的幸运子弹触发概率增加18.0% / Lv.10 首发弹药的幸运子弹触发概率增加20.0% / Lv.11 首发弹药的幸运子弹触发概率增加22.0% / Lv.12 首发弹药的幸运子弹触发概率增加24.0% / Lv.13 首发弹药的幸运子弹触发概率增加26.0% / Lv.14 首发弹药的幸运子弹触发概率增加28.0% / Lv.15 首发弹药的幸运子弹触发概率增加30.0% / Lv.16 首发弹药的幸运子弹触发概率增加32.0% / Lv.17 首发弹药的幸运子弹触发概率增加34.0% / Lv.18 首发弹药的幸运子弹触发概率增加36.0% / Lv.19 首发弹药的幸运子弹触发概率增加38.0% / Lv.20 首发弹药的幸运子弹触发概率增加40.0%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#S_029",
+      "name": "太刀精粹Ⅴ",
+      "grade": "S",
+      "slot": "圆形槽位",
+      "maxLevel": 5,
+      "unavailable": false,
+      "eff": "Lv.1 “乱舞”最大持续时间增加1.2秒，每次获得“乱舞”状态时额外获得0.4秒持续时间 / Lv.2 “乱舞”最大持续时间增加2.4秒，每次获得“乱舞”状态时额外获得0.8秒持续时间 / Lv.3 “乱舞”最大持续时间增加3.6秒，每次获得“乱舞”状态时额外获得1.2秒持续时间 / Lv.4 “乱舞”最大持续时间增加4.8秒，每次获得“乱舞”状态时额外获得1.6秒持续时间 / Lv.5 “乱舞”最大持续时间增加6秒，每次获得“乱舞”状态时额外获得2秒持续时间",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#S_030",
+      "name": "单手剑精粹ⅤI",
+      "grade": "S",
+      "slot": "圆形槽位",
+      "maxLevel": 20,
+      "unavailable": false,
+      "eff": "Lv.1 盾牌投掷命中时回复4点架势值 / Lv.2 盾牌投掷命中时回复8点架势值 / Lv.3 盾牌投掷命中时回复12点架势值 / Lv.4 盾牌投掷命中时回复16点架势值 / Lv.5 盾牌投掷命中时回复20点架势值 / Lv.6 盾牌投掷命中时回复24点架势值 / Lv.7 盾牌投掷命中时回复28点架势值 / Lv.8 盾牌投掷命中时回复32点架势值 / Lv.9 盾牌投掷命中时回复36点架势值 / Lv.10 盾牌投掷命中时回复40点架势值 / Lv.11 盾牌投掷命中时回复44点架势值 / Lv.12 盾牌投掷命中时回复48点架势值 / Lv.13 盾牌投掷命中时回复52点架势值 / Lv.14 盾牌投掷命中时回复56点架势值 / Lv.15 盾牌投掷命中时回复60点架势值 / Lv.16 盾牌投掷命中时回复64点架势值 / Lv.17 盾牌投掷命中时回复68点架势值 / Lv.18 盾牌投掷命中时回复72点架势值 / Lv.19 盾牌投掷命中时回复76点架势值 / Lv.20 盾牌投掷命中时回复80点架势值",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8f/Icon_Gem_Circle_Lv6.png"
+    },
+    {
+      "id": "Gem#S_031",
+      "name": "双刀精粹II",
+      "grade": "S",
+      "slot": "三角形槽位",
+      "maxLevel": 10,
+      "unavailable": false,
+      "eff": "Lv.1 每移动10米，直接攻击伤害提升3%，持续3秒 / Lv.2 每移动10米，直接攻击伤害提升6%，持续3秒 / Lv.3 每移动10米，直接攻击伤害提升9%，持续3秒 / Lv.4 每移动10米，直接攻击伤害提升12%，持续3秒 / Lv.5 每移动10米，直接攻击伤害提升15%，持续3秒 / Lv.6 每移动10米，直接攻击伤害提升18%，持续3秒 / Lv.7 每移动10米，直接攻击伤害提升21%，持续3秒 / Lv.8 每移动10米，直接攻击伤害提升24%，持续3秒 / Lv.9 每移动10米，直接攻击伤害提升27%，持续3秒 / Lv.10 每移动10米，直接攻击伤害提升30%，持续3秒",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_Gem_Triangle_Lv6.png"
+    },
+    {
+      "id": "Gem#X_001",
+      "name": "简易附魔",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 获得弱元素属性附魔，属性取决于当前拥有元素属性加成的宝藏数量，默认为火属性",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_002",
+      "name": "骤死",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 直接攻击有概率触发所有击杀效果，冷却时间1秒",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_003",
+      "name": "医龙",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 你可以救援你正举着的力竭队友",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_004",
+      "name": "幻影",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 直接攻击有30%概率额外造成一次较弱的伤害",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_005",
+      "name": "忍耐",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 喝炼金灵药时获得霸体",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_006",
+      "name": "战场医师",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 救援队友时获得霸体",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_007",
+      "name": "单手剑精粹Ⅲ",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 架势值回复时间延长200%。破防状态时攻击力提升15%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_008",
+      "name": "单手剑精粹Ⅳ",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 增加3%获得复仇印记概率",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_009",
+      "name": "单手剑精粹Ⅴ",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 长按特殊动作 防御可以防御来自背后的攻击",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_010",
+      "name": "大剑精粹Ⅱ",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 任意非蓄力动作中获得的蓄力值都可累积至第三层",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_011",
+      "name": "大剑精粹Ⅲ",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 长按攻击 + 长按特殊动作 强蓄力可以中断大部分动作且动作速度加快",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_012",
+      "name": "弓箭精粹Ⅱ",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 触发爆裂有35%概率重复一次",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_013",
+      "name": "弓箭精粹Ⅲ",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 快速射击和长按攻击 蓄力射击可穿透1个敌人",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_014",
+      "name": "弓箭精粹Ⅳ",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 使用爆发射击后特殊动作伤害提升15%，持续4秒，最高叠加至45%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_015",
+      "name": "涡炉枪精粹Ⅲ",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 压力值上限提升50点",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_016",
+      "name": "涡炉枪精粹Ⅳ",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 涡炉过载下泄压炮伤害提升40%，且涡炉冷却持续时间延长100%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_017",
+      "name": "涡炉枪精粹Ⅴ",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 普通攻击有10%概率触发1次最低威力的泄压炮",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_018",
+      "name": "双刀精粹Ⅰ",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 直接攻击击中有概率回复猎人道具充能，且猎人道具在进入新区域后使用次数完全回复",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_019",
+      "name": "提灯精粹Ⅲ",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 幽影会每秒回复2%生命值",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_020",
+      "name": "提灯精粹Ⅳ",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 直接攻击额外获得4幽能。幽能上限提升30%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_021",
+      "name": "火枪精粹Ⅳ",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 热能上限增加50",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_022",
+      "name": "法杖精粹Ⅲ",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 消耗能量点获得7%技能强度，持续15秒，可叠加3次",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_023",
+      "name": "法杖精粹Ⅳ",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 当前每拥有1个能量点使攻击力提升4%",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_025",
+      "name": "太刀精粹Ⅲ",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 长按特殊动作（蓄力）居合斩蓄力时每秒获得90点聚气能量",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_026",
+      "name": "太刀精粹Ⅳ",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 格挡成功后直接攻击伤害提升50%，持续15秒",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_027",
+      "name": "玄武",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 获得5级中毒、冻结、燃烧、感电抗性的效果",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_028",
+      "name": "火枪精粹VI",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 每隔一段时间空投强化弹药补给，额外的弹药上限加成效果会影响补给量",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_029",
+      "name": "双刀精粹V",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 周围每存在1个敌人，每秒获得3点连击积蓄。（首领相当于5个敌人）",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_030",
+      "name": "提灯精粹VI",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 每使1名友方获得激励，获得5点幽能",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    },
+    {
+      "id": "Gem#X_031",
+      "name": "枪手精粹VII",
+      "grade": "X",
+      "slot": "六边形槽位",
+      "maxLevel": 1,
+      "unavailable": false,
+      "eff": "Lv.1 投掷击中时有50%概率生成一个会吸引敌人和场景物件（包括手雷）的小型黑洞",
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_Gem_Hexagon_Lv7.png"
+    }
+  ]
+}

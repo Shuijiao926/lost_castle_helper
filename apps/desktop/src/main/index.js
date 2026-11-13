@@ -37,6 +37,7 @@ const shapeRounded = require('./shape');
 const createConfigStore = require('./config');
 const createDataLoader = require('./data');
 const createNotesStore = require('./notes-store');
+const createSubmissionStore = require('./submission-store');
 const createGeometry = require('./geometry');
 const createPanel = require('./panel');
 const createBubbleWindow = require('./bubble-window');
@@ -405,6 +406,14 @@ if (!gotLock) {
       getBubbleWindow: () => bubbleWin,
       setBubblePosition,
       persistBubbleBounds,
+      onSubmitBuild: async (payload) => {
+        if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
+          throw new Error('投稿内容无效');
+        }
+        const res = submissionStore.save(payload);
+        log('submission saved:', res.path);
+        return res;
+      },
     });
 
     // 辅助进程必须常驻：即使不显示阴影，它也负责

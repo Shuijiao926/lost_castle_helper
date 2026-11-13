@@ -1,6 +1,6 @@
 {
   "name": "lc2-helper",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": true,
   "description": "《失落城堡2》流派速查助手：Windows 常驻托盘 + 热键浮窗，不抢游戏焦点",
   "workspaces": [
