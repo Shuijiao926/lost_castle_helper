@@ -50,6 +50,8 @@ function createPanel(deps) {
   let resizeTimer = null;
   let resizeCursorScale = 1;
   let sessionSize = null;
+  let windowSize = { width: PANEL.w, height: PANEL.h };
+  let submitModeBounds = null;
   const RESIZE_DIRS = new Set(['n','s','e','w','ne','nw','se','sw']);
   let dragMoveCount = 0;
   let dragTimer = null;
@@ -195,6 +197,11 @@ function createPanel(deps) {
   }
 
   /* ---------------- 位置 ---------------- */
+  function setWindowBounds(bounds) {
+    win.setBounds(bounds, false);
+    windowSize = { width: bounds.width, height: bounds.height };
+  }
+
   function resolveBounds() {
     const bubble = getBubbleBounds();
     const displays = screen.getAllDisplays();
@@ -339,7 +346,7 @@ function createPanel(deps) {
     if (!win || open) return;
     open = true;
     dormant = false;
-    win.setBounds(showBounds(), false);
+    setWindowBounds(showBounds());
     applyShape();
     fadeIn(win);
     win.showInactive(); // 显示但不抢焦点
@@ -360,6 +367,7 @@ function createPanel(deps) {
     }
     win = null;
     open = false;
+    submitModeBounds = null;
   }
 
   function hide() {
@@ -393,7 +401,9 @@ function createPanel(deps) {
     const rx = Math.round(x), ry = Math.round(y);
     if (dragState && lastDragPos && lastDragPos[0] === rx && lastDragPos[1] === ry) return;
     lastDragPos = [rx, ry];
-    win.setPosition(rx, ry, false);
+    // Windows 分数缩放下，setPosition 会把已舍入的当前尺寸写回，拖得越久窗口越大。
+    // 复用上一次明确设定的 DIP 尺寸，避免每帧或每次拖拽累加舍入误差。
+    win.setBounds({ x: rx, y: ry, ...windowSize }, false);
     dragMoveCount += 1;
   }
 
@@ -460,7 +470,7 @@ function createPanel(deps) {
     const p = payload || {};
     if (!RESIZE_DIRS.has(p.dir) || !Number.isFinite(p.sx) || !Number.isFinite(p.sy)) return;
     stopResizeTimer();
-    const b = win.getBounds();
+    const b = { ...win.getBounds(), ...windowSize };
     try {
       const scale = screen.getPrimaryDisplay().scaleFactor || 1;
       const cp = screen.getCursorScreenPoint();
@@ -487,7 +497,7 @@ function createPanel(deps) {
       if (width < PANEL.w) { if (dir.includes('w')) x = st.x + st.width - PANEL.w; width = PANEL.w; }
       if (height < PANEL.h) { if (dir.includes('n')) y = st.y + st.height - PANEL.h; height = PANEL.h; }
       try {
-        win.setBounds({ x: Math.round(x), y: Math.round(y), width: Math.round(width), height: Math.round(height) }, false);
+        setWindowBounds({ x: Math.round(x), y: Math.round(y), width: Math.round(width), height: Math.round(height) });
       } catch {}
     }, 8);
   }
@@ -505,8 +515,28 @@ function createPanel(deps) {
     } catch {}
     const x = Math.round(b.x + (b.width - w) / 2);
     const y = Math.round(b.y + (b.height - h) / 2);
-    sessionSize = { width: w, height: h };
-    win.setBounds({ x, y, width: w, height: h }, false);
+    setWindowBounds({ x, y, width: w, height: h });
+    sessionSize = windowSize;
+    applyShape();
+  }
+
+  function setSubmitMode(on) {
+    if (!win || win.isDestroyed()) return;
+    if (on) {
+      if (submitModeBounds) return;
+      const previous = { ...win.getBounds(), ...windowSize };
+      const wa = screen.getDisplayMatching(previous).workArea;
+      const width = Math.min(820, wa.width - 40);
+      const height = Math.min(900, wa.height - 40);
+      const x = Math.round(wa.x + (wa.width - width) / 2);
+      const y = Math.round(wa.y + (wa.height - height) / 2);
+      setWindowBounds({ x, y, width, height });
+      submitModeBounds = previous;
+    } else {
+      if (!submitModeBounds) return;
+      setWindowBounds(submitModeBounds);
+      submitModeBounds = null;
+    }
     applyShape();
   }
 
@@ -517,10 +547,10 @@ function createPanel(deps) {
     applyShape();
     const b = win && !win.isDestroyed() ? win.getBounds() : null;
     if (b) {
-      sessionSize = { width: b.width, height: b.height };
+      sessionSize = windowSize;
       configStore.state.panel = { x: b.x, y: b.y };
       try { configStore.save(); } catch {}
-      log('panel resized ->', b.width, b.height);
+      log('panel resized ->', windowSize.width, windowSize.height);
     }
     try { win.setAlwaysOnTop(true, TOPMOST_LEVEL); } catch {}
   }
@@ -596,6 +626,7 @@ function createPanel(deps) {
 
   /* ---------------- 创建 ---------------- */
   function create() {
+    windowSize = { width: PANEL.w, height: PANEL.h };
     win = new BrowserWindow({
       width: PANEL.w,
       height: PANEL.h,
@@ -658,10 +689,10 @@ function createPanel(deps) {
     toggle,
     getWindow: () => win,
     destroy,
-  resizeShape: applyShape,
-  startResize,
-  setSize,
-  finalizeResize,
+    startResize,
+    setSize,
+    setSubmitMode,
+    finalizeResize,
     isOpen: () => open,
     isPinned: () => pinned,
     isDormant: () => dormant,

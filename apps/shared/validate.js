@@ -89,8 +89,17 @@ function validateBuild(b) {
     });
   }
 
-  if (isArr(b.nightmareList)) {
-    b.nightmareList.forEach((n, i) => need(isStr(n.n), `nightmareList[${i}].n：必填`));
+  if (b.nightmareList !== undefined) {
+    need(isArr(b.nightmareList), 'nightmareList：必须是数组');
+    if (isArr(b.nightmareList)) {
+      b.nightmareList.forEach((n, i) => {
+        need(isStr(n?.n), `nightmareList[${i}].n：必填`);
+        if (n?.p !== undefined) need(typeof n.p === 'string', `nightmareList[${i}].p：必须是字符串`);
+        if (n?.points !== undefined) {
+          need(Number.isSafeInteger(n.points) && n.points > 0, `nightmareList[${i}].points：必须是正整数`);
+        }
+      });
+    }
   }
 
   if (b.dmg !== undefined && isStr(b.dmg) && b.dmg !== '待补') {

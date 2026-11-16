@@ -12,7 +12,11 @@
 (function () {
   'use strict';
 
-  const { WEAPONS, WEAPON_ITEMS, ARMORS, SOUL_STONES, CURSED_TREASURES, INSC, BUILDS, TREASURES, ALL_TAGS, loadInscriptions, loadTreasures, loadWeapons, loadWeaponTypes, loadArmors, loadSoulStones, loadCursedTreasures } = LC2.data.catalog;
+  const {
+    WEAPONS, WEAPON_ITEMS, ARMORS, SOUL_STONES, CURSED_TREASURES, NIGHTMARE_EFFECTS,
+    INSC, BUILDS, TREASURES, ALL_TAGS, loadInscriptions, loadTreasures, loadWeapons,
+    loadWeaponTypes, loadArmors, loadSoulStones, loadCursedTreasures, loadNightmareEffects,
+  } = LC2.data.catalog;
   const { ic, ICON, ICON_SVG, RC } = LC2.ui.icons;
   const { $, esc } = LC2.ui.dom;
   const refs = LC2.ui.dom.refs;
@@ -394,10 +398,10 @@ function renderDetail(){
   }
 
   /* ⑧ 梦魇加点 */
-  if((b.nightmareList||[]).length){
-    const body='<div class="nmgrid">'+b.nightmareList.map(n=>
-      '<div class="nmrow"><span>'+esc(n.n)+'</span><span class="p">'+esc(n.p||'—')+'</span></div>').join('')+'</div>';
-    h+=sec('梦魇推荐加点',box('个人自用方案',body));
+  if(Array.isArray(b.nightmareList) && b.nightmareList.length){
+    const total = domain.nightmareTotal(b.nightmareList);
+    h += sec('梦魇推荐加点', box(total === null ? '个人自用方案' : '总强度 ' + total + ' 点',
+      '<div class="nmgrid">' + renderNightmareRows(b.nightmareList) + '</div>'));
   }
 
   h+='<div class="footline"><span>作者 '+esc(b.author||'—')+' · 来源：'+esc(b.src)+'</span><span>更新 '+esc(b.updated)+'</span></div>';
@@ -703,6 +707,7 @@ function showToast(msg,ms){
 }
 
 const submit = { wt: '', insc: '', transition: [], graduation: [], slot: 'transition', armorTransition: [], armorGraduation: [], armorSlot: 'transition', treasureTiers: { must: [], recommended: [], backup: [] }, treasureSlot: 'must', soulStones: [], cursed: { none: [], suggest: [], must: [] }, cursedSlot: 'none', resonance: ['', '', ''], stoneOrder: ['red', 'green', 'blue'], stoneConfirmed: false, tags: [] };
+const nightmareSelections = new Map();
 const SLOT_ICON = {
   transition: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 6l6 6-6 6M14 6l6 6-6 6"/></svg>',
   graduation: '<svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 3 14.7 9 21 9.8 16.5 14 17.6 20.3 12 17.2 6.4 20.3 7.5 14 3 9.8 9.3 9 12 3"/></svg>',
@@ -1099,34 +1104,18 @@ function buildResChain(nodeFactory){
     if(stone) return '<span class="stone-slot filled" data-shape="' + shape + '" title="' + esc(stone.name) + '"><img src="' + esc(stone.icon || '') + '" alt=""></span>';
     return '<span class="stone-slot is-empty" data-shape="' + shape + '" title="' + shapeName[shape] + '槽位 · 未镶嵌"><svg viewBox="0 0 24 24" aria-hidden="true">' + shapePath[shape] + '</svg></span>';
   };
-  let html = '';
-  plan.forEach((group, idx) => {
-    html += '<span class="stone-group">' + group.map(stoneSlot).join('') + '</span>';
+  const steps = plan.map((group, idx) => {
+    const slots = group.map(stoneSlot).join('');
     const value = parseInt(submit.resonance[idx], 10) || 0;
     const opts = resEntries(idx);
     const entry = value ? opts[value - 1] : null;
-    html += nodeFactory(idx, entry, opts);
+    return slots + nodeFactory(idx, entry, opts);
   });
   const extras = pool.filter((stone) => !used.has(stone.name));
   if(extras.length){
-    html += '<span class="chain-extra" title="' + esc(extras.map((s) => s.name).join('、')) + '">+' + extras.length + '</span>';
+    steps[steps.length - 1] += '<span class="chain-extra" title="' + esc(extras.map((s) => s.name).join('、')) + '">+' + extras.length + '</span>';
   }
-  return html;
-}
-
-function fitResChain(chain){
-  const host = chain.closest('.soulres');
-  if(!host || host.clientWidth < 80 || chain.clientWidth < 80) return;
-  const available = Math.max(160, host.clientWidth - 18);
-  const gap = available < 380 ? 4 : 5;
-  const base = 8 * 28 + 3 * 34;
-  const scale = Math.min(1, Math.max(.72, (available - 15 * gap) / base));
-  chain.style.setProperty('--chain-slot', (28 * scale).toFixed(1) + 'px');
-  chain.style.setProperty('--chain-node', (34 * scale).toFixed(1) + 'px');
-  chain.style.setProperty('--chain-gap', gap + 'px');
-}
-function refreshResChains(){
-  document.querySelectorAll('.soulres-chain').forEach(fitResChain);
+  return steps.map((step) => '<span class="soulres-step">' + step + '</span>').join('');
 }
 
 function renderSoulRes(){
@@ -1146,7 +1135,6 @@ function renderSoulRes(){
     }
     return '<span class="soulres-node is-empty" title="共鸣 ' + (idx + 1) + '：' + (opts.length ? '尚未选择' : '无可用选项') + '"><span class="rplus">' + (opts.length ? '+' : '–') + '</span></span>';
   });
-  fitResChain(slots);
 }
 
 function renderResBar(){
@@ -1171,7 +1159,6 @@ function renderResBar(){
         + (entry ? '<img src="' + resIcon(entry.level) + '" alt="Lv.' + (entry.level || 1) + '">' : '<span class="rplus">' + (opts.length ? '+' : '–') + '</span>')
         + '</button>';
     });
-    fitResChain(slots);
   }
   const hint = $('subResHint');
   if(hint) hint.textContent = submit.resonance.some(Boolean) ? '已选 ' + submit.resonance.map((v) => v || 0).join('-') : '尚未选择共鸣';
@@ -1259,11 +1246,6 @@ if(soulGrid){
   });
   soulGrid.addEventListener('mouseleave', () => highlightStoneSlots(''));
 }
-if(typeof ResizeObserver !== 'undefined'){
-  const chainObserver = new ResizeObserver(() => refreshResChains());
-  document.querySelectorAll('.soulres').forEach((el) => chainObserver.observe(el));
-}
-window.addEventListener('resize', refreshResChains);
 
 const subWtSearch = $('subWtSearch');
 if(subWtSearch) subWtSearch.addEventListener('input', subRenderWt);
@@ -1462,6 +1444,47 @@ function subRenderSel(){
 
 function subStatus(){}
 
+function updateNightmareTotal(){
+  const total = domain.nightmareTotal(domain.nightmareList(nightmareSelections));
+  subSet('subNightmareTotal', '总强度 ' + total + ' 点');
+}
+
+function renderNightmareEditor(){
+  const list = $('subNightmareEffects');
+  if (!NIGHTMARE_EFFECTS.length) {
+    list.textContent = '暂时没有可选的梦魇效果。';
+    $('subNightmareTotal').textContent = '';
+    return;
+  }
+  list.innerHTML = NIGHTMARE_EFFECTS.map(({ name, description, options }) => {
+    const selected = nightmareSelections.get(name);
+    return '<label class="nightmare-row"><span><b>' + esc(name) + '</b><small>' + esc(description) + '</small></span>'
+      + '<select class="subinp" data-nightmare="' + esc(name) + '"><option value="">不加点</option>'
+      + options.map(({ points, label }) => '<option value="' + points + '"' + (selected === points ? ' selected' : '')
+        + '>' + points + ' 点 · ' + esc(label) + '</option>').join('')
+      + '</select></label>';
+  }).join('');
+  updateNightmareTotal();
+}
+
+function renderNightmareRows(list, removable = false){
+  return list.map((entry) => {
+    const { n, p, points } = entry;
+    const value = [points ? points + ' 点' : '', p].filter(Boolean).join(' · ') || '—';
+    return '<div class="nmrow"><span>' + esc(n) + '</span><span class="p">' + esc(value) + '</span>'
+      + (removable ? '<button type="button" class="nightmare-remove" data-remove-nightmare="' + esc(n)
+        + '" aria-label="移除' + esc(n) + '">×</button>' : '') + '</div>';
+  }).join('');
+}
+
+$('subNightmareEffects').addEventListener('change', (ev) => {
+  const select = ev.target.closest('select[data-nightmare]');
+  if (!select) return;
+  if (select.value) nightmareSelections.set(select.dataset.nightmare, Number(select.value));
+  else nightmareSelections.delete(select.dataset.nightmare);
+  updateNightmareTotal();
+});
+
 function openSubmit(){
   $('subName').value = '';
   $('subVersion').value = '';
@@ -1475,6 +1498,7 @@ function openSubmit(){
   if($('subInscOnlyWt')){ $('subInscOnlyWt').classList.remove('on'); $('subInscOnlyWt').setAttribute('aria-pressed','false'); $('subInscOnlyWt').disabled = true; }
   submit.wt = ''; submit.insc = ''; submit.transition = []; submit.graduation = []; submit.slot = 'transition'; submit.armorTransition = []; submit.armorGraduation = []; submit.armorSlot = 'transition'; submit.treasureTiers = { must: [], recommended: [], backup: [] }; submit.treasureSlot = 'must';
   submit.soulStones = []; submit.cursed = { none: [], suggest: [], must: [] }; submit.cursedSlot = 'none'; submit.resonance = ['', '', ''];
+  nightmareSelections.clear();
   applyStoneOrder(['red', 'green', 'blue']);
   subRenderWt(); subRenderInsc(); subRenderEquip(); subRenderSlots(); subRenderArmor(); subRenderArmorSlots(); subRenderTreasures(); subRenderTreasureSlots();
   subRenderSoul(); subRenderCursed(); subRenderCursedSlots(); subRenderTreasureSlots(); subRenderSel(); subStatus();
@@ -1540,6 +1564,7 @@ async function saveSubmit(){
     gear.armor = { name: armorPrimary, type: a ? a.kind : '' };
   }
   const features = tags.slice(0, 5).map((t) => t.slice(0, 8));
+  const nightmare = domain.nightmareList(nightmareSelections);
   const record = {
     id: 'sub_' + Date.now().toString(36),
     name, wt: submit.wt, insc: submit.insc,
@@ -1547,6 +1572,7 @@ async function saveSubmit(){
     features, tags, tip, author, gameVersion,
     updatedAt: today,
     ...(selectedResonance() ? { resonance: selectedResonance() } : {}),
+    ...(nightmare.length ? { nightmareList: nightmare } : {}),
     ...(submit.stoneConfirmed ? { stonePriority: Object.fromEntries(submit.stoneOrder.map((key, idx) => [key, idx + 1])) } : {}),
     sourceType: 'self-test',
     license: 'CC-BY-NC-SA-4.0',
@@ -1590,26 +1616,30 @@ async function saveSubmit(){
 }
 
 /* 多页切换 */
-const SUB_PAGES = ['basic', 'wt', 'insc', 'equip', 'armor', 'treasure', 'soul', 'cursed'];
+const SUB_PAGES = ['basic', 'wt', 'insc', 'equip', 'armor', 'treasure', 'soul', 'cursed', 'nightmare'];
 let subPage = 0;
 let subReviewOpen = false;
+let subReviewScroll = 0;
 function subGo(i){
   subReviewOpen = false;
   $subModal.classList.remove('review-mode');
   subPage = Math.max(0, Math.min(SUB_PAGES.length - 1, i));
   const page = SUB_PAGES[subPage];
+  $subModal.classList.toggle('no-info', page === 'basic' || page === 'nightmare');
+  if (page === 'nightmare') renderNightmareEditor();
   const prev = $('subPrev'), next = $('subNext');
   if (prev) prev.disabled = subPage === 0;
   if (next) next.disabled = subPage === SUB_PAGES.length - 1;
   document.querySelectorAll('#submitModal .subpage').forEach((el) => el.classList.toggle('on', el.dataset.page === page));
   document.querySelectorAll('#submitModal .subpages > div').forEach((el) => el.classList.toggle('on', el.dataset.page === page));
-  if(page === 'insc' || page === 'soul') requestAnimationFrame(refreshResChains);
   subSet('subSave', '查看已选');
   requestAnimationFrame(syncSubThumb);
 }
 
 function openReview(){
+  subReviewScroll = $('subMain').scrollTop;
   subReviewOpen = true;
+  $subModal.classList.remove('no-info');
   $subModal.classList.add('review-mode');
   const prev = $('subPrev'), next = $('subNext');
   if (prev) prev.disabled = false;
@@ -1619,7 +1649,12 @@ function openReview(){
   subRenderReview();
   subSet('subSave', '提交');
   requestAnimationFrame(syncSubThumb);
-  $('subBody').scrollTop = 0;
+  $('subMain').scrollTop = 0;
+}
+
+function backToSubmitPage(){
+  subGo(subPage);
+  $('subMain').scrollTop = subReviewScroll;
 }
 
 function subReviewRow(label, items, kind, group, opts){
@@ -1641,6 +1676,7 @@ function subClearReview(){
   submit.soulStones = [];
   submit.cursed = { none: [], suggest: [], must: [] };
   submit.resonance = ['', '', ''];
+  nightmareSelections.clear();
   applyStoneOrder(['red', 'green', 'blue']);
   renderResBar();
   subRenderWt(); subRenderInsc(); subRenderEquip(); subRenderSlots();
@@ -1705,7 +1741,19 @@ function subRenderReview(){
       + subReviewRow('建议净化', c.suggest, 'cursed', 'suggest')
       + subReviewRow('必须净化', c.must, 'cursed', 'must') + '</div>');
   }
+  const nightmare = domain.nightmareList(nightmareSelections);
+  if (nightmare.length) {
+    parts.push('<div class="rvsec"><div class="rvhead"><span>梦魇推荐加点</span><span class="rvcount">'
+      + domain.nightmareTotal(nightmare) + ' 点</span></div>'
+      + renderNightmareRows(nightmare, true) + '</div>');
+  }
   box.innerHTML = parts.length ? parts.join('') : emptyState('还没有选东西呢 (´･ω･`)', '去前面的页签挑一挑吧', true);
+  box.querySelectorAll('[data-remove-nightmare]').forEach((button) => {
+    button.onclick = () => {
+      nightmareSelections.delete(button.dataset.removeNightmare);
+      subRenderReview();
+    };
+  });
   const clear = $('subReviewClear'); if(clear) clear.classList.toggle('disabled', !parts.length);
   const reviewItem = (kind, group, name) => {
     if(kind === 'wt') return WEAPONS.find((x) => x.id === name) || null;
@@ -1726,9 +1774,9 @@ function subRenderReview(){
     };
   });
   box.querySelectorAll('.rvx').forEach((x) => {
-    x.onclick = () => {
+    x.onclick = (ev) => {
       const kind = x.dataset.kind, group = x.dataset.group, name = x.dataset.name;
-      if(e && e.stopPropagation) e.stopPropagation();
+      ev.stopPropagation();
       if(kind === 'wt') submit.wt = '';
       else if(kind === 'insc') submit.insc = '';
       else if(kind === 'equip') submit[group === 'transition' ? 'transition' : 'graduation'] = submit[group === 'transition' ? 'transition' : 'graduation'].filter((n) => n !== name);
@@ -1771,12 +1819,12 @@ document.querySelectorAll('#submitModal .treasure-slots .subslot').forEach((slot
 document.querySelectorAll('#submitModal .cursed-slots .subslot').forEach((slot) => {
   slot.onclick = () => { submit.cursedSlot = slot.dataset.slot; subRenderCursed(); subRenderCursedSlots(); };
 });
-$('subPrev').onclick = () => { if (subReviewOpen) subGo(SUB_PAGES.length - 1); else subGo(subPage - 1); };
+$('subPrev').onclick = () => { if (subReviewOpen) backToSubmitPage(); else subGo(subPage - 1); };
 $('subNext').onclick = () => { if (!subReviewOpen) subGo(subPage + 1); };
 $sbtn.onclick = openSubmit;
 $('subClose').onclick = closeSubmit;
 $('subSave').onclick = () => { if (subReviewOpen) saveSubmit(); else openReview(); };
-$('subReviewBack').onclick = () => subGo(SUB_PAGES.length - 1);
+$('subReviewBack').onclick = backToSubmitPage;
 $('subReviewClear').onclick = subClearReview;
 $('subName').addEventListener('input', subPreview);
 $('subTip').addEventListener('input', subPreview);
@@ -2423,6 +2471,8 @@ window.lc2.onPanel(function(s){
     loadArmors(d.armors);
     loadSoulStones(d.soulStones);
     loadCursedTreasures(d.cursedTreasures);
+    loadNightmareEffects(d.nightmareEffects);
+    if (state.submitOpen && !subReviewOpen && SUB_PAGES[subPage] === 'nightmare') renderNightmareEditor();
     applyCatalogIcons();
     loadTreasures(d.treasures);
     applyTreasureIcons();

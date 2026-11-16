@@ -50,6 +50,30 @@ test('目录查找：武器名 / 刻印名 / 未知兜底', () => {
   assert.equal(domain.inscriptionName('nope'), '—');
 });
 
+test('梦魇推荐只保存图鉴中可选的档位，并按累计强度求和', () => {
+  const nightmareCatalog = createCatalog();
+  const { nightmareEffects } = require('../../../data/nightmare-effects.json');
+  nightmareCatalog.loadNightmareEffects(nightmareEffects);
+  const nightmare = createDomain(nightmareCatalog);
+  const picks = nightmare.nightmareList(new Map([
+    ['魂晶吞噬', 5],
+    ['生命锁定', 12],
+    ['法力锁定', 4], // 每档增量不能当作该档累计强度
+    ['未知词条', 10],
+  ]));
+  assert.deepEqual(picks, [
+    { n: '生命锁定', p: '锁定 65%', points: 12 },
+    { n: '魂晶吞噬', p: '价格 +5%', points: 5 },
+  ]);
+  assert.equal(nightmare.nightmareTotal(picks), 17);
+});
+
+test('历史梦魇方案没有强度字段时依然可展示，也不计算不完整的总强度', () => {
+  const legacy = [{ n: '生命锁定', p: '65%' }, { n: '升级锁定' }];
+  assert.equal(domain.nightmareTotal(legacy), null);
+  assert.deepEqual(domain.normalizeBuilds([makeBuild({ nightmareList: legacy })])[0].nightmareList, legacy);
+});
+
 test('stars：每 2 分一颗星，四舍五入', () => {
   assert.equal((domain.stars(10).match(/<i>/g) || []).length, 5);
   assert.equal((domain.stars(8.2).match(/<i>/g) || []).length, 4);

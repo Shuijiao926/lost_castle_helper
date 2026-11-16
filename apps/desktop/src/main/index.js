@@ -407,28 +407,6 @@ if (!gotLock) {
     });
     panel.setPinned(configStore.state.panelPinned);
 
-    let submitModeBounds = null;
-    function setSubmitMode(on) {
-      const win = panel.getWindow();
-      if (!win || win.isDestroyed()) return;
-      if (on) {
-        if (submitModeBounds) return;
-        submitModeBounds = win.getBounds();
-        const d = screen.getDisplayMatching(submitModeBounds);
-        const wa = d.workArea;
-        const w = Math.min(820, wa.width - 40);
-        const h = Math.min(900, wa.height - 40);
-        const x = Math.round(wa.x + (wa.width - w) / 2);
-        const y = Math.round(wa.y + (wa.height - h) / 2);
-        win.setBounds({ x, y, width: w, height: h }, false);
-        try { panel.resizeShape?.(); } catch {}
-      } else if (submitModeBounds) {
-        win.setBounds(submitModeBounds, false);
-        submitModeBounds = null;
-        try { panel.resizeShape?.(); } catch {}
-      }
-    }
-
     registerIpc({
       ipcMain,
       log,
@@ -441,7 +419,7 @@ if (!gotLock) {
       getBubbleWindow: () => bubbleWin,
       setBubblePosition,
       persistBubbleBounds,
-      onSubmitMode: setSubmitMode,
+      onSubmitMode: panel.setSubmitMode,
       onSubmitBuild: async (payload) => {
         if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
           throw new Error('投稿内容无效');

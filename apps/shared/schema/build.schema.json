@@ -160,7 +160,8 @@
             "type": "object", "required": ["n"], "additionalProperties": false,
             "properties": {
               "n": { "type": "string", "description": "梦魇效果名" },
-              "p": { "type": "string", "description": "百分比，如 65%；不填显示 —" }
+              "p": { "type": "string", "description": "这档加点的效果，如锁定 65%；兼容只填百分比的旧数据" },
+              "points": { "type": "integer", "minimum": 1, "description": "这档增加的梦魇效果强度；旧数据可省略" }
             }
           }
         },

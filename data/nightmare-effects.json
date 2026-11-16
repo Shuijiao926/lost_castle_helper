@@ -1,0 +1,126 @@
+{
+  "version": "1.0",
+  "source": {
+    "name": "失落城堡2中文维基（灰机）",
+    "url": "https://lc2.huijiwiki.com/wiki/虚灵梦魇",
+    "license": "CC-BY-NC-SA-4.0",
+    "references": [
+      "https://lc2.huijiwiki.com/wiki/历史版本/BetaTest/0.9.4.1_3",
+      "https://lc2tool.com/catalog.10f5acef0d.json"
+    ]
+  },
+  "nightmareEffects": [
+    {
+      "name": "生命锁定",
+      "description": "限制可用生命值的比例。",
+      "options": [
+        { "points": 2, "label": "锁定 20%" },
+        { "points": 6, "label": "锁定 40%" },
+        { "points": 12, "label": "锁定 65%" }
+      ]
+    },
+    {
+      "name": "灵药污染",
+      "description": "出发时携带的炼金灵药变少。",
+      "options": [
+        { "points": 4, "label": "少带 50%" },
+        { "points": 10, "label": "少带 100%" }
+      ]
+    },
+    {
+      "name": "法力锁定",
+      "description": "限制可用法力值的比例。",
+      "options": [
+        { "points": 2, "label": "锁定 10%" },
+        { "points": 6, "label": "锁定 25%" },
+        { "points": 12, "label": "锁定 50%" }
+      ]
+    },
+    {
+      "name": "泉水污染",
+      "description": "从虚灵的生命之泉补充的灵药变少。",
+      "options": [
+        { "points": 2, "label": "少回复 20%" },
+        { "points": 6, "label": "少回复 40%" },
+        { "points": 12, "label": "少回复 90%" }
+      ]
+    },
+    {
+      "name": "虚弱体质",
+      "description": "生命回复效果减弱。",
+      "options": [
+        { "points": 2, "label": "回复 −10%" },
+        { "points": 6, "label": "回复 −20%" },
+        { "points": 12, "label": "回复 −45%" }
+      ]
+    },
+    {
+      "name": "脆弱身板",
+      "description": "被击中时承受更多伤害。",
+      "options": [
+        { "points": 2, "label": "受伤 +10%" },
+        { "points": 5, "label": "受伤 +20%" },
+        { "points": 9, "label": "受伤 +30%" }
+      ]
+    },
+    {
+      "name": "元素易伤",
+      "description": "更容易受到元素异常状态影响。",
+      "options": [
+        { "points": 10, "label": "开启" }
+      ]
+    },
+    {
+      "name": "回收惩罚",
+      "description": "分解宝藏时拿回的魂晶变少。",
+      "options": [
+        { "points": 2, "label": "少返还 3 魂晶" },
+        { "points": 6, "label": "少返还 5 魂晶" },
+        { "points": 12, "label": "少返还 10 魂晶" }
+      ]
+    },
+    {
+      "name": "负重降低",
+      "description": "宝藏背包的负重上限减少。",
+      "options": [
+        { "points": 2, "label": "负重 −1" },
+        { "points": 5, "label": "负重 −2" },
+        { "points": 9, "label": "负重 −3" },
+        { "points": 14, "label": "负重 −4" },
+        { "points": 20, "label": "负重 −5" }
+      ]
+    },
+    {
+      "name": "坏运气",
+      "description": "掉落武器自带的附魔数量受限。",
+      "options": [
+        { "points": 3, "label": "最多 1 个附魔" },
+        { "points": 8, "label": "没有附魔" }
+      ]
+    },
+    {
+      "name": "选择限制",
+      "description": "混沌首领宝藏可能只给两个选项。",
+      "options": [
+        { "points": 3, "label": "概率 25%" },
+        { "points": 8, "label": "概率 45%" }
+      ]
+    },
+    {
+      "name": "升级锁定",
+      "description": "虚灵魔法熔炉无法把武器和盔甲升到传说品质。",
+      "options": [
+        { "points": 10, "label": "开启" }
+      ]
+    },
+    {
+      "name": "魂晶吞噬",
+      "description": "向虚灵购买商品时需要更多魂晶。",
+      "options": [
+        { "points": 5, "label": "价格 +5%" },
+        { "points": 10, "label": "价格 +10%" },
+        { "points": 15, "label": "价格 +15%" }
+      ]
+    }
+  ]
+}

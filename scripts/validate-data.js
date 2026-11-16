@@ -29,6 +29,38 @@ function main() {
     process.exit(1);
   }
 
+  if (path.basename(target) === 'nightmare-effects.json') {
+    const effects = data?.nightmareEffects;
+    const names = new Set();
+    const errors = [];
+    if (!data?.source?.url || !data.source.license) errors.push('source：必须提供来源和许可');
+    if (!Array.isArray(effects) || !effects.length) errors.push('nightmareEffects：必须是非空数组');
+    for (const effect of Array.isArray(effects) ? effects : []) {
+      const name = effect?.name;
+      if (typeof name !== 'string' || !name.trim() || names.has(name)) errors.push('词条名称缺失或重复：' + name);
+      names.add(name);
+      if (typeof effect?.description !== 'string' || !effect.description.trim()) errors.push(name + '：缺少效果说明');
+      if (!Array.isArray(effect?.options) || !effect.options.length) {
+        errors.push(name + '：缺少可选档位');
+        continue;
+      }
+      let previous = 0;
+      for (const option of effect.options) {
+        if (!Number.isSafeInteger(option?.points) || option.points <= previous || typeof option.label !== 'string' || !option.label.trim()) {
+          errors.push(name + '：档位必须填写效果，且累计强度必须是递增的正整数');
+          break;
+        }
+        previous = option.points;
+      }
+    }
+    if (errors.length) {
+      errors.forEach((error) => console.error('✗ ' + error));
+      process.exit(1);
+    }
+    console.log(`✓ ${path.relative(path.join(__dirname, '..'), target)}（${effects.length} 个梦魇词条）`);
+    return;
+  }
+
   // 衣服目录：结构与唯一性校验（data/armors.json）
   if (path.basename(target) === 'armors.json') {
     const relA = path.relative(path.join(__dirname, '..'), target);

@@ -208,6 +208,30 @@ test('panel：拖拽结束后保存位置', () => {
   assert.deepEqual(configStore.state.panel, { x: 200, y: 300 });
 });
 
+test('panel：反复拖拽不会把 Windows 高 DPI 下的尺寸舍入误差累加到窗口', () => {
+  const { panel, win, setCursor } = makeHarness();
+  panel.show();
+  panel.setSize(560, 760);
+  // 模拟分数缩放下读回的边界：奇数位置多报 1 DIP，setPosition 会把它写回。
+  win.getBounds = () => ({
+    ...win.bounds,
+    width: win.bounds.width + Math.abs(win.bounds.x % 2),
+    height: win.bounds.height + Math.abs(win.bounds.y % 2),
+  });
+  win.setPosition = (x, y) => win.setBounds({ ...win.getBounds(), x, y });
+  const start = win.getBounds();
+
+  for (let i = 0; i < 6; i += 1) {
+    const b = win.getBounds();
+    setCursor(b.x + 40, b.y + 8);
+    panel.startDrag({ sx: b.x + 40, sy: b.y + 8 });
+    setCursor(b.x + 41, b.y + 9);
+    panel.finalizeDrag();
+  }
+
+  assert.deepEqual(win.getBounds(), { ...start, x: start.x + 6, y: start.y + 6 });
+});
+
 test('panel：唤醒后恢复可聚焦并通知渲染层退出休眠', () => {
   const { panel, win } = makeHarness({ pinned: true });
   panel.show();

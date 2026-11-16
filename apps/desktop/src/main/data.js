@@ -26,6 +26,7 @@ function createDataLoader({ source, configStore, log, submissionStore }) {
       armors: statics.armors || [],
       soulStones: statics.soulStones || [],
       cursedTreasures: statics.cursedTreasures || [],
+      nightmareEffects: statics.nightmareEffects || [],
       inscriptions: statics.inscriptions,
       schools: statics.schools,
       treasures: statics.treasures || [],

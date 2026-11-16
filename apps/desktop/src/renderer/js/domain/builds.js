@@ -151,6 +151,18 @@
     });
   }
 
+  function nightmareList(selections) {
+    return catalog.NIGHTMARE_EFFECTS.flatMap((effect) => {
+      const option = effect.options.find((entry) => entry.points === selections.get(effect.name));
+      return option ? [{ n: effect.name, p: option.label, points: option.points }] : [];
+    });
+  }
+
+  function nightmareTotal(list) {
+    if (list.some((entry) => !Number.isSafeInteger(entry.points) || entry.points < 1)) return null;
+    return list.reduce((sum, entry) => sum + entry.points, 0);
+  }
+
   return {
     weapon: weapon,
     weaponName: weaponName,
@@ -160,6 +172,8 @@
     matches: matches,
     sortBuilds: sortBuilds,
     visibleBuilds: visibleBuilds,
-    normalizeBuilds: normalizeBuilds
+    normalizeBuilds: normalizeBuilds,
+    nightmareList,
+    nightmareTotal,
   };
 }));

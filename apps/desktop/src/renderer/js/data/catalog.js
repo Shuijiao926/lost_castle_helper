@@ -52,6 +52,7 @@ const ARMORS=[];
 /* 全量灵魂石 / 诅咒宝藏：运行时由 data/*.json 填充 */
 const SOUL_STONES=[];
 const CURSED_TREASURES=[];
+const NIGHTMARE_EFFECTS=[];
 
 const ALL_TAGS=(()=>{const m=new Map();BUILDS.forEach(b=>(b.tags||[]).forEach(t=>{
   if(!m.has(t))m.set(t,[]);m.get(t).push(b);}));
@@ -83,6 +84,16 @@ const ALL_TAGS=(()=>{const m=new Map();BUILDS.forEach(b=>(b.tags||[]).forEach(t=
     for (const it of items) {
       if (it && typeof it.name === 'string' && it.name.trim()) {
         CURSED_TREASURES.push({ id: it.id || it.name, code: it.code || '', name: it.name.trim(), eff: it.eff || '', removed: !!it.removed, icon: it.icon || '' });
+      }
+    }
+  }
+
+  function loadNightmareEffects(items) {
+    NIGHTMARE_EFFECTS.length = 0;
+    if (!Array.isArray(items)) return;
+    for (const item of items) {
+      if (item && typeof item.name === 'string' && Array.isArray(item.options)) {
+        NIGHTMARE_EFFECTS.push(item);
       }
     }
   }
@@ -127,5 +138,10 @@ const ALL_TAGS=(()=>{const m=new Map();BUILDS.forEach(b=>(b.tags||[]).forEach(t=
     }
   }
 
-  return { INSC_DEF: INSC_DEF, WEAPONS: WEAPONS, WEAPON_ITEMS: WEAPON_ITEMS, ARMORS: ARMORS, SOUL_STONES: SOUL_STONES, CURSED_TREASURES: CURSED_TREASURES, INSC: INSC, BUILDS: BUILDS, TREASURES: TREASURES, ALL_TAGS: ALL_TAGS, loadInscriptions: loadInscriptions, loadTreasures: loadTreasures, loadWeapons: loadWeapons, loadWeaponTypes: loadWeaponTypes, loadArmors: loadArmors, loadSoulStones: loadSoulStones, loadCursedTreasures: loadCursedTreasures };
+  return {
+    INSC_DEF, WEAPONS, WEAPON_ITEMS, ARMORS, SOUL_STONES, CURSED_TREASURES, NIGHTMARE_EFFECTS,
+    INSC, BUILDS, TREASURES, ALL_TAGS,
+    loadInscriptions, loadTreasures, loadWeapons, loadWeaponTypes, loadArmors, loadSoulStones,
+    loadCursedTreasures, loadNightmareEffects,
+  };
 }));

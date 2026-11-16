@@ -151,6 +151,7 @@ function loadStatic() {
     armors: readLocalJSON('armors.json', { armors: [] }).armors || [],
     soulStones: readLocalJSON('soul-stones.json', { soulStones: [] }).soulStones || [],
     cursedTreasures: readLocalJSON('cursed-treasures.json', { cursedTreasures: [] }).cursedTreasures || [],
+    nightmareEffects: readLocalJSON('nightmare-effects.json', { nightmareEffects: [] }).nightmareEffects || [],
     inscriptions: readLocalJSON('inscriptions.json', { inscriptions: [] }).inscriptions || [],
     schools: readLocalJSON('schools.json', { schools: [] }).schools || [],
     treasures: readLocalJSON('treasures.json', { treasures: [] }).treasures || [],
