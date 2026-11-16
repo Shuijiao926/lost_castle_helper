@@ -46,6 +46,15 @@
         "dmg": { "type": "string", "maxLength": 12, "description": "数值，未知填 待补（不填则不显示该区块）" },
 
         "tip": { "type": "string", "minLength": 6, "maxLength": 100, "description": "一句话玩法技巧（卡片展开 + 详情顶部）" },
+  "stonePriority": {
+    "type": "object", "additionalProperties": false,
+    "description": "三种符文拿取优先级（阿希尔/帕拉提/纳伊鲁），1 最高",
+    "properties": {
+      "red": { "type": "integer", "minimum": 1, "maximum": 3 },
+      "green": { "type": "integer", "minimum": 1, "maximum": 3 },
+      "blue": { "type": "integer", "minimum": 1, "maximum": 3 }
+    }
+  },
 
         "inscEff": { "type": "string", "description": "刻印效果原文" },
         "resonance": {
@@ -107,9 +116,8 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "gold": { "type": "array", "items": { "type": "string" }, "description": "金色宝藏" },
-            "craft": { "type": "array", "items": { "type": "string" }, "description": "合成宝藏" },
-            "main": { "type": "array", "items": { "type": "string" }, "description": "主要宝藏" },
+            "must": { "type": "array", "items": { "type": "string" }, "description": "必选宝藏" },
+            "recommended": { "type": "array", "items": { "type": "string" }, "description": "推荐宝藏" },
             "backup": { "type": "array", "items": { "type": "string" }, "description": "备选宝藏" }
           }
         },

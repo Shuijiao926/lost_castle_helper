@@ -30,6 +30,9 @@
 <button type="button" class="fbtn icon" id="updateBtn" title="版本与更新" aria-label="版本与更新" aria-haspopup="dialog" aria-controls="updateDialog" aria-expanded="false">
   <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.2"/><path d="M12 7.5v5.8M12 16.5h.01"/></svg>
 </button>
+<button type="button" class="fbtn icon" id="settingsBtn" title="设置" aria-label="设置" aria-haspopup="dialog" aria-controls="settings">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6h.09A1.65 1.65 0 0 0 10 3.09V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+</button>
 </div>
     </div>
     <div class="searchbar" id="sbar" title="点击输入关键词；左侧漏斗或 F 打开筛选">
@@ -83,9 +86,35 @@
         </div>
       </div>
     </div>
+    <div class="modal" id="settings" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="msheet settingssheet">
+        <div class="mh"><span class="mh-spacer"></span><b id="settingsTitle">设置</b><button type="button" class="mh-close" id="settingsClose" aria-label="关闭" title="关闭（Esc）"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+        <div class="settingsbody">
+          <div class="settings-group">窗口</div>
+          <div class="settings-row">
+            <div class="settings-copy"><b>调整窗口大小</b><span>拖拽面板边缘也可以自由调整</span></div>
+            <div class="settings-sizes">
+              <button type="button" class="szbtn" data-size="440x680">默认</button>
+              <button type="button" class="szbtn" data-size="820x900">宽屏</button>
+              <button type="button" class="szbtn" data-size="1100x1000">大屏</button>
+            </div>
+          </div>
+          <div class="settings-group">版本</div>
+          <div class="settings-row">
+            <div class="settings-copy"><b>检查更新</b><span id="settingsUpdateMsg">查看当前版本并检查是否有新版本</span></div>
+            <div class="settings-actions">
+              <button type="button" class="settings-action" id="settingsCheckUpdate">检查更新</button>
+              <button type="button" class="settings-action settings-download" id="settingsDownloadUpdate" hidden>前往下载</button>
+            </div>
+          </div>
+          <div class="settings-note">更多设置后续加入</div>
+        </div>
+      </div>
+    </div>
+
     <div class="modal" id="help">
       <div class="msheet" style="height:auto;max-height:86%">
-        <div class="mh"><span></span><b>使用帮助</b><span class="ok" id="helpClose">关闭</span></div>
+        <div class="mh"><span class="mh-spacer"></span><b>使用帮助</b><button type="button" class="mh-close" id="helpClose" aria-label="关闭" title="关闭（Esc）"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
         <div class="helpbody">
           <div class="hgroup">快捷键</div>
           <div class="hgrid">
@@ -125,8 +154,8 @@
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg>
           </button>
         </div>
-        <div class="mbody"><div class="mgrid" id="mgrid"></div></div>
-        <div class="mfoot"><span class="mcount" id="mcount"></span></div>
+        <div class="mbody"><div class="mgrid" id="mgrid"></div><div class="vsplit" id="filterSplit" title="拖动调整详情宽度"></div><aside class="minfo" id="minfo"><div class="si-empty">鼠标移到图鉴上<br>这里会显示说明</div></aside></div>
+        <div class="mfoot"><span class="mcount" id="mcount"></span><span class="mhint" id="mhint">拉宽窗口可查看图鉴详情</span></div>
       </div>
     </div>
   </div>
@@ -145,14 +174,45 @@
         <div data-page="cursed">诅咒</div>
       </div>
       <div class="subbody" id="subBody">
+        <div class="submain" id="subMain">
         <div class="subpage on" data-page="basic">
           <div class="field"><label>流派名</label><input id="subName" class="subinp subinp-lg" placeholder="例如：冰震大剑"></div>
           <div class="fieldrow">
             <div class="field"><label>游戏版本</label><input id="subVersion" class="subinp" placeholder="例如：1.0.1.3"></div>
             <div class="field"><label>作者</label><input id="subAuthor" class="subinp" placeholder="你的昵称"></div>
           </div>
-          <div class="field"><label>标签</label><input id="subTags" class="subinp" placeholder="冰属性, 暴击"></div>
+          <div class="field">
+            <label>标签</label>
+            <div class="tag-editor" id="subTagEditor">
+              <span class="tag-prefix" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 13l-7 7-9-9V4h7l9 9z"/><circle cx="8.5" cy="8.5" r="1.3"/></svg></span>
+              <span class="tag-list" id="subTagList"></span>
+              <input id="subTagInput" class="tag-input" placeholder="添加标签">
+            </div>
+          </div>
           <div class="field"><label>一句话技巧</label><input id="subTip" class="subinp" placeholder="开怪先蓄力，宝藏按顺序拿"></div>
+          <div class="field">
+            <div class="rune-head">
+              <span class="rune-title">符文优先级 <span class="field-note">拖动排序</span></span>
+            </div>
+            <div class="stoneprio" id="stonePrio">
+              <div class="rune-row" data-stone="red">
+                <span class="rune-grip" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                <img class="rune-ic" src="https://huiji-public.huijistatic.com/lc2/uploads/0/07/Icon_Power_Red.png" alt="">
+                <div class="rune-copy"><b>阿希尔符文</b></div>
+              </div>
+              <div class="rune-row" data-stone="green">
+                <span class="rune-grip" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                <img class="rune-ic" src="https://huiji-public.huijistatic.com/lc2/uploads/6/69/Icon_Power_Green.png" alt="">
+                <div class="rune-copy"><b>帕拉提符文</b></div>
+              </div>
+              <div class="rune-row" data-stone="blue">
+                <span class="rune-grip" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                <img class="rune-ic" src="https://huiji-public.huijistatic.com/lc2/uploads/f/fe/Icon_Power_blue.png" alt="">
+                <div class="rune-copy"><b>纳伊鲁符文</b></div>
+              </div>
+            </div>
+            <button type="button" class="rune-confirm" id="stoneConfirm" title="确认符文优先级"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 6.8"/></svg><span class="rune-confirm-label">确认当前顺序</span></button>
+          </div>
           <div class="subpreview">
             <div class="spv-label">卡片预览</div>
             <div class="spv-card">
@@ -167,17 +227,27 @@
         </div>
 
         <div class="subpage" data-page="wt">
+          <input id="subWtSearch" class="subinp subsearch" placeholder="搜索武器类型">
           <div class="subgrid" id="subWtGrid"></div>
         </div>
 
         <div class="subpage" data-page="insc">
+          <div class="subfilter">
+            <input id="subInscSearch" class="subinp subsearch" placeholder="搜索刻印">
+            <button type="button" class="subchip" id="subInscOnlyWt" aria-pressed="false" title="只显示当前武器类型的刻印">仅当前武器</button>
+          </div>
+          <div class="soulres" id="subResBar" hidden>
+            <div class="soulres-head"><span class="soulres-title">当前共鸣</span><span class="soulres-code" id="subResHint">尚未选择共鸣</span></div>
+            <div class="soulres-chain" id="subResSlots"></div>
+            <div class="resmenu" id="subResMenu" hidden></div>
+          </div>
           <div class="subgrid" id="subInscGrid"></div>
         </div>
 
         <div class="subpage" data-page="equip">
           <div class="subslots equipment-slots">
-            <button type="button" class="subslot" data-slot="transition"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 6l6 6-6 6M14 6l6 6-6 6"/></svg><span>过渡装备</span></button>
-            <button type="button" class="subslot on" data-slot="graduation"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 3 14.7 9 21 9.8 16.5 14 17.6 20.3 12 17.2 6.4 20.3 7.5 14 3 9.8 9.3 9 12 3"/></svg><span>毕业装备</span></button>
+            <button type="button" class="subslot on" data-slot="transition"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 6l6 6-6 6M14 6l6 6-6 6"/></svg><span>过渡装备</span></button>
+            <button type="button" class="subslot" data-slot="graduation"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 3 14.7 9 21 9.8 16.5 14 17.6 20.3 12 17.2 6.4 20.3 7.5 14 3 9.8 9.3 9 12 3"/></svg><span>毕业装备</span></button>
           </div>
           <input id="subEquipSearch" class="subinp subsearch" placeholder="搜索装备">
           <div class="subgrid" id="subEquipGrid"></div>
@@ -185,8 +255,8 @@
 
         <div class="subpage" data-page="armor">
           <div class="subslots armor-slots">
-            <button type="button" class="subslot" data-slot="transition"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 6l6 6-6 6M14 6l6 6-6 6"/></svg><span>过渡衣服</span></button>
-            <button type="button" class="subslot on" data-slot="graduation"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 3 14.7 9 21 9.8 16.5 14 17.6 20.3 12 17.2 6.4 20.3 7.5 14 3 9.8 9.3 9 12 3"/></svg><span>毕业衣服</span></button>
+            <button type="button" class="subslot on" data-slot="transition"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 6l6 6-6 6M14 6l6 6-6 6"/></svg><span>过渡衣服</span></button>
+            <button type="button" class="subslot" data-slot="graduation"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 3 14.7 9 21 9.8 16.5 14 17.6 20.3 12 17.2 6.4 20.3 7.5 14 3 9.8 9.3 9 12 3"/></svg><span>毕业衣服</span></button>
           </div>
           <input id="subArmorSearch" class="subinp subsearch" placeholder="搜索衣服">
           <div class="subgrid" id="subArmorGrid"></div>
@@ -194,9 +264,8 @@
 
         <div class="subpage" data-page="treasure">
           <div class="subslots treasure-slots">
-            <button type="button" class="subslot" data-slot="gold"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7.2"/><path d="M9 12h6M12 9v6"/></svg><span>金色宝藏</span></button>
-            <button type="button" class="subslot" data-slot="craft"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 6-7 12L5 9z"/><path d="M5 9h14"/></svg><span>合成宝藏</span></button>
-            <button type="button" class="subslot on" data-slot="main"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l2.3 4.8 5.2.7-3.8 3.7.9 5.2L12 16l-4.6 2.4.9-5.2L4.5 9.5l5.2-.7z"/></svg><span>主要宝藏</span></button>
+            <button type="button" class="subslot on" data-slot="must"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l2.3 4.8 5.2.7-3.8 3.7.9 5.2L12 16l-4.6 2.4.9-5.2L4.5 9.5l5.2-.7z"/></svg><span>必选宝藏</span></button>
+            <button type="button" class="subslot" data-slot="recommended"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.2L19 10l-5.1 1.8L12 17l-1.9-5.2L5 10l5.1-1.8z"/><path d="M18.6 3.5l.6 1.7 1.7.6-1.7.6-.6 1.7-.6-1.7-1.7-.6 1.7-.6z"/></svg><span>推荐宝藏</span></button>
             <button type="button" class="subslot" data-slot="backup"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16l-6-4-6 4z"/></svg><span>备选宝藏</span></button>
           </div>
           <input id="subTreasureSearch" class="subinp subsearch" placeholder="搜索宝藏">
@@ -204,6 +273,10 @@
         </div>
 
         <div class="subpage" data-page="soul">
+          <div class="soulres" id="subSoulRes" hidden>
+            <div class="soulres-head"><span class="soulres-title">当前共鸣</span><span class="soulres-code" id="subSoulResCode"></span></div>
+            <div class="soulres-chain" id="subSoulResSlots"></div>
+          </div>
           <input id="subSoulSearch" class="subinp subsearch" placeholder="搜索灵魂石">
           <div class="subgrid" id="subSoulGrid"></div>
           <div class="subsel" id="subSoulSel"></div>
@@ -211,21 +284,42 @@
 
         <div class="subpage" data-page="cursed">
           <div class="subslots cursed-slots">
-            <button type="button" class="subslot" data-slot="none"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.2"/><path d="M6.6 6.6l10.8 10.8"/></svg><span>不用净化</span></button>
-            <button type="button" class="subslot on" data-slot="suggest"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s6 6.3 6 11a6 6 0 0 1-12 0c0-4.7 6-11 6-11z"/><path d="M9.5 14.2a2.5 2.5 0 0 0 2.5 2.5"/></svg><span>建议净化</span></button>
+            <button type="button" class="subslot on" data-slot="none"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.2"/><path d="M6.6 6.6l10.8 10.8"/></svg><span>不用净化</span></button>
+            <button type="button" class="subslot" data-slot="suggest"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s6 6.3 6 11a6 6 0 0 1-12 0c0-4.7 6-11 6-11z"/><path d="M9.5 14.2a2.5 2.5 0 0 0 2.5 2.5"/></svg><span>建议净化</span></button>
             <button type="button" class="subslot" data-slot="must"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.6 4.8h2.8l-.6 9.6h-1.6z" fill="currentColor" stroke="none"/><circle cx="12" cy="18.4" r="1.55" fill="currentColor" stroke="none"/></svg><span>必须净化</span></button>
           </div>
           <input id="subCursedSearch" class="subinp subsearch" placeholder="搜索诅咒宝藏">
           <div class="subgrid" id="subCursedGrid"></div>
         </div>
+
+        <div class="subpage" data-page="review">
+          <div class="rvbar">
+            <button type="button" class="rvback" id="subReviewBack">‹ 返回修改</button>
+            <span class="rvclear" id="subReviewClear" title="清空全部已选" aria-label="清空全部已选"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4.6A1.6 1.6 0 0 1 9.6 3h4.8A1.6 1.6 0 0 1 16 4.6V6"/><path d="M18.5 6l-.9 13.2a2 2 0 0 1-2 1.8H8.4a2 2 0 0 1-2-1.8L5.5 6"/><path d="M10 10.6v6.4M14 10.6v6.4"/></svg></span>
+          </div>
+          <div id="subReview"></div>
+        </div>
+        </div>
+        <div class="vsplit" id="subSplit" title="拖动调整详情宽度"></div>
+        <aside class="subinfo" id="subInfo">
+          <div class="si-empty">点选图鉴里的任意一件<br>这里会显示它的说明</div>
+        </aside>
       </div>
       <div class="mfoot subfoot">
         <span class="subnav">
           <button type="button" class="subarrow" id="subPrev" aria-label="上一页"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg></button>
           <button type="button" class="subarrow" id="subNext" aria-label="下一页"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 5.5 6.5 6.5-6.5 6.5"/></svg></button>
         </span>
+        <span class="subhint" id="subHint">拉宽窗口可查看图鉴详情</span>
         <span class="msubmit" id="subSave">提交</span>
       </div>
+    </div>
+  </div>
+
+  <div class="modal" id="itemDetail">
+    <div class="msheet itemdetail">
+      <div class="mh"><span class="mh-spacer"></span><b>图鉴详情</b><span class="mh-close" id="itemDetailClose" title="关闭" aria-label="关闭"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></span></div>
+      <div class="itemdetailbody" id="itemDetailBody"></div>
     </div>
   </div>
 

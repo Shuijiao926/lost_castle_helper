@@ -62,7 +62,7 @@ const ALL_TAGS=(()=>{const m=new Map();BUILDS.forEach(b=>(b.tags||[]).forEach(t=
     TREASURES.length = 0;
     for (const entry of entries) {
       if (entry && typeof entry.name === 'string' && entry.name.trim()) {
-        TREASURES.push({ id: entry.id || entry.name, name: entry.name.trim(), icon: entry.icon || '' });
+        TREASURES.push({ id: entry.id || entry.name, name: entry.name.trim(), icon: entry.icon || '', desc: entry.desc || '', effect: entry.effect || entry.eff || '', rarity: entry.rarity || '', depth: entry.depth || '', tags: entry.tags || '', source: entry.source || '' });
       }
     }
   }
@@ -92,8 +92,19 @@ const ALL_TAGS=(()=>{const m=new Map();BUILDS.forEach(b=>(b.tags||[]).forEach(t=
     ARMORS.length = 0;
     for (const item of items) {
       if (item && typeof item.name === 'string' && item.name.trim()) {
-        ARMORS.push({ id: item.id || item.name, name: item.name.trim(), kind: item.kind || '', icon: item.icon || '' });
+        ARMORS.push({ id: item.id || item.name, name: item.name.trim(), kind: item.kind || '', icon: item.icon || '', desc: item.desc || '', effect: item.effect || '', stats: item.stats || '', rarity: item.rarity || '', unobtainable: !!item.unobtainable });
       }
+    }
+  }
+
+  function loadWeaponTypes(types) {
+    if (!Array.isArray(types)) return;
+    for (const t of types) {
+      const w = WEAPONS.find((x) => x.id === t.id);
+      if (!w) continue;
+      w.iconKey = t.id;
+      if (t.note) w.note = t.note;
+      if (Array.isArray(t.subs)) w.subs = t.subs.slice();
     }
   }
 
@@ -102,7 +113,7 @@ const ALL_TAGS=(()=>{const m=new Map();BUILDS.forEach(b=>(b.tags||[]).forEach(t=
     WEAPON_ITEMS.length = 0;
     for (const item of items) {
       if (item && typeof item.name === 'string' && item.name.trim()) {
-        WEAPON_ITEMS.push({ id: item.id || item.name, name: item.name.trim(), wt: item.wt || '', icon: item.icon || '' });
+        WEAPON_ITEMS.push({ id: item.id || item.name, name: item.name.trim(), wt: item.wt || '', icon: item.icon || '', desc: item.desc || '', effect: item.effect || '', stats: item.stats || '', rarity: item.rarity || '' });
       }
     }
   }
@@ -111,10 +122,10 @@ const ALL_TAGS=(()=>{const m=new Map();BUILDS.forEach(b=>(b.tags||[]).forEach(t=
     if (!Array.isArray(entries) || !entries.length) return;
     for (const entry of entries) {
       if (entry && Object.hasOwn(INSC, entry.id) && INSC[entry.id].wt === entry.wt && typeof entry.name === 'string' && entry.name) {
-        Object.assign(INSC[entry.id], { name: entry.name, source: entry.source, icon: entry.icon || '' });
+        Object.assign(INSC[entry.id], { name: entry.name, source: entry.source, icon: entry.icon || '', iconKey: entry.id, desc: entry.desc || '', effect: entry.effect || '', rarity: entry.rarity || '', effectGroups: entry.effectGroups || null });
       }
     }
   }
 
-  return { INSC_DEF: INSC_DEF, WEAPONS: WEAPONS, WEAPON_ITEMS: WEAPON_ITEMS, ARMORS: ARMORS, SOUL_STONES: SOUL_STONES, CURSED_TREASURES: CURSED_TREASURES, INSC: INSC, BUILDS: BUILDS, TREASURES: TREASURES, ALL_TAGS: ALL_TAGS, loadInscriptions: loadInscriptions, loadTreasures: loadTreasures, loadWeapons: loadWeapons, loadArmors: loadArmors, loadSoulStones: loadSoulStones, loadCursedTreasures: loadCursedTreasures };
+  return { INSC_DEF: INSC_DEF, WEAPONS: WEAPONS, WEAPON_ITEMS: WEAPON_ITEMS, ARMORS: ARMORS, SOUL_STONES: SOUL_STONES, CURSED_TREASURES: CURSED_TREASURES, INSC: INSC, BUILDS: BUILDS, TREASURES: TREASURES, ALL_TAGS: ALL_TAGS, loadInscriptions: loadInscriptions, loadTreasures: loadTreasures, loadWeapons: loadWeapons, loadWeaponTypes: loadWeaponTypes, loadArmors: loadArmors, loadSoulStones: loadSoulStones, loadCursedTreasures: loadCursedTreasures };
 }));

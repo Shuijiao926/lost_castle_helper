@@ -8,8 +8,11 @@ contextBridge.exposeInMainWorld('lc2', {
   /* ---- 数据 ---- */
   getData: () => ipcRenderer.invoke('lc2:getData'),
   getConfig: () => ipcRenderer.invoke('lc2:getConfig'),
+  checkUpdate: () => ipcRenderer.invoke('lc2:checkUpdate'),
+  openExternal: (url) => ipcRenderer.invoke('lc2:openExternal', url),
 
   /* ---- 投稿草稿 ---- */
+  submitMode: (on) => ipcRenderer.invoke('lc2:submitMode', !!on),
   submitBuild: (payload) => ipcRenderer.invoke('lc2:submitBuild', payload),
 
   /* ---- 面板 ---- */
@@ -61,4 +64,9 @@ contextBridge.exposeInMainWorld('lc2', {
   panelDragStart: (sx, sy) => ipcRenderer.send('lc2:panelDragStart', {sx, sy}),
   panelDragMove: (sx, sy) => ipcRenderer.send('lc2:panelDragMove', {sx, sy}),
   panelDragEnd: () => ipcRenderer.send('lc2:panelDragEnd'),
+
+  /* ---- 面板缩放（自定义边缘手柄） ---- */
+  panelResizeStart: (sx, sy, dir) => ipcRenderer.send('lc2:panelResizeStart', { sx, sy, dir }),
+  panelResizeEnd: () => ipcRenderer.send('lc2:panelResizeEnd'),
+  setPanelSize: (width, height) => ipcRenderer.send('lc2:setPanelSize', { width, height }),
 });

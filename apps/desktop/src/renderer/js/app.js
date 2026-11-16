@@ -12,7 +12,7 @@
 (function () {
   'use strict';
 
-  const { WEAPONS, WEAPON_ITEMS, ARMORS, SOUL_STONES, CURSED_TREASURES, INSC, BUILDS, TREASURES, ALL_TAGS, loadInscriptions, loadTreasures, loadWeapons, loadArmors, loadSoulStones, loadCursedTreasures } = LC2.data.catalog;
+  const { WEAPONS, WEAPON_ITEMS, ARMORS, SOUL_STONES, CURSED_TREASURES, INSC, BUILDS, TREASURES, ALL_TAGS, loadInscriptions, loadTreasures, loadWeapons, loadWeaponTypes, loadArmors, loadSoulStones, loadCursedTreasures } = LC2.data.catalog;
   const { ic, ICON, ICON_SVG, RC } = LC2.ui.icons;
   const { $, esc } = LC2.ui.dom;
   const refs = LC2.ui.dom.refs;
@@ -32,7 +32,7 @@
 let pendingStagger = false;   // render 后是否让列表重新错峰入场
 let notesLoaded = false;
 
-const state={sort:'hot',view:'feed',detailId:null,expanded:{},cur:'',owned:new Set(),myVote:{},
+const state={sort:'hot',view:'feed',detailId:null,filterItem:null,lastSubmitItem:null,expanded:{},cur:'',owned:new Set(),myVote:{},
   favs:new Set(),ratingOpen:null,notes:{},noteBid:null,
   q:'',focusedInput:false,dormant:false,tags:[],filterW:[],filterI:[],filterEquip:[],filterArmor:[],filterTreasures:[],modal:false,seg:'w',sideSel:null,mq:''};
 
@@ -342,7 +342,10 @@ function renderDetail(){
   /* 宝藏怎么选：混沌 / 合成金 / 其他（按顺序拿） */
   const tOrder=b.treasureOrder||[];
   const tt=b.treasureTiers||{};
-  const hasTiers=['gold','craft','main','backup'].some(function(k){return (tt[k]||[]).length;});
+  const mustArr=tt.must||tt.gold||[];
+  const recArr=tt.recommended||[].concat(tt.craft||[],tt.main||[]);
+  const backArr=tt.backup||[];
+  const hasTiers=mustArr.length+recArr.length+backArr.length > 0;
   if((b.treasures&&(b.treasures.chaos.length||b.treasures.gold.length))||hasTiers||tOrder.length||(b.treasureNotes||[]).length){
     let body='';
     const chipRow=(label,arr,color)=>{if(!arr||!arr.length)return '';
@@ -350,8 +353,8 @@ function renderDetail(){
         +'<span style="flex:1;text-align:right">'+arr.map(x=>'<span class="chip np" style="margin:2px 0 2px 5px">'
         +ic(x,x,'s24',color||RC['史诗'])+esc(x)+'</span>').join('')+'</span></div>';};
     body+=chipRow('混沌宝藏',b.treasures&&b.treasures.chaos)+chipRow('合成金宝藏',b.treasures&&b.treasures.gold);
-    body+=chipRow('金色宝藏',tt.gold,RC['传奇'])+chipRow('合成宝藏',tt.craft,RC['史诗'])
-      +chipRow('主要宝藏',tt.main,RC['稀有'])+chipRow('备选宝藏',tt.backup,'#6b7386');
+    body+=chipRow('必选宝藏',mustArr,RC['传奇'])+chipRow('推荐宝藏',recArr,RC['史诗'])
+      +chipRow('备选宝藏',backArr,'#6b7386');
     if(tOrder.length){
       body+='<div class="gtitle" style="margin-top:11px;color:#8b9ad4">其他宝藏 · 按这个顺序拿'
         +'<span style="color:#6b7386;font-weight:400">（越靠前越优先）</span></div>';
@@ -365,7 +368,7 @@ function renderDetail(){
       body+='</div><div class="chaincap" style="margin-top:7px">按从上到下拿　·　前面的是垫底件，先拿它们，后面的才刷得出来</div>';
     }
     if((b.treasureNotes||[]).length)body+='<div class="tip" style="margin-top:9px">'+b.treasureNotes.map(n=>'· '+esc(n)).join('<br>')+'</div>';
-    h+=sec('宝藏怎么选',box('金色 / 合成 / 主要 / 备选',body));
+    h+=sec('宝藏怎么选',box('必选 / 推荐 / 备选',body));
   }
 
   /* ⑥ 诅咒宝藏 */
@@ -551,12 +554,20 @@ function applyTreasureIcons(){
 }
 
 function renderModal(animate){
+  const searchText = { w: '搜索武器类型', i: '搜索刻印', equip: '搜索装备', armor: '搜索衣服', treasure: '搜索宝藏', t: '搜索标签' };
+  if(modalQuery) modalQuery.placeholder = searchText[state.seg] || '搜索';
+  state.filterItem = null;
+  renderFilterInfo(null);
   modalQueryClear.hidden = !state.mq;
   const q=state.mq.toLowerCase();
   if(animate){ elGrid.classList.remove('m-seg-in'); void elGrid.offsetWidth; elGrid.classList.add('m-seg-in'); }
   function finish(itemsLen){
     const count=document.getElementById('mcount');
     if(count) count.textContent = '共 ' + itemsLen + ' 项';
+    const empty = itemsLen === 0;
+    elGrid.classList.toggle('is-empty', empty);
+    const modalEl = document.getElementById('modal');
+    if(modalEl) modalEl.classList.toggle('no-info', empty || state.seg === 't');
     refreshFootActions();
   }
   if (state.seg === 'treasure') {
@@ -611,6 +622,27 @@ function renderModal(animate){
     finish(items.length);
   }
 }
+function renderFilterInfo(item){
+  const box = $('minfo');
+  if(!box) return;
+  box.innerHTML = item ? buildItemInfo(item) : '<div class="si-empty">鼠标移到图鉴上<br>这里会显示说明</div>';
+}
+
+elGrid.addEventListener('mouseover', (event) => {
+  const item = event.target.closest('.mg');
+  if (!item || !elGrid.contains(item)) return;
+  state.filterItem = filterItemByKey(state.seg, item.dataset.k);
+  renderFilterInfo(state.filterItem);
+});
+elGrid.addEventListener('click', (event) => {
+  const item = event.target.closest('.mg');
+  if (!item || !elGrid.contains(item)) return;
+  state.filterItem = filterItemByKey(state.seg, item.dataset.k);
+  renderFilterInfo(state.filterItem);
+});
+document.getElementById('itemDetailClose').onclick = closeItemDetail;
+document.getElementById('itemDetail').addEventListener('click', (e) => { if (e.target.id === 'itemDetail') closeItemDetail(); });
+
 elFbtn.onclick=(ev)=>{
   const t=ev.target;
   if(t && t.closest && (t.closest('#fopen') || t.closest('#fchev'))){ releaseFocusInput(); openModal(); return; }
@@ -670,16 +702,15 @@ function showToast(msg,ms){
   toastTimer=setTimeout(()=>$toast.classList.remove('on'),ms||4200);
 }
 
-const submit = { wt: '', insc: '', transition: [], graduation: [], slot: 'graduation', armorTransition: [], armorGraduation: [], armorSlot: 'graduation', treasureTiers: { gold: [], craft: [], main: [], backup: [] }, treasureSlot: 'main', soulStones: [], cursed: { none: [], suggest: [], must: [] }, cursedSlot: 'suggest' };
+const submit = { wt: '', insc: '', transition: [], graduation: [], slot: 'transition', armorTransition: [], armorGraduation: [], armorSlot: 'transition', treasureTiers: { must: [], recommended: [], backup: [] }, treasureSlot: 'must', soulStones: [], cursed: { none: [], suggest: [], must: [] }, cursedSlot: 'none', resonance: ['', '', ''], stoneOrder: ['red', 'green', 'blue'], stoneConfirmed: false, tags: [] };
 const SLOT_ICON = {
   transition: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 6l6 6-6 6M14 6l6 6-6 6"/></svg>',
   graduation: '<svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 3 14.7 9 21 9.8 16.5 14 17.6 20.3 12 17.2 6.4 20.3 7.5 14 3 9.8 9.3 9 12 3"/></svg>',
   'cursed-none': '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.2"/><path d="M6.6 6.6l10.8 10.8"/></svg>',
   'cursed-suggest': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s6 6.3 6 11a6 6 0 0 1-12 0c0-4.7 6-11 6-11z"/></svg>',
   'cursed-must': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.6 4.8h2.8l-.6 9.6h-1.6z" fill="currentColor" stroke="none"/><circle cx="12" cy="18.4" r="1.55" fill="currentColor" stroke="none"/></svg>',
-  'treasure-gold': '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7.2"/><path d="M9 12h6M12 9v6"/></svg>',
-  'treasure-craft': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 6-7 12L5 9z"/><path d="M5 9h14"/></svg>',
-  'treasure-main': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l2.3 4.8 5.2.7-3.8 3.7.9 5.2L12 16l-4.6 2.4.9-5.2L4.5 9.5l5.2-.7z"/></svg>',
+  'treasure-must': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l2.3 4.8 5.2.7-3.8 3.7.9 5.2L12 16l-4.6 2.4.9-5.2L4.5 9.5l5.2-.7z"/></svg>',
+  'treasure-recommended': '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7.2"/><path d="M8.7 12.2l2.2 2.2 4.4-4.6"/></svg>',
   'treasure-backup': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16l-6-4-6 4z"/></svg>',
 };
 state.submitOpen = false;
@@ -690,13 +721,294 @@ function subSet(id, v){ const el = $(id); if (el) el.textContent = String(v); }
 function subSplit(v){
   return String(v || '').split(/[,，、\s]+/).map((x) => x.trim()).filter(Boolean);
 }
+function renderStonePrio(){
+  const wrap = $('stonePrio');
+  if(!wrap) return;
+  submit.stoneOrder = Array.from(wrap.querySelectorAll('.rune-row')).map((row) => row.dataset.stone);
+}
+function applyStoneOrder(order){
+  const wrap = $('stonePrio');
+  if(!wrap) return;
+  order.forEach((stone) => {
+    const row = wrap.querySelector('[data-stone="' + stone + '"]');
+    if(row) wrap.appendChild(row);
+  });
+  submit.stoneOrder = order.slice();
+  submit.stoneConfirmed = false;
+  renderStonePrio();
+  renderStoneConfirm();
+}
+let runeDrag = null;
+(function bindRuneDrag(){
+  const wrap = $('stonePrio');
+  if(!wrap) return;
+  wrap.addEventListener('pointerdown', (ev) => {
+    if(ev.button !== 0) return;
+    const row = ev.target.closest('.rune-row');
+    if(!row) return;
+    const rect = row.getBoundingClientRect();
+    const ghost = row.cloneNode(true);
+    ghost.classList.add('drag-ghost');
+    ghost.style.left = rect.left + 'px';
+    ghost.style.top = rect.top + 'px';
+    ghost.style.width = rect.width + 'px';
+    document.body.appendChild(ghost);
+    row.classList.add('drag-origin');
+    runeDrag = { row, ghost, offsetY: ev.clientY - rect.top };
+    try { row.setPointerCapture(ev.pointerId); } catch(e){}
+    ev.preventDefault();
+  });
+  document.addEventListener('pointermove', (ev) => {
+    if(!runeDrag) return;
+    runeDrag.ghost.style.top = (ev.clientY - runeDrag.offsetY) + 'px';
+    const target = document.elementFromPoint(ev.clientX, ev.clientY)?.closest('.rune-row');
+    if(!target || target === runeDrag.row || !wrap.contains(target)) return;
+    const before = Array.from(wrap.children).map((el) => [el, el.getBoundingClientRect().top]);
+    const rect = target.getBoundingClientRect();
+    const after = ev.clientY > rect.top + rect.height / 2;
+    wrap.insertBefore(runeDrag.row, after ? target.nextSibling : target);
+    const afterMap = new Map(Array.from(wrap.children).map((el) => [el, el.getBoundingClientRect().top]));
+    for(const [el, top] of before){
+      if(el === runeDrag.row) continue;
+      const nextTop = afterMap.get(el);
+      if(nextTop === undefined || nextTop === top) continue;
+      el.animate(
+        [{ transform: `translateY(${top - nextTop}px)` }, { transform: 'none' }],
+        { duration: 160, easing: 'cubic-bezier(.2,.8,.2,1)' }
+      );
+    }
+  });
+  function end(){
+    if(!runeDrag) return;
+    runeDrag.ghost.remove();
+    runeDrag.row.classList.remove('drag-origin');
+    runeDrag = null;
+    submit.stoneConfirmed = false;
+    renderStonePrio();
+    renderStoneConfirm();
+  }
+  document.addEventListener('pointerup', end);
+  document.addEventListener('pointercancel', end);
+})();
+
+function renderStoneConfirm(){
+  const btn = $('stoneConfirm');
+  if(!btn) return;
+  btn.classList.toggle('on', !!submit.stoneConfirmed);
+  btn.setAttribute('aria-pressed', submit.stoneConfirmed ? 'true' : 'false');
+  const label = btn.querySelector('.rune-confirm-label');
+  if(label) label.textContent = submit.stoneConfirmed ? '已确认当前顺序' : '确认当前顺序';
+  btn.title = submit.stoneConfirmed ? '已确认符文优先级，点击取消' : '确认符文优先级';
+}
+const stoneConfirmBtn = $('stoneConfirm');
+if(stoneConfirmBtn) stoneConfirmBtn.addEventListener('click', () => {
+  submit.stoneConfirmed = !submit.stoneConfirmed;
+  renderStoneConfirm();
+  if(submit.stoneConfirmed) showToast('符文优先级已确认');
+});
+renderStoneConfirm();
+
+function renderSubTags(){
+  const list = $('subTagList');
+  if(!list) return;
+  list.innerHTML = '';
+  submit.tags.forEach((tag, idx) => {
+    const chip = document.createElement('span');
+    chip.className = 'tag-chip';
+    const label = document.createElement('span');
+    label.textContent = tag;
+    const close = document.createElement('button');
+    close.type = 'button';
+    close.className = 'tag-x';
+    close.textContent = '×';
+    close.title = '移除标签';
+    close.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      submit.tags.splice(idx, 1);
+      renderSubTags();
+      $('subTagInput')?.focus();
+    });
+    chip.appendChild(label);
+    chip.appendChild(close);
+    list.appendChild(chip);
+  });
+}
+function addSubTags(raw){
+  const parts = String(raw || '').split(/[,，、]+/).map((x) => x.trim().replace(/^#/, '')).filter(Boolean);
+  let added = false;
+  for(const value of parts){
+    if(value.length > 12){ showToast('单个标签最多 12 个字'); continue; }
+    if(submit.tags.includes(value)){ continue; }
+    if(submit.tags.length >= 8){ showToast('最多添加 8 个标签'); break; }
+    submit.tags.push(value);
+    added = true;
+  }
+  if(added){ renderSubTags(); }
+  return added;
+}
+function commitSubTagInput(){
+  const input = $('subTagInput');
+  if(!input) return false;
+  const added = addSubTags(input.value);
+  if(added || !input.value.trim()) input.value = '';
+  return added;
+}
+const subTagInput = $('subTagInput');
+if(subTagInput){
+  subTagInput.addEventListener('keydown', (ev) => {
+    if(ev.key === 'Enter' || ev.key === ',' || ev.key === '，' || ev.key === '、'){
+      ev.preventDefault();
+      commitSubTagInput();
+    } else if(ev.key === 'Backspace' && !subTagInput.value && submit.tags.length){
+      submit.tags.pop();
+      renderSubTags();
+    }
+  });
+  subTagInput.addEventListener('blur', () => { if(subTagInput.value.trim()) commitSubTagInput(); });
+}
+$('subTagEditor')?.addEventListener('click', () => $('subTagInput')?.focus());
+renderSubTags();
+
+function buildItemInfo(item){
+  const asText = (value) => {
+    if (typeof value === 'string') return value.trim();
+    if (value && typeof value === 'object') {
+      if (typeof value.text === 'string') return value.text.trim();
+      if (typeof value.desc === 'string') return value.desc.trim();
+      if (typeof value.name === 'string' && value.text !== undefined) return value.text.trim();
+    }
+    return '';
+  };
+  const cleanRepeats = (text) => String(text || '')
+    .replace(/(特殊动作|普通攻击|武器技能|跳跃|闪避|蓄力攻击)\1/g, '$1')
+    .replace(/攻击(普通攻击|特殊动作)/g, '$1')
+    .trim();
+  const highlightNumbers = (text) => {
+    const raw = String(text || '');
+    return raw.split(/([+-]?\d+(?:\.\d+)?%?)/).map((part, i) => {
+      if (i % 2 === 1) return '<em>' + esc(part) + '</em>';
+      return esc(part);
+    }).join('');
+  };
+  const splitParagraphs = (text) => String(text || '').split(/\n+/).map((x) => x.trim()).filter(Boolean);
+  const splitEffect = (text) => {
+    const out = [];
+    for (const line of String(text || '').split(/\n+/)) {
+      const parts = line.match(/[^。；！？\n]+[。；！？]?/g) || [line];
+      for (const part of parts) {
+        const t = part.trim();
+        if (t) out.push(t);
+      }
+    }
+    return out;
+  };
+
+  const meta = [];
+  if(item.wt && typeof W === 'function') { try { meta.push(W(item.wt).name); } catch(e){} }
+  if(item.kind){ if(item.kind==='hunter') meta.push('通用刻印'); else if(item.kind==='specific') meta.push('专属刻印'); else meta.push(asText(item.kind)); }
+  const rarity = asText(item.rarity);
+  if(rarity) meta.push(rarity);
+  if(item.grade) meta.push('品级 ' + asText(item.grade));
+  if(item.slot) meta.push(asText(item.slot));
+  if(typeof item.maxLevel === 'number' && item.maxLevel) meta.push('等级上限 ' + item.maxLevel);
+  if(item.depth) meta.push('深度 ' + asText(item.depth));
+  if(item.unobtainable) meta.push('无法正常生成');
+  const desc = asText(item.desc || item.description || item.note);
+  let effect = cleanRepeats(asText(item.effect || item.eff));
+  let curse = '';
+  const curseMatch = effect.match(/[；;]\s*诅咒\s*[:：]\s*([\s\S]*)$/);
+  if(curseMatch){
+    curse = curseMatch[1].trim();
+    effect = effect.slice(0, curseMatch.index).trim();
+  }
+  const stats = asText(item.stats);
+  const tags = (Array.isArray(item.tags) ? item.tags : Array.isArray(item.subs) ? item.subs : (typeof item.tags === 'string' && item.tags ? item.tags.split(/[,\s]+/) : []))
+    .map(asText).filter(Boolean);
+  const source = asText(item.source);
+  const rarityClass = ({'初始':'r0','普通':'r1','优秀':'r2','稀有':'r3','史诗':'r4','传奇':'r5'})[rarity] || '';
+  const metaHTML = meta.map((t) => {
+    const isRarity = t === rarity;
+    return '<span class="si-chip' + (isRarity ? ' si-rarity ' + rarityClass : '') + '">' + esc(t) + '</span>';
+  }).join('');
+  const statLines = stats.split(/[；\n]+/).map((x) => x.trim()).filter(Boolean);
+  const descHTML = splitParagraphs(desc).map((p) => '<p class="si-p">' + esc(p) + '</p>').join('');
+  const effectLines = splitEffect(effect);
+  const g = item.effectGroups;
+  const levelParts = effect ? effect.split(/\s*\/\s*(?=Lv\.\d+)/).map((x) => x.trim()).filter(Boolean) : [];
+  let effectHTML;
+  if(levelParts.length > 1){
+    effectHTML = '<div class="si-level-list">' + levelParts.map((part) => {
+      const m = part.match(/^(Lv\.\d+)\s*(.*)$/s);
+      const tag = m ? m[1] : '';
+      const text = m ? m[2] : part;
+      return '<div class="si-level-row">' + (tag ? '<span class="si-level-tag">' + esc(tag) + '</span>' : '') + '<span class="si-level-text">' + highlightNumbers(text) + '</span></div>';
+    }).join('') + '</div>';
+  } else if(g && (Array.isArray(g.main) || Array.isArray(g.groups))){
+    const mainLines = Array.isArray(g.main) ? g.main.filter(Boolean) : [];
+    const rawGroups = Array.isArray(g.groups) ? g.groups : [];
+    const resBlocks = rawGroups.map((rg, idx) => {
+      const entries = Array.isArray(rg) ? rg : (rg && Array.isArray(rg.lines) ? [rg] : []);
+      return { title: '共鸣组 ' + (idx + 1), entries };
+    }).filter((b) => b.entries.length);
+    effectHTML = (mainLines.length ? '<div class="si-effect-main"><div class="si-effect-sub">主效果</div><div class="si-effect-list">' + mainLines.map((line) => '<div class="si-effect-line"><span class="si-eqtext">' + highlightNumbers(line) + '</span></div>').join('') + '</div></div>' : '')
+      + (resBlocks.length ? '<div class="si-resonance"><div class="si-effect-sub">共鸣</div>'
+        + resBlocks.map((block) => '<div class="si-resblock"><div class="si-res-title">' + block.title + '</div>' + block.entries.map((entry) => '<div class="si-resgroup"><span class="si-lv">Lv.' + (entry.level || 1) + '</span><div class="si-reslines">' + (entry.lines || []).map((line) => '<p class="si-p">' + highlightNumbers(line) + '</p>').join('') + '</div></div>').join('') + '</div>').join('') + '</div>' : '');
+  } else if(effectLines.length > 1) {
+    effectHTML = '<div class="si-effect-list">' + effectLines.map((line, i) => '<div class="si-effect-line"><span class="si-eq">' + String(i + 1).padStart(2, '0') + '</span><span class="si-eqtext">' + highlightNumbers(line) + '</span></div>').join('') + '</div>';
+  } else {
+    effectHTML = effect ? '<div class="si-text">' + highlightNumbers(effect) + '</div>' : '';
+  }
+  return '<div class="si-hero"><div class="si-pic">' + ic(item.iconKey || item.name, item.name, 's60') + '</div>'
+    + '<div class="si-name">' + esc(item.name) + '</div>'
+    + (meta.length ? '<div class="si-meta">' + metaHTML + '</div>' : '')
+    + '</div>'
+    + (desc ? '<div class="si-sec si-desc"><div class="si-label">说明</div><div class="si-text">' + descHTML + '</div></div>' : '')
+    + (effect ? '<div class="si-sec si-effect"><div class="si-label">效果</div>' + effectHTML + '</div>' : '')
+    + (curse ? '<div class="si-sec si-curse"><div class="si-label">诅咒</div><div class="si-text">' + esc(curse) + '</div></div>' : '')
+    + (statLines.length ? '<div class="si-sec si-attrs"><div class="si-label">属性</div><div class="si-stats">' + statLines.map((line) => '<div class="si-stat">' + esc(line) + '</div>').join('') + '</div></div>' : '')
+    + (source ? '<div class="si-sec"><div class="si-label">获取</div><div class="si-text">' + esc(source) + '</div></div>' : '')
+    + (tags.length ? '<div class="si-sec"><div class="si-label">标签</div><div class="si-tags">' + tags.map((t) => '<span class="si-tag">' + esc(t) + '</span>').join('') + '</div></div>' : '')
+    + (!desc && !effect && !stats ? '<div class="si-sec"><div class="si-text dim">说明信息待补</div></div>' : '');
+}
+
+const SUBINFO_EMPTY = '<div class="si-empty">点选图鉴里的任意一件<br>这里会显示它的说明</div>';
+
+function showItemInfo(item){
+  const box = $('subInfo');
+  state.lastSubmitItem = item;
+  if(box){
+    box.innerHTML = buildItemInfo(item);
+  }
+}
+
+function openItemDetail(item){
+  if(!item) return;
+  const body = $('itemDetailBody'), modal = $('itemDetail');
+  if(!body || !modal) return;
+  body.innerHTML = buildItemInfo(item);
+  modal.classList.add('on');
+}
+
+function closeItemDetail(){
+  const modal = $('itemDetail');
+  if(modal) modal.classList.remove('on');
+}
+
+function filterItemByKey(seg, key){
+  if(seg === 'w') return WEAPONS.find((x) => x.id === key) || null;
+  if(seg === 'i') return INSC[key] ? { ...INSC[key], name: INSC[key].name } : null;
+  if(seg === 'equip') return WEAPON_ITEMS.find((x) => x.name === key) || null;
+  if(seg === 'armor') return ARMORS.find((x) => x.name === key) || null;
+  if(seg === 'treasure') return TREASURES.find((x) => x.name === key) || null;
+  return null;
+}
 
 function subCell(item, selected, onClick, iconKey, label){
   const el = document.createElement('div');
   el.className = 'subcell' + (selected ? ' on' : '');
   el.innerHTML = ic(iconKey || item.name, item.name, 's46') + `<div class="sn">${esc(label || item.name)}</div>`;
   el.title = item.eff ? (item.name + '：' + item.eff) : item.name;
-  el.onclick = onClick;
+  el.onclick = (ev) => { showItemInfo(item); onClick(ev); };
   return el;
 }
 
@@ -713,10 +1025,11 @@ function subPreview(){
 function subRenderWt(){
   const grid = $('subWtGrid');
   grid.innerHTML = '';
-  WEAPONS.forEach((it) => {
+  const q = ($('subWtSearch')?.value || '').trim().toLowerCase();
+  WEAPONS.filter((it) => !q || (it.name + ' ' + (it.short || '') + ' ' + (it.note || '')).toLowerCase().includes(q)).forEach((it) => {
     grid.appendChild(subCell(it, submit.wt === it.id, () => {
       submit.wt = submit.wt === it.id ? '' : it.id;
-      subRenderWt(); subStatus();
+      subRenderWt(); subRenderInsc(); subStatus();
     }, it.id, it.name));
   });
   subSet('subWtVal', submit.wt ? wName(submit.wt) : '');
@@ -724,21 +1037,245 @@ function subRenderWt(){
 }
 
 function subInscList(){
-  return Object.keys(INSC).map((id) => ({ id, name: INSC[id].name || id }));
+  return Object.keys(INSC).map((id) => INSC[id]);
+}
+
+let resMenuSlot = -1;
+
+function resGroups(){
+  const item = INSC[submit.insc];
+  const groups = item && item.effectGroups && item.effectGroups.groups;
+  if(!Array.isArray(groups)) return [];
+  const out = groups.slice(0, 3);
+  while(out.length < 3) out.push([]);
+  return out;
+}
+
+function resEntries(slotIdx){
+  const group = resGroups()[slotIdx];
+  return Array.isArray(group) ? group : [];
+}
+
+function soulShape(item){
+  const slot = String(item && item.slot || '');
+  if(slot.includes('三角')) return 'triangle';
+  if(slot.includes('方形')) return 'square';
+  if(slot.includes('圆形')) return 'circle';
+  if(slot.includes('六边')) return 'hexagon';
+  return '';
+}
+
+function resIcon(level){
+  return '../../assets/resonance-lv' + (level >= 2 ? (level >= 3 ? 3 : 2) : 1) + '.png';
+}
+
+function highlightStoneSlots(shape){
+  document.querySelectorAll('.stone-slot.hint').forEach((el) => el.classList.remove('hint'));
+  if(!shape) return;
+  document.querySelectorAll('.stone-slot.is-empty[data-shape="' + shape + '"]').forEach((el) => el.classList.add('hint'));
+}
+
+function buildResChain(nodeFactory){
+  const shapeOf = soulShape;
+  const shapePath = {
+    triangle: '<path d="M12 4l8 14H4z"/>',
+    square: '<rect x="5" y="5" width="14" height="14" rx="2"/>',
+    circle: '<circle cx="12" cy="12" r="7"/>',
+    hexagon: '<path d="M12 3l7.8 4.5v9L12 21l-7.8-4.5v-9z"/>',
+  };
+  const shapeName = { triangle: '三角形', square: '方形', circle: '圆形', hexagon: '六边形' };
+  const plan = [['triangle', 'square', 'circle'], ['triangle', 'square', 'circle'], ['hexagon', 'hexagon']];
+  const pool = submit.soulStones.map((name) => SOUL_STONES.find((x) => x.name === name)).filter(Boolean);
+  const used = new Set();
+  const takeStone = (shape) => {
+    for(const stone of pool){
+      if(used.has(stone.name)) continue;
+      if(shapeOf(stone) === shape){ used.add(stone.name); return stone; }
+    }
+    return null;
+  };
+  const stoneSlot = (shape) => {
+    const stone = takeStone(shape);
+    if(stone) return '<span class="stone-slot filled" data-shape="' + shape + '" title="' + esc(stone.name) + '"><img src="' + esc(stone.icon || '') + '" alt=""></span>';
+    return '<span class="stone-slot is-empty" data-shape="' + shape + '" title="' + shapeName[shape] + '槽位 · 未镶嵌"><svg viewBox="0 0 24 24" aria-hidden="true">' + shapePath[shape] + '</svg></span>';
+  };
+  let html = '';
+  plan.forEach((group, idx) => {
+    html += '<span class="stone-group">' + group.map(stoneSlot).join('') + '</span>';
+    const value = parseInt(submit.resonance[idx], 10) || 0;
+    const opts = resEntries(idx);
+    const entry = value ? opts[value - 1] : null;
+    html += nodeFactory(idx, entry, opts);
+  });
+  const extras = pool.filter((stone) => !used.has(stone.name));
+  if(extras.length){
+    html += '<span class="chain-extra" title="' + esc(extras.map((s) => s.name).join('、')) + '">+' + extras.length + '</span>';
+  }
+  return html;
+}
+
+function fitResChain(chain){
+  const host = chain.closest('.soulres');
+  if(!host || host.clientWidth < 80 || chain.clientWidth < 80) return;
+  const available = Math.max(160, host.clientWidth - 18);
+  const gap = available < 380 ? 4 : 5;
+  const base = 8 * 28 + 3 * 34;
+  const scale = Math.min(1, Math.max(.72, (available - 15 * gap) / base));
+  chain.style.setProperty('--chain-slot', (28 * scale).toFixed(1) + 'px');
+  chain.style.setProperty('--chain-node', (34 * scale).toFixed(1) + 'px');
+  chain.style.setProperty('--chain-gap', gap + 'px');
+}
+function refreshResChains(){
+  document.querySelectorAll('.soulres-chain').forEach(fitResChain);
+}
+
+function renderSoulRes(){
+  const box = $('subSoulRes');
+  if(!box) return;
+  if(!submit.insc){ box.hidden = true; return; }
+  box.hidden = false;
+  const slots = $('subSoulResSlots');
+  const code = $('subSoulResCode');
+  const picks = submit.resonance;
+  if(code) code.textContent = picks.some(Boolean) ? picks.map((v) => v || 0).join('-') : '尚未选择共鸣';
+  if(!slots) return;
+  slots.innerHTML = buildResChain((idx, entry, opts) => {
+    if(entry){
+      const level = entry.level || 1;
+      return '<span class="soulres-node filled" title="共鸣 ' + (idx + 1) + ' · ' + esc((entry.lines || [])[0] || '') + '"><img src="' + resIcon(level) + '" alt="Lv.' + level + '"></span>';
+    }
+    return '<span class="soulres-node is-empty" title="共鸣 ' + (idx + 1) + '：' + (opts.length ? '尚未选择' : '无可用选项') + '"><span class="rplus">' + (opts.length ? '+' : '–') + '</span></span>';
+  });
+  fitResChain(slots);
+}
+
+function renderResBar(){
+  const bar = $('subResBar');
+  if(!bar) return;
+  renderSoulRes();
+  const groups = resGroups();
+  const hasOptions = groups.some((g) => Array.isArray(g) && g.length);
+  if(!submit.insc){
+    bar.hidden = true;
+    resMenuSlot = -1;
+    return;
+  }
+  bar.hidden = false;
+  const slots = $('subResSlots');
+  if(slots){
+    slots.innerHTML = buildResChain((idx, entry, opts) => {
+      const cls = 'soulres-node' + (entry ? ' filled' : (opts.length ? ' is-empty' : ' is-empty'));
+      const title = entry ? ('共鸣 ' + (idx + 1) + ' · ' + esc((entry.lines || [])[0] || '')) : ('共鸣 ' + (idx + 1) + '：' + (opts.length ? '选择共鸣' : '无可用选项'));
+      const disabled = opts.length ? '' : ' disabled';
+      return '<button type="button" class="' + cls + '" data-res-slot="' + idx + '"' + disabled + ' title="' + title + '">'
+        + (entry ? '<img src="' + resIcon(entry.level) + '" alt="Lv.' + (entry.level || 1) + '">' : '<span class="rplus">' + (opts.length ? '+' : '–') + '</span>')
+        + '</button>';
+    });
+    fitResChain(slots);
+  }
+  const hint = $('subResHint');
+  if(hint) hint.textContent = submit.resonance.some(Boolean) ? '已选 ' + submit.resonance.map((v) => v || 0).join('-') : '尚未选择共鸣';
+  const menu = $('subResMenu');
+  if(!menu) return;
+  if(resMenuSlot < 0){
+    menu.hidden = true;
+    menu.innerHTML = '';
+    return;
+  }
+  const entries = resEntries(resMenuSlot);
+  menu.hidden = false;
+  menu.innerHTML = '<div class="resmenu-title">选择共鸣</div>'
+    + (entries.length
+      ? entries.map((entry, idx) => '<button type="button" class="resopt" data-res-value="' + (idx + 1) + '">'
+        + '<img class="ricon" src="' + resIcon(entry.level) + '" alt="Lv.' + (entry.level || 1) + '">'
+        + '<span class="roptext">' + esc((entry.lines || [])[0] || '') + '</span></button>').join('')
+      : '<div class="resmenu-empty">该位置没有可选的共鸣</div>')
+    + '<button type="button" class="resclear" data-res-clear="1">清空该共鸣</button>';
+}
+
+function bindResBar(){
+  const bar = $('subResBar');
+  if(!bar || bar.dataset.bound) return;
+  bar.dataset.bound = '1';
+  document.addEventListener('click', (ev) => {
+    if(!ev.target || !ev.target.isConnected) return;
+    if(resMenuSlot >= 0 && !ev.target.closest('#subResBar')){ resMenuSlot = -1; renderResBar(); }
+  });
+  bar.addEventListener('click', (ev) => {
+    const slot = ev.target.closest('[data-res-slot]');
+    if(slot){ const idx = Number(slot.dataset.resSlot); resMenuSlot = resMenuSlot === idx ? -1 : idx; renderResBar(); return; }
+    const opt = ev.target.closest('[data-res-value]');
+    if(opt && resMenuSlot >= 0){
+      submit.resonance[resMenuSlot] = opt.dataset.resValue;
+      resMenuSlot = -1;
+      renderResBar();
+      return;
+    }
+    const clear = ev.target.closest('[data-res-clear]');
+    if(clear && resMenuSlot >= 0){
+      submit.resonance[resMenuSlot] = '';
+      resMenuSlot = -1;
+      renderResBar();
+    }
+  });
+  renderSoulRes();
 }
 
 function subRenderInsc(){
   const grid = $('subInscGrid');
+  const q = ($('subInscSearch')?.value || '').trim().toLowerCase();
+  const wtToggle = $('subInscOnlyWt');
+  if(wtToggle){
+    const hasWt = !!submit.wt;
+    wtToggle.disabled = !hasWt;
+    if(!hasWt) wtToggle.classList.remove('on');
+    wtToggle.setAttribute('aria-pressed', wtToggle.classList.contains('on') ? 'true' : 'false');
+  }
+  const onlyWt = !!(wtToggle && wtToggle.classList.contains('on')) && !!submit.wt;
   grid.innerHTML = '';
-  subInscList().forEach((it) => {
+  subInscList().filter((it) => {
+    if(onlyWt && it.wt !== submit.wt) return false;
+    return !q || it.name.toLowerCase().includes(q);
+  }).forEach((it) => {
     grid.appendChild(subCell(it, submit.insc === it.id, () => {
-      submit.insc = submit.insc === it.id ? '' : it.id;
-      subRenderInsc(); subStatus();
+      const next = submit.insc === it.id ? '' : it.id;
+      if(next !== submit.insc) submit.resonance = ['', '', ''];
+      submit.insc = next;
+      resMenuSlot = -1;
+      subRenderInsc(); subStatus(); renderResBar();
     }, it.id, it.name.replace('刻印', '')));
   });
   subSet('subInscVal', submit.insc ? (INSC[submit.insc]?.name || submit.insc) : '');
+  renderResBar();
   subPreview();
 }
+
+bindResBar();
+const soulGrid = $('subSoulGrid');
+if(soulGrid){
+  soulGrid.addEventListener('mouseover', (ev) => {
+    const cell = ev.target.closest('.subcell');
+    if(cell) highlightStoneSlots(cell.dataset.shape || '');
+  });
+  soulGrid.addEventListener('mouseleave', () => highlightStoneSlots(''));
+}
+if(typeof ResizeObserver !== 'undefined'){
+  const chainObserver = new ResizeObserver(() => refreshResChains());
+  document.querySelectorAll('.soulres').forEach((el) => chainObserver.observe(el));
+}
+window.addEventListener('resize', refreshResChains);
+
+const subWtSearch = $('subWtSearch');
+if(subWtSearch) subWtSearch.addEventListener('input', subRenderWt);
+const subInscSearch = $('subInscSearch');
+if(subInscSearch) subInscSearch.addEventListener('input', subRenderInsc);
+const subInscOnlyWt = $('subInscOnlyWt');
+if(subInscOnlyWt) subInscOnlyWt.addEventListener('click', () => {
+  if(subInscOnlyWt.disabled) return;
+  subInscOnlyWt.classList.toggle('on');
+  subInscOnlyWt.setAttribute('aria-pressed', subInscOnlyWt.classList.contains('on') ? 'true' : 'false');
+  subRenderInsc();
+});
 
 function subRenderEquip(){
   const q = ($('subEquipSearch').value || '').trim().toLowerCase();
@@ -826,13 +1363,13 @@ function subRenderTreasures(){
   const grid = $('subTreasureGrid');
   grid.innerHTML = '';
   TREASURES.filter((it) => !q || it.name.toLowerCase().includes(q)).forEach((it) => {
-    const group = ['gold', 'craft', 'main', 'backup'].find((k) => submit.treasureTiers[k].includes(it.name)) || '';
+    const group = ['must', 'recommended', 'backup'].find((k) => submit.treasureTiers[k].includes(it.name)) || '';
     const el = subCell(it, !!group, () => {
       const list = submit.treasureTiers[activeKey];
       const at = list.indexOf(it.name);
       if (at >= 0) list.splice(at, 1);
       else {
-        ['gold', 'craft', 'main', 'backup'].forEach((k) => {
+        ['must', 'recommended', 'backup'].forEach((k) => {
           const i = submit.treasureTiers[k].indexOf(it.name);
           if (i >= 0) submit.treasureTiers[k].splice(i, 1);
         });
@@ -863,13 +1400,16 @@ function subRenderSoul(){
   const grid = $('subSoulGrid');
   grid.innerHTML = '';
   SOUL_STONES.filter((it) => !it.unavailable && (!q || it.name.toLowerCase().includes(q))).forEach((it) => {
-    grid.appendChild(subCell(it, submit.soulStones.includes(it.name), () => {
+    const cell = subCell(it, submit.soulStones.includes(it.name), () => {
       const at = submit.soulStones.indexOf(it.name);
       if (at >= 0) submit.soulStones.splice(at, 1); else submit.soulStones.push(it.name);
       subRenderSoul(); subRenderSel(); subStatus();
-    }, it.name, it.name));
+    }, it.name, it.name);
+    cell.dataset.shape = soulShape(it);
+    grid.appendChild(cell);
   });
   subSet('subSoulCount', submit.soulStones.length);
+  renderSoulRes();
 }
 
 function subRenderCursed(){
@@ -926,15 +1466,27 @@ function openSubmit(){
   $('subName').value = '';
   $('subVersion').value = '';
   $('subAuthor').value = '';
-  $('subTags').value = '';
+  submit.tags = [];
+  if($('subTagInput')) $('subTagInput').value = '';
+  renderSubTags();
   $('subTip').value = '';
-  submit.wt = ''; submit.insc = ''; submit.transition = []; submit.graduation = []; submit.slot = 'graduation'; submit.armorTransition = []; submit.armorGraduation = []; submit.armorSlot = 'graduation'; submit.treasureTiers = { gold: [], craft: [], main: [], backup: [] }; submit.treasureSlot = 'main';
-  submit.soulStones = []; submit.cursed = { none: [], suggest: [], must: [] }; submit.cursedSlot = 'suggest';
+  if($('subWtSearch')) $('subWtSearch').value = '';
+  if($('subInscSearch')) $('subInscSearch').value = '';
+  if($('subInscOnlyWt')){ $('subInscOnlyWt').classList.remove('on'); $('subInscOnlyWt').setAttribute('aria-pressed','false'); $('subInscOnlyWt').disabled = true; }
+  submit.wt = ''; submit.insc = ''; submit.transition = []; submit.graduation = []; submit.slot = 'transition'; submit.armorTransition = []; submit.armorGraduation = []; submit.armorSlot = 'transition'; submit.treasureTiers = { must: [], recommended: [], backup: [] }; submit.treasureSlot = 'must';
+  submit.soulStones = []; submit.cursed = { none: [], suggest: [], must: [] }; submit.cursedSlot = 'none'; submit.resonance = ['', '', ''];
+  applyStoneOrder(['red', 'green', 'blue']);
   subRenderWt(); subRenderInsc(); subRenderEquip(); subRenderSlots(); subRenderArmor(); subRenderArmorSlots(); subRenderTreasures(); subRenderTreasureSlots();
   subRenderSoul(); subRenderCursed(); subRenderCursedSlots(); subRenderTreasureSlots(); subRenderSel(); subStatus();
   subGo(0);
+  subReviewOpen = false;
+  $subModal.classList.remove('review-mode');
+  subSet('subSave', '查看已选');
   subPreview();
   state.submitOpen = true;
+  state.lastSubmitItem = null;
+  const infoBox = $('subInfo');
+  if(infoBox) infoBox.innerHTML = SUBINFO_EMPTY;
   $subModal.classList.add('on');
   requestAnimationFrame(syncSubThumb);
   acquireFocusInput($('subName'));
@@ -942,15 +1494,32 @@ function openSubmit(){
 
 function closeSubmit(){
   state.submitOpen = false;
+  state.lastSubmitItem = null;
+  const infoBox = $('subInfo');
+  if(infoBox) infoBox.innerHTML = SUBINFO_EMPTY;
+  $subModal.classList.remove('review-mode');
   $subModal.classList.remove('on');
   releaseFocusInput();
+}
+
+function selectedResonance(){
+  const picks = submit.resonance.map((v, idx) => {
+    const entries = resEntries(idx);
+    const entry = entries[parseInt(v, 10) - 1];
+    return entry ? { entry, lines: entry.lines || [] } : null;
+  }).filter(Boolean);
+  if(!picks.length) return null;
+  const nodes = picks.map((p) => p.lines.join(' ')).filter(Boolean);
+  if(!nodes.length) return null;
+  return { code: submit.resonance.map((v) => v || 0).join('-'), nodes };
 }
 
 async function saveSubmit(){
   const name = ($('subName').value || '').trim();
   const author = ($('subAuthor').value || '').trim();
   const gameVersion = ($('subVersion').value || '').trim();
-  const tags = subSplit($('subTags').value);
+  commitSubTagInput();
+  const tags = submit.tags.slice();
   const tip = ($('subTip').value || '').trim();
   if (name.length < 2 || name.length > 20) return showToast('流派名需要 2-20 个字');
   if (!submit.wt) return showToast('请选择武器类型');
@@ -977,6 +1546,8 @@ async function saveSubmit(){
     rating: 0, votes: 0,
     features, tags, tip, author, gameVersion,
     updatedAt: today,
+    ...(selectedResonance() ? { resonance: selectedResonance() } : {}),
+    ...(submit.stoneConfirmed ? { stonePriority: Object.fromEntries(submit.stoneOrder.map((key, idx) => [key, idx + 1])) } : {}),
     sourceType: 'self-test',
     license: 'CC-BY-NC-SA-4.0',
     ...(Object.keys(gear).length ? { gear } : {}),
@@ -990,9 +1561,8 @@ async function saveSubmit(){
       return { name: n, ...(a && a.kind ? { type: a.kind } : {}), tier };
     }),
     treasureTiers: {
-      gold: submit.treasureTiers.gold.slice(),
-      craft: submit.treasureTiers.craft.slice(),
-      main: submit.treasureTiers.main.slice(),
+      must: submit.treasureTiers.must.slice(),
+      recommended: submit.treasureTiers.recommended.slice(),
       backup: submit.treasureTiers.backup.slice(),
     },
     soulStones: submit.soulStones.map((n) => {
@@ -1022,7 +1592,10 @@ async function saveSubmit(){
 /* 多页切换 */
 const SUB_PAGES = ['basic', 'wt', 'insc', 'equip', 'armor', 'treasure', 'soul', 'cursed'];
 let subPage = 0;
+let subReviewOpen = false;
 function subGo(i){
+  subReviewOpen = false;
+  $subModal.classList.remove('review-mode');
   subPage = Math.max(0, Math.min(SUB_PAGES.length - 1, i));
   const page = SUB_PAGES[subPage];
   const prev = $('subPrev'), next = $('subNext');
@@ -1030,16 +1603,153 @@ function subGo(i){
   if (next) next.disabled = subPage === SUB_PAGES.length - 1;
   document.querySelectorAll('#submitModal .subpage').forEach((el) => el.classList.toggle('on', el.dataset.page === page));
   document.querySelectorAll('#submitModal .subpages > div').forEach((el) => el.classList.toggle('on', el.dataset.page === page));
+  if(page === 'insc' || page === 'soul') requestAnimationFrame(refreshResChains);
+  subSet('subSave', '查看已选');
   requestAnimationFrame(syncSubThumb);
+}
+
+function openReview(){
+  subReviewOpen = true;
+  $subModal.classList.add('review-mode');
+  const prev = $('subPrev'), next = $('subNext');
+  if (prev) prev.disabled = false;
+  if (next) next.disabled = true;
+  document.querySelectorAll('#submitModal .subpage').forEach((el) => el.classList.toggle('on', el.dataset.page === 'review'));
+  document.querySelectorAll('#submitModal .subpages > div').forEach((el) => el.classList.remove('on'));
+  subRenderReview();
+  subSet('subSave', '提交');
+  requestAnimationFrame(syncSubThumb);
+  $('subBody').scrollTop = 0;
+}
+
+function subReviewRow(label, items, kind, group, opts){
+  if(!items.length) return '';
+  const keyOf = opts && opts.icon ? opts.icon : (n) => n;
+  const labelOf = opts && opts.label ? opts.label : (n) => n;
+  return '<div class="rvgroup"><span class="rvglabel">'+label+'</span><span class="rvchips">'
+    + items.map((n) => '<span class="rvchip" title="点击查看详情" data-kind="'+kind+'" data-group="'+group+'" data-name="'+esc(n)+'">'+ic(keyOf(n), labelOf(n), 's30')+esc(labelOf(n))
+      +'<span class="rvx" data-kind="'+kind+'" data-group="'+group+'" data-name="'+esc(n)+'">×</span></span>').join('')
+    + '</span></div>';
+}
+
+function subClearReview(){
+  submit.wt = '';
+  submit.insc = '';
+  submit.transition = []; submit.graduation = [];
+  submit.armorTransition = []; submit.armorGraduation = [];
+  submit.treasureTiers = { must: [], recommended: [], backup: [] }; submit.treasureSlot = 'must';
+  submit.soulStones = [];
+  submit.cursed = { none: [], suggest: [], must: [] };
+  submit.resonance = ['', '', ''];
+  applyStoneOrder(['red', 'green', 'blue']);
+  renderResBar();
+  subRenderWt(); subRenderInsc(); subRenderEquip(); subRenderSlots();
+  subRenderArmor(); subRenderArmorSlots(); subRenderTreasures(); subRenderTreasureSlots();
+  subRenderSoul(); subRenderCursed(); subRenderCursedSlots();
+  subRenderReview(); subStatus();
+  showToast('已清空全部已选内容');
+}
+
+function subRenderReview(){
+  const box = $('subReview');
+  if(!box) return;
+  const parts = [];
+  if(submit.wt) parts.push(subReviewRow('武器', [submit.wt], 'wt', '', { icon: (id) => id, label: (id) => wName(id) }));
+  if(submit.insc) parts.push(subReviewRow('刻印', [submit.insc], 'insc', '', { icon: (id) => id, label: (id) => (INSC[id]?.name || id).replace('刻印','') }));
+  const resPick = selectedResonance();
+  if(resPick){
+    parts.push('<div class="rvsec"><div class="rvhead"><span>刻印共鸣</span><span class="rvcount">'+esc(resPick.code)+'</span></div>'
+      + resPick.nodes.map((node, i) => '<div class="rvnote"><b>共鸣 '+(i+1)+'</b>'+esc(node)+'</div>').join('') + '</div>');
+  }
+  const stonePicks = submit.stoneOrder.map((key, idx) => [key, idx + 1]);
+  if(submit.stoneConfirmed){
+    const stoneNames = { red: '阿希尔符文', green: '帕拉提符文', blue: '纳伊鲁符文' };
+    const stoneIcons = {
+      red: 'https://huiji-public.huijistatic.com/lc2/uploads/0/07/Icon_Power_Red.png',
+      green: 'https://huiji-public.huijistatic.com/lc2/uploads/6/69/Icon_Power_Green.png',
+      blue: 'https://huiji-public.huijistatic.com/lc2/uploads/f/fe/Icon_Power_blue.png',
+    };
+    parts.push('<div class="rvsec"><div class="rvhead"><span>符文优先级</span></div><div class="rvgroup"><span class="rvchips rune-order">'
+      + stonePicks.map(([k], i) => '<span class="rvstone '+k+'"><img class="rvstone-ic" src="' + stoneIcons[k] + '" alt=""><span>' + stoneNames[k] + '</span></span>' + (i < stonePicks.length - 1 ? '<span class="rvstone-arrow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>' : '')).join('')
+      + '</span></div></div>');
+  }
+  if(submit.transition.length || submit.graduation.length){
+    parts.push('<div class="rvsec"><div class="rvhead"><span>装备</span><span class="rvcount">'
+      +(submit.transition.length+submit.graduation.length)+'</span></div>'
+      + subReviewRow('过渡', submit.transition, 'equip', 'transition')
+      + subReviewRow('毕业', submit.graduation, 'equip', 'graduation') + '</div>');
+  }
+  if(submit.armorTransition.length || submit.armorGraduation.length){
+    parts.push('<div class="rvsec"><div class="rvhead"><span>衣服</span><span class="rvcount">'
+      +(submit.armorTransition.length+submit.armorGraduation.length)+'</span></div>'
+      + subReviewRow('过渡', submit.armorTransition, 'armor', 'transition')
+      + subReviewRow('毕业', submit.armorGraduation, 'armor', 'graduation') + '</div>');
+  }
+  const tr = submit.treasureTiers;
+  const trAll = tr.must.length + tr.recommended.length + tr.backup.length;
+  if(trAll){
+    parts.push('<div class="rvsec"><div class="rvhead"><span>宝藏</span><span class="rvcount">'+trAll+'</span></div>'
+      + subReviewRow('必选', tr.must, 'treasure', 'must')
+      + subReviewRow('推荐', tr.recommended, 'treasure', 'recommended')
+      + subReviewRow('备选', tr.backup, 'treasure', 'backup') + '</div>');
+  }
+  if(submit.soulStones.length){
+    parts.push('<div class="rvsec"><div class="rvhead"><span>灵魂石</span><span class="rvcount">'+submit.soulStones.length+'</span></div>'
+      + subReviewRow('效果', submit.soulStones, 'soul', '') + '</div>');
+  }
+  const c = submit.cursed;
+  const cAll = c.none.length + c.suggest.length + c.must.length;
+  if(cAll){
+    parts.push('<div class="rvsec"><div class="rvhead"><span>诅咒宝藏</span><span class="rvcount">'+cAll+'</span></div>'
+      + subReviewRow('不用净化', c.none, 'cursed', 'none')
+      + subReviewRow('建议净化', c.suggest, 'cursed', 'suggest')
+      + subReviewRow('必须净化', c.must, 'cursed', 'must') + '</div>');
+  }
+  box.innerHTML = parts.length ? parts.join('') : emptyState('还没有选东西呢 (´･ω･`)', '去前面的页签挑一挑吧', true);
+  const clear = $('subReviewClear'); if(clear) clear.classList.toggle('disabled', !parts.length);
+  const reviewItem = (kind, group, name) => {
+    if(kind === 'wt') return WEAPONS.find((x) => x.id === name) || null;
+    if(kind === 'insc') return INSC[name] ? { ...INSC[name] } : null;
+    if(kind === 'equip') return WEAPON_ITEMS.find((x) => x.name === name) || null;
+    if(kind === 'armor') return ARMORS.find((x) => x.name === name) || null;
+    if(kind === 'treasure') return TREASURES.find((x) => x.name === name) || null;
+    if(kind === 'soul') return SOUL_STONES.find((x) => x.name === name) || null;
+    if(kind === 'cursed') return CURSED_TREASURES.find((x) => x.name === name) || null;
+    return null;
+  };
+  box.querySelectorAll('.rvchip').forEach((chip) => {
+    chip.onclick = (ev) => {
+      if(ev.target.closest && ev.target.closest('.rvx')) return;
+      const item = reviewItem(chip.dataset.kind, chip.dataset.group, chip.dataset.name);
+      if(!item) return;
+      if(window.innerWidth >= 720) showItemInfo(item);
+    };
+  });
+  box.querySelectorAll('.rvx').forEach((x) => {
+    x.onclick = () => {
+      const kind = x.dataset.kind, group = x.dataset.group, name = x.dataset.name;
+      if(e && e.stopPropagation) e.stopPropagation();
+      if(kind === 'wt') submit.wt = '';
+      else if(kind === 'insc') submit.insc = '';
+      else if(kind === 'equip') submit[group === 'transition' ? 'transition' : 'graduation'] = submit[group === 'transition' ? 'transition' : 'graduation'].filter((n) => n !== name);
+      else if(kind === 'armor') submit[group === 'transition' ? 'armorTransition' : 'armorGraduation'] = submit[group === 'transition' ? 'armorTransition' : 'armorGraduation'].filter((n) => n !== name);
+      else if(kind === 'treasure') submit.treasureTiers[group] = submit.treasureTiers[group].filter((n) => n !== name);
+      else if(kind === 'soul') submit.soulStones = submit.soulStones.filter((n) => n !== name);
+      else if(kind === 'cursed') submit.cursed[group] = submit.cursed[group].filter((n) => n !== name);
+      subRenderWt(); subRenderInsc(); subRenderEquip(); subRenderArmor(); subRenderTreasures(); subRenderSoul(); subRenderCursed();
+      subRenderSlots(); subRenderArmorSlots(); subRenderTreasureSlots(); subRenderCursedSlots(); subRenderReview(); subStatus();
+    };
+  });
 }
 
 function syncSubThumb(){
   const row = $('subPages');
   const thumb = row && row.querySelector('.seg-thumb');
   const active = row && row.querySelector('div.on');
-  if (!row || !thumb || !active) return;
+  if (!row || !thumb) return;
+  if (!active) { thumb.style.width = '0'; thumb.style.height = '0'; return; }
   const rr = row.getBoundingClientRect(), ar = active.getBoundingClientRect();
-  if (!ar.width) return;
+  if (!ar.width) { thumb.style.width = '0'; thumb.style.height = '0'; return; }
   thumb.style.left = (ar.left - rr.left) + 'px';
   thumb.style.top = (ar.top - rr.top) + 'px';
   thumb.style.width = ar.width + 'px';
@@ -1061,11 +1771,13 @@ document.querySelectorAll('#submitModal .treasure-slots .subslot').forEach((slot
 document.querySelectorAll('#submitModal .cursed-slots .subslot').forEach((slot) => {
   slot.onclick = () => { submit.cursedSlot = slot.dataset.slot; subRenderCursed(); subRenderCursedSlots(); };
 });
-$('subPrev').onclick = () => subGo(subPage - 1);
-$('subNext').onclick = () => subGo(subPage + 1);
+$('subPrev').onclick = () => { if (subReviewOpen) subGo(SUB_PAGES.length - 1); else subGo(subPage - 1); };
+$('subNext').onclick = () => { if (!subReviewOpen) subGo(subPage + 1); };
 $sbtn.onclick = openSubmit;
 $('subClose').onclick = closeSubmit;
-$('subSave').onclick = saveSubmit;
+$('subSave').onclick = () => { if (subReviewOpen) saveSubmit(); else openReview(); };
+$('subReviewBack').onclick = () => subGo(SUB_PAGES.length - 1);
+$('subReviewClear').onclick = subClearReview;
 $('subName').addEventListener('input', subPreview);
 $('subTip').addEventListener('input', subPreview);
 $('subEquipSearch').addEventListener('input', subRenderEquip);
@@ -1073,7 +1785,181 @@ $('subArmorSearch').addEventListener('input', subRenderArmor);
 $('subTreasureSearch').addEventListener('input', subRenderTreasures);
 $('subSoulSearch').addEventListener('input', subRenderSoul);
 $('subCursedSearch').addEventListener('input', subRenderCursed);
-$subModal.addEventListener('click', (e) => { if (e.target === $subModal) closeSubmit(); });
+$subModal.addEventListener('click', (e) => { if(window.__lc2SuppressBackdrop){window.__lc2SuppressBackdrop=false;return;} if (e.target === $subModal) closeSubmit(); });
+
+/* 详情栏宽度拖拽 */
+(function bindInfoSplitters(){
+  const KEY = 'lc2.infoWidth';
+  const MIN = 220;
+  function maxWidth(){ return Math.max(MIN, Math.min(560, window.innerWidth - 300)); }
+  function applyPaneWidth(pane, value){
+    if(!pane) return;
+    const w = Math.max(MIN, Math.min(maxWidth(), value));
+    pane.style.width = w + 'px';
+  }
+  function applyAll(value){
+    document.querySelectorAll('.minfo,.subinfo').forEach((p) => applyPaneWidth(p, value));
+  }
+  const saved = Number(localStorage.getItem(KEY));
+  if(Number.isFinite(saved) && saved >= MIN) applyAll(saved);
+  function setup(splitId, paneSelector){
+    const split = document.getElementById(splitId);
+    const pane = document.querySelector(paneSelector);
+    if(!split || !pane) return;
+    let drag = null;
+    split.addEventListener('pointerdown', (ev) => {
+      if(ev.button !== 0) return;
+      drag = { x: ev.clientX, w: pane.getBoundingClientRect().width };
+      split.classList.add('dragging');
+      try { split.setPointerCapture(ev.pointerId); } catch(e){}
+      ev.preventDefault();
+      ev.stopPropagation();
+    });
+    split.addEventListener('pointermove', (ev) => {
+      if(!drag) return;
+      const next = drag.w + (drag.x - ev.clientX);
+      applyPaneWidth(pane, next);
+    });
+    function end(){
+      if(!drag) return;
+      drag = null;
+      split.classList.remove('dragging');
+      try { localStorage.setItem(KEY, String(Math.round(pane.getBoundingClientRect().width))); } catch(e){}
+    }
+    split.addEventListener('pointerup', end);
+    split.addEventListener('pointercancel', end);
+    split.addEventListener('lostpointercapture', end);
+    split.addEventListener('dblclick', () => { applyAll(268); try { localStorage.setItem(KEY, '268'); } catch(e){} });
+  }
+  setup('filterSplit', '.minfo');
+  setup('subSplit', '.subinfo');
+  window.addEventListener('resize', () => {
+    document.querySelectorAll('.minfo,.subinfo').forEach((p) => {
+      if(p.style.width) applyPaneWidth(p, parseInt(p.style.width, 10));
+    });
+  });
+})();
+
+/* 设置 */
+const settingsBtn = $('settingsBtn'), settingsModal = $('settings'), settingsClose = $('settingsClose');
+function syncSizeButtons(){
+  const w = window.innerWidth, h = window.innerHeight;
+  document.querySelectorAll('#settings [data-size]').forEach((btn) => {
+    const [bw, bh] = btn.dataset.size.split('x').map(Number);
+    btn.classList.toggle('on', Math.abs(w - bw) <= 4 && Math.abs(h - bh) <= 4);
+  });
+}
+function applyPanelSize(w, h){
+  if(window.lc2 && window.lc2.setPanelSize) window.lc2.setPanelSize(w, h);
+  else window.resizeTo(w, h);
+  setTimeout(() => {
+    syncSizeButtons();
+    if(Math.abs(window.innerWidth - w) > 6 || Math.abs(window.innerHeight - h) > 6){
+      showToast('窗口尺寸调整失败，请重启客户端后再试');
+    }
+  }, 320);
+}
+function openSettings(){
+  settingsModal.classList.add('on');
+  syncSizeButtons();
+  if(settingsBtn) settingsBtn.setAttribute('aria-expanded', 'true');
+}
+function closeSettings(){
+  settingsModal.classList.remove('on');
+  if(settingsBtn) settingsBtn.setAttribute('aria-expanded', 'false');
+}
+if(settingsBtn) settingsBtn.onclick = openSettings;
+if(settingsClose) settingsClose.onclick = closeSettings;
+document.querySelectorAll('#settings [data-size]').forEach((btn) => {
+  btn.onclick = () => {
+    const [w, h] = btn.dataset.size.split('x').map(Number);
+    applyPanelSize(w, h);
+  };
+});
+const settingsCheck = $('settingsCheckUpdate');
+const settingsUpdateMsg = $('settingsUpdateMsg');
+const settingsDownload = $('settingsDownloadUpdate');
+let updateInfo = null;
+function setUpdateMsg(text, ok){
+  if(settingsUpdateMsg){
+    settingsUpdateMsg.textContent = text;
+    settingsUpdateMsg.style.color = ok ? '#A8D8B0' : '';
+  }
+}
+function compareVersion(a, b){
+  const parse = (s) => String(s || '').replace(/^v/i, '').split('.').map((n) => {
+    const v = parseInt(n, 10); return Number.isFinite(v) ? v : 0;
+  });
+  const x = parse(a), y = parse(b);
+  for(let i = 0; i < Math.max(x.length, y.length); i++){
+    const dx = x[i] || 0, dy = y[i] || 0;
+    if(dx !== dy) return dx - dy;
+  }
+  return 0;
+}
+async function fetchRemoteVersion(){
+  const urls = [
+    'https://raw.githubusercontent.com/Shuijiao926/lost_castle_helper/main/package.json',
+    'https://raw.githubusercontent.com/Shuijiao926/lost_castle_helper/master/package.json',
+  ];
+  for(const url of urls){
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 8000);
+    try {
+      const res = await fetch(url, { cache: 'no-store', signal: ctrl.signal });
+      if(!res.ok) continue;
+      const pkg = await res.json();
+      if(pkg && pkg.version) return String(pkg.version).replace(/^v/i, '');
+    } catch(e) {
+      // try next mirror
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+  return null;
+}
+if(settingsCheck) settingsCheck.onclick = async () => {
+  if(settingsCheck.disabled) return;
+  settingsCheck.disabled = true;
+  settingsCheck.textContent = '检查中…';
+  if(settingsDownload) settingsDownload.hidden = true;
+  setUpdateMsg('正在检查最新版本…');
+  try {
+    let current = '—';
+    if(window.lc2 && window.lc2.getConfig){
+      try { const cfg = await window.lc2.getConfig(); current = cfg.version || current; } catch(e){}
+    }
+    let latest = await fetchRemoteVersion();
+    if(!latest && window.lc2 && window.lc2.checkUpdate){
+      try {
+        const remote = await window.lc2.checkUpdate();
+        if(remote && remote.ok) latest = remote.latest;
+      } catch(e){}
+    }
+    if(!latest){
+      setUpdateMsg('检查失败，请检查网络后重试');
+      return;
+    }
+    if(compareVersion(latest, current) > 0){
+      updateInfo = { latest, current, url: 'https://github.com/Shuijiao926/lost_castle_helper/releases' };
+      setUpdateMsg('发现新版本 v' + latest + '，当前 v' + current);
+      if(settingsDownload) settingsDownload.hidden = false;
+    } else {
+      updateInfo = { latest, current, url: 'https://github.com/Shuijiao926/lost_castle_helper/releases' };
+      setUpdateMsg('当前已是最新版本 v' + current, true);
+    }
+  } catch(e) {
+    setUpdateMsg('检查失败，请检查网络后重试');
+  } finally {
+    settingsCheck.disabled = false;
+    settingsCheck.textContent = '检查更新';
+  }
+};
+if(settingsDownload) settingsDownload.onclick = () => {
+  const url = (updateInfo && updateInfo.url) || 'https://github.com/Shuijiao926/lost_castle_helper/releases';
+  if(window.lc2 && window.lc2.openExternal) window.lc2.openExternal(url);
+  else window.open(url, '_blank');
+};
 
 /* 帮助 */
 const $hbtn=$('hbtn'),$help=$('help'),$helpClose=$('helpClose');
@@ -1081,7 +1967,7 @@ function openHelp(){$help.classList.add('on');}
 function closeHelp(){$help.classList.remove('on');}
 $hbtn.onclick=openHelp;
 $helpClose.onclick=closeHelp;
-$help.onclick=ev=>{if(ev.target===$help)closeHelp();};
+$help.onclick=ev=>{if(window.__lc2SuppressBackdrop){window.__lc2SuppressBackdrop=false;return;}if(ev.target===$help)closeHelp();};
 
 const updateBtn = $('updateBtn');
 const updateDialog = $('updateDialog');
@@ -1122,6 +2008,7 @@ function closeUpdateDialog() {
 updateBtn.onclick = openUpdateDialog;
 $('updateClose').onclick = closeUpdateDialog;
 updateDialog.onclick = (event) => {
+  if(window.__lc2SuppressBackdrop){window.__lc2SuppressBackdrop=false;return;}
   if (event.target === updateDialog) closeUpdateDialog();
 };
 
@@ -1149,7 +2036,7 @@ if(mallBtn) mallBtn.onclick=function(){
 };
 const mCloseBtn=document.getElementById('mClose');
 if(mCloseBtn) mCloseBtn.onclick=()=>closeModal();
-elModal.onclick=ev=>{if(ev.target===elModal)closeModal();};
+elModal.onclick=ev=>{if(window.__lc2SuppressBackdrop){window.__lc2SuppressBackdrop=false;return;}if(ev.target===elModal)closeModal();};
 document.querySelectorAll('#modal .mseg div').forEach(d=>{d.onclick=()=>{
   state.seg=d.dataset.seg;
   const seg=document.querySelector('#modal .mseg'); if(seg) seg.dataset.seg=state.seg;
@@ -1291,12 +2178,17 @@ document.addEventListener('keydown',e=>{
   const k=e.key;
   const tag=(e.target&&e.target.tagName)||'';
   if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT') return;   // 输入控件自己处理键盘
+  if(document.getElementById('itemDetail')?.classList.contains('on')){ if(k==='Escape'){e.preventDefault();closeItemDetail();} return; }
   if(e.target===searchQueryClear && k==='Enter') return;
   if(k==='`'){e.preventDefault();
     if(typeof window.lc2!=='undefined'){ window.lc2.requestToggle(); return; }
     const hid=elPanel.classList.toggle('hidden');
     elBubble.classList.toggle('hidden',!hid);elTip.classList.toggle('hidden',!hid);return;}
   if(elPanel.classList.contains('hidden'))return;
+  if (settingsModal.classList.contains('on')) {
+    if (k === 'Escape') { e.preventDefault(); closeSettings(); }
+    return;
+  }
   if (updateDialog.classList.contains('on')) {
     if (k === 'Escape') {
       e.preventDefault();
@@ -1407,6 +2299,8 @@ if(typeof window.lc2 === 'undefined') bootNotes();   // 浏览器 / 原型：读
       el.addEventListener('pointerdown', function(ev){
         if(ev.button !== 0) return;
         if(ev.target.closest('.fbtn') || ev.target.closest('.back')) return;
+    if(ev.target.closest('.mh-close, .ok, button, input, textarea, .mseg, .seg-thumb, .rvclear, .rvback, .subarrow, .msubmit, .mfoot')) return;
+        if(el.classList.contains('modal') && ev.target.closest('.msheet')) return;
         pdrag = { sx: ev.screenX, sy: ev.screenY };
         try { el.setPointerCapture(ev.pointerId); } catch(e){}
         window.lc2.panelDragStart(ev.screenX, ev.screenY);
@@ -1416,13 +2310,58 @@ if(typeof window.lc2 === 'undefined') bootNotes();   // 浏览器 / 原型：读
          这里只保留 start / end 生命周期标记。 */
       el.addEventListener('pointerup', function(ev){
         if(!pdrag) return;
+        const moved = Math.abs((ev.screenX||0) - pdrag.sx) > 3 || Math.abs((ev.screenY||0) - pdrag.sy) > 3;
         pdrag = null;
         try { el.releasePointerCapture(ev.pointerId); } catch(e){}
         window.lc2.panelDragEnd();
+        if(moved){
+          window.__lc2SuppressBackdrop = true;
+          setTimeout(function(){ window.__lc2SuppressBackdrop = false; }, 180);
+        }
       }, true);
     }
-    bindPanelDrag(document.getElementById('grip'));   // 顶部拖拽条
+    /* 自定义窗口缩放：避免无边框窗口右下角原生命中不稳定 */
+  (function bindResizeHandles(){
+    const panelEl = document.getElementById('panel');
+    if(!panelEl || !window.lc2 || !window.lc2.panelResizeStart) return;
+    let rz = null;
+    function endResizeOnce(){ if(!rz) return; rz = null; window.lc2.panelResizeEnd(); }
+    const dirs = ['n','s','e','w','ne','nw','se','sw'];
+    dirs.forEach((dir) => {
+      const el = document.createElement('div');
+      el.className = 'rz rz-' + dir;
+      el.dataset.dir = dir;
+      el.addEventListener('pointerdown', (ev) => {
+        if(ev.button !== 0) return;
+        rz = { id: ev.pointerId };
+        try { el.setPointerCapture(ev.pointerId); } catch(e){}
+        try { el.addEventListener('lostpointercapture', endResizeOnce, { once: true }); } catch(e){}
+        window.lc2.panelResizeStart(ev.screenX, ev.screenY, dir);
+        ev.preventDefault();
+        ev.stopPropagation();
+      }, true);
+      panelEl.appendChild(el);
+    });
+    function endResize(ev){
+      if(!rz) return;
+      rz = null;
+      window.lc2.panelResizeEnd();
+      if(ev && ev.preventDefault) ev.preventDefault();
+    }
+    document.addEventListener('pointerup', endResize, true);
+    document.addEventListener('pointercancel', endResize, true);
+    window.addEventListener('blur', () => { if(rz){ rz = null; window.lc2.panelResizeEnd(); } });
+  })();
+
+  bindPanelDrag(document.getElementById('grip'));   // 顶部拖拽条
     bindPanelDrag(document.getElementById('hdr'));    // 标题栏空白处（按钮除外）
+    /* 弹窗打开后顶部栏被遮住：让弹窗标题栏/复查栏也能拖动整窗 */
+    document.querySelectorAll('.modal .mh, #submitModal .rvbar').forEach((el) => bindPanelDrag(el));
+  bindPanelDrag(document.getElementById('modal'));
+  bindPanelDrag(document.getElementById('submitModal'));
+  bindPanelDrag(document.getElementById('help'));
+  bindPanelDrag(document.getElementById('updateDialog'));
+  bindPanelDrag(document.getElementById('settings'));
     /* 阻止 Chromium 原生拖拽：否则按住图标/文字会拖出“幽灵”并选中 */
     document.addEventListener('dragstart', function(ev){ ev.preventDefault(); }, true);
   }
@@ -1479,7 +2418,8 @@ window.lc2.onPanel(function(s){
 /* 载入真实数据（Electron 面板窗口） */
   function applyPayload(d){
     loadInscriptions(d.inscriptions);
-    loadWeapons(d.weaponItems);
+    loadWeaponTypes(d.weapons);
+  loadWeapons(d.weaponItems);
     loadArmors(d.armors);
     loadSoulStones(d.soulStones);
     loadCursedTreasures(d.cursedTreasures);

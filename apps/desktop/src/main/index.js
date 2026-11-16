@@ -262,6 +262,15 @@ function cleanupOrphanHelpers() {
 }
 
 /* ---------------- 气泡右键菜单 ---------------- */
+function quitApp() {
+  if (app.isQuitting) return;
+  app.isQuitting = true;
+  try { if (panel) panel.destroy(); } catch {}
+  try { if (bubbleWin && !bubbleWin.isDestroyed()) bubbleWin.destroy(); } catch {}
+  try { if (nativeBubble.isRunning()) nativeBubble.stop(); } catch {}
+  app.quit();
+}
+
 function restartApp() {
   if (app.isQuitting) return;
   // 便携版退出后会删除解包目录，需要从启动器重新运行。
@@ -363,7 +372,11 @@ if (!gotLock) {
     log('数据来源 =', configStore.state.dataSource, '| 缓存目录 =', source.cacheDir(), process.env.LC2_DATA_URL ? '| 自定义数据地址 = ' + process.env.LC2_DATA_URL : '');
     geometry = createGeometry({ BUBBLE, PANEL, MARGIN });
     notesStore = createNotesStore({ userDataDir, log });
-    dataLoader = createDataLoader({ source, configStore, log });
+    const submissionStore = createSubmissionStore({
+      dir: path.join(app.getPath('userData'), 'submissions'),
+      log,
+    });
+    dataLoader = createDataLoader({ source, configStore, log, submissionStore });
 
     shortcuts = createShortcuts({ globalShortcut, log, BASE_KEYS, PANEL_KEYS });
 
@@ -394,6 +407,28 @@ if (!gotLock) {
     });
     panel.setPinned(configStore.state.panelPinned);
 
+    let submitModeBounds = null;
+    function setSubmitMode(on) {
+      const win = panel.getWindow();
+      if (!win || win.isDestroyed()) return;
+      if (on) {
+        if (submitModeBounds) return;
+        submitModeBounds = win.getBounds();
+        const d = screen.getDisplayMatching(submitModeBounds);
+        const wa = d.workArea;
+        const w = Math.min(820, wa.width - 40);
+        const h = Math.min(900, wa.height - 40);
+        const x = Math.round(wa.x + (wa.width - w) / 2);
+        const y = Math.round(wa.y + (wa.height - h) / 2);
+        win.setBounds({ x, y, width: w, height: h }, false);
+        try { panel.resizeShape?.(); } catch {}
+      } else if (submitModeBounds) {
+        win.setBounds(submitModeBounds, false);
+        submitModeBounds = null;
+        try { panel.resizeShape?.(); } catch {}
+      }
+    }
+
     registerIpc({
       ipcMain,
       log,
@@ -406,6 +441,7 @@ if (!gotLock) {
       getBubbleWindow: () => bubbleWin,
       setBubblePosition,
       persistBubbleBounds,
+      onSubmitMode: setSubmitMode,
       onSubmitBuild: async (payload) => {
         if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
           throw new Error('投稿内容无效');
@@ -448,7 +484,7 @@ if (!gotLock) {
       getBaseKey: () => shortcuts.getBaseKey(),
       onShowBubble: showBubble,
       onToggle: () => panel.toggle(),
-      onQuit: () => app.quit(),
+      onQuit: quitApp,
       log,
     });
     log(trayHandle ? '托盘已就绪' : '托盘不可用（缺少图标资源）');
@@ -506,6 +542,8 @@ if (!gotLock) {
     }
     try { nativeBubble.stop(); } catch {}
     try { panelShadow.stop(); } catch {}
+    try { if (panel) panel.destroy(); } catch {}
+    try { if (bubbleWin && !bubbleWin.isDestroyed()) bubbleWin.destroy(); } catch {}
     if (shortcuts) shortcuts.unregisterAll();
     if (trayHandle) trayHandle.destroy();
     if (configStore) {

@@ -17,12 +17,15 @@ function registerIpc({
   setBubblePosition,
   persistBubbleBounds,
   onSubmitBuild,
+  onSubmitMode,
 }) {
   let dragState = null;
   const finite = (v) => Number.isFinite(v);
 
   /* ---------------- 数据 / 配置 ---------------- */
   ipcMain.handle('lc2:getData', () => dataLoader.load());
+  ipcMain.handle('lc2:checkUpdate', () => updater.checkForUpdates());
+  ipcMain.handle('lc2:openExternal', (_e, url) => updater.openExternal(String(url || '')));
   ipcMain.handle('lc2:getConfig', () => ({ version: getAppVersion(), baseKey: getBaseKey(), panelOpen: panel.isOpen() }));
 
   /* ---------------- 用户印象 ---------------- */
@@ -39,6 +42,10 @@ function registerIpc({
   ipcMain.handle('lc2:submitBuild', async (_e, payload) => {
     if (typeof onSubmitBuild !== 'function') throw new Error('投稿保存不可用');
     return onSubmitBuild(payload);
+  });
+
+  ipcMain.handle('lc2:submitMode', (_e, on) => {
+    if (typeof onSubmitMode === 'function') onSubmitMode(on === true);
   });
 
   /* ---------------- 面板 ---------------- */
@@ -75,6 +82,9 @@ function registerIpc({
   ipcMain.on('lc2:panelDragStart', (_e, p) => panel.startDrag(p));
   ipcMain.on('lc2:panelDragMove', (_e, p) => panel.dragMoveFallback(p));
   ipcMain.on('lc2:panelDragEnd', () => panel.finalizeDrag());
+  ipcMain.on('lc2:panelResizeStart', (_e, p) => panel.startResize(p));
+  ipcMain.on('lc2:panelResizeEnd', () => panel.finalizeResize());
+  ipcMain.on('lc2:setPanelSize', (_e, size) => { if (size) panel.setSize(Number(size.width), Number(size.height)); });
 }
 
 module.exports = { registerIpc };

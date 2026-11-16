@@ -46,6 +46,11 @@ function createPanel(deps) {
   /** 圆角模式：dwm（Win11 系统圆角）| shape（Win10 回退裁剪）| null（探测中） */
   let cornersMode = null;
   let dragState = null;
+  let resizeState = null;
+  let resizeTimer = null;
+  let resizeCursorScale = 1;
+  let sessionSize = null;
+  const RESIZE_DIRS = new Set(['n','s','e','w','ne','nw','se','sw']);
   let dragMoveCount = 0;
   let dragTimer = null;
   let dragCursorScale = 1;
@@ -71,7 +76,8 @@ function createPanel(deps) {
     if (cornersMode === 'dwm') return; // Win11：系统圆角，不裁剪
     if (cornersMode === null) return; // 探测中，等结果
     // Win10 回退：窗口区域裁剪（阴影层会补一圈抗锯齿轮廓盖住阶梯）
-    shapeRounded(win, PANEL.w, PANEL.h, PANEL_RADIUS, log);
+    const b = win.getBounds();
+    shapeRounded(win, b.width, b.height, PANEL_RADIUS, log);
   }
 
   function setupCorners() {
@@ -314,11 +320,26 @@ function createPanel(deps) {
   }
 
   /* ---------------- 显隐 ---------------- */
+  function showBounds() {
+    const base = resolveBounds();
+    if (!sessionSize) return base;
+    let { width, height } = sessionSize;
+    let x = base.x, y = base.y;
+    try {
+      const wa = screen.getDisplayMatching(base).workArea;
+      width = Math.min(width, wa.width - 8);
+      height = Math.min(height, wa.height - 8);
+      x = Math.max(wa.x, Math.min(x, wa.x + wa.width - width));
+      y = Math.max(wa.y, Math.min(y, wa.y + wa.height - height));
+    } catch {}
+    return { x, y, width, height };
+  }
+
   function show() {
     if (!win || open) return;
     open = true;
     dormant = false;
-    win.setBounds(resolveBounds(), false);
+    win.setBounds(showBounds(), false);
     applyShape();
     fadeIn(win);
     win.showInactive(); // 显示但不抢焦点
@@ -329,6 +350,16 @@ function createPanel(deps) {
     sendPanelState();
     enablePanelKeys();
     log('panel open');
+  }
+
+  function destroy() {
+    stopDragTimer();
+    stopResizeTimer();
+    if (win && !win.isDestroyed()) {
+      try { win.destroy(); } catch {}
+    }
+    win = null;
+    open = false;
   }
 
   function hide() {
@@ -420,6 +451,80 @@ function createPanel(deps) {
     moveTo(p.sx - dragState.ox, p.sy - dragState.oy);
   }
 
+  function stopResizeTimer() {
+    if (resizeTimer) { clearInterval(resizeTimer); resizeTimer = null; }
+  }
+
+  function startResize(payload) {
+    if (!win || win.isDestroyed()) return;
+    const p = payload || {};
+    if (!RESIZE_DIRS.has(p.dir) || !Number.isFinite(p.sx) || !Number.isFinite(p.sy)) return;
+    stopResizeTimer();
+    const b = win.getBounds();
+    try {
+      const scale = screen.getPrimaryDisplay().scaleFactor || 1;
+      const cp = screen.getCursorScreenPoint();
+      const errDip = Math.hypot(cp.x / scale - p.sx, cp.y / scale - p.sy);
+      const errRaw = Math.hypot(cp.x - p.sx, cp.y - p.sy);
+      resizeCursorScale = errDip < errRaw ? scale : 1;
+    } catch { resizeCursorScale = screen.getPrimaryDisplay().scaleFactor || 1; }
+    resizeState = { dir: p.dir, start: b, sx: p.sx, sy: p.sy };
+    if (USE_PANEL_SHADOW) { try { panelShadow.hide(); } catch {} }
+    try { win.setAlwaysOnTop(true, TOPMOST_LEVEL); } catch {}
+    resizeTimer = setInterval(() => {
+      if (!win || win.isDestroyed() || !resizeState) { stopResizeTimer(); return; }
+      let cp;
+      try { cp = screen.getCursorScreenPoint(); } catch { return; }
+      if (!cp) return;
+      const cx = cp.x / resizeCursorScale, cy = cp.y / resizeCursorScale;
+      const st = resizeState.start, dir = resizeState.dir;
+      const dx = cx - resizeState.sx, dy = cy - resizeState.sy;
+      let x = st.x, y = st.y, width = st.width, height = st.height;
+      if (dir.includes('e')) width = st.width + dx;
+      if (dir.includes('s')) height = st.height + dy;
+      if (dir.includes('w')) { width = st.width - dx; x = st.x + dx; }
+      if (dir.includes('n')) { height = st.height - dy; y = st.y + dy; }
+      if (width < PANEL.w) { if (dir.includes('w')) x = st.x + st.width - PANEL.w; width = PANEL.w; }
+      if (height < PANEL.h) { if (dir.includes('n')) y = st.y + st.height - PANEL.h; height = PANEL.h; }
+      try {
+        win.setBounds({ x: Math.round(x), y: Math.round(y), width: Math.round(width), height: Math.round(height) }, false);
+      } catch {}
+    }, 8);
+  }
+
+  function setSize(width, height) {
+    if (!win || win.isDestroyed()) return;
+    if (!Number.isFinite(width) || !Number.isFinite(height)) return;
+    const b = win.getBounds();
+    let w = Math.max(PANEL.w, Math.round(width));
+    let h = Math.max(PANEL.h, Math.round(height));
+    try {
+      const wa = screen.getDisplayMatching(b).workArea;
+      w = Math.min(w, wa.width - 20);
+      h = Math.min(h, wa.height - 20);
+    } catch {}
+    const x = Math.round(b.x + (b.width - w) / 2);
+    const y = Math.round(b.y + (b.height - h) / 2);
+    sessionSize = { width: w, height: h };
+    win.setBounds({ x, y, width: w, height: h }, false);
+    applyShape();
+  }
+
+  function finalizeResize() {
+    if (!resizeState) return;
+    stopResizeTimer();
+    resizeState = null;
+    applyShape();
+    const b = win && !win.isDestroyed() ? win.getBounds() : null;
+    if (b) {
+      sessionSize = { width: b.width, height: b.height };
+      configStore.state.panel = { x: b.x, y: b.y };
+      try { configStore.save(); } catch {}
+      log('panel resized ->', b.width, b.height);
+    }
+    try { win.setAlwaysOnTop(true, TOPMOST_LEVEL); } catch {}
+  }
+
   function finalizeDrag() {
     if (!win || win.isDestroyed() || !dragState) return;
     // 最后一帧对齐：松开时可能还有 1 帧未应用
@@ -495,8 +600,10 @@ function createPanel(deps) {
       width: PANEL.w,
       height: PANEL.h,
       transparent: false,
-      backgroundColor: '#15161c',
+      backgroundColor: '#191120',
       frame: false,
+      thickFrame: false,
+      roundedCorners: true,
       resizable: false,
       skipTaskbar: true,
       hasShadow: false,
@@ -510,6 +617,8 @@ function createPanel(deps) {
         sandbox: false,
       },
     });
+    win.on('resize', () => { applyShape(); });
+
 
     win.setAlwaysOnTop(true, TOPMOST_LEVEL);
     try { win.setBackgroundColor('#15161c'); } catch {}
@@ -548,6 +657,11 @@ function createPanel(deps) {
     hide,
     toggle,
     getWindow: () => win,
+    destroy,
+  resizeShape: applyShape,
+  startResize,
+  setSize,
+  finalizeResize,
     isOpen: () => open,
     isPinned: () => pinned,
     isDormant: () => dormant,

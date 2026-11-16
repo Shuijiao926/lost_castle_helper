@@ -6,728 +6,1217 @@
     "name": "失落城堡2中文维基（灰机）",
     "page": "防具",
     "license": "CC-BY-NC-SA-4.0",
-    "file": "data/sources/wiki-armors.json"
+    "file": "data/sources/wiki-armors.json",
+    "detailsFile": "data/sources/wiki-armor-details.json"
   },
   "armors": [
     {
       "id": "NA_000",
       "name": "朴素的内衬",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/12/Icon_suit_NA_000.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/12/Icon_suit_NA_000.png",
+      "desc": "人不会一直穿着铠甲，宝藏猎人也不例外。",
+      "effect": "轻甲：移动速度+10；清空区域后获得少量炼金灵药补给。",
+      "stats": "生命值0",
+      "rarity": "初始",
+      "unobtainable": true
     },
     {
       "id": "NA_001",
       "name": "猎手轻甲",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/ac/Icon_suit_NA_001.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/ac/Icon_suit_NA_001.png",
+      "desc": "在探险者间广泛流通的轻便皮甲，轻便并能提供一定基础防御力，但其实并不算是和强大魔物战斗的好选择。",
+      "effect": "轻甲：移动速度+10",
+      "stats": "生命值60/76/92/124/148/172；符文 阿希尔符文 + 1/2/3/4/5",
+      "rarity": "初始"
     },
     {
       "id": "NA_032",
       "name": "见习猎人轻甲",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/6c/Icon_suit_NA_032.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/6c/Icon_suit_NA_032.png",
+      "desc": "被改造过的猎手轻甲，实际性能和一般的猎手轻甲差异不大。",
+      "effect": "轻甲：移动速度+10",
+      "stats": "生命值66/84/101/136/163/189；符文 帕拉提符文 + 1/2/3/4/5",
+      "rarity": "初始",
+      "unobtainable": true
     },
     {
       "id": "NA_031",
       "name": "木精灵树衣",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4f/Icon_suit_NA_031.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4f/Icon_suit_NA_031.png",
+      "desc": "瑞亚多边境木精灵聚落中，年轻木精灵猎手们常穿的树衣。树衣用皮革和特殊的树皮树藤和树叶制作，相比防御性能，树衣更多是能让穿着者融入进森林之中。",
+      "effect": "轻甲：移动速度+10",
+      "stats": "生命值66/84/101/136/163/189；符文 帕拉提符文 + 1/2/3/4/5",
+      "rarity": "初始",
+      "unobtainable": true
     },
     {
       "id": "NA_002",
       "name": "探险者皮甲",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/6f/Icon_suit_NA_002.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/6f/Icon_suit_NA_002.png",
+      "desc": "用皮和麻布缝制的方便活动的轻型皮甲。轻便的材料决定期功能性可能远大于其防御性。",
+      "effect": "轻甲：移动速度+10；清空区域后获得少量炼金灵药补给。",
+      "stats": "生命值79/95/126/150/174；移动速度5%/5%/5%/5%/5%；符文 阿希尔符文 + 1/2/3/4/5",
+      "rarity": "普通"
     },
     {
       "id": "NA_010",
       "name": "帝国士兵轻甲",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/fa/Icon_suit_NA_010.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/fa/Icon_suit_NA_010.png",
+      "desc": "帝国下层士兵的制式步兵铠甲，轻便便于行军是其最大特征。",
+      "effect": "轻甲：移动速度+10；直接攻击命中后有15%概率使暴击率提高10%，持续提高5（普通）/6（优秀）/7（稀有）/8（史诗）/10（传奇）秒，可以叠加。",
+      "stats": "生命值78/93/124/147/171；符文 帕拉提符文 + 1/2/3/4/5",
+      "rarity": "普通"
     },
     {
       "id": "NA_011",
       "name": "流浪剑士皮甲",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/51/Icon_suit_NA_011.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/51/Icon_suit_NA_011.png",
+      "desc": "不知名的流浪剑士所穿着的戴兜帽皮甲，在国家的边境，往往有许许多多这样名不见经传的剑士依靠猎魔赏金为生。",
+      "effect": "轻甲：移动速度+10；特殊动作特殊动作击中时，攻击力提高5（普通）/6（优秀）/7（稀有）/8（史诗）/10（传奇）点，持续10秒。",
+      "stats": "生命值76/91/122/145/168；攻击力5/5/5/5/5；符文 阿希尔符文 + 1/2/3/4/5",
+      "rarity": "普通"
     },
     {
       "id": "NA_012",
       "name": "役卒兵装",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f6/Icon_suit_NA_012.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f6/Icon_suit_NA_012.png",
+      "desc": "一般为远东岛国楼船的军队杂役或斥候所穿着的，用亚麻和草藤编制的轻甲。",
+      "effect": "轻甲：移动速度+10；该防具有较高的基础暴击率，但有50%概率使受到伤害提高30%。",
+      "stats": "生命值81/98/130/155/179；暴击率15%/18%/22%/25%/30%；符文 阿希尔符文 + 1/2/3/4/5",
+      "rarity": "普通"
     },
     {
       "id": "NA_014",
       "name": "密探罩袍",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8b/Icon_suit_NA_014.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/8b/Icon_suit_NA_014.png",
+      "desc": "帝国密探们的制式轻甲，由于黑帽白铠辨识度太高，一般也只穿着于正式场合和一些公开的行动上。",
+      "effect": "轻甲：移动速度+10；闪避闪避后，回复5（普通）/6（优秀）/7（稀有）/8（史诗）/10（传奇）点法力值。",
+      "stats": "生命值74/89/119/142/164；法力值20/20/20/20/20；符文 纳伊鲁符文 + 1/2/3/4/5",
+      "rarity": "普通"
     },
     {
       "id": "NA_029",
       "name": "园丁工作服",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/ee/Icon_suit_NA_029.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/ee/Icon_suit_NA_029.png",
+      "desc": "黑城堡地区的神秘魔物很多，这个被叫做“园丁”的强大魔物似乎和城堡的过去有所关联……",
+      "effect": "轻甲：移动速度+10；附近每有4个敌人被击杀，生长出一株酸液喷吐者。",
+      "stats": "生命值80/96/128/152/176；符文 阿希尔符文 + 1/1/2/3；符文 帕拉提符文 + 1/1/2/2/3",
+      "rarity": "普通"
     },
     {
       "id": "NA_033",
       "name": "冠军战衣",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/cc/Icon_suit_NA_033.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/cc/Icon_suit_NA_033.png",
+      "desc": "哥布林军团的哥布林们为他们骄傲而强大的冠军制作了一套漂亮的战衣，但完全没考虑他们的冠军究竟能否穿的下。",
+      "effect": "轻甲：移动速度+10；附近每有敌人被击杀，攻击力提高2点，最高10（普通）/12（优秀）/14（稀有）/16（史诗）/20（传奇）点，进入新区域后重置加成。",
+      "stats": "生命值88/106/141/167/194；技能强度-20%/-20%/-20%/-20%/-20%；符文 阿希尔符文 + 1/2/3/4/5",
+      "rarity": "普通"
     },
     {
       "id": "NA_034",
       "name": "遗落的布偶装",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/32/Icon_suit_NA_034.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/32/Icon_suit_NA_034.png",
+      "desc": "“过去一位哥布林国王有一只从小养大的可爱的宠物小狗。为了让小狗不会寂寞，国王经常穿着这套和小狗一样的布偶装陪小狗玩耍……什么你说这件布偶装的样子根本不是小狗？但哥布林那找到的文献就是这么写的，翻译起来还可费劲了！”",
+      "effect": "轻甲：移动速度+10；炼金灵药低于25%，击中敌人时可以恢复1%的炼金灵药。",
+      "stats": "生命值88/106/141/167/194；符文 帕拉提符文 + 1/2/3/4/5",
+      "rarity": "普通"
     },
     {
       "id": "NA_003",
       "name": "守卫轻甲",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c4/Icon_suit_NA_003.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c4/Icon_suit_NA_003.png",
+      "desc": "一般是瑞亚多城镇守卫穿着的链甲，虽然厚重的铁头盔能为头部提供一定的防护，但用料过于朴实面对强大的魔物也仅仅只能提供些基础的防护。",
+      "effect": "轻甲：移动速度+10；受到伤害时，有50%（优秀）/65%（稀有）/80%（史诗）/100%（传奇）的概率使受到的伤害下降10点。",
+      "stats": "生命值93/123/145/168；移动速度5%/5%/5%/5%；符文 阿希尔符文 + 1/2/3/4；符文 帕拉提符文 + 1/1/1/1",
+      "rarity": "优秀"
     },
     {
       "id": "NA_004",
       "name": "典礼皮衣",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/eb/Icon_suit_NA_004.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/eb/Icon_suit_NA_004.png",
+      "desc": "奥利亚斯帝国带护肩的礼服，装饰性大于实用性。",
+      "effect": "轻甲：移动速度+10；若未受到攻击，清空区域后给予10（优秀）/12（稀有）/16（史诗）/20（传奇）额外。",
+      "stats": "生命值99/131/155/179；法力值10/10/10/10；符文 纳伊鲁符文 + 2/3/4/5",
+      "rarity": "优秀"
     },
     {
       "id": "NA_013",
       "name": "剑士战服",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a5/Icon_suit_NA_013.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a5/Icon_suit_NA_013.png",
+      "desc": "边境地区一些来自东方的剑士间流行的轻便皮甲，轻便实用是其主要特点。",
+      "effect": "轻甲：移动速度+10；特殊动作特殊动作的暴击率提高15%（优秀）/20%（稀有）/25%（史诗）/30%（传奇）。",
+      "stats": "生命值95/126/149/172；攻击力5/5/5/5；符文 阿希尔符文 + 2/3/4/5",
+      "rarity": "优秀"
     },
     {
       "id": "NA_009",
       "name": "山贼轻甲",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d3/Icon_suit_NA_009.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d3/Icon_suit_NA_009.png",
+      "desc": "边境地区山贼们时常劫掠经过的商队，为和商队护卫战斗以及方便劫掠后快速逃离，部分山贼也会穿着有一定防御力的轻甲。",
+      "effect": "轻甲：移动速度+10；使用猎人道具后，暴击率提高20%，持续10（优秀）/12（稀有）/14（史诗）/20（传奇）秒。",
+      "stats": "生命值101/133/157/181；防御力-1/-1/-1/-1；符文 阿希尔符文 + 2/3/4/5",
+      "rarity": "优秀"
     },
     {
       "id": "NA_019",
       "name": "掮客帽",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/11/Icon_suit_NA_019.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/11/Icon_suit_NA_019.png",
+      "desc": "在边境地区做一个掮客是个危险的职业，帽子和皮衣皆使用特殊处理的魔物皮所制，有一定的防御力。",
+      "effect": "轻甲：移动速度+10；虚灵商店的商品的价格降低15%。",
+      "stats": "生命值60/80/94/109；符文 纳伊鲁符文 + 1/2/3/4",
+      "rarity": "优秀"
     },
     {
       "id": "NA_021",
       "name": "步人甲",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/19/Icon_suit_NA_021.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/19/Icon_suit_NA_021.png",
+      "desc": "东方赤玉帝国下级士兵的制式铠甲，轻便且有一定的防御能力。",
+      "effect": "轻甲：移动速度+10；进入新区域时获得30（优秀）/40（稀有）/50（史诗）/60（传奇）点护盾。",
+      "stats": "生命值94/124/147/169；防御力1/1/1/1；符文 帕拉提符文 + 2/3/4/5",
+      "rarity": "优秀"
     },
     {
       "id": "NA_026",
       "name": "山民之衣",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f0/Icon_suit_NA_026.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f0/Icon_suit_NA_026.png",
+      "desc": "边境山区中往往生活着一些古老的木精灵山民，他们远离文明，崇拜自然。",
+      "effect": "轻甲：移动速度+10；超过100%移动速度部分，每有1%的额外移动速度，暴击率提升0.5（优秀）/0.6（稀有）/0.8（史诗）/1（传奇）%。",
+      "stats": "生命值94/124/146/168；符文 阿希尔符文 + 2/3/4/5",
+      "rarity": "优秀"
     },
     {
       "id": "NA_020",
       "name": "流浪者皮甲",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f8/Icon_suit_NA_020.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f8/Icon_suit_NA_020.png",
+      "desc": "边境地区的一些底层流浪佣兵们所穿着的皮甲，皮革制成的兜帽可以一定程度抵御恶劣天气。",
+      "effect": "轻甲：移动速度+10；投掷命中时有概率发生爆炸，冷却时间4（优秀）/3.5（稀有）/3（史诗）/2（传奇）秒。",
+      "stats": "生命值103/136/161/185；符文 帕拉提符文 + 2/3/4/5",
+      "rarity": "优秀"
     },
     {
       "id": "NA_040",
       "name": "可怕的玩偶装",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7b/Icon_suit_NA_040.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7b/Icon_suit_NA_040.png",
+      "desc": "“不给糖果就捣乱！”",
+      "effect": "轻甲：移动速度+10；受到伤害时流下“眼泪”。“眼泪”会凝聚成触碰后恢复法力值的魔力余烬，该效果有2秒冷却时间。",
+      "stats": "生命值110/145/172/198；符文 帕拉提符文 + 1/2/2/3；符文 纳伊鲁符文 + 1/1/2/2",
+      "rarity": "优秀"
     },
     {
       "id": "NA_041",
       "name": "吞食之铠",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/bc/Icon_suit_NA_041.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/bc/Icon_suit_NA_041.png",
+      "desc": "宝藏鮟鱇素材打造的皮甲，穿上后似乎肚子也感觉饿了起来。",
+      "effect": "轻甲：移动速度+10；你的召唤生物死亡或撤离时，也会触发当前所有通过“击杀”触发的效果，冷却时间3秒。",
+      "stats": "生命值89/118/139/161；防御力3/3/3/3；符文 帕拉提符文 + 2/3/4/5",
+      "rarity": "优秀"
     },
     {
       "id": "NA_008",
       "name": "游侠正装",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/60/Icon_suit_NA_008.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/60/Icon_suit_NA_008.png",
+      "desc": "游侠组织的高级套装，外表华丽性同时兼顾一定实用性。",
+      "effect": "轻甲：移动速度+10；每次攻击提高1%暴击率，最大提升20（稀有）/25（史诗）/30（传奇）%，在受到攻击或者进入新区域后重置。",
+      "stats": "生命值126/148/170；暴击伤害10%/10%/10%；符文 阿希尔符文 + 2/3/4；符文 帕拉提符文 + 1/1/1",
+      "rarity": "稀有"
     },
     {
       "id": "NA_015",
       "name": "云纹兜鍪",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/cf/Icon_suit_NA_015.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/cf/Icon_suit_NA_015.png",
+      "desc": "赤玉帝国高级轻骑兵的盔甲，由赤玉工匠打造，轻便且有着优秀的防御力。",
+      "effect": "轻甲：移动速度+10；每移动5米，移动速度提高10%，持续5秒。",
+      "stats": "生命值136/159/182；移动速度10%/10%/10%；符文 阿希尔符文 + 1/1/1；符文 帕拉提符文 + 2/3/4",
+      "rarity": "稀有"
     },
     {
       "id": "NA_016",
       "name": "侠客袍",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/74/Icon_suit_NA_016.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/74/Icon_suit_NA_016.png",
+      "desc": "赤玉帝国的江湖浪客们喜穿之服，浪客们行侠义之事后拂衣而去，深藏身与名。",
+      "effect": "轻甲：移动速度+10；攻击时有30%（稀有）/35%（史诗）/40%（传奇）的概率提高5%的暴击率，最高提高20%，持续5秒。",
+      "stats": "生命值135/158/181；暴击伤害15%/15%/15%；符文 阿希尔符文 + 3/4/5",
+      "rarity": "稀有"
     },
     {
       "id": "NA_017",
       "name": "窃贼兜帽",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b7/Icon_suit_NA_017.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b7/Icon_suit_NA_017.png",
+      "desc": "近期在盗贼组织间十分流行的特殊附魔兜帽，只要把兜帽和面具都戴上就没人能看清你的脸了。(真的吗？）",
+      "effect": "轻甲：移动速度+10；攻击有概率掉落，该效果每个区域最多掉落15 。",
+      "stats": "生命值100/117/134；符文 阿希尔符文 + 1/2/2；符文 纳伊鲁符文 + 1/1/2",
+      "rarity": "稀有"
     },
     {
       "id": "NA_022",
       "name": "玄铁甲",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5c/Icon_suit_NA_022.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5c/Icon_suit_NA_022.png",
+      "desc": "东方赤玉帝国下层士官所穿着的制式铠甲，相比步人甲有更好的防御性能。",
+      "effect": "轻甲：移动速度+10；进入新区域时获得20点护盾。当有护盾时，防御力提高2（稀有）/3（史诗）/5（传奇）点。",
+      "stats": "生命值126/148/169；防御力2/2/2；符文 帕拉提符文 + 3/4/5",
+      "rarity": "稀有"
     },
     {
       "id": "NA_023",
       "name": "龟壳轻甲",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c4/Icon_suit_NA_023.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c4/Icon_suit_NA_023.png",
+      "desc": "使用魔物飞弹龟的背壳制作的铠甲，但用飞弹龟为素材打造的铠甲相比威严，似乎看着有那么些可爱。",
+      "effect": "轻甲：移动速度+10；受到攻击时对周围敌人造成伤害，造成的伤害值受当前攻击力及受到的伤害值影响。1秒冷却。",
+      "stats": "生命值151/177/203；符文 帕拉提符文 + 3/4/5",
+      "rarity": "稀有"
     },
     {
       "id": "NA_030",
       "name": "兽人短袍",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/10/Icon_suit_NA_030.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/10/Icon_suit_NA_030.png",
+      "desc": "某个擅长使用各种武器的有名宝藏猎人所穿着的短袍，短袍虽然看似平常，但其中藏有各种辅助战斗的机关。",
+      "effect": "轻甲：移动速度+10",
+      "stats": "生命值140/164/188；符文 阿希尔符文 + 2/2/3；符文 帕拉提符文 + 2/2/3；符文 纳伊鲁符文 + 2/3/3",
+      "rarity": "稀有"
     },
     {
       "id": "NA_038",
       "name": "诅咒蛮骨甲",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/96/Icon_suit_NA_038.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/96/Icon_suit_NA_038.png",
+      "desc": "被流放的凶残蛮族领袖所穿着的兽骨兽皮铠甲。传闻这件铠甲已被诅咒，会将其主人击败的敌人怨魂化为力量。",
+      "effect": "轻甲：移动速度+10；附近每累计有10个敌人被击杀增加1点攻击力，最多提升12（稀有）/15（史诗）/18（传奇）点。；当前攻击力增加0点。",
+      "stats": "生命值119/140/160；符文 阿希尔符文 + 3/4/5",
+      "rarity": "稀有"
     },
     {
       "id": "NA_042",
       "name": "神秘剑客短袍",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/18/Icon_suit_NA_042.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/18/Icon_suit_NA_042.png",
+      "desc": "戴着灵狐面具的楼船武士服饰，据说有着辟邪驱魔的魔力。",
+      "effect": "轻甲：移动速度+10；闪避攻击 闪避攻击伤害提升20%（稀有）/30%（史诗）/40%（传奇），且闪避攻击 闪避攻击命中时获得额外武器能量。",
+      "stats": "生命值136/159/183；暴击率15%/15%/15%；符文 阿希尔符文 + 3/4/5",
+      "rarity": "稀有"
     },
     {
       "id": "NA_024",
       "name": "阿希尔的符文之甲",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/bf/Icon_suit_NA_024.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/bf/Icon_suit_NA_024.png",
+      "desc": "阿希尔虚灵们打造的符文铠甲，勇气与力量将充盈穿戴者的身体。",
+      "effect": "轻甲：移动速度+10；符文斩击的最终伤害增加25%（史诗）/30%（传奇）。",
+      "stats": "生命值154/176；暴击伤害30%/30%；符文 阿希尔符文 + 5/6",
+      "rarity": "史诗"
     },
     {
       "id": "NA_028",
       "name": "华丽掮客服",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/67/Icon_suit_NA_028.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/67/Icon_suit_NA_028.png",
+      "desc": "在边境地区，掮客是个危险却利润颇丰的职业，如果你的业务在蒸蒸日上，或许你就需要这套华丽轻便，且厚实有一定防御力的套装。",
+      "effect": "轻甲：移动速度+10；虚灵商店的商品的价格降低20%。",
+      "stats": "生命值120/137；符文 纳伊鲁符文 + 2/3",
+      "rarity": "史诗"
     },
     {
       "id": "NA_006",
       "name": "白蝠骑士骨甲",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/91/Icon_suit_NA_006.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/91/Icon_suit_NA_006.png",
+      "desc": "蝠翼骑士团是一支有名的猎魔组织，骑士团标识的白色蝠骨铠甲虽为全身甲，但却非常轻便灵活。",
+      "effect": "轻甲：移动速度+10；自身及周围友军获得10%（史诗）/15%（传奇）的攻击力。每1点额外增加0.5%的攻击力。",
+      "stats": "生命值168/192；符文 帕拉提符文 + 4/5",
+      "rarity": "史诗"
     },
     {
       "id": "NA_007",
       "name": "虚灵隐匿者",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d7/Icon_suit_NA_007.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d7/Icon_suit_NA_007.png",
+      "desc": "虚灵附魔的神秘长袍，似乎能一定程度引导出虚灵魔法的力量。",
+      "effect": "轻甲：移动速度+10；略微提高闪避闪避的距离，且受到攻击后有25%（史诗）/35%（传奇）的概率自动闪避。",
+      "stats": "生命值145/166；暴击率10%/10%；符文 阿希尔符文 + 4/5",
+      "rarity": "史诗"
     },
     {
       "id": "NA_018",
       "name": "看守者轻甲",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/27/Icon_suit_NA_018.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/27/Icon_suit_NA_018.png",
+      "desc": "看守者是瑞亚多守护者议会下的独立特务组织，主要负责惩办各种魔法的滥用者以及监督守护者议会的成员。",
+      "effect": "轻甲：移动速度+10；使用武器技能武器技能后，暴击率提高25%（史诗）/30%（传奇），持续5秒。",
+      "stats": "生命值155/176；技能强度20%/20%；符文 阿希尔符文 + 2/3；符文 纳伊鲁符文 + 2/3",
+      "rarity": "史诗"
     },
     {
       "id": "NA_005",
       "name": "恶龙皮甲",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/97/Icon_suit_NA_005.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/97/Icon_suit_NA_005.png",
+      "desc": "工匠使用幼龙褪去的皮制成的盔甲，轻盈且能有效抵御魔法攻击。",
+      "effect": "轻甲：移动速度+10；伤害提高x2%，最大提高50%（史诗）/60%（传奇）（当前0%）。",
+      "stats": "生命值155/177；符文 纳伊鲁符文 + 4/5",
+      "rarity": "史诗"
     },
     {
       "id": "NA_025",
       "name": "阴影潜藏者",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/64/Icon_suit_NA_025.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/64/Icon_suit_NA_025.png",
+      "desc": "有名刺客组织“暗影”的套装，“暗影”信仰暗影之主维斯卡洛，以擅长使用魔法和炼金术见长。",
+      "effect": "轻甲：移动速度+10；对生命值高于75%（史诗）/60%（传奇）的敌人造成伤害时，暴击率提升100%。",
+      "stats": "生命值155/176；符文 阿希尔符文 + 4/5",
+      "rarity": "史诗"
     },
     {
       "id": "NA_027",
       "name": "恶毒者面具",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/1e/Icon_suit_NA_027.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/1e/Icon_suit_NA_027.png",
+      "desc": "来源于某神秘的邪恶炼金结社的套装。由于经常进行各种危险的炼金试验，结社的成员常戴着让人胆寒的鸟嘴面具，衣物也由带有一定防护性质的皮革制成。",
+      "effect": "轻甲：移动速度+10；伤害提高x2%，最大提高50%（史诗）/60%（传奇）（当前0%）。",
+      "stats": "生命值149/170；法力值30/30；符文 帕拉提符文 + 4/5",
+      "rarity": "史诗"
     },
     {
       "id": "NA_039",
       "name": "风暴团长之铠",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e9/Icon_suit_NA_039.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e9/Icon_suit_NA_039.png",
+      "desc": "信仰风暴之神卡里昂的雇佣兵军团风暴之团军团长的铠甲，这个军团以擅长使用标枪及其他投掷武器而闻名。",
+      "effect": "轻甲：移动速度+10；投掷攻击对生命值低于40%（史诗）/50%（传奇）的敌人造成伤害时暴击率提高100%。",
+      "stats": "生命值159/181；暴击伤害30%/30%；符文 阿希尔符文 + 4/5",
+      "rarity": "史诗"
     },
     {
       "id": "NA_037",
       "name": "猩红符文甲",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/20/Icon_suit_NA_037.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/20/Icon_suit_NA_037.png",
+      "desc": "一件纯粹的阿希尔符文力量铠甲。",
+      "effect": "轻甲：移动速度+10；为你提供10点阿希尔符文力量，以获得通过攻击敌人触发符文斩击的能力。",
+      "stats": "生命值76；暴击率10%；符文 阿希尔符文 + 10",
+      "rarity": "史诗",
+      "unobtainable": true
     },
     {
       "id": "NA_035",
       "name": "神圣武士之傲",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e8/Icon_suit_NA_035.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e8/Icon_suit_NA_035.png",
+      "desc": "散发着神圣的金色光芒的屠魔武士铠甲，似乎是虚灵们搜集的来自不同时空的强大屠魔武士的装备。",
+      "effect": "轻甲：移动速度+10；符文斩击命中敌人5次后暴击伤害增加15%；符文斩击命中敌人10次后攻击力增加15%；符文斩击命中敌人15次后暴击率增加15%。效果进入新区域后重置。",
+      "stats": "生命值150；攻击力15；符文 阿希尔符文 + 5",
+      "rarity": "传奇"
     },
     {
       "id": "NA_036",
       "name": "恶魔君王甲壳",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5f/Icon_suit_NA_036.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5f/Icon_suit_NA_036.png",
+      "desc": "被邪恶的黑色雾气所包裹的护甲，穿着时可藉转换虚灵符文力量，激活强大的恶魔之量，但公会也怀疑过度使用恶魔力量会有被恶魔侵蚀同化的风险。",
+      "effect": "轻甲：移动速度+10；符文斩击符文震击符文法弹击中敌人后积累魔能，魔能积累满后进入魔化状态，提高x80%攻击力，持续30秒。",
+      "stats": "生命值200；攻击速度10%；符文 阿希尔符文 + 3；符文 帕拉提符文 + 3；符文 纳伊鲁符文 + 3",
+      "rarity": "传奇"
     },
     {
       "id": "NA_046",
       "name": "诡谲混沌之铠",
       "kind": "轻甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/cb/Icon_suit_NA_046.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/cb/Icon_suit_NA_046.png",
+      "desc": "在古老瑞亚多传说中，诡谲之魔神曾蛊惑人类，使人类疯狂，陷入纷争。如传说一般，这件铠甲充满着让人陷入疯狂的混沌之力。",
+      "effect": "轻甲：移动速度+10；攻击力提升12.5%，生命值上限提升7%，法力值上限提升7%。；每次打败首领级魔物后，加成效果提升50%并获得1次复活次数。（当前可用复活次数0）",
+      "stats": "生命值200；攻击速度10%；符文 阿希尔符文 + 3；符文 帕拉提符文 + 3；符文 纳伊鲁符文 + 3",
+      "rarity": "传奇"
     },
     {
       "id": "CA_008",
       "name": "追踪者面具",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/99/Icon_suit_CA_008.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/99/Icon_suit_CA_008.png",
+      "desc": "瑞亚多守护者议会的密探们往往会秘密的进行一些调查，但他们伪装的服饰并不能盖住他们深厚的魔法造诣。",
+      "effect": "布甲：法力值上限+50",
+      "stats": "生命值72/87/116/137/159；符文 阿希尔符文 + 1/2/3/4/5",
+      "rarity": "普通",
+      "unobtainable": true
     },
     {
       "id": "CA_007",
       "name": "村民先知服饰",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/39/Icon_suit_CA_007.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/39/Icon_suit_CA_007.png",
+      "desc": "在各个偏远村庄中都总会有些古怪却在村里小有威望的先知，他们总会相信大蒜和洋葱是接近神明的最佳途径。",
+      "effect": "布甲：法力值上限+50；法力值消耗降低12%（普通）/15%（优秀）/18%（稀有）/21%（史诗）/25%（传奇）",
+      "stats": "生命值68/82/109/130/150；符文 纳伊鲁符文 + 1/2/3/4/5",
+      "rarity": "普通"
     },
     {
       "id": "CA_014",
       "name": "佣兵法师袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/94/Icon_suit_CA_014.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/94/Icon_suit_CA_014.png",
+      "desc": "瑞亚多边境有许多法师雇佣兵，他们拿钱办事，专长使用魔法帮委托人解决各种“困难”。",
+      "effect": "布甲：法力值上限+50；使用武器技能武器技能后，回复10点法力值，冷却时间1（普通）/0.8（优秀）/0.6（稀有）/0.4（史诗）/0.2（传奇）秒。",
+      "stats": "生命值74/89/119/142/164；符文 纳伊鲁符文 + 1/2/3/4/5",
+      "rarity": "普通"
     },
     {
       "id": "CA_018",
       "name": "流浪法师长袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a6/Icon_suit_CA_018.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a6/Icon_suit_CA_018.png",
+      "desc": "作为法师之国，瑞亚多吸引着各国的法师前来。其中一些法师或是追寻仕途但仍未找到立足之所，或是享受在法师之国的氛围而四处旅行。这些四处可见的流浪法师也是法师之国的特色之一。",
+      "effect": "布甲：法力值上限+50；攻击回复法力值倍率提高25%（普通）/30%（优秀）/40%（稀有）/60%（史诗）/100%（传奇）。",
+      "stats": "生命值74/89/118/140/163；法力值15/15/15/15/15；符文 帕拉提符文 + 1/2/3/4/5；符文 纳伊鲁符文 + 1/1/1/1/1",
+      "rarity": "普通"
     },
     {
       "id": "CA_022",
       "name": "守护者黑袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0f/Icon_suit_CA_022.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0f/Icon_suit_CA_022.png",
+      "desc": "魔法之国瑞亚多受守护者议会所统领。守护者议会内以法袍和面具区分组织成员们的阶层，黑袍及黄铜的猫头鹰面具是低阶守护者法师们的身份标识。",
+      "effect": "布甲：法力值上限+50；法力值消耗降低10%（优秀）/12%（稀有）/15%（史诗）/15%（传奇），技能强度提高5%（优秀）/8%（稀有）/10%（史诗）/15%（传奇）。",
+      "stats": "生命值90/119/141/162；法力值20/20/20/20；符文 纳伊鲁符文 + 2/3/4/5",
+      "rarity": "优秀"
     },
     {
       "id": "CA_005",
       "name": "腐化圣职者短袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e0/Icon_suit_CA_005.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e0/Icon_suit_CA_005.png",
+      "desc": "过去边境小村的神甫在面对绝望的灾难时，背弃了无法拯救村子的信仰响应了恶神的召唤。最终恶神以村子中所以人的灵魂为代价“拯救”了这个边境小村。",
+      "effect": "布甲：法力值上限+50；累计使用60（优秀）/55（稀有）/50（史诗）/40（传奇）法力值召唤异变的村民协助战斗。",
+      "stats": "生命值91/120/142/164；符文 帕拉提符文 + 1/1/1/1；符文 纳伊鲁符文 + 1/2/3/4",
+      "rarity": "优秀"
     },
     {
       "id": "CA_009",
       "name": "邪恶炼金长袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a6/Icon_suit_CA_009.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a6/Icon_suit_CA_009.png",
+      "desc": "邪恶的炼金术师尤金过去曾是一位瑞亚多的黑袍守护者，这件为人们熟知的古怪法袍正是他用当年穿着的守护者黑袍改造而成。",
+      "effect": "布甲：法力值上限+50；累计使用100（优秀）/90（稀有）/80（史诗）/70（传奇）点法力值后，会在身边释放毒雾。",
+      "stats": "生命值82/108/128/148；符文 纳伊鲁符文 + 2/3/4/5",
+      "rarity": "优秀"
     },
     {
       "id": "CA_013",
       "name": "祈雨服",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/57/Icon_suit_CA_013.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/57/Icon_suit_CA_013.png",
+      "desc": "东方国家偏远地区的有群奇妙的旅行巫师，他们往往戴着造型奇特的面具，用他们的巫术为路过乡村带来农作物的丰收。",
+      "effect": "布甲：法力值上限+50；持续使用武器技能武器技能2秒后，技能强度提高30%（优秀）/35%（稀有）/40%（史诗）/50%（传奇）。",
+      "stats": "生命值87/115/136/157；法力值30/30/30/30；符文 帕拉提符文 + 1/1/1/1；符文 纳伊鲁符文 + 1/2/3/4",
+      "rarity": "优秀"
     },
     {
       "id": "CA_015",
       "name": "战地牧师套装",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0b/Icon_suit_CA_015.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0b/Icon_suit_CA_015.png",
+      "desc": "帝国高阶骑士团配备的战地牧师所穿着的套装，这些战地牧师不仅可以在战场通过祈祷和神迹救助伤员，自己也有一定的战斗能力。",
+      "effect": "布甲：法力值上限+50；进入新区域时回复20（优秀）/30（稀有）/40（史诗）/50（传奇）点生命值。",
+      "stats": "生命值93/123/145/168；符文 阿希尔符文 + 1/2/3/4；符文 帕拉提符文 + 1/1/1/1",
+      "rarity": "优秀"
     },
     {
       "id": "CA_020",
       "name": "魔导士兵短袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e2/Icon_suit_CA_020.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/e2/Icon_suit_CA_020.png",
+      "desc": "帝国魔导兵团下层士兵所穿着的短袍。魔导兵团中，即使是下层士兵也往往能够使用魔法辅助战斗。",
+      "effect": "布甲：法力值上限+50；每150（优秀）/120（稀有）/110（史诗）/100（传奇）点法力值上限提升1点防御力。",
+      "stats": "生命值93/123/145/167；防御力1/1/1/1；符文 帕拉提符文 + 1/1/1/1；符文 纳伊鲁符文 + 1/2/3/4",
+      "rarity": "优秀"
     },
     {
       "id": "CA_001",
       "name": "圣礼法袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_suit_CA_001.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9b/Icon_suit_CA_001.png",
+      "desc": "帝国圣职人员长袍，常见于帝国的一般圣教牧师们身上。",
+      "effect": "布甲：法力值上限+50；每次受到攻击时会震开周围的敌人，1秒冷却。",
+      "stats": "生命值95/125/148/171；法力值20/20/20/20；符文 帕拉提符文 + 2/3/4/5",
+      "rarity": "优秀"
     },
     {
       "id": "CA_006",
       "name": "堕落学徒法袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/eb/Icon_suit_CA_006.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/e/eb/Icon_suit_CA_006.png",
+      "desc": "瑞亚多作为一个魔法之国，除了各种正规的魔法组织和结社外，也有许多见不得光的秘密黑魔法研习结社。",
+      "effect": "布甲：法力值上限+50；使用武器技能武器技能后提升3（优秀）/4（稀有）/5（史诗）/6（传奇）点，持续10秒",
+      "stats": "生命值90/119/141/162；技能强度10%/10%/10%/10%；符文 纳伊鲁符文 + 2/3/4/5",
+      "rarity": "优秀"
     },
     {
       "id": "CA_031",
       "name": "陈旧的女仆装",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b2/Icon_suit_CA_031.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b2/Icon_suit_CA_031.png",
+      "desc": "“真的真的非常抱歉！”",
+      "effect": "布甲：法力值上限+50；使用表情“道歉”时，快速回复法力值。",
+      "stats": "生命值80/105/124/144；法力值50/50/50/50；符文 纳伊鲁符文 + 2/3/4/5",
+      "rarity": "优秀"
     },
     {
       "id": "CA_041",
       "name": "鱼骨面具",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/92/Icon_suit_CA_041.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/92/Icon_suit_CA_041.png",
+      "desc": "泥鱼部族鱼人萨满所穿着的衣装。鱼骨面具似乎带有某种诡异的力量，会影响穿戴者的心智。",
+      "effect": "布甲：法力值上限+50",
+      "stats": "生命值100/100/156/180；符文 阿希尔符文 + 1/2/2/3；符文 帕拉提符文 + 1/2/2/3；符文 纳伊鲁符文 + 1/2/2/3",
+      "rarity": "优秀"
     },
     {
       "id": "CA_035",
       "name": "圣诞老人",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/ff/Icon_suit_CA_035.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/ff/Icon_suit_CA_035.png",
+      "desc": "圣诞快乐！",
+      "effect": "布甲：法力值上限+50；每消耗60点法力值，获得一份“礼物”。",
+      "stats": "生命值88/116/137/158；法力值30/30/30/30；符文 纳伊鲁符文 + 2/3/4/5",
+      "rarity": "优秀",
+      "unobtainable": true
     },
     {
       "id": "CA_002",
       "name": "守护者灰袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c3/Icon_suit_CA_002.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c3/Icon_suit_CA_002.png",
+      "desc": "瑞亚多守护者议会法师的法袍，灰袍及银色的猫头鹰面具是中阶议会法师的标识。",
+      "effect": "布甲：法力值上限+50；技能强度提高12%（稀有）/15%（史诗）/20%（传奇）。",
+      "stats": "生命值130/152/174；法力值25/25/25；符文 纳伊鲁符文 + 3/4/5",
+      "rarity": "稀有"
     },
     {
       "id": "CA_003",
       "name": "维特的欺诈法袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/56/Icon_suit_CA_003.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/56/Icon_suit_CA_003.png",
+      "desc": "这套法袍的上一任主人是位被帝国驱逐的有名欺诈师，帽子上的嘴巴似乎能迷惑他人的心智。",
+      "effect": "布甲：法力值上限+50；消耗法力值以吸收50%的伤害。每吸收1点伤害消耗3点法力值。",
+      "stats": "生命值60/60/60；法力值30/50/80；符文 纳伊鲁符文 + 3/4/5",
+      "rarity": "稀有"
     },
     {
       "id": "CA_011",
       "name": "雷电法袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4f/Icon_suit_CA_011.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4f/Icon_suit_CA_011.png",
+      "desc": "过去一个强大雷精灵爱上了一位在山中修行的年轻法师。然而群山只是年轻法师修行旅途的一站，临别前雷精灵用自己的力量为法师的法袍赐予了强大的祝福。",
+      "effect": "布甲：法力值上限+50；累积使用100（稀有）/90（史诗）/80（传奇）点法力值后，生成3（稀有）/3（史诗）/4（传奇）个电花。该效果有4秒冷却时间。",
+      "stats": "生命值112/131/150；符文 阿希尔符文 + 1/1/1；符文 纳伊鲁符文 + 2/3/4",
+      "rarity": "稀有"
     },
     {
       "id": "CA_012",
       "name": "忧伤南瓜",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5b/Icon_suit_CA_012.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5b/Icon_suit_CA_012.png",
+      "desc": "这是一颗有思想的南瓜，它不知道自己为啥存在又要去往何方。在一番思考后，它希望你先把它套在脑袋上然后和你一起旅行。",
+      "effect": "布甲：法力值上限+50；进入新区域时获得几个回复炼金药瓶的糖果。",
+      "stats": "生命值107/126/144；符文 帕拉提符文 + 2/3/4；符文 纳伊鲁符文 + 1/1/1",
+      "rarity": "稀有"
     },
     {
       "id": "CA_021",
       "name": "玄冥阴阳服",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/66/Icon_suit_CA_021.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/66/Icon_suit_CA_021.png",
+      "desc": "远东岛国楼船的秘密魔法结社的法袍，白狐对楼船象征着神秘与灵性，是魔法力量的象征。",
+      "effect": "布甲：法力值上限+50；附近有敌人被击杀时回复6（稀有）/8（史诗）/12（传奇）点法力值。",
+      "stats": "生命值119/139/159；符文 阿希尔符文 + 1/1/1；符文 纳伊鲁符文 + 2/3/4",
+      "rarity": "稀有"
     },
     {
       "id": "CA_034",
       "name": "邪恶稻草人",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d0/Icon_suit_CA_034.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d0/Icon_suit_CA_034.png",
+      "desc": "稻草间似乎隐藏着恶意，足以吓退任何胆小的灵魂……但似乎却会吸引强大的魔物来揍你。",
+      "effect": "布甲：法力值上限+50；击中敌人时会将敌人的攻击目标转移至自己。",
+      "stats": "生命值144/168/193；防御力2/2/2；符文 帕拉提符文 + 4/5/6",
+      "rarity": "稀有"
     },
     {
       "id": "CA_036",
       "name": "寒地巫师服",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c6/Icon_suit_CA_036.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c6/Icon_suit_CA_036.png",
+      "desc": "来自极寒之地的巫师们所穿着的法袍。与其说是法袍，不如说是一件御寒的厚棉衣。",
+      "effect": "布甲：法力值上限+50；使用武器技能武器技能后获得30点附魔，持续5（稀有）/7（史诗）/10（传奇）秒。",
+      "stats": "生命值133/156/179；符文 帕拉提符文 + 1/2/2；符文 纳伊鲁符文 + 2/2/3",
+      "rarity": "稀有"
     },
     {
       "id": "CA_023",
       "name": "纳伊鲁的符文长袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/72/Icon_suit_CA_023.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/72/Icon_suit_CA_023.png",
+      "desc": "纳伊鲁虚灵们编织的长袍，智慧和魔法力量流淌在长袍的每一根丝线。",
+      "effect": "布甲：法力值上限+50；符文法弹的最终伤害增加25%（史诗）/30%（传奇）。",
+      "stats": "生命值150/171；技能强度20%/20%；符文 纳伊鲁符文 + 5/6",
+      "rarity": "史诗"
     },
     {
       "id": "CA_030",
       "name": "纯蓝符文袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d2/Icon_suit_CA_030.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d2/Icon_suit_CA_030.png",
+      "desc": "一件纯粹的纳伊鲁符文力量法袍。",
+      "effect": "布甲：法力值上限+50；为你提供10点纳伊鲁符文力量，以获得通过累积消耗法力值施放符文法弹的能力。",
+      "stats": "生命值66；法力值30；符文 纳伊鲁符文 + 10",
+      "rarity": "史诗",
+      "unobtainable": true
     },
     {
       "id": "CA_017",
       "name": "红石法师长袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/11/Icon_suit_CA_017.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/11/Icon_suit_CA_017.png",
+      "desc": "红石结社是一个独立且中立的法师组织。红石结社以魔法及与魔法相关的历史研究为组织核心，成员往往出现在各种与魔法相关的遗迹探索中。",
+      "effect": "布甲：法力值上限+50；每消耗60点法力值，技能强度提升5%，持续10秒，最高叠加10（史诗）/12（传奇）次，每次加成独立计时。",
+      "stats": "生命值150/172；符文 纳伊鲁符文 + 4/5",
+      "rarity": "史诗"
     },
     {
       "id": "CA_019",
       "name": "赤玉巫师面具",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4c/Icon_suit_CA_019.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4c/Icon_suit_CA_019.png",
+      "desc": "远东之国赤玉的法师们擅长引导自然魔法力量，他们除了在战争中使用各种自然魔法破敌外，也会使用他们的魔法力量为国家祈求风调雨顺。",
+      "effect": "布甲：法力值上限+50；猎人道具猎人道具使用间隔减少30%（史诗）/40%（传奇）。",
+      "stats": "生命值160/182；符文 纳伊鲁符文 + 4/5",
+      "rarity": "史诗"
     },
     {
       "id": "CA_004",
       "name": "占卜师法袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0f/Icon_suit_CA_004.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0f/Icon_suit_CA_004.png",
+      "desc": "来自森林的亚人们有着强大的自然魔法亲和力，其中一些佼佼者甚至可以通过和自然沟通占卜未来。",
+      "effect": "布甲：法力值上限+50；有25%（史诗）/30%（传奇）概率免疫一次受击伤害。；（0/20）- 周期性触发 - 每隔60秒，受到的下一次攻击必然免疫。",
+      "stats": "生命值140/160；符文 帕拉提符文 + 2/3；符文 纳伊鲁符文 + 2/2",
+      "rarity": "史诗"
     },
     {
       "id": "CA_024",
       "name": "魔导战斗法袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/37/Icon_suit_CA_024.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/37/Icon_suit_CA_024.png",
+      "desc": "帝国魔导兵团中士官都为强大的战斗法师，他们擅长使用各种战斗法术击溃帝国的敌人。",
+      "effect": "布甲：法力值上限+50；每150（史诗）/120（传奇）点法力值上限提升1点防御力和2%点技能强度。",
+      "stats": "生命值141/161；防御力2/2；符文 帕拉提符文 + 2/2；符文 纳伊鲁符文 + 2/3",
+      "rarity": "史诗"
     },
     {
       "id": "CA_025",
       "name": "白魔法师长袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/85/Icon_suit_CA_025.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/8/85/Icon_suit_CA_025.png",
+      "desc": "白魔法师擅长使用各类支持魔法。在魔法之国瑞亚多，这件白色的贤者法袍属于那些魔法造诣达到极高水平的非议会白魔法师们。",
+      "effect": "布甲：法力值上限+50；每点额外提高5（史诗）/7（传奇）点生命值上限,每点额外提高5（史诗）/7（传奇）点法力值上限。",
+      "stats": "生命值82/93；符文 帕拉提符文 + 2/2；符文 纳伊鲁符文 + 2/3",
+      "rarity": "史诗"
     },
     {
       "id": "CA_026",
       "name": "黑魔法师长袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/13/Icon_suit_CA_026.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/13/Icon_suit_CA_026.png",
+      "desc": "黑魔法师并非使用邪恶的黑魔法的法师，而是专长于各类攻击性魔法的法师。在魔法之国瑞亚多，身着这身黑袍的往往都是那些纵横战场的最强大的战地法师。",
+      "effect": "布甲：法力值上限+50；符文法弹每击中一个敌人增加1%技能强度，最高增加30%（史诗）/40%（传奇），持续10秒。",
+      "stats": "生命值155/177；技能强度15%/15%；符文 阿希尔符文 + 3/3；符文 纳伊鲁符文 + 3/4",
+      "rarity": "史诗"
     },
     {
       "id": "CA_029",
       "name": "叛逆领主法袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9f/Icon_suit_CA_029.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/9f/Icon_suit_CA_029.png",
+      "desc": "过去一位想要策划颠覆奥利亚斯帝国的边境领主的法袍，法袍双肩各镶嵌了一枚恶魔力量的晶核，有着强大但并不稳定的邪恶魔法力量。",
+      "effect": "布甲：法力值上限+50；使用武器技能武器技能后，召唤水晶或魔法弹攻击敌人，冷却时间5秒。",
+      "stats": "生命值162/184；符文 纳伊鲁符文 + 4/5",
+      "rarity": "史诗"
     },
     {
       "id": "CA_033",
       "name": "吸血鬼礼服",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/46/Icon_suit_CA_033.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/46/Icon_suit_CA_033.png",
+      "desc": "穿上这件礼服，仿佛能感受到夜色的呼唤，散发出神秘而危险的气息。",
+      "effect": "布甲：法力值上限+50；闪避闪避时会变身成蝙蝠，攻击路径上的所有敌人，并能回复5%已损失的生命值，回复后的生命值不会超过生命值上限的35%。",
+      "stats": "生命值150/172；符文 阿希尔符文 + 4/5",
+      "rarity": "史诗"
     },
     {
       "id": "CA_037",
       "name": "冻结法袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/1f/Icon_suit_CA_037.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/1f/Icon_suit_CA_037.png",
+      "desc": "传说是某位有名的古怪魔法师所穿着的法袍。在他的魔法理论中，想要更高的魔法修为必须先有一个冷静的头脑，于是他给自己的法袍施加了奇特的魔法，会将穿戴者的脑袋封入冰中。",
+      "effect": "布甲：法力值上限+50；对冻结目标造成的伤害提高x1.5%，最大提高60%（史诗）/75%（传奇）（当前0%）。",
+      "stats": "生命值162/184；符文 帕拉提符文 + 2/2；符文 纳伊鲁符文 + 2/3",
+      "rarity": "史诗"
     },
     {
       "id": "CA_038",
       "name": "幽羽长袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/92/Icon_suit_CA_038.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/92/Icon_suit_CA_038.png",
+      "desc": "装饰了大量渡鸦尾羽的长袍，据说过去属于一位擅长虚灵幽焰魔法的传奇法师。",
+      "effect": "布甲：法力值上限+50；所有召唤生物的攻击速度提高15%（史诗）/20%（传奇）。召唤生物击中敌人有概率使你获得少量武器能量。",
+      "stats": "生命值170/194；符文 帕拉提符文 + 4/5",
+      "rarity": "史诗"
     },
     {
       "id": "CA_039",
       "name": "不祥的女仆装",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5a/Icon_suit_CA_039.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5a/Icon_suit_CA_039.png",
+      "desc": "虽然没有找到被恶魔侵蚀影响的痕迹，但却散发着不祥气息的诡异女仆装束。",
+      "effect": "布甲：法力值上限+50；进入新区域时召唤一个噩梦娃娃，且每个存活中的召唤生物都会提高你5%的攻击力，最多提高50%（史诗）/60%（传奇）。",
+      "stats": "生命值178/203；召唤物增伤10%/10%；符文 帕拉提符文 + 4/5",
+      "rarity": "史诗"
     },
     {
       "id": "CA_040",
       "name": "噩梦法袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b6/Icon_suit_CA_040.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b6/Icon_suit_CA_040.png",
+      "desc": "不稳定的魔法能量构成的诡异法袍，似乎其魔力可以吞噬法袍的穿戴者。",
+      "effect": "布甲：法力值上限+50；使用攻击造成伤害时，获得15%的全元素增伤，持续10（史诗）/12（传奇）秒。每种元素属性都可独立触发该增伤效果且独立计时。",
+      "stats": "生命值170/194；符文 阿希尔符文 + 2/3；符文 帕拉提符文 + 2/3；符文 纳伊鲁符文 + 2/3",
+      "rarity": "史诗"
     },
     {
       "id": "CA_016",
       "name": "守护者白袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4e/Icon_suit_CA_016.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/4e/Icon_suit_CA_016.png",
+      "desc": "瑞亚多守护者议会法师的法袍，白袍及金色的猫头鹰面具是高阶议会法师的标识，法袍本身会增强穿戴者的魔法亲和力，似乎能感受到知识之神希拉的加护。",
+      "effect": "布甲：法力值上限+50；使用武器技能武器技能后技能强度提高10%，持续15秒。可叠加。",
+      "stats": "生命值183；法力值30；符文 纳伊鲁符文 + 5",
+      "rarity": "传奇"
     },
     {
       "id": "CA_027",
       "name": "焚天",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/47/Icon_suit_CA_027.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/47/Icon_suit_CA_027.png",
+      "desc": "这件法袍应该属于东方赤玉帝国过去一位有名的法师，强大的附魔会为穿戴者带来强大的魔法力量，但这件法袍为什么会出现在边境地区就不得而知了。",
+      "effect": "布甲：法力值上限+50；累计使用200点法力值后进入焚天状态，持续20秒。期间每点会使所有伤害提高3%。",
+      "stats": "生命值190；符文 阿希尔符文 + 3；符文 纳伊鲁符文 + 2",
+      "rarity": "传奇"
     },
     {
       "id": "CA_028",
       "name": "传奇法师法袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/35/Icon_suit_CA_028.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/35/Icon_suit_CA_028.png",
+      "desc": "一位已化为虚灵的传奇黑魔法师留下的法袍，袍子上所带有的强大能量展现出了它前主人强大的魔法造诣，即便在虚灵们手里也被奉为至宝。",
+      "effect": "布甲：法力值上限+50；使用武器技能武器技能后返还50%的法力值消耗。",
+      "stats": "生命值162；技能强度20%；符文 纳伊鲁符文 + 5",
+      "rarity": "传奇"
     },
     {
       "id": "CA_042",
       "name": "虚空法袍",
       "kind": "布甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f8/Icon_suit_CA_042.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f8/Icon_suit_CA_042.png",
+      "desc": "以虚灵符文魔力构成的丝线编织的神秘法袍。然而除了最纯粹的虚灵符文魔力外，法袍中似乎还隐藏了不祥的混沌之力。",
+      "effect": "布甲：法力值上限+50；符文斩击，符文震击，符文法弹的最终伤害增加25%，且有25%概率附带混沌之力。",
+      "stats": "生命值180；符文 阿希尔符文 + 3；符文 帕拉提符文 + 3；符文 纳伊鲁符文 + 3",
+      "rarity": "传奇"
     },
     {
       "id": "HA_024",
       "name": "佣兵板甲",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f0/Icon_suit_HA_024.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f0/Icon_suit_HA_024.png",
+      "desc": "各国佣兵间流行重型铠甲，由厚重的生铁打造面对强大魔物也有较为优秀的防御能力。",
+      "effect": "重甲：强韧+1，防御力+2；受到攻击后，防御力提高3（普通）/3（优秀）/4（稀有）/4（史诗）/5（传奇），持续10（普通）/15（优秀）/15（稀有）/20（史诗）/20（传奇）秒。",
+      "stats": "生命值87/104/138/164/190；符文 帕拉提符文 + 1/2/3/4/5",
+      "rarity": "普通"
     },
     {
       "id": "HA_013",
       "name": "树灵藤甲",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b1/Icon_suit_HA_013.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b1/Icon_suit_HA_013.png",
+      "desc": "木灵树皮及藤蔓所制之甲，木甲拥有生命能为穿戴者注入活力。",
+      "effect": "重甲：强韧+1，防御力+2；生命值低于35%时，会缓慢恢复至35%。",
+      "stats": "生命值83/100/133/158/183；符文 帕拉提符文 + 1/2/3/4/5",
+      "rarity": "普通"
     },
     {
       "id": "HA_002",
       "name": "北境骑士重铠",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/2f/Icon_suit_HA_002.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/2f/Icon_suit_HA_002.png",
+      "desc": "勇敢的北境骑士们所穿着的板甲，用北方动物的毛皮修饰而显得别具一格。",
+      "effect": "重甲：强韧+1，防御力+2；进入新区域时，若当前生命值高于180，提高4（优秀）/5（稀有）/6（史诗）/7（传奇）点。",
+      "stats": "生命值109/144/170/197；符文 帕拉提符文 + 2/3/4/5",
+      "rarity": "优秀"
     },
     {
       "id": "HA_025",
       "name": "陈旧骑士甲",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_suit_HA_025.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/68/Icon_suit_HA_025.png",
+      "desc": "一般的下级骑士铠甲，虽然似乎常经保养没啥锈蚀，但盔甲各处的磨损和伤痕告示着它沧桑的年龄。",
+      "effect": "重甲：强韧+1，防御力+2；受到攻击后，防御力降低2，持续10秒。",
+      "stats": "生命值97/127/151/174；防御力3/3/3/3；符文 帕拉提符文 + 2/3/4/5",
+      "rarity": "优秀"
     },
     {
       "id": "HA_001",
       "name": "堡垒重甲",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/06/Icon_suit_HA_001.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/06/Icon_suit_HA_001.png",
+      "desc": "用坚固矿物包裹全身的厚实盔甲，能有效抵御物理攻击。",
+      "effect": "重甲：强韧+1，防御力+2；受到伤害时有20%（优秀）/22%（稀有）/25%（史诗）/30%（传奇）的概率将伤害降低20%。每1点额外增加2%的概率",
+      "stats": "生命值96/126/149/172；符文 帕拉提符文 + 2/3/4/5",
+      "rarity": "优秀"
     },
     {
       "id": "HA_004",
       "name": "武士大铠",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/95/Icon_suit_HA_004.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/9/95/Icon_suit_HA_004.png",
+      "desc": "来自远东岛国楼船的武士铠甲，由铁木制成，十分厚实。",
+      "effect": "重甲：强韧+1，防御力+2；每1点额外增加1.5%暴击率。",
+      "stats": "生命值94/124/147/169；暴击率5%/5%/5%/5%；符文 阿希尔符文 + 2/3/4/5",
+      "rarity": "优秀"
     },
     {
       "id": "HA_026",
       "name": "流浪骑士重甲",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/58/Icon_suit_HA_026.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/58/Icon_suit_HA_026.png",
+      "desc": "边境往往有一些背弃原本组织的骑士，他们用罩袍和麻布隐藏盔甲上过去所属组织的标识，干着宝藏猎人或雇佣兵的工作。",
+      "effect": "重甲：强韧+1，防御力+2；受到攻击后，移动速度增加25%，持续15秒。",
+      "stats": "生命值103/136/160/185；符文 帕拉提符文 + 1/2/3/4；符文 纳伊鲁符文 + 1/1/1/1",
+      "rarity": "优秀"
     },
     {
       "id": "HA_015",
       "name": "噬魂铠甲",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/24/Icon_suit_HA_015.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/2/24/Icon_suit_HA_015.png",
+      "desc": "誓言守护村子的骑士未能达成誓言成为了屠戮其守护之物的怪物，其过去所穿着的铠甲也成为了一件吞噬灵魂的不详之物。",
+      "effect": "重甲：强韧+1，防御力+2；附近每有敌人被击杀增加1点生命值上限，最多提升150点。；当前生命值增加0点。",
+      "stats": "生命值63/83/98/113；攻击力5/5/5/5；符文 阿希尔符文 + 2/3/4/5",
+      "rarity": "优秀"
     },
     {
       "id": "HA_032",
       "name": "废土暴徒",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/38/Icon_suit_HA_032.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/38/Icon_suit_HA_032.png",
+      "desc": "边境地区的荒漠地区盘踞着一些流浪的暴徒团体，他们像蜥蜴人们一样，主要依靠劫掠和拾荒过活。",
+      "effect": "重甲：强韧+1，防御力+2；分解武器时，你和你的队友额外获得5。",
+      "stats": "生命值97/128/152/175；移动速度10%/10%/10%/10%；符文 帕拉提符文 + 2/3/4/5",
+      "rarity": "优秀"
     },
     {
       "id": "HA_033",
       "name": "废土锈铠",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/11/Icon_suit_HA_033.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/11/Icon_suit_HA_033.png",
+      "desc": "用废弃的破沙船的钢板打造的护具，锈迹中还混杂着大量硝石碎屑。",
+      "effect": "重甲：强韧+1，防御力+2；周期性触发 - 每隔5秒，下一次直接攻击的暴击率提高50%（优秀）/65%（稀有）/80%（史诗）/100%（传奇）。",
+      "stats": "生命值105/139/164/189；暴击率15%/15%/15%/15%；符文 阿希尔符文 + 2/3/4/5",
+      "rarity": "优秀"
     },
     {
       "id": "HA_036",
       "name": "沼地猎兵",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d3/Icon_suit_HA_036.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d3/Icon_suit_HA_036.png",
+      "desc": "使用猎蛛蛛后厚重的甲壳制造的盔甲，甲壳中的腺体似乎可以产生强化穿戴者的激素。",
+      "effect": "重甲：强韧+1，防御力+2；所有攻击的中毒累积值提高15%（优秀）/20%（稀有）/25%（史诗）/30%（传奇）。",
+      "stats": "生命值100/132/156/180；毒属性增伤20%/20%/20%/20%；符文 帕拉提符文 + 2/3/4/5",
+      "rarity": "优秀"
     },
     {
       "id": "HA_006",
       "name": "鹰铁卫",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/60/Icon_suit_HA_006.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/60/Icon_suit_HA_006.png",
+      "desc": "帝国骑士团“鹰铁卫”的制式板甲。迅捷同时也能给使用者提供优良的保护。",
+      "effect": "重甲：强韧+1，防御力+2；每点防御力额外增加2.5%移动速度，最多增加50%。",
+      "stats": "生命值131/153/176；移动速度10%/10%/10%；符文 帕拉提符文 + 3/4/5",
+      "rarity": "稀有"
     },
     {
       "id": "HA_007",
       "name": "铁骑士铠甲",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5b/Icon_suit_HA_007.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5b/Icon_suit_HA_007.png",
+      "desc": "由厚重的铁板打造，覆盖全身的实用板甲，能有效抵御攻击。",
+      "effect": "重甲：强韧+1，防御力+2；受到攻击时有30%概率使伤害减少10点，每1点额外减少1点伤害。",
+      "stats": "生命值147/172/197；符文 帕拉提符文 + 3/4/5",
+      "rarity": "稀有"
     },
     {
       "id": "HA_005",
       "name": "鬼武者大铠",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/76/Icon_suit_HA_005.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/76/Icon_suit_HA_005.png",
+      "desc": "来自远东岛国楼船的附魔铠甲，蕴含着鬼神的力量。",
+      "effect": "重甲：强韧+1，防御力+2；使用武器技能武器技能后，下一次特殊动作特殊动作的暴击率提高50%（稀有）/70%（史诗）/100%（传奇）。",
+      "stats": "生命值121/141/162；技能强度10%/10%/10%；符文 纳伊鲁符文 + 3/4/5",
+      "rarity": "稀有"
     },
     {
       "id": "HA_012",
       "name": "恶神重铠",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/02/Icon_suit_HA_012.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/02/Icon_suit_HA_012.png",
+      "desc": "过去某个地下的邪恶古国所祭祀的恶神之铠，腐臭的力量虽已消散，但穿着者似乎仍能听到恶神的低语。",
+      "effect": "重甲：强韧+1，防御力+2；附近每个中毒的敌人都会使攻击力提高5%，首领级敌人会提高20%。",
+      "stats": "生命值126/147/169；符文 帕拉提符文 + 3/4/5",
+      "rarity": "稀有"
     },
     {
       "id": "HA_018",
       "name": "玄铁红线甲",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/54/Icon_suit_HA_018.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/54/Icon_suit_HA_018.png",
+      "desc": "远东赤玉帝国中阶将士之铠，由坚硬的玄铁打造的甲片带来优秀的防御性能。",
+      "effect": "重甲：强韧+1，防御力+2；进入新区域时获得20%（稀有）/25%（史诗）/30%（传奇）生命值上限的临时护盾。",
+      "stats": "生命值148/174/199；符文 阿希尔符文 + 1/1/1；符文 帕拉提符文 + 2/3/4",
+      "rarity": "稀有"
     },
     {
       "id": "HA_023",
       "name": "熔铁骑士铠甲",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d6/Icon_suit_HA_023.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/d6/Icon_suit_HA_023.png",
+      "desc": "和铁炉骑士们不同，熔铁骑士们似乎并不像他们的铠甲那般充满热情，是一个冷血无情的佣兵骑士团。",
+      "effect": "重甲：强韧+1，防御力+2；单次攻击造成超过500的伤害时，附加一次造成80（稀有）/100（史诗）/120（传奇）伤害的火焰打击。",
+      "stats": "生命值136/160/183；符文 阿希尔符文 + 3/4/5",
+      "rarity": "稀有"
     },
     {
       "id": "HA_021",
       "name": "破魔者铠甲",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b3/Icon_suit_HA_021.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/b/b3/Icon_suit_HA_021.png",
+      "desc": "破魔者是过去帝国为和瑞亚多法师军团对抗而组建的军团，他们铠甲做了特殊的抗魔法处理并都戴着特殊的面具，是一群让法师们闻风丧胆的存在。",
+      "effect": "重甲：强韧+1，防御力+2；累计消耗60（稀有）/50（史诗）/40（传奇）点法力值后，下一次攻击命中时会触发一次符文斩击。",
+      "stats": "生命值135/158/181；技能强度15%/15%/15%；符文 阿希尔符文 + 2/3/4；符文 纳伊鲁符文 + 2/2/2",
+      "rarity": "稀有"
     },
     {
       "id": "HA_014",
       "name": "磐岩坚铠",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/dd/Icon_suit_HA_014.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/d/dd/Icon_suit_HA_014.png",
+      "desc": "以魔法固定坚固岩石所成之铠，有着优秀的防御力和魔法亲和力，但灵活性欠佳。",
+      "effect": "重甲：强韧+1，防御力+2；使用武器技能武器技能后获得护身石甲，持续12秒。",
+      "stats": "生命值158/186/213；移动速度-10%/-10%/-10%；符文 帕拉提符文 + 2/2/3；符文 纳伊鲁符文 + 2/3/3",
+      "rarity": "稀有"
     },
     {
       "id": "HA_016",
       "name": "腐鳞重甲",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/34/Icon_suit_HA_016.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/3/34/Icon_suit_HA_016.png",
+      "desc": "由腐化飞龙之龙鳞所锻之铠，龙鳞中仍流淌着堕落飞龙的血液及流淌的魔法能量。",
+      "effect": "重甲：强韧+1，防御力+2",
+      "stats": "生命值141/166/190；法力值30/30/30；符文 帕拉提符文 + 1/2/3；符文 纳伊鲁符文 + 2/2/3",
+      "rarity": "稀有"
     },
     {
       "id": "HA_034",
       "name": "冰灵机关铠",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f2/Icon_suit_HA_034.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/f2/Icon_suit_HA_034.png",
+      "desc": "在全身带有特殊魔力机关的铠甲，其中灌注着冰灵的血液。",
+      "effect": "重甲：强韧+1，防御力+2；对首领级怪物的冻结效率提高30%，且周围有敌人陷入冻结时在其头顶生成冰锥。",
+      "stats": "生命值139/163/187；法力值50/50/50；符文 帕拉提符文 + 1/2/3；符文 纳伊鲁符文 + 2/2/3",
+      "rarity": "稀有"
     },
     {
       "id": "HA_020",
       "name": "帕拉提的符文之铠",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a6/Icon_suit_HA_020.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a6/Icon_suit_HA_020.png",
+      "desc": "帕拉提虚灵们打造的符文铠甲，能让穿戴者感受到纯粹的生命力量。",
+      "effect": "重甲：强韧+1，防御力+2；符文震击的最终伤害增加25%（史诗）/30%（传奇）。",
+      "stats": "生命值165/189；防御力2/2；符文 帕拉提符文 + 5/6",
+      "rarity": "史诗"
     },
     {
       "id": "HA_029",
       "name": "圣骑士重甲",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/af/Icon_suit_HA_029.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/af/Icon_suit_HA_029.png",
+      "desc": "帝国精锐圣骑士的附魔铠甲，一般只有帝国骑士团中最忠诚高级圣骑士才会穿戴。",
+      "effect": "重甲：强韧+1，防御力+2；生命值提高12%（史诗）/16%（传奇）。",
+      "stats": "生命值174/198；防御力2/2；符文 帕拉提符文 + 3/4；符文 纳伊鲁符文 + 1/1",
+      "rarity": "史诗"
     },
     {
       "id": "HA_008",
       "name": "屠魔者重甲",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7d/Icon_suit_HA_008.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/7/7d/Icon_suit_HA_008.png",
+      "desc": "传闻由过去屠戮无数恶魔的传奇恶魔猎手以恶魔的身躯为材料打造的板甲，面对恶魔时会涌现出让人胆寒的杀意。",
+      "effect": "重甲：强韧+1，防御力+2；附近每有敌人被击杀攻击力提高3%点，最高提高30%（史诗）/36%（传奇），进入新区域后重置。",
+      "stats": "生命值145/165；暴击率10%/10%；符文 阿希尔符文 + 4/5",
+      "rarity": "史诗"
     },
     {
       "id": "HA_009",
       "name": "铁炉骑士重甲",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/57/Icon_suit_HA_009.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/57/Icon_suit_HA_009.png",
+      "desc": "铁炉骑士团大陆上有名的骑士团，他们总是惩恶扬善践行正义，并永远向周围的人们输出着他们的热情……精神上和物理上皆是。",
+      "effect": "重甲：强韧+1，防御力+2；使用武器技能武器技能获得3层火焰光环，持续10（史诗）/12（传奇）秒。",
+      "stats": "生命值174/198；符文 阿希尔符文 + 2/2；符文 纳伊鲁符文 + 2/3",
+      "rarity": "史诗"
     },
     {
       "id": "HA_010",
       "name": "黑骑士板甲",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c0/Icon_suit_HA_010.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c0/Icon_suit_HA_010.png",
+      "desc": "神秘的黑骑士团的骑士所着的黑色重甲。黑骑士团以擅长屠龙而闻，虽然他们的行动总是难以追踪，但人们时不时会看到身着黑甲的骑士提着飞龙之首在魔物猎人公会换取赏金。",
+      "effect": "重甲：强韧+1，防御力+2；受到伤害后攻击力提高1点，最高获得20（史诗）/25（传奇）点攻击力，每进入一个新的大关卡后重置。当前攻击力增加0点。",
+      "stats": "生命值173/198；符文 阿希尔符文 + 2/2；符文 帕拉提符文 + 2/3",
+      "rarity": "史诗"
     },
     {
       "id": "HA_011",
       "name": "蛮牛拘束器",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0b/Icon_suit_HA_011.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/0b/Icon_suit_HA_011.png",
+      "desc": "用拘束强壮攻城蛮牛的附魔钢铁打造的板甲, 坚固且有着强大的韧性。",
+      "effect": "重甲：强韧+1，防御力+2；进入新区域时，若当前生命值高于240则将提高至15（史诗）/20（传奇）点。",
+      "stats": "生命值177/202；符文 帕拉提符文 + 4/5",
+      "rarity": "史诗"
     },
     {
       "id": "HA_003",
       "name": "黄金骑士重甲",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/17/Icon_suit_HA_003.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/1/17/Icon_suit_HA_003.png",
+      "desc": "由特殊金属打造华丽且高韧度的板甲，对魔法有极佳的亲和性。",
+      "effect": "重甲：强韧+1，防御力+2；返还武器技能武器技能消耗的法力值30%（史诗）/40%（传奇）。",
+      "stats": "生命值166/190；技能强度10%/10%；符文 帕拉提符文 + 2/2；符文 纳伊鲁符文 + 2/3",
+      "rarity": "史诗"
     },
     {
       "id": "HA_027",
       "name": "血骑士重甲",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/fb/Icon_suit_HA_027.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/f/fb/Icon_suit_HA_027.png",
+      "desc": "由血红色的魔法水晶和精钢打造的特殊铠甲，强大的魔法水晶力量可以大幅增强穿戴者的体质，但水晶的不稳定也让本身防御性能并不可观。",
+      "effect": "重甲：强韧+1，防御力+2；防御力超过0的部分减为0，每点减少的防御力将转化为2.5%（史诗）/3.0%（传奇）生命值上限（当前0%）。",
+      "stats": "生命值192/219；防御力-2/-2；符文 阿希尔符文 + 2/3；符文 帕拉提符文 + 2/3",
+      "rarity": "史诗"
     },
     {
       "id": "HA_028",
       "name": "遗忘守护之铠",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c6/Icon_suit_HA_028.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/c/c6/Icon_suit_HA_028.png",
+      "desc": "铠甲来自一座被遗忘的古国。古国的公主有一位忠诚的守护骑士，即使公主如何堕落变成何种样貌，守护骑士都永远的守护在公主的身后。",
+      "effect": "重甲：强韧+1，防御力+2；每有25连击计数，攻击力增加5%，最多增加30%（史诗）/35%（传奇）。",
+      "stats": "生命值174/199；防御力-3/-3；符文 阿希尔符文 + 4/5",
+      "rarity": "史诗"
     },
     {
       "id": "HA_031",
       "name": "深绿符文铠",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/03/Icon_suit_HA_031.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/0/03/Icon_suit_HA_031.png",
+      "desc": "一件纯粹的帕拉提符文力量铠甲。",
+      "effect": "重甲：强韧+1，防御力+2；为你提供10点帕拉提符文力量，以获得随时间自动进行符文震击充能的能力。",
+      "stats": "生命值96；符文 帕拉提符文 + 10",
+      "rarity": "史诗",
+      "unobtainable": true
     },
     {
       "id": "HA_017",
       "name": "堕落骑士重甲",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/67/Icon_suit_HA_017.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/6/67/Icon_suit_HA_017.png",
+      "desc": "被恶魔血肉严重侵蚀的铠甲，样式属于某个非常古老的帝国骑士团，其主人似乎是某位早已找不到记录的叛逃骑士。如今铠甲已被恶魔的力量严重侵蚀，穿戴者似乎能隐约听到恶魔的低语。",
+      "effect": "重甲：强韧+1，防御力+2",
+      "stats": "生命值165/189；攻击力10/10；符文 阿希尔符文 + 3/4；符文 帕拉提符文 + 3/4；符文 纳伊鲁符文 + 3/4",
+      "rarity": "史诗"
     },
     {
       "id": "HA_035",
       "name": "淬魔黄铜重铠",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/41/Icon_suit_HA_035.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/4/41/Icon_suit_HA_035.png",
+      "desc": "使用瑞亚多魔能机兵外壳材料打造的重型板甲，有着优秀的防御力与魔力强化效果。",
+      "effect": "重甲：强韧+1，防御力+2；每次直接攻击命中时可以积累蒸汽能量并进入蒸汽超载状态，处于蒸汽超载状态时会定期获得武器能量并持续消耗蒸汽能量。",
+      "stats": "生命值179/204；符文 阿希尔符文 + 4/5",
+      "rarity": "史诗"
     },
     {
       "id": "HA_022",
       "name": "守誓者之力",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a7/Icon_suit_HA_022.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/a/a7/Icon_suit_HA_022.png",
+      "desc": "守誓者是个神秘的组织，实际人数不详。他们似乎和某个强大的高位存在契约作为其在现世的代行者，并获得了强大的力量，但同时这份力量也并非常人所能轻易驾驭的。",
+      "effect": "重甲：强韧+1，防御力+2；每次受到攻击时各减少1点。；周期性触发 - 每隔20秒，因受击减少的符文力量各恢复1点。",
+      "stats": "生命值231；符文 阿希尔符文 + 10；符文 帕拉提符文 + 10；符文 纳伊鲁符文 + 10",
+      "rarity": "传奇"
     },
     {
       "id": "HA_019",
       "name": "兽面吞头连环铠",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5e/Icon_suit_HA_019.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/5e/Icon_suit_HA_019.png",
+      "desc": "过去远东赤玉帝国的大将之铠，有着无与伦比的防御力以及炎神的加护，穿戴者能感受到身上如有千军万马之势。",
+      "effect": "重甲：强韧+1，防御力+2；（0/20） - 符文斩击命中后15秒内暴击率提高1%，最高20%。；（0/20） - 符文震击命中后15秒内生命值上限提高1%，最高20%。",
+      "stats": "生命值187；暴击率20%；符文 阿希尔符文 + 3；符文 帕拉提符文 + 3",
+      "rarity": "传奇"
     },
     {
       "id": "HA_038",
       "name": "罪孽领主重袍",
       "kind": "重甲",
-      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/54/Icon_suit_HA_038.png"
+      "icon": "https://huiji-public.huijistatic.com/lc2/uploads/5/54/Icon_suit_HA_038.png",
+      "desc": "被诅咒的法师领主的法袍，其罪孽与诅咒使这件法袍变得无比沉重，似乎可以吞噬其穿戴者一般。",
+      "effect": "重甲：强韧+1，防御力+2；攻击普通攻击和特殊动作特殊动作击中时，根据该攻击动作伤害倍率额外回复法力值。；使用武器技能武器技能时，根据消耗的法力值获得武器能量。",
+      "stats": "生命值210；攻击力25；符文 阿希尔符文 + 4；符文 纳伊鲁符文 + 4",
+      "rarity": "传奇"
     }
   ]
 }
