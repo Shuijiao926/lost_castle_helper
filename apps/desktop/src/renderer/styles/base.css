@@ -564,6 +564,22 @@
     scrollbar-color:rgba(255,214,146,.22) transparent}
   .subpage{display:none}
   .subpage.on{display:block;animation:sub-page-in .22s cubic-bezier(.22,1,.36,1) both}
+  #submitModal .subpage[data-page="basic"].on{display:flex;flex-direction:column;min-height:100%}
+  .field{margin-bottom:9px}
+  .field label{display:block;margin:0 0 5px 2px;font-size:10.5px;color:#A99FC0;letter-spacing:.3px}
+  .fieldrow{display:flex;gap:8px}
+  .fieldrow .field{flex:1;min-width:0}
+  .subinp-lg{height:44px;font-size:14.5px;font-weight:600}
+  .subpreview{margin-top:auto;padding-top:14px}
+  .spv-label{font-size:10px;color:#8F83A8;margin:0 0 6px 2px}
+  .spv-card{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;
+    background:rgba(20,14,34,.32);border:1px solid rgba(255,214,146,.16)}
+  .spv-star{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    color:#FFD790;background:rgba(255,214,146,.08);border:1px solid rgba(255,214,146,.25);font-size:15px}
+  .spv-body{min-width:0}
+  .spv-name{font-size:13px;color:#FFE6B0;font-weight:600;line-height:1.2}
+  .spv-meta{font-size:10.5px;color:#9B8FB5;margin-top:3px}
+  .spv-tip{font-size:10.5px;color:#8F83A8;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   @keyframes sub-page-in{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:none}}
   .subrow{display:flex;gap:7px}
   .subinp{width:100%;height:38px;padding:0 12px;border-radius:12px;font-size:12.5px;color:#EDE9F4;
@@ -584,19 +600,31 @@
   .subcell.on .sn{color:#FFE6B0}
   .subsel{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
   .subslots{display:flex;gap:6px;margin-bottom:10px}
-  .subslot{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:#A99FC0;background:rgba(255,255,255,.035);
-    border:1px solid transparent;border-radius:9px;padding:5px 11px;cursor:pointer;font-family:inherit;
+  .subslot{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:#A99FC0;background:rgba(255,255,255,.035);
+    border:1px solid transparent;border-radius:9px;padding:5px 8px;cursor:pointer;font-family:inherit;
     transition:color .16s,background .16s,border-color .16s}
   .subslot svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
   .subslot:hover{color:#D8C9EE;background:rgba(255,255,255,.06)}
   .subslot.on{color:#FFE6B0;background:rgba(255,214,146,.07);border-color:rgba(255,214,146,.28)}
+  .subslot[data-slot="must"] svg path,.subslot[data-slot="must"] svg circle,
+  .subcell .slotbadge.cursed-must svg path,.subcell .slotbadge.cursed-must svg circle{fill:currentColor;stroke:none}
   .subslot.on svg{color:#FFD790}
   .subcell.eqcell.on::after{content:none}
-  .subcell .slotbadge{position:absolute;top:1px;right:2px;z-index:2;width:17px;height:17px;border-radius:50%;
-    display:flex;align-items:center;justify-content:center;background:rgba(16,10,28,.88);border:1px solid transparent}
-  .subcell .slotbadge svg{width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-  .subcell .slotbadge.graduation{color:#FFD790;border-color:rgba(255,214,146,.55)}
-  .subcell .slotbadge.transition{color:#D9A06A;border-color:rgba(217,160,106,.55)}
+  .subcell .slotbadge{position:absolute;top:0;right:0;z-index:2;width:18px;height:18px;
+    display:flex;align-items:center;justify-content:center;background:none;border:0;
+    filter:drop-shadow(0 1px 2px rgba(0,0,0,.85))}
+  .subcell .slotbadge svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;
+    shape-rendering:geometricPrecision}
+  .subcell .slotbadge.graduation{color:#FFD790}
+  .subcell .slotbadge.transition{color:#D9A06A}
+  .subcell .slotbadge.cursed-none{color:#B3BECC}
+  .subcell .slotbadge.cursed-suggest{color:#CDB2F2}
+  .subcell .slotbadge.cursed-must{color:#F2A697}
+  .subcell .slotbadge.treasure-gold,
+  .subcell .slotbadge.treasure-craft,
+  .subcell .slotbadge.treasure-main,
+  .subcell .slotbadge.treasure-backup{color:#FFD790}
+  .vd.suggest{background:rgba(150,120,200,.2);color:#C9B8E4}
   .subcell.other{border-color:rgba(196,160,240,.22)}
   .subtag{font-size:11px;color:#E8D9B4;background:rgba(120,84,190,.28);border:1px solid rgba(196,160,240,.3);
     border-radius:8px;padding:2px 6px;cursor:pointer}

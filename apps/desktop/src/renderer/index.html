@@ -146,9 +146,24 @@
       </div>
       <div class="subbody" id="subBody">
         <div class="subpage on" data-page="basic">
-          <div class="subrow"><input id="subName" class="subinp" placeholder="流派名"><input id="subVersion" class="subinp" placeholder="游戏版本"></div>
-          <div class="subrow"><input id="subAuthor" class="subinp" placeholder="作者"><input id="subTags" class="subinp" placeholder="标签，用逗号分开"></div>
-          <input id="subTip" class="subinp" placeholder="一句话玩法技巧">
+          <div class="field"><label>流派名</label><input id="subName" class="subinp subinp-lg" placeholder="例如：冰震大剑"></div>
+          <div class="fieldrow">
+            <div class="field"><label>游戏版本</label><input id="subVersion" class="subinp" placeholder="例如：1.0.1.3"></div>
+            <div class="field"><label>作者</label><input id="subAuthor" class="subinp" placeholder="你的昵称"></div>
+          </div>
+          <div class="field"><label>标签</label><input id="subTags" class="subinp" placeholder="冰属性, 暴击"></div>
+          <div class="field"><label>一句话技巧</label><input id="subTip" class="subinp" placeholder="开怪先蓄力，宝藏按顺序拿"></div>
+          <div class="subpreview">
+            <div class="spv-label">卡片预览</div>
+            <div class="spv-card">
+              <span class="spv-star">✦</span>
+              <div class="spv-body">
+                <div class="spv-name" id="spvName">流派名</div>
+                <div class="spv-meta" id="spvMeta">武器未选 · 刻印未选</div>
+                <div class="spv-tip" id="spvTip">一句话技巧</div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="subpage" data-page="wt">
@@ -160,7 +175,7 @@
         </div>
 
         <div class="subpage" data-page="equip">
-          <div class="subslots">
+          <div class="subslots equipment-slots">
             <button type="button" class="subslot" data-slot="transition"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 6l6 6-6 6M14 6l6 6-6 6"/></svg><span>过渡装备</span></button>
             <button type="button" class="subslot on" data-slot="graduation"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 3 14.7 9 21 9.8 16.5 14 17.6 20.3 12 17.2 6.4 20.3 7.5 14 3 9.8 9.3 9 12 3"/></svg><span>毕业装备</span></button>
           </div>
@@ -169,14 +184,23 @@
         </div>
 
         <div class="subpage" data-page="armor">
+          <div class="subslots armor-slots">
+            <button type="button" class="subslot" data-slot="transition"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 6l6 6-6 6M14 6l6 6-6 6"/></svg><span>过渡衣服</span></button>
+            <button type="button" class="subslot on" data-slot="graduation"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 3 14.7 9 21 9.8 16.5 14 17.6 20.3 12 17.2 6.4 20.3 7.5 14 3 9.8 9.3 9 12 3"/></svg><span>毕业衣服</span></button>
+          </div>
           <input id="subArmorSearch" class="subinp subsearch" placeholder="搜索衣服">
           <div class="subgrid" id="subArmorGrid"></div>
         </div>
 
         <div class="subpage" data-page="treasure">
+          <div class="subslots treasure-slots">
+            <button type="button" class="subslot" data-slot="gold"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7.2"/><path d="M9 12h6M12 9v6"/></svg><span>金色宝藏</span></button>
+            <button type="button" class="subslot" data-slot="craft"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 6-7 12L5 9z"/><path d="M5 9h14"/></svg><span>合成宝藏</span></button>
+            <button type="button" class="subslot on" data-slot="main"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l2.3 4.8 5.2.7-3.8 3.7.9 5.2L12 16l-4.6 2.4.9-5.2L4.5 9.5l5.2-.7z"/></svg><span>主要宝藏</span></button>
+            <button type="button" class="subslot" data-slot="backup"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16l-6-4-6 4z"/></svg><span>备选宝藏</span></button>
+          </div>
           <input id="subTreasureSearch" class="subinp subsearch" placeholder="搜索宝藏">
           <div class="subgrid" id="subTreasureGrid"></div>
-          <div class="sublist" id="subTreasureList"></div>
         </div>
 
         <div class="subpage" data-page="soul">
@@ -186,9 +210,13 @@
         </div>
 
         <div class="subpage" data-page="cursed">
+          <div class="subslots cursed-slots">
+            <button type="button" class="subslot" data-slot="none"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.2"/><path d="M6.6 6.6l10.8 10.8"/></svg><span>不用净化</span></button>
+            <button type="button" class="subslot on" data-slot="suggest"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s6 6.3 6 11a6 6 0 0 1-12 0c0-4.7 6-11 6-11z"/><path d="M9.5 14.2a2.5 2.5 0 0 0 2.5 2.5"/></svg><span>建议净化</span></button>
+            <button type="button" class="subslot" data-slot="must"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.6 4.8h2.8l-.6 9.6h-1.6z" fill="currentColor" stroke="none"/><circle cx="12" cy="18.4" r="1.55" fill="currentColor" stroke="none"/></svg><span>必须净化</span></button>
+          </div>
           <input id="subCursedSearch" class="subinp subsearch" placeholder="搜索诅咒宝藏">
           <div class="subgrid" id="subCursedGrid"></div>
-          <div class="sublist" id="subCursedList"></div>
         </div>
       </div>
       <div class="mfoot subfoot">

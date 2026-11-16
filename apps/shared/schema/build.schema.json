@@ -103,6 +103,16 @@
             "gold": { "type": "array", "items": { "type": "string" }, "description": "合成金宝藏名称" }
           }
         },
+        "treasureTiers": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "gold": { "type": "array", "items": { "type": "string" }, "description": "金色宝藏" },
+            "craft": { "type": "array", "items": { "type": "string" }, "description": "合成宝藏" },
+            "main": { "type": "array", "items": { "type": "string" }, "description": "主要宝藏" },
+            "backup": { "type": "array", "items": { "type": "string" }, "description": "备选宝藏" }
+          }
+        },
         "treasureOrder": {
           "type": "array", "items": { "$ref": "#/definitions/treasure" },
           "description": "其他宝藏，按从上到下的顺序=拾取优先级（顺序已内含门槛逻辑）"
@@ -116,7 +126,7 @@
             "properties": {
               "name": { "type": "string" },
               "eff": { "type": "string", "description": "效果与诅咒副作用" },
-              "verdict": { "enum": ["净化", "不净化"], "description": "是否净化" }
+              "verdict": { "enum": ["不净化", "建议净化", "必须净化"], "description": "净化建议层级" }
             }
           }
         },
@@ -152,6 +162,14 @@
       }
     },
 
+    "armorChoice": {
+      "type": "object", "required": ["name", "tier"], "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string", "description": "轻甲 / 布甲 / 重甲" },
+        "tier": { "enum": ["过渡", "毕业"] }
+      }
+    },
     "gearWeapon": {
       "type": "object", "required": ["name"], "additionalProperties": false,
       "properties": {

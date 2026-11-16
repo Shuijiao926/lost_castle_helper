@@ -525,6 +525,7 @@ public class Lc2Bubble : Form
     {
         if (hovering == value) return;
         hovering = value;
+        Cursor = value ? Cursors.Hand : Cursors.Default;
         timer.Interval = value ? HoverInterval : IdleInterval;
         Compose(angle, value);
     }
@@ -705,6 +706,7 @@ public class Lc2Bubble : Form
 '@
 
 Add-Type -ReferencedAssemblies 'System.Drawing', 'System.Windows.Forms' -TypeDefinition $cs -Language CSharp
+
 
 if ($GenerateOnly) {
   if (-not $Icon) { throw '-Icon is required when -GenerateOnly is used' }
