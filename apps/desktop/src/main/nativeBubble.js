@@ -18,7 +18,9 @@ const path = require('path');
 const fs = require('fs');
 const { app, screen } = require('electron');
 
-const log = (...a) => console.log('[lc2:bubble]', ...a);
+const logger = require('./util/log');
+const log = (...a) => logger.warn('[气泡]', ...a);
+const debug = (...a) => logger.debug('[气泡]', ...a);
 
 const BUBBLE_DIP = 72;      // 逻辑尺寸（和原先 Electron 窗口一致）
 const READY_TIMEOUT = 8000; // 冷启动编译 C# 需要一点时间
@@ -38,8 +40,8 @@ function iconPath() { return path.join(dirInApp('assets'), 'icon.png'); }
 
 /* ---------------- 启动 ---------------- */
 /**
- * @param {{x:number,y:number,onClick?:Function,onRightClick?:Function,onDragStart?:Function,onMove?:Function,onExit?:Function}} opts
- *        x / y 为 DIP 坐标
+ * @param {{x:number,y:number,hidden?:boolean,onClick?:Function,onRightClick?:Function,onDragStart?:Function,onMove?:Function,onExit?:Function}} opts
+ *        x / y 为 DIP 坐标；hidden=true 时脚本启动后先不显示，等 SHOW 命令再露出
  * @returns {Promise<boolean>} 脚本是否成功进入 READY
  */
 function start(opts = {}) {
@@ -65,8 +67,10 @@ function start(opts = {}) {
     // parent pid: helper self-closes if Electron dies (no orphan bubbles)
     '-ParentPid', String(process.pid),
   ];
+  // 启动卡片还在屏幕上时先不显示，避免两个窗口叠在同一位置闪一下
+  if (opts.hidden) args.push('-Hidden');
 
-  log('spawn size=' + size + ' scale=' + scale);
+  debug('spawn size=' + size + ' scale=' + scale);
   const proc = spawn('powershell.exe', args, { windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'] });
   child = proc;
   ready = false;
@@ -98,7 +102,7 @@ function start(opts = {}) {
 
         if (line === 'READY') {
           ready = true;
-          log('ready');
+          debug('ready');
           finish(true);
         } else if (line === 'CLICK') {
           opts.onClick?.();
@@ -119,7 +123,7 @@ function start(opts = {}) {
             opts.onMove?.(Math.round(x / scale), Math.round(y / scale));
           }
         } else {
-          log('stdout:', line);
+          debug('stdout:', line);
         }
       }
     });

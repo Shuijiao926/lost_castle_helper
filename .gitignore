@@ -37,3 +37,7 @@ storage/
 data/submissions/
 data/runtime/
 data/ratings.json
+
+# ==== Agent运行产物 ====
+.harness
+.workbuddy

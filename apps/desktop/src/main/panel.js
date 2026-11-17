@@ -21,6 +21,7 @@ function createPanel(deps) {
     disablePanelKeys,
     isQuitting,
     log,
+    onPageLoaded,
     paths,
     PANEL,
     PANEL_RADIUS,
@@ -90,7 +91,7 @@ function createPanel(deps) {
       cornersMode = 'shape';
       if (USE_PANEL_SHADOW) panelShadow.setFill(true);
       applyShape();
-      log('panel corners: shape (forced)');
+      log.debug?.('panel corners: shape (forced)');
       return;
     }
 
@@ -107,7 +108,7 @@ function createPanel(deps) {
       if (ok) {
         cornersMode = 'dwm';
         try { win.setShape([]); } catch {}
-        log(
+        log.debug?.(
           'panel corners: dwm pref=' + PANEL_CORNER_PREF,
           PANEL_CORNER_PREF === 1 ? 'square' : (PANEL_CORNER_PREF === 2 ? 'round' : 'round-small')
         );
@@ -115,7 +116,7 @@ function createPanel(deps) {
         cornersMode = 'shape';
         if (USE_PANEL_SHADOW) panelShadow.setFill(true);
         applyShape();
-        log('panel corners: shape fallback (win10/7)');
+        log.debug?.('panel corners: shape fallback (win10/7)');
       }
     });
   }
@@ -143,7 +144,7 @@ function createPanel(deps) {
     } catch {
       fadeSupported = false;
     }
-    log('panel fade supported =', fadeSupported);
+    log.debug?.('panel fade supported =', fadeSupported);
     return fadeSupported;
   }
 
@@ -270,7 +271,7 @@ function createPanel(deps) {
     disablePanelKeys();
     try { win.setFocusable(false); } catch {}
     try { win.webContents.send('lc2:dormant', true); } catch {}
-    log('panel dormant（不接收键盘，点击面板唤醒）pinned =', pinned);
+    log.debug?.('panel dormant（不接收键盘，点击面板唤醒）pinned =', pinned);
   }
 
   function exitSearchFocus() {
@@ -286,14 +287,14 @@ function createPanel(deps) {
     if (!win || win.isDestroyed() || !open || !dormant) return;
     cancelFocusTimer();
     dormant = false;
-    log('panel activate（点击唤醒）pinned =', pinned);
+    log.debug?.('panel activate（点击唤醒）pinned =', pinned);
     focusPanel();
     if (win.webContents) win.webContents.send('lc2:dormant', false);
     focusTimer = setTimeout(() => {
       focusTimer = null;
       if (!win || win.isDestroyed() || !open || dormant) return;
       const focused = win.isFocused();
-      log('panel activate: focused=', focused);
+      log.debug?.('panel activate: focused=', focused);
       if (!focused) {
         // 唤醒失败 → 退回"不抢焦点但可用热键"模式，避免键盘完全失效
         enablePanelKeys();
@@ -319,7 +320,7 @@ function createPanel(deps) {
       focusTimer = null;
       if (!win || win.isDestroyed() || !open || dormant) return;
       keepOffTaskbar();
-      log('search focus on: focusable=', win.isFocusable(), 'focused=', win.isFocused());
+      log.debug?.('search focus on: focusable=', win.isFocusable(), 'focused=', win.isFocused());
       if (!win.isFocused()) {
         focusPanel();
       }
@@ -356,7 +357,7 @@ function createPanel(deps) {
     // 告诉渲染层面板从气泡哪一侧展开（决定进场动画的方向原点）
     sendPanelState();
     enablePanelKeys();
-    log('panel open');
+    log.debug?.('panel open');
   }
 
   function destroy() {
@@ -387,7 +388,7 @@ function createPanel(deps) {
         try { win.setOpacity(1); } catch {}
       }
       if (USE_PANEL_SHADOW) panelShadow.hide();
-      log('panel close');
+      log.debug?.('panel close');
     });
   }
 
@@ -442,7 +443,7 @@ function createPanel(deps) {
       if (!cp) return;
       moveTo(cp.x / dragCursorScale - dragState.ox, cp.y / dragCursorScale - dragState.oy);
     }, 8);
-    log('drag start panel=', JSON.stringify(b));
+    log.debug?.('drag start panel=', b);
   }
 
   /** 原生光标流 → 面板位置（现在仅作兜底；主进程计时器接管时不双驱动） */
@@ -550,7 +551,7 @@ function createPanel(deps) {
       sessionSize = windowSize;
       configStore.state.panel = { x: b.x, y: b.y };
       try { configStore.save(); } catch {}
-      log('panel resized ->', windowSize.width, windowSize.height);
+      log.debug?.('panel resized ->', windowSize.width, windowSize.height);
     }
     try { win.setAlwaysOnTop(true, TOPMOST_LEVEL); } catch {}
   }
@@ -570,7 +571,7 @@ function createPanel(deps) {
     const b = win.getBounds();
     configStore.state.panel = { x: b.x, y: b.y };
     try { configStore.save(); } catch (e) { log('save panel pos failed:', e.message); }
-    log('panel moved ->', b.x, b.y);
+    log.debug?.('panel moved ->', b.x, b.y);
     try {
       win.setAlwaysOnTop(true, TOPMOST_LEVEL);
       if (USE_PANEL_SHADOW) {
@@ -605,7 +606,7 @@ function createPanel(deps) {
       x >= bb.x - pad && x <= bb.x + bb.width + pad && y >= bb.y - pad && y <= bb.y + bb.height + pad;
 
     if (inPanel || inBubble) return;
-    log('outside click: pinned =', pinned);
+    log.debug?.('outside click: pinned =', pinned);
     if (pinned) {
       // 置顶模式：点击外部不收起，但进入休眠（停止接收键盘）
       enterDormant();
@@ -620,7 +621,7 @@ function createPanel(deps) {
     configStore.state.panelPinned = pinned;
     try { configStore.save(); } catch (e) { log('save pinned failed:', e.message); }
     if (win && !win.isDestroyed()) win.webContents.send('lc2:pin', pinned);
-    log('pin toggle →', pinned);
+    log.debug?.('pin toggle →', pinned);
     return pinned;
   }
 
@@ -654,10 +655,18 @@ function createPanel(deps) {
     win.setAlwaysOnTop(true, TOPMOST_LEVEL);
     try { win.setBackgroundColor('#15161c'); } catch {}
 
-    win.webContents.on('console-message', (_e, _level, message) => {
-      log('[renderer]', message);
+    win.webContents.on('console-message', (_e, level, message) => {
+      if (level >= 2) log('[renderer]', message);
+      else log.debug?.('[renderer]', message);
     });
-    win.loadFile(paths.rendererIndex, { query: { mode: 'panel', win: WIN_MODE } });
+    Promise.resolve(win.loadFile(paths.rendererIndex, { query: { mode: 'panel', win: WIN_MODE } })).then(
+      () => onPageLoaded?.(true),
+      (error) => {
+        if (isQuitting()) return;
+        log('面板页面加载失败:', error.message);
+        onPageLoaded?.(false);
+      },
+    );
     setupCorners();
     win.once('ready-to-show', () => applyShape());
     win.webContents.once('did-finish-load', () => applyShape());
@@ -665,11 +674,11 @@ function createPanel(deps) {
     win.webContents.on('did-finish-load', () => sendPanelState());
     // 面板不销毁，只隐藏，避免反复重建
     win.on('blur', () => {
-      log('panel blur');
+      log.debug?.('panel blur');
       enterDormant();
     });
     win.on('focus', () => {
-      log('panel focus');
+      log.debug?.('panel focus');
       keepOffTaskbar();
     });
     win.on('close', (e) => {

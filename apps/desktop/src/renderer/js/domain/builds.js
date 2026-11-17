@@ -48,6 +48,65 @@
     return out.filter((n) => n && n.trim()).map((n) => n.trim());
   }
 
+  function mergeEquipment(choices, primary) {
+    const rows = new Map();
+    function add(name, item, stage) {
+      if (!rows.has(name)) {
+        rows.set(name, { name, stages: [], types: [], notes: [], sources: [], primary: null });
+      }
+      const row = rows.get(name);
+      const pairs = [
+        [row.stages, stage],
+        [row.types, item.type],
+        [row.notes, item.note],
+        [row.sources, item.obtain],
+      ];
+      for (const [values, value] of pairs) {
+        if (value && !values.includes(value)) values.push(value);
+      }
+      return row;
+    }
+
+    for (const choice of choices) {
+      const name = typeof choice?.name === 'string' ? choice.name.trim() : '';
+      // 旧记录把推荐清单中的首件毕业武器记为「核心」。
+      if (name) add(name, choice, choice.tag === '核心' ? '毕业' : choice.tag);
+    }
+    const primaryName = typeof primary?.name === 'string' ? primary.name.trim() : '';
+    if (primaryName) {
+      // 本地投稿只有过渡装时也会设置 gear。已有阶段以清单为准。
+      const stage = rows.has(primaryName) ? '' : '毕业';
+      add(primaryName, primary, stage).primary = primary;
+    }
+    return [...rows.values()];
+  }
+
+  function equipmentForDetail(build) {
+    const weapons = build.weaponChoices?.length
+      ? build.weaponChoices
+      : (build.core || []).map((name) => ({ name, tag: '毕业' }));
+    const weaponRows = mergeEquipment([
+      ...weapons,
+      ...(build.transition || []).map((item) => ({ ...item, tag: '过渡' })),
+    ], build.gear?.weapon);
+
+    // 投稿只在主武器上记录类型，其余武器从对应的图鉴条目补齐。
+    for (const row of weaponRows) {
+      if (row.types.length) continue;
+      const item = catalog.WEAPON_ITEMS.find(({ name }) => name === row.name);
+      const type = item && WEAPONS.find(({ id }) => id === item.wt);
+      if (type?.name) row.types.push(type.name);
+    }
+
+    return {
+      weapons: weaponRows,
+      armors: mergeEquipment(
+        (build.armorChoices || []).map((item) => ({ ...item, tag: item?.tier })),
+        build.gear?.armor,
+      ),
+    };
+  }
+
   function treasureNames(build) {
     return [
       ...(build.treasures?.chaos || []),
@@ -62,6 +121,20 @@
     const names = new Set(builds.flatMap(treasureNames));
     return [...names].filter((name) => name.toLowerCase().includes(keyword))
       .sort((a, b) => a.localeCompare(b, 'zh-CN'));
+  }
+
+  function listTags(builds, query = '') {
+    const keyword = query.trim().toLowerCase();
+    const counts = new Map();
+    for (const build of builds) {
+      if (!Array.isArray(build.tags)) continue;
+      for (const tag of new Set(build.tags)) {
+        if (typeof tag !== 'string' || !tag.trim() || !tag.toLowerCase().includes(keyword)) continue;
+        counts.set(tag, (counts.get(tag) || 0) + 1);
+      }
+    }
+    return [...counts.entries()].sort(([tagA, countA], [tagB, countB]) =>
+      countB - countA || tagA.localeCompare(tagB, 'zh-CN'));
   }
 
   /** 评分 → 5 颗星 HTML（四舍五入到每颗星 = 2 分） */
@@ -128,10 +201,21 @@
     return true;
   }
 
-  /** 排序（不改原数组） */
+  /**
+   * 流派的时间戳（毫秒）；取不到就返回 0，交给排序沉到最后。
+   * 优先 createdAt（投稿时间），退回 updatedAt / updated（最后更新）。
+   */
+  function buildTime(build) {
+    var raw = build.createdAt || build.updatedAt || build.updated || '';
+    var t = Date.parse(raw);
+    return isNaN(t) ? 0 : t;
+  }
+
+  /** 排序（不改原数组）：time 由近到远，rating 高分在前，默认按人气 */
   function sortBuilds(list, sort) {
     var out = list.slice();
     if (sort === 'rating') out.sort(function (a, b) { return b.rating - a.rating || b.votes - a.votes; });
+    else if (sort === 'time') out.sort(function (a, b) { return buildTime(b) - buildTime(a) || b.votes - a.votes; });
     else out.sort(function (a, b) { return b.votes - a.votes || b.rating - a.rating; });
     return out;
   }
@@ -150,6 +234,56 @@
       o.updated = b.updatedAt || b.updated || '';
       return o;
     });
+  }
+
+  function soulShape(item) {
+    const slot = String(item?.slot || '');
+    if (slot.includes('三角')) return 'triangle';
+    if (slot.includes('方形')) return 'square';
+    if (slot.includes('圆形')) return 'circle';
+    if (slot.includes('六边')) return 'hexagon';
+    return '';
+  }
+
+  function soulLoadout(stones) {
+    const plan = [['triangle', 'square', 'circle'], ['triangle', 'square', 'circle'], ['hexagon', 'hexagon']];
+    const extras = stones.slice();
+    const groups = plan.map((group) => group.map((shape) => {
+      const index = extras.findIndex((stone) => soulShape(stone) === shape);
+      const stone = index < 0 ? null : extras.splice(index, 1)[0];
+      return { shape, stone };
+    }));
+    return { groups, extras };
+  }
+
+  function soulEffectDetails(raw, selectedLevel) {
+    const text = String(raw || '').trim();
+    const levels = text.split(/\s+\/\s+(?=Lv\.?\s*\d+\b)/i).filter(Boolean).map((step) => {
+      const match = /^Lv\.?\s*(\d+)\s+(.+)$/is.exec(step);
+      return match ? { level: Number(match[1]), text: match[2] } : { level: null, text: step };
+    });
+    const exact = levels.find(({ level }) => level !== null && level === Number(selectedLevel));
+    if (exact) return { summary: exact.text, sampleLevel: null, levels };
+
+    const first = levels[0];
+    const number = /\d+(?:\.\d+)?/g;
+    if (levels.length > 1) {
+      const template = first.text.replace(number, '#');
+      if (levels.every((entry) => entry.text.replace(number, '#') === template)) {
+        const values = levels.map((entry) => entry.text.match(number) || []);
+        let index = 0;
+        // Bound each varying value by published levels, without assuming linear growth.
+        const summary = first.text.replace(number, (value) => {
+          const column = values.map((row) => row[index]);
+          index += 1;
+          const min = column.reduce((low, current) => Number(current) < Number(low) ? current : low, value);
+          const max = column.reduce((high, current) => Number(current) > Number(high) ? current : high, value);
+          return Number(min) === Number(max) ? value : min + '–' + max;
+        });
+        return { summary, sampleLevel: null, levels };
+      }
+    }
+    return { summary: first?.text || '', sampleLevel: first?.level ?? null, levels };
   }
 
   function nightmareList(selections) {
@@ -176,11 +310,17 @@
     weaponName: weaponName,
     inscriptionName: inscriptionName,
     listTreasures: listTreasures,
+    listTags,
+    equipmentForDetail,
     stars: stars,
     matches: matches,
+    buildTime: buildTime,
     sortBuilds: sortBuilds,
     visibleBuilds: visibleBuilds,
     normalizeBuilds: normalizeBuilds,
+    soulShape,
+    soulLoadout,
+    soulEffectDetails,
     nightmareList,
     nightmareTotal,
     nightmareProgress,

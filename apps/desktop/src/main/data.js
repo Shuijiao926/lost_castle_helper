@@ -4,7 +4,7 @@
  * 把 source 层（github / local / cache）的细节包住，
  * 对 IPC 只暴露结构化的客户端数据。
  */
-function createDataLoader({ source, configStore, log, submissionStore }) {
+function createDataLoader({ source, configStore, submissionStore }) {
   async function load() {
     const loaded = await source.loadBuilds({ source: configStore.state.dataSource });
     const file = loaded.file || { builds: [] };
@@ -15,9 +15,7 @@ function createDataLoader({ source, configStore, log, submissionStore }) {
       const drafts = submissionStore.list();
       const seen = new Set(builds.map((b) => b && b.id));
       drafts.forEach((d) => { if (!seen.has(d.id)) { builds.push(d); seen.add(d.id); } });
-      if (drafts.length) log('本地投稿草稿已合并:', drafts.length);
     }
-    if (!builds.length) log('builds 数据为空（source=' + loaded.source + '）');
 
     return {
       builds,

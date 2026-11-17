@@ -9,13 +9,17 @@ function createShortcuts({ globalShortcut, log, BASE_KEYS, PANEL_KEYS }) {
   let panelKeysRegistered = false;
   let panelEscape = null;
   let menuEscape = null;
+  let modalEscape = null;
   let escapeRegistered = false;
+
+  /** Esc 的占用优先级：弹层 > 气泡菜单 > 面板 */
+  const escapeHandler = () => modalEscape || menuEscape || panelEscape;
 
   function updateEscapeShortcut() {
     try {
-      if ((panelEscape || menuEscape) && !escapeRegistered) {
-        escapeRegistered = globalShortcut.register('Escape', () => (menuEscape || panelEscape)?.());
-      } else if (!panelEscape && !menuEscape && escapeRegistered) {
+      if (escapeHandler() && !escapeRegistered) {
+        escapeRegistered = globalShortcut.register('Escape', () => escapeHandler()?.());
+      } else if (!escapeHandler() && escapeRegistered) {
         globalShortcut.unregister('Escape');
         escapeRegistered = false;
       }
@@ -29,12 +33,23 @@ function createShortcuts({ globalShortcut, log, BASE_KEYS, PANEL_KEYS }) {
     updateEscapeShortcut();
   }
 
+  /**
+   * 弹层占用 Esc。
+   *
+   * 输入控件临时获焦时主进程会注销面板热键（否则输入框收不到按键），
+   * 此时 Esc 只剩「窗口有焦点」这一条路，窗口一旦失焦弹层就关不掉了。
+   * 打开弹层时把 Esc 重新注册回来，由渲染层统一处理成关闭当前弹层。
+   */
+  function setModalEscape(handler) {
+    modalEscape = handler;
+    updateEscapeShortcut();
+  }
+
   function registerBaseKey(handler) {
     for (const key of BASE_KEYS) {
       try {
         if (globalShortcut.register(key, handler)) {
           baseKey = key;
-          log('base hotkey =', key);
           return baseKey;
         }
       } catch (e) {
@@ -87,6 +102,7 @@ function createShortcuts({ globalShortcut, log, BASE_KEYS, PANEL_KEYS }) {
     escapeRegistered = false;
     panelEscape = null;
     menuEscape = null;
+    modalEscape = null;
   }
 
   return {
@@ -94,6 +110,7 @@ function createShortcuts({ globalShortcut, log, BASE_KEYS, PANEL_KEYS }) {
     enablePanelKeys,
     disablePanelKeys,
     setMenuEscape,
+    setModalEscape,
     unregisterAll,
     getBaseKey: () => baseKey,
     isPanelKeysRegistered: () => panelKeysRegistered,

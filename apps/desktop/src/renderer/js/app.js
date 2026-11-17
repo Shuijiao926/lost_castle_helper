@@ -14,17 +14,17 @@
 
   const {
     WEAPONS, WEAPON_ITEMS, ARMORS, SOUL_STONES, CURSED_TREASURES, NIGHTMARE_EFFECTS,
-    INSC, BUILDS, TREASURES, ALL_TAGS, loadInscriptions, loadTreasures, loadWeapons,
+    INSC, BUILDS, TREASURES, loadInscriptions, loadTreasures, loadWeapons,
     loadWeaponTypes, loadArmors, loadSoulStones, loadCursedTreasures, loadNightmareEffects,
   } = LC2.data.catalog;
-  const { ic, ICON, ICON_SVG, RC, nightmareIcon } = LC2.ui.icons;
+  const { ic, ICON, ICON_SVG, RC, weaponTint, nightmareIcon } = LC2.ui.icons;
   const { $, esc } = LC2.ui.dom;
   const refs = LC2.ui.dom.refs;
   const elFeed = refs.feed, elDetail = refs.detail, elSbar = refs.sbar, elBack = refs.back,
         elFilterbar = refs.filterbar, elListbar = refs.listbar,
         elTtl = refs.ttl, elModal = refs.modal, elGrid = refs.mgrid,
         elPanel = refs.panel, elBubble = refs.bubble, elTip = refs.bubbleTip;
-  const searchQuery = $('q'), searchQueryClear = $('qClear');
+  const searchQuery = $('q'), searchQueryClear = $('qClear'), feedTop = $('feedTop'), feedBottom = $('feedBottom');
   const modalQuery = $('mq'), modalQueryClear = $('mqClear');
   const elFbtn = elSbar;
   const domain = LC2.domain;
@@ -35,8 +35,9 @@
 /* ================= 应用状态 ================= */
 let pendingStagger = false;   // render 后是否让列表重新错峰入场
 let notesLoaded = false;
+let dataStatus = window.lc2 ? 'loading' : 'ready';
 
-const state={sort:'hot',view:'feed',detailId:null,filterItem:null,lastSubmitItem:null,expanded:{},cur:'',owned:new Set(),myVote:{},
+const state={sort:'time',view:'feed',detailId:null,filterItem:null,lastSubmitItem:null,expanded:{},cur:'',owned:new Set(),myVote:{},
   favs:new Set(),ratingOpen:null,notes:{},noteBid:null,
   q:'',focusedInput:false,dormant:false,tags:[],filterW:[],filterI:[],filterEquip:[],filterArmor:[],filterTreasures:[],modal:false,seg:'w',sideSel:null,mq:''};
 
@@ -49,20 +50,17 @@ const filterSegments = {
   armor: { field: 'filterArmor', label: '衣服' },
 };
 
-/* ================= 数据加载提示 ================= */
-function logDataSummary(arr){
-  try{
-    console.log('[lc2] 流派数据已加载：' + arr.length + ' 条'
-      + (arr.length ? '' : '（数据为空，显示空状态）'));
-  }catch(e){}
-}
-
 /* ================= 领域调用（应用状态 → 领域参数） ================= */
 function currentFilters() {
   return { q: state.q, filterW: state.filterW, filterI: state.filterI, filterEquip: state.filterEquip, filterArmor: state.filterArmor, filterTreasures: state.filterTreasures, tag: state.tags, sort: state.sort };
 }
 function visible() {
   return domain.visibleBuilds(BUILDS, currentFilters());
+}
+/** 当前排序 + 筛选下的第一条：换排序后默认就选它 */
+function firstVisibleId() {
+  const list = visible();
+  return list.length ? list[0].id : '';
 }
 
 /* ===== 搜索焦点：面板默认不抢焦点，输入时才临时获焦 ===== */
@@ -169,24 +167,55 @@ function renderFilterbar(isFeed){
   });
 }
 
+/* 「回到顶部 / 去底部」：都以「一个视口」为触发距离，滚过一屏才出现，
+ * 两个按钮在长列表里可能同时出现（列表超过两屏），互不遮挡。 */
+function syncFeedScroll(){
+  const top = elFeed.scrollTop;
+  const height = elFeed.clientHeight;
+  const rest = elFeed.scrollHeight - top - height;
+  elFeed.classList.toggle('scrolled', top > 0);
+  feedTop.hidden = !height || top < height;
+  feedBottom.hidden = !height || rest < height;
+}
+
+elFeed.addEventListener('scroll', syncFeedScroll, { passive: true });
+window.addEventListener('resize', syncFeedScroll);
+feedTop.addEventListener('click', () => {
+  elFeed.scrollTop = 0;
+  syncFeedScroll();
+});
+feedBottom.addEventListener('click', () => {
+  elFeed.scrollTop = elFeed.scrollHeight;
+  syncFeedScroll();
+});
+
 function render(){
   const isFeed=state.view==='feed';
+  elPanel.classList.toggle('detail-open', !isFeed);
   elFeed.style.display=isFeed?'block':'none';
   elDetail.style.display=isFeed?'none':'block';
   elSbar.style.display=isFeed?'flex':'none';
   elBack.style.display=isFeed?'none':'inline';
-  /* 详情页：隐藏「帮助 / 筛选 / 投稿 / 标题」，只留返回 */
-  $sbtn.style.display=isFeed?'':'none';
-  $hbtn.style.display=isFeed?'':'none';
   elTtl.style.display=isFeed?'':'none';
   if(elListbar) elListbar.style.display = isFeed ? 'flex' : 'none';
   renderFilterbar(isFeed);
   isFeed?renderFeed():renderDetail();
+  syncFeedScroll();
   if(pendingStagger){ pendingStagger=false; motion.stagger(elFeed); }
 }
 
 /* ---------- 卡片 ---------- */
 function renderFeed(){
+  elFeed.setAttribute('aria-busy', String(dataStatus === 'loading'));
+  if(dataStatus === 'loading'){
+    elFeed.innerHTML = '<div class="feed-status" role="status"><span class="loading-ring" aria-hidden="true"></span>正在加载流派与图鉴…</div>';
+    return;
+  }
+  if(dataStatus === 'failed'){
+    elFeed.innerHTML = '<div class="feed-status"><span role="status">流派与图鉴加载失败</span><button type="button" class="load-retry">重试</button></div>';
+    elFeed.querySelector('.load-retry').onclick = () => window.__lc2RefreshData();
+    return;
+  }
   const list=visible();
   if(!list.some(b=>b.id===state.cur)&&list.length)state.cur=list[0].id;
   if(!BUILDS.length){
@@ -211,22 +240,29 @@ if(ev.target.closest('[data-note]')){openNote(bid);return;}
 }
 function cardHTML(b,isCur){
   const open=!!state.expanded[b.id];
+  const tint=weaponTint(b.wt);
+  // 一枚就够：分数够高给「高分」，否则人气够旺给「热门」，避免整列卡片都挂标签
+  const badge = b.rating>=9 ? '<span class="cbadge score">高分</span>'
+    : (b.votes>=150 ? '<span class="cbadge hot">热门</span>' : '');
   let h='<div class="card'+(isCur?' is-active':'')+'" data-bid="'+b.id+'">';
-  h+='<div class="ch">'+ic(b.wt,W(b.wt).short,'s46')
-   +'<div class="main"><div class="cname">'+esc(b.name)+'</div>'
-   +'<div class="cmeta">'+esc(wName(b.wt))+' · '+esc(inscName(b.insc))+'</div>'
-   +'<div class="rate"><span class="sc">★ '+b.rating.toFixed(1)+'</span>'+stars(b.rating)
-   +'<span style="color:#767e94">'+b.votes+' 人打分</span></div></div>'
-   +'<div class="right-col"><span class="det" data-det="'+b.id+'">详情</span>'
-   +'<div class="cardacts">'
+  // 评分块是 .ch 的直接子元素（不在 .main 里）：窄窗口排在名字下面，宽窗口靠 CSS 排到右侧成列，
+  // 分数 / 星级 / 人数永远作为一个整体移动，不会因为窗口变宽而各自漂开
+  h+='<div class="ch">'+ic(b.wt,W(b.wt).short,'s48',tint)
+   +'<div class="main"><div class="ctop"><div class="cname">'+esc(b.name)+'</div>'+badge+'</div>'
+   +'<div class="cmeta"><span class="cate" style="--tc:'+tint+'">'+esc(wName(b.wt))+'</span>'
+   +'<span class="csep">·</span><span class="cate insc">'+esc(inscName(b.insc))+'</span></div></div>'
+   +'<div class="rate"><span class="sc"><i>★</i>'+b.rating.toFixed(1)+'</span>'+stars(b.rating)
+   +'<span class="votes">'+b.votes+' 人打分</span></div>'
+   +'<span class="det" data-det="'+b.id+'">详情</span></div>';
+
+  // 特征 chip 与三个操作图标同排：左边标签、右边动作，卡片底部才有"收口"
+  h+='<div class="cfoot"><div class="chips feat">'
+   +(b.features||[]).map(f=>'<span class="chip np">'+esc(f)+'</span>').join('')
+   +'</div><div class="cardacts">'
    +'<span class="act'+(state.myVote[b.id]?' on':'')+'" data-rate="'+b.id+'" title="打分">'+ICON_SVG.star+'</span>'
    +'<span class="act fav'+(state.favs.has(b.id)?' on':'')+'" data-fav="'+b.id+'" title="收藏">'+ICON_SVG.heart+'</span>'
 +'<span class="act note'+(state.notes[b.id]?' on':'')+'" data-note="'+b.id+'" title="'+(state.notes[b.id]?'修改我的印象':'写点印象')+'">'+ICON_SVG.note+'</span>'
-   +'</div></div></div>';
-
-  if((b.features||[]).length){
-    h+='<div class="chips" style="margin-top:11px">'+b.features.map(f=>'<span class="chip np">'+esc(f)+'</span>').join('')+'</div>';
-  }
+   +'</div></div>';
 
   if(state.ratingOpen===b.id){
     const my=state.myVote[b.id]||0;
@@ -250,6 +286,149 @@ function openDetail(id){state.detailId=id;state.view='detail';render();motion.re
 function closeDetail(){state.view='feed';state.detailId=null;render();motion.replay(elFeed,'m-view-back');}
 function sec(t,body,hint){return body?('<div class="sec">'+t+(hint?' <span class="hint">'+hint+'</span>':'')+'</div>'+body):'';}
 function box(title,body,iconHtml){return '<div class="box"><h4>'+(iconHtml||'')+esc(title)+'</h4>'+body+'</div>';}
+/* 不带标题的盒子：标题已经在 .sec 上重复时用这个，避免同一句话写两遍 */
+function plainBox(body){return '<div class="box">'+body+'</div>';}
+
+/* ================= 详情页展示形态 =================
+ * 速记：只列「这局要选什么」——刻印、共鸣、灵魂石、宝藏、诅咒、加点
+ * 完整：连每条说明一起带上（刻印效果、灵魂石等级效果、宝藏效果、诅咒代价…）
+ */
+const DETAIL_MODE_KEY='lc2.detailMode.v1';
+let detailMode='quick';
+try{ if(localStorage.getItem(DETAIL_MODE_KEY)==='full') detailMode='full'; }catch(e){}
+function detailFull(){ return detailMode==='full'; }
+function setDetailMode(mode){
+  const next=mode==='full'?'full':'quick';
+  if(next===detailMode) return;
+  detailMode=next;
+  try{ localStorage.setItem(DETAIL_MODE_KEY,next); }catch(e){}
+  const top=elDetail.scrollTop;
+  renderDetail();
+  elDetail.scrollTop=top;
+}
+
+/* 刻印图鉴：投稿数据只存 inscEff 时，用图鉴补出完整的刻印效果 */
+function inscEntry(id){ return (id && INSC[id]) || null; }
+
+/**
+ * 共鸣：把 code（形如 1-1-0）还原成每个槽位选中的方案。
+ * 有图鉴就取该方案的等级与文案（能出 Lv1/Lv2/Lv3 图标），
+ * 图鉴查不到时退回投稿里存下来的纯文本。
+ */
+function detailResonance(b){
+  const res=b.resonance;
+  if(!res) return [];
+  const nodes=Array.isArray(res.nodes)?res.nodes:[];
+  const picks=String(res.code||'').split('-').map((v)=>parseInt(v,10)||0);
+  const item=inscEntry(b.insc);
+  const groups=(item&&item.effectGroups&&Array.isArray(item.effectGroups.groups))?item.effectGroups.groups:[];
+  const slots=Math.max(picks.length,groups.length?Math.min(groups.length,3):0,1);
+  const out=[];
+  for(let i=0;i<slots;i++){
+    const idx=picks[i]||0;
+    const group=groups[i]||[];
+    const entry=idx>0?(group[idx-1]||null):null;
+    const text=entry?((entry.lines||[]).join(' ')):(nodes[i]||'');
+    if(!text) continue;
+    out.push({slot:i+1,level:entry?(entry.level||1):(idx||1),text:String(text)});
+  }
+  return out;
+}
+
+/* 十六进制 → 半透明：标签底色 / 描边用（不依赖 color-mix，老版 Chromium 也能跑） */
+function tint(hex,alpha){
+  const m=/^#?([0-9a-f]{6})$/i.exec(String(hex||''));
+  if(!m) return 'rgba(255,255,255,'+alpha+')';
+  const n=parseInt(m[1],16);
+  return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+alpha+')';
+}
+
+/* 品类 / 稀有度小标签：颜色跟着品类走，别全是同一个绿 */
+function rtag(label,color){
+  if(!label) return '';
+  const c=color||'#8b93a6';
+  return '<span class="rtag" style="--tag-color:'+c+';background:'+tint(c,.15)+';border:1px solid '+tint(c,.32)+'">'
+    +esc(label)+'</span>';
+}
+
+/* 说明文案里的数字挑出来上色：先转义再套标签，不会二次转义 */
+function accentText(text){
+  /* Lv.N 单独当一个整块（压暗），避免 "Lv.1" 的 1 和后面 "3米" 的 3 粘成一个数 */
+  return esc(text).replace(/(Lv\.?\s*\d+)|(\d+(?:\.\d+)?(?:–\d+(?:\.\d+)?)?(?:[ \t]*(?:%|％|点|秒|次|层|个|米|倍))?)/g,
+    (all, lv) => (lv ? '<i class="lvmark">'+lv+'</i>' : '<i class="num">'+all+'</i>'));
+}
+
+/**
+ * 完整模式的效果文案：一行一条，「诅咒：」单独起一行换色。
+ * 原来整段用 <br> 挤在一起，看不出哪句是收益、哪句是代价。
+ */
+function effBlock(text){
+  const raw=String(text||'').replace(/\r/g,'').trim();
+  if(!raw) return '';
+  const lines=[];
+  raw.split(/\n+/).forEach((seg)=>{
+    seg.split(/(?=诅咒\s*[-－—:：])/).forEach((part)=>{
+      const t=part.trim();
+      if(t) lines.push(t);
+    });
+  });
+  return '<div class="effblock">'+lines.map((line)=>{
+    const cls='effline'+(/^诅咒\s*[-－—:：]/.test(line)?' curse':'');
+    return '<div class="'+cls+'">'+accentText(line)+'</div>';
+  }).join('')+'</div>';
+}
+
+function renderSoulEffect(eff, level, maxLevel){
+  const { summary, sampleLevel, levels } = domain.soulEffectDetails(eff, level);
+  const example = sampleLevel !== null && (levels.length > 1 || maxLevel !== 1)
+    ? '<span class="dstone-example">Lv.' + sampleLevel + ' 示例</span>' : '';
+  const breakdown = levels.length > 1
+    ? '<details class="dstone-levels"><summary>各等级效果</summary><dl>'
+      + levels.map((row) => '<dt>' + (row.level === null ? '基础' : 'Lv.' + row.level)
+        + '</dt><dd>' + accentText(row.text) + '</dd>').join('') + '</dl></details>' : '';
+  return example + effBlock(summary) + breakdown;
+}
+
+function renderTreasureDetail(name, rarity, color, effect, order = ''){
+  return '<div class="dtrow"><div class="dttop">' + order + ic(name,name,'s30',color)
+    + '<span class="dtname">' + esc(name) + '</span>'
+    + rtag(rarity, RC[rarity] || '#8b93a6') + '</div>' + effBlock(effect) + '</div>';
+}
+
+function renderEquipmentDetails({ primary, notes, sources }, kind) {
+  const stats = [];
+  if (primary && kind === 'weapon') {
+    if (primary.atk != null) stats.push('攻击力 ' + primary.atk);
+    if (primary.skill || primary.cost != null) {
+      const skill = primary.skill ? '技能「' + primary.skill + '」' : '技能';
+      stats.push(skill + (primary.cost != null ? '消耗 ' + primary.cost + ' 法力' : ''));
+    }
+  }
+  if (primary && kind === 'armor') stats.push(...(primary.attrs || []));
+  const effects = effBlock([...stats, ...notes].join('\n'));
+  const obtain = sources.map((source) => '<div class="dgear-source">获取：' + esc(source) + '</div>').join('');
+  return effects || obtain ? '<div class="dgear-description">' + effects + obtain + '</div>' : '';
+}
+
+function renderEquipmentGroup(label, kind, rows, full) {
+  if (!rows.length) return '';
+  const color = kind === 'weapon' ? '#E3A08F' : '#93B7EE';
+  return '<section class="box dgear-group dgear-' + kind + '"><h4>' + esc(label) + '</h4><ul>'
+    + rows.map((row) => {
+      const types = row.types.map((type) => rtag(type, color)).join('');
+      const rarity = row.primary?.rarity;
+      const stages = row.stages.map((stage) => (
+        '<span class="dgear-stage' + (stage === '毕业' ? ' is-graduation' : '') + '">' + esc(stage) + '</span>'
+      )).join('');
+      return '<li class="dgear-row">' + ic(row.name, row.name, 's30', color)
+        + '<div class="dgear-ident"><span class="dgear-name">' + esc(row.name) + '</span>'
+        + types + rtag(rarity, Object.hasOwn(RC, rarity) ? RC[rarity] : '#8b93a6') + '</div>'
+        + '<div class="dgear-stages">' + stages + '</div>'
+        + (full ? renderEquipmentDetails(row, kind) : '')
+        + '</li>';
+    }).join('')
+    + '</ul></section>';
+}
 
 function renderDetail(){
   const b=BUILDS.find(x=>x.id===state.detailId);
@@ -265,7 +444,13 @@ function renderDetail(){
      +'<span style="color:#767e94">'+b.votes+' 人打分</span></div>'
    +'</div></div>';
 
-  /* 玩法技巧 */
+  /* ①.5 展示形态：一枚轻量文字开关，别抢标题 */
+  const full=detailFull();
+  h+='<div class="dmode" role="tablist" aria-label="展示形态">'
+    +'<span class="dmode-tab'+(full?'':' on')+'" role="tab" data-dmode="quick" aria-selected="'+(full?'false':'true')+'" title="只列要选的东西">速记</span>'
+    +'<span class="dmode-sep">·</span>'
+    +'<span class="dmode-tab'+(full?' on':'')+'" role="tab" data-dmode="full" aria-selected="'+(full?'true':'false')+'" title="连每件物品的说明一起看">完整</span>'
+    +'</div>';
   /* 玩法技巧（含连招要点） */
   let tipBody='<div class="tip">'+esc(b.tip)+'</div>';
   if((b.combos||[]).length){
@@ -280,134 +465,176 @@ function renderDetail(){
       +'<b style="font-size:17px;color:#f0c0d8;font-weight:600">'+esc(b.dmg)+'</b></div>');
   }
 
-  /* 武器刻印 + 灵魂石 */
-  if(b.inscEff||b.resonance){
-    let body=esc(b.inscEff||'待补');
-    if(b.resonance) body+='<div class="res"><b>共鸣选择 '+esc(b.resonance.code)+'</b><br>'
-      +b.resonance.nodes.map(n=>'· '+esc(n)).join('<br>')+'</div>';
-    h+=sec('武器刻印',box(inscName(b.insc),body,ic(b.insc,'','s30','#4a3f2a')));
+  /* ④ 武器刻印：图鉴图标 + 刻印名 +（完整）效果与说明 */
+  const insc=inscEntry(b.insc);
+  const inscMain=(insc&&insc.effectGroups&&Array.isArray(insc.effectGroups.main))?insc.effectGroups.main:[];
+  const inscEffTxt=(b.inscEff&&b.inscEff!=='待补')?String(b.inscEff).trim():'';
+  {
+    let body='<div class="inscrow">'+ic(b.insc,'','s46','#4a3f2a')
+      +'<div class="inscmain"><div class="inscname">'+esc(inscName(b.insc))
+      +'<span class="gtag t-weapon">'+esc(wName(b.wt))+'</span></div>';
+    if(full){
+      const effLines=inscMain.length?inscMain:(inscEffTxt?[inscEffTxt]:[]);
+      if(effLines.length) body+=effBlock(effLines.join('\n'));
+      if(insc&&insc.desc) body+='<div class="inscdesc">'+esc(insc.desc)+'</div>';
+    }
+    body+='</div></div>';
+    h+=sec('武器刻印',plainBox(body));
   }
-  if((b.soulStones||[]).length||(b.soulPlan||[]).length){
+
+  /* ⑤ 共鸣：code 拆槽位，每档带 Lv 图标与对应文案 */
+  const resRows=detailResonance(b);
+  if(resRows.length){
+    const code=(b.resonance&&b.resonance.code)?String(b.resonance.code):'—';
+    let body='<div class="dreshead"><span class="drescap">共鸣组合</span>'
+      +'<span class="drescode">'+esc(code)+'</span></div>';
+    body+=resRows.map(r=>'<div class="dresrow">'
+      +'<span class="dresic"><img src="'+resIcon(r.level)+'" alt="Lv.'+r.level+'"></span>'
+      +'<span class="dresslot">共鸣 '+r.slot+'</span>'
+      +'<span class="drestxt">'+accentText(r.text)+'</span></div>').join('');
+    h+=sec('共鸣',plainBox(body));
+  }
+
+  /* ⑥ 灵魂石：速记两列排开，完整单列 + 该等级效果 */
+  const stones=Array.isArray(b.soulStones)?b.soulStones:[];
+  if(stones.length||(b.soulPlan||[]).length){
     let body='';
-    if((b.soulStones||[]).length){
-      body+=b.soulStones.map(s=>'<div class="srow"><span class="sn">'+esc(s.name)+'</span>'
-        +'<span class="sl">'+esc(s.lv||'—')+'</span><span class="se">'+esc(s.eff)+'</span></div>').join('');
+    if(stones.length){
+      body+='<div class="dstones'+(full?'':' is-compact')+'">'+stones.map((s)=>{
+        const cat=SOUL_STONES.find((x)=>x.name===s.name)||null;
+        const lvRaw=s.lv?String(s.lv).replace(/^Lv\.?\s*/i,''):'';
+        const eff=s.eff||cat?.eff;
+        return '<div class="dstone">'+ic(s.name,s.name,full?'s30':'s24','#B79BEB')
+          +'<div class="dstonemain"><div class="dstonetop">'
+          +'<span class="dstonename">'+esc(s.name)+'</span>'
+          +(lvRaw?'<span class="dstonelv">Lv.'+esc(lvRaw)+'</span>':'')
+          +(full&&!lvRaw&&cat&&cat.maxLevel>1?'<span class="dstonerange">Lv.1–'+esc(cat.maxLevel)+'</span>':'')
+          +(full&&cat&&cat.slot?'<span class="dstoneslot">'+esc(cat.slot)+'</span>':'')
+          +'</div>'
+          +(full&&eff?renderSoulEffect(eff,lvRaw,cat?.maxLevel):'')
+          +'</div></div>';
+      }).join('')+'</div>';
     }
     if((b.soulPlan||[]).length){
-      body+='<div class="plan">'+b.soulPlan.map(p=>'<span class="pg"><b>'+esc(p.g)+'</b>'+esc(p.items.join(' + '))+'</span>').join('')+'</div>';
+      body+='<div class="gtitle" style="--c:#B79BEB">分配方案</div><div class="plan">'
+        +b.soulPlan.map(p=>'<span class="pg"><b>'+esc(p.g)+'</b>'+esc(p.items.join(' + '))+'</span>').join('')+'</div>';
     }
-    h+=sec('灵魂石',box('词条与分配方案',body));
+    h+=sec('灵魂石',plainBox(body));
   }
 
-  /* 武器、衣服（推荐清单 + 毕业装） */
-  if(b.gear||(b.weaponChoices||[]).length||(b.core||[]).length||(b.transition||[]).length){
-    let body='';
-    /* 推荐清单 */
-    const rlist=(b.weaponChoices&&b.weaponChoices.length
-        ? b.weaponChoices.slice()
-        : (b.core||[]).map(n=>({name:n,tag:'核心',note:''}))).slice();
-    (b.transition||[]).forEach(t=>rlist.push({name:t.name,tag:'过渡',note:(t.note||'')+(t.obtain?'　获取：'+t.obtain:'')}));
-    if(rlist.length){
-      body+='<div class="gtitle" style="margin-top:0">推荐清单</div><div class="plist">';
-      rlist.forEach(w=>{
-        body+='<div class="prow" style="align-items:flex-start;padding:7px 9px">'
-          +ic(w.name,w.name,'s24',RC['传奇'])
-          +'<span style="flex:1;min-width:0">'
-          +'<span style="color:#d5dae6">'+esc(w.name)+'</span>'
-          +(w.tag?'<span class="tierb" style="margin-left:7px;background:rgba(139,154,212,.16);color:#a3b2d4">'+esc(w.tag)+'</span>':'')
-          +(w.note?'<span style="display:block;font-size:11.5px;color:#8f96a8;margin-top:3px;line-height:1.6">'+esc(w.note)+'</span>':'')
-          +'</span></div>';
-      });
-      body+='</div>';
-    }
-    /* 毕业装 */
-    if(b.gear){
-      body+='<div class="gtitle" style="margin-top:12px">毕业装</div>';
-      if(b.gear.weapon){const w=b.gear.weapon;
-        body+='<div class="gear">'+ic(w.name,w.name,'s46',RC[w.rarity]||'#3b4a63')
-          +'<div class="gt"><div class="gname">'+esc(w.name)
-          +'<span class="gtag t-weapon">'+esc(w.type)+'</span><span class="gtag t-legend">'+esc(w.rarity)+'</span></div>'
-          +'<div class="ps">攻击力 '+esc(w.atk)+'　·　技能「'+esc(w.skill)+'」消耗 '+esc(w.cost)+' 法力</div>'
-          +'<div class="ps">'+esc(w.note)+'</div>'
-          +'<div class="ps" style="color:#7f8798">获取：'+esc(w.obtain||'待补')+'</div></div></div>';
-      }
-      if(b.gear.armor){const a=b.gear.armor;
-        body+='<div class="gear">'+ic(a.name,a.name,'s46',RC[a.rarity]||'#3b4a63')
-          +'<div class="gt"><div class="gname">'+esc(a.name)
-          +'<span class="gtag t-armor">'+esc(a.type)+'</span><span class="gtag t-legend">'+esc(a.rarity)+'</span></div>'
-          +'<div class="attrs">'+(a.attrs||[]).map(x=>'<span class="attr">'+esc(x)+'</span>').join('')+'</div>'
-          +'<div class="ps">'+esc(a.note)+'</div>'
-          +'<div class="ps" style="color:#7f8798">获取：'+esc(a.obtain||'待补')+'</div></div></div>';
-      }
-    }
-    h+=sec('武器、衣服',box('推荐清单 / 毕业装',body));
-  }
+  /* ⑦ 武器、衣服 */
+  const equipment = domain.equipmentForDetail(b);
+  h += sec('武器与衣服',
+    renderEquipmentGroup('武器', 'weapon', equipment.weapons, full)
+    + renderEquipmentGroup('衣服', 'armor', equipment.armors, full));
 
-  /* 宝藏怎么选：混沌 / 合成金 / 其他（按顺序拿） */
+  /* ⑧ 宝藏怎么选：必选 / 推荐 / 备选，以及按顺序拿的其他宝藏 */
   const tOrder=b.treasureOrder||[];
   const tt=b.treasureTiers||{};
-  const mustArr=tt.must||tt.gold||[];
-  const recArr=tt.recommended||[].concat(tt.craft||[],tt.main||[]);
+  const mustArr=(tt.must&&tt.must.length)?tt.must:(tt.gold||[]);
+  const recArr=(tt.recommended&&tt.recommended.length)?tt.recommended:[].concat(tt.craft||[],tt.main||[]);
   const backArr=tt.backup||[];
+  const chaosArr=(b.treasures&&b.treasures.chaos)||[];
+  const goldArr=(b.treasures&&b.treasures.gold)||[];
   const hasTiers=mustArr.length+recArr.length+backArr.length > 0;
-  if((b.treasures&&(b.treasures.chaos.length||b.treasures.gold.length))||hasTiers||tOrder.length||(b.treasureNotes||[]).length){
+  if(chaosArr.length||goldArr.length||hasTiers||tOrder.length||(b.treasureNotes||[]).length){
+    /* 一档一区块：标题单独一行，下面统一左对齐排，不会再出现挤在右侧换行的情况 */
+    const tierBlock=(label,arr,color)=>{
+      if(!arr||!arr.length) return '';
+      const head='<div class="dtierlabel" style="--c:'+color+'">'+esc(label)
+        +'<span class="dtiernum">'+arr.length+'</span></div>';
+      if(!full){
+        return '<div class="dtier">'+head+'<div class="dtierchips">'
+          +arr.map(x=>'<span class="chip">'+ic(x,x,'s24',color)+esc(x)+'</span>').join('')+'</div></div>';
+      }
+      return '<div class="dtier">'+head+'<div class="dtierlist">'+arr.map(x=>{
+        const t=TREASURES.find((y)=>y.name===x)||null;
+        return renderTreasureDetail(x,t?.rarity,color,t?.effect);
+      }).join('')+'</div></div>';
+    };
     let body='';
-    const chipRow=(label,arr,color)=>{if(!arr||!arr.length)return '';
-      return '<div class="kv" style="align-items:flex-start;padding:5px 0"><span class="k">'+label+'</span>'
-        +'<span style="flex:1;text-align:right">'+arr.map(x=>'<span class="chip np" style="margin:2px 0 2px 5px">'
-        +ic(x,x,'s24',color||RC['史诗'])+esc(x)+'</span>').join('')+'</span></div>';};
-    body+=chipRow('混沌宝藏',b.treasures&&b.treasures.chaos)+chipRow('合成金宝藏',b.treasures&&b.treasures.gold);
-    body+=chipRow('必选宝藏',mustArr,RC['传奇'])+chipRow('推荐宝藏',recArr,RC['史诗'])
-      +chipRow('备选宝藏',backArr,'#6b7386');
+    /* 每一档一个色相：原来必选/推荐直接借用稀有度的深底色，做前景色会发闷、还和"合成金"撞色。
+       必选用绿（和"已选"同一套语义），推荐用蓝，跟金/紫都拉得开 */
+    body+=tierBlock('混沌宝藏',chaosArr,'#B892FF')
+      +tierBlock('合成金宝藏',goldArr,'#E0B44A')
+      +tierBlock('必选',mustArr,'#7FC79B')
+      +tierBlock('推荐',recArr,'#7FA8E8')
+      +tierBlock('备选',backArr,'#8A90A2');
     if(tOrder.length){
-      body+='<div class="gtitle" style="margin-top:11px;color:#8b9ad4">其他宝藏 · 按这个顺序拿'
-        +'<span style="color:#6b7386;font-weight:400">（越靠前越优先）</span></div>';
-      body+='<div class="plist">';
-      tOrder.forEach(x=>{
-        body+='<div class="prow">'
+      body+='<div class="dtierlabel" style="--c:#8b9ad4;margin-top:12px">其他宝藏 · 按这个顺序拿'
+        +'<span class="dtiernum">'+tOrder.length+'</span></div>';
+      body+='<div class="dorder">';
+      tOrder.forEach((x,i)=>{
+        const t=TREASURES.find((y)=>y.name===x.n)||null;
+        const order='<span class="dordernum">'+(i+1)+'</span>';
+        if(full){
+          body+=renderTreasureDetail(x.n,x.r,RC[x.r]||'#3b4a63',t?.effect,order);
+          return;
+        }
+        body+='<div class="drow">'
+          +order
           +ic(x.n,x.n,'s24',RC[x.r]||'#3b4a63')
-          +'<span class="nm2">'+esc(x.n)+'</span>'
-          +'<span class="rar">'+esc(x.r)+'</span></div>';
+          +'<div class="dtmain"><div class="dttop"><span class="dtname">'+esc(x.n)+'</span>'
+          +rtag(x.r,RC[x.r]||'#8b93a6')+'</div>'
+          +'</div></div>';
       });
       body+='</div><div class="chaincap" style="margin-top:7px">按从上到下拿　·　前面的是垫底件，先拿它们，后面的才刷得出来</div>';
     }
     if((b.treasureNotes||[]).length)body+='<div class="tip" style="margin-top:9px">'+b.treasureNotes.map(n=>'· '+esc(n)).join('<br>')+'</div>';
-    h+=sec('宝藏怎么选',box('必选 / 推荐 / 备选',body));
+    h+=sec('宝藏怎么选',plainBox(body));
   }
 
-  /* ⑥ 诅咒宝藏 */
+  /* ⑨ 诅咒宝藏：只留「拿不拿 / 净化不净化」的结论，完整模式补诅咒代价 */
   if((b.cursed||[]).length){
-    let body=b.cursed.map(c=>'<div class="cursed">'+ic(c.name,c.name,'s30',RC['诅咒'])
+    const body=b.cursed.map(c=>'<div class="cursed">'+ic(c.name,c.name,'s30','#D995BA')
       +'<div class="cmain"><div class="ctitle">'+esc(c.name)
       +'<span class="vd '+(c.verdict==='不净化'?'keep':c.verdict==='必须净化'?'purge':'suggest')+'">'+esc(c.verdict)+'</span></div>'
-      +'<div class="ceff">'+esc(c.eff)+'</div></div></div>').join('');
-    h+=sec('诅咒宝藏',box('拿不拿 / 净不净化',body));
+      +(full&&c.eff?effBlock(c.eff):'')
+      +'</div></div>').join('');
+    h+=sec('诅咒宝藏',plainBox(body));
   }
 
-  /* ⑦ 炼金与猎人道具 */
+  /* ⑩ 炼金与猎人道具 */
   if((b.alchemy||[]).length||(b.hunterItems||[]).length){
+    const hasAlchemy=(b.alchemy||[]).length>0;
+    const hasHunter=(b.hunterItems||[]).length>0;
+    /* 两类都用同一套物品行，只有同时存在时才加分组标题 */
+    const itemRow=(name,eff)=>'<div class="ditem">'+ic(name,name,'s30','#9DCFB4')
+      +'<div class="ditemmain"><div class="ditemtop"><span class="ditemname">'+esc(name)+'</span></div>'
+      +(full&&eff?effBlock(eff):'')
+      +'</div></div>';
     let body='';
-    if((b.alchemy||[]).length){
-      body+=b.alchemy.map(a=>'<div class="srow"><span class="sn">'+esc(a.name)+'</span>'
-        +'<span class="se">'+esc(a.eff)+'</span></div>').join('');
+    if(hasAlchemy&&hasHunter) body+='<div class="gtitle" style="--c:#7CC4A0;margin-top:0">炼金</div>';
+    if(hasAlchemy) body+='<div class="dlist">'+b.alchemy.map(a=>itemRow(a.name,a.eff)).join('')+'</div>';
+    if(hasHunter){
+      if(hasAlchemy) body+='<div class="gtitle" style="--c:#7CC4A0">猎人道具</div>';
+      body+='<div class="dlist">'+b.hunterItems.map(x=>itemRow(x.name,x.eff)).join('')+'</div>';
     }
-    if((b.hunterItems||[]).length){
-      body+='<div class="plan">'+b.hunterItems.map(x=>'<span class="pg"><b>'+esc(x.name)+'</b>'+esc(x.eff)+'</span>').join('')+'</div>';
-    }
-    h+=sec('炼金与猎人道具',box('材料 / 道具',body));
+    h+=sec('炼金与猎人道具',plainBox(body));
   }
 
-  /* ⑧ 梦魇加点 */
+  /* ⑪ 梦魇加点：改成单列卡片，名字不再被挤断行 */
   if(Array.isArray(b.nightmareList) && b.nightmareList.length){
-    h += sec('梦魇推荐加点', '<div class="box">'
-      + renderNightmareProgress(b.nightmareList)
-      + '<div class="nmgrid">' + renderNightmareRows(b.nightmareList) + '</div></div>');
+    h+=sec('梦魇推荐加点','<div class="box">'
+      +renderNightmareProgress(b.nightmareList)
+      +renderNightmareCards(b.nightmareList)+'</div>');
   }
 
   h+='<div class="footline"><span>作者 '+esc(b.author||'—')+' · 来源：'+esc(b.src)+'</span><span>更新 '+esc(b.updated)+'</span></div>';
 
   elDetail.innerHTML=h;elDetail.scrollTop=0;
   elDetail.querySelectorAll('[data-tag]').forEach(n=>{n.onclick=()=>{state.tags=[n.dataset.tag];closeDetail();render();fbtnState();};});
+  elDetail.querySelectorAll('[data-dmode]').forEach(n=>{n.onclick=()=>setDetailMode(n.dataset.dmode);});
+}
+
+/* 梦魇条目：一行名字 + 点数，效果单独一行（原来两列挤在一起会断字） */
+function renderNightmareCards(list){
+  return '<div class="nmlist">'+list.map(({n,p,points})=>
+    '<div class="nmitem">'+nightmareIcon(n)
+    +'<div class="nmmain"><div class="nmline"><span class="nmname">'+esc(n)+'</span>'
+    +(points?'<span class="nmpt">'+points+' 点</span>':'')+'</div>'
+    +(p?'<div class="nmeff">'+accentText(p)+'</div>':'')
+    +'</div></div>').join('')+'</div>';
 }
 
 /* ================= 交互 ================= */
@@ -502,10 +729,15 @@ function refreshFootActions(){
   }
 }
 
+function setFilterCellSelected(item, selected) {
+  item.classList.toggle('on', selected);
+  if (item.hasAttribute('aria-pressed')) item.setAttribute('aria-pressed', String(selected));
+}
+
 function syncModalSelection() {
   const selected = new Set(curSelList());
   for (const item of elGrid.querySelectorAll('.mg')) {
-    item.classList.toggle('on', selected.has(item.dataset.k));
+    setFilterCellSelected(item, selected.has(item.dataset.k));
   }
   refreshFootActions();
 }
@@ -517,7 +749,7 @@ elGrid.addEventListener('click', (event) => {
   const selected = curSelList();
   const isSelected = !selected.includes(key);
   setCurSelList(isSelected ? [...selected, key] : selected.filter((value) => value !== key));
-  item.classList.toggle('on', isSelected);
+  setFilterCellSelected(item, isSelected);
   refreshFootActions();
 });
 
@@ -563,7 +795,7 @@ function renderModal(animate){
   state.filterItem = null;
   renderFilterInfo(null);
   modalQueryClear.hidden = !state.mq;
-  const q=state.mq.toLowerCase();
+  const q=state.mq.trim().toLowerCase();
   if(animate){ elGrid.classList.remove('m-seg-in'); void elGrid.offsetWidth; elGrid.classList.add('m-seg-in'); }
   function finish(itemsLen){
     const count=document.getElementById('mcount');
@@ -586,12 +818,14 @@ function renderModal(animate){
     return;
   }
   if(state.seg==='t'){
-    const items=ALL_TAGS.filter(([t])=>!q||t.toLowerCase().includes(q));
-    elGrid.innerHTML=items.length?items.map(([t,arr])=>
-      '<div class="mg'+(state.tags.indexOf(t)>=0?' on':'')+'" data-k="'+esc(t)+'">'
-      +'<div class="mg-label">'+esc(t)+'</div>'
-      +'<div class="cc">'+arr.length+' 个玩法</div></div>').join('')
-      :emptyState(q ? '没有匹配的标签 (・_・;)' : '标签还没长出来 (´･ω･`)', q ? '换个关键词试试看' : '资料还没搬完，它已经很努力了 汪～', true);
+    const items = domain.listTags(BUILDS, q);
+    elGrid.innerHTML = items.length ? items.map(([tag, count]) => {
+      const selected = state.tags.includes(tag);
+      return '<button type="button" class="mg mg-tag'+(selected?' on':'')+'" data-k="'+esc(tag)+'" aria-pressed="'+selected+'">'
+        +'<span class="mg-label">'+esc(tag)+'</span>'
+        +'<span class="cc">'+count+' 个流派</span></button>';
+    }).join('') : emptyState(q ? '没有匹配的标签' : '还没有流派标签',
+      q ? '换个关键词试试看' : '有流派带上标签后，就能在这里筛选。', true);
     finish(items.length);
     return;
   }
@@ -693,8 +927,21 @@ function syncSortUI(){
   if(sorter) sorter.dataset.sort = state.sort;
   document.querySelectorAll('#sorter .sbtn').forEach(x=>x.classList.toggle('on',x.dataset.sort===state.sort));
 }
+/* 换排序规则后整个列表顺序都变了，高亮若停在原来那张卡上会像「点错了」，
+ * 所以统一把结果里的第一条选中，并回到列表顶部。 */
+function applySort(sort){
+  state.sort=sort;
+  state.ratingOpen=null;
+  syncSortUI();
+  const first=firstVisibleId();
+  if(first) state.cur=first;
+  render();
+  elFeed.scrollTop=0;
+  syncFeedScroll();
+  fbtnState();
+}
 document.querySelectorAll('#sorter .sbtn').forEach(d=>{
-  d.onclick=()=>{state.sort=d.dataset.sort;syncSortUI();render();fbtnState();};
+  d.onclick=()=>applySort(d.dataset.sort);
 });
 
 /* ================= 投稿编辑器：从图鉴选内容，降低录入门槛 ================= */
@@ -813,7 +1060,14 @@ if(stoneConfirmBtn) stoneConfirmBtn.addEventListener('click', () => {
 });
 renderStoneConfirm();
 
+const subTagInput = $('subTagInput');
+const subTagAdd = $('subTagAdd');
+function syncSubTagAdd(){
+  if (subTagAdd) subTagAdd.disabled = !subTagInput?.value.trim();
+}
+
 function renderSubTags(){
+  syncSubTagAdd();
   const list = $('subTagList');
   if(!list) return;
   list.innerHTML = '';
@@ -827,6 +1081,7 @@ function renderSubTags(){
     close.className = 'tag-x';
     close.textContent = '×';
     close.title = '移除标签';
+    close.setAttribute('aria-label', '移除标签 ' + tag);
     close.addEventListener('click', (ev) => {
       ev.stopPropagation();
       submit.tags.splice(idx, 1);
@@ -848,7 +1103,8 @@ function addSubTags(raw){
     submit.tags.push(value);
     added = true;
   }
-  if(added){ renderSubTags(); }
+  if (added) renderSubTags();
+  else if (parts.length && parts.every((value) => submit.tags.includes(value))) showToast('这个标签已添加');
   return added;
 }
 function commitSubTagInput(){
@@ -856,11 +1112,13 @@ function commitSubTagInput(){
   if(!input) return false;
   const added = addSubTags(input.value);
   if(added || !input.value.trim()) input.value = '';
+  syncSubTagAdd();
   return added;
 }
-const subTagInput = $('subTagInput');
 if(subTagInput){
+  subTagInput.addEventListener('input', syncSubTagAdd);
   subTagInput.addEventListener('keydown', (ev) => {
+    if (ev.isComposing) return;
     if(ev.key === 'Enter' || ev.key === ',' || ev.key === '，' || ev.key === '、'){
       ev.preventDefault();
       commitSubTagInput();
@@ -869,9 +1127,14 @@ if(subTagInput){
       renderSubTags();
     }
   });
-  subTagInput.addEventListener('blur', () => { if(subTagInput.value.trim()) commitSubTagInput(); });
 }
-$('subTagEditor')?.addEventListener('click', () => $('subTagInput')?.focus());
+subTagAdd?.addEventListener('click', () => {
+  commitSubTagInput();
+  subTagInput?.focus();
+});
+$('subTagEditor')?.addEventListener('click', (ev) => {
+  if (ev.target !== subTagAdd) subTagInput?.focus();
+});
 renderSubTags();
 
 function buildItemInfo(item){
@@ -1034,7 +1297,7 @@ function subRenderWt(){
   WEAPONS.filter((it) => !q || (it.name + ' ' + (it.short || '') + ' ' + (it.note || '')).toLowerCase().includes(q)).forEach((it) => {
     grid.appendChild(subCell(it, submit.wt === it.id, () => {
       submit.wt = submit.wt === it.id ? '' : it.id;
-      subRenderWt(); subRenderInsc(); subStatus();
+      subRenderWt(); subRenderInsc(); subRenderEquip(); subStatus();
     }, it.id, it.name));
   });
   subSet('subWtVal', submit.wt ? wName(submit.wt) : '');
@@ -1061,13 +1324,8 @@ function resEntries(slotIdx){
   return Array.isArray(group) ? group : [];
 }
 
-function soulShape(item){
-  const slot = String(item && item.slot || '');
-  if(slot.includes('三角')) return 'triangle';
-  if(slot.includes('方形')) return 'square';
-  if(slot.includes('圆形')) return 'circle';
-  if(slot.includes('六边')) return 'hexagon';
-  return '';
+function selectedSoulStones(){
+  return submit.soulStones.map((name) => SOUL_STONES.find((stone) => stone.name === name)).filter(Boolean);
 }
 
 function resIcon(level){
@@ -1080,8 +1338,7 @@ function highlightStoneSlots(shape){
   document.querySelectorAll('.stone-slot.is-empty[data-shape="' + shape + '"]').forEach((el) => el.classList.add('hint'));
 }
 
-function buildResChain(nodeFactory){
-  const shapeOf = soulShape;
+function buildResChain(nodeFactory, loadout = domain.soulLoadout(selectedSoulStones())){
   const shapePath = {
     triangle: '<path d="M12 4l8 14H4z"/>',
     square: '<rect x="5" y="5" width="14" height="14" rx="2"/>',
@@ -1089,36 +1346,25 @@ function buildResChain(nodeFactory){
     hexagon: '<path d="M12 3l7.8 4.5v9L12 21l-7.8-4.5v-9z"/>',
   };
   const shapeName = { triangle: '三角形', square: '方形', circle: '圆形', hexagon: '六边形' };
-  const plan = [['triangle', 'square', 'circle'], ['triangle', 'square', 'circle'], ['hexagon', 'hexagon']];
-  const pool = submit.soulStones.map((name) => SOUL_STONES.find((x) => x.name === name)).filter(Boolean);
-  const used = new Set();
-  const takeStone = (shape) => {
-    for(const stone of pool){
-      if(used.has(stone.name)) continue;
-      if(shapeOf(stone) === shape){ used.add(stone.name); return stone; }
-    }
-    return null;
-  };
-  const stoneSlot = (shape) => {
-    const stone = takeStone(shape);
+  const { groups, extras } = loadout;
+  const stoneSlot = ({ shape, stone }) => {
     if(stone) return '<span class="stone-slot filled" data-shape="' + shape + '" title="' + esc(stone.name) + '"><img src="' + esc(stone.icon || '') + '" alt=""></span>';
     return '<span class="stone-slot is-empty" data-shape="' + shape + '" title="' + shapeName[shape] + '槽位 · 未镶嵌"><svg viewBox="0 0 24 24" aria-hidden="true">' + shapePath[shape] + '</svg></span>';
   };
-  const steps = plan.map((group, idx) => {
+  const steps = groups.map((group, idx) => {
     const slots = group.map(stoneSlot).join('');
     const value = parseInt(submit.resonance[idx], 10) || 0;
     const opts = resEntries(idx);
     const entry = value ? opts[value - 1] : null;
     return slots + nodeFactory(idx, entry, opts);
   });
-  const extras = pool.filter((stone) => !used.has(stone.name));
   if(extras.length){
     steps[steps.length - 1] += '<span class="chain-extra" title="' + esc(extras.map((s) => s.name).join('、')) + '">+' + extras.length + '</span>';
   }
   return steps.map((step) => '<span class="soulres-step">' + step + '</span>').join('');
 }
 
-function renderSoulRes(){
+function renderSoulRes(loadout){
   const box = $('subSoulRes');
   if(!box) return;
   if(!submit.insc){ box.hidden = true; return; }
@@ -1134,7 +1380,7 @@ function renderSoulRes(){
       return '<span class="soulres-node filled" title="共鸣 ' + (idx + 1) + ' · ' + esc((entry.lines || [])[0] || '') + '"><img src="' + resIcon(level) + '" alt="Lv.' + level + '"></span>';
     }
     return '<span class="soulres-node is-empty" title="共鸣 ' + (idx + 1) + '：' + (opts.length ? '尚未选择' : '无可用选项') + '"><span class="rplus">' + (opts.length ? '+' : '–') + '</span></span>';
-  });
+  }, loadout);
 }
 
 function renderResBar(){
@@ -1208,20 +1454,32 @@ function bindResBar(){
   renderSoulRes();
 }
 
+function currentWeaponFilter(id){
+  const toggle = $(id);
+  if (!toggle) return '';
+  toggle.disabled = !submit.wt;
+  if (toggle.disabled) toggle.classList.remove('on');
+  const enabled = toggle.classList.contains('on');
+  toggle.setAttribute('aria-pressed', String(enabled));
+  return enabled ? submit.wt : '';
+}
+
+function bindCurrentWeaponFilter(id, render){
+  const toggle = $(id);
+  toggle?.addEventListener('click', () => {
+    if (toggle.disabled) return;
+    toggle.classList.toggle('on');
+    render();
+  });
+}
+
 function subRenderInsc(){
   const grid = $('subInscGrid');
   const q = ($('subInscSearch')?.value || '').trim().toLowerCase();
-  const wtToggle = $('subInscOnlyWt');
-  if(wtToggle){
-    const hasWt = !!submit.wt;
-    wtToggle.disabled = !hasWt;
-    if(!hasWt) wtToggle.classList.remove('on');
-    wtToggle.setAttribute('aria-pressed', wtToggle.classList.contains('on') ? 'true' : 'false');
-  }
-  const onlyWt = !!(wtToggle && wtToggle.classList.contains('on')) && !!submit.wt;
+  const wt = currentWeaponFilter('subInscOnlyWt');
   grid.innerHTML = '';
   subInscList().filter((it) => {
-    if(onlyWt && it.wt !== submit.wt) return false;
+    if(wt && it.wt !== wt) return false;
     return !q || it.name.toLowerCase().includes(q);
   }).forEach((it) => {
     grid.appendChild(subCell(it, submit.insc === it.id, () => {
@@ -1251,20 +1509,15 @@ const subWtSearch = $('subWtSearch');
 if(subWtSearch) subWtSearch.addEventListener('input', subRenderWt);
 const subInscSearch = $('subInscSearch');
 if(subInscSearch) subInscSearch.addEventListener('input', subRenderInsc);
-const subInscOnlyWt = $('subInscOnlyWt');
-if(subInscOnlyWt) subInscOnlyWt.addEventListener('click', () => {
-  if(subInscOnlyWt.disabled) return;
-  subInscOnlyWt.classList.toggle('on');
-  subInscOnlyWt.setAttribute('aria-pressed', subInscOnlyWt.classList.contains('on') ? 'true' : 'false');
-  subRenderInsc();
-});
+bindCurrentWeaponFilter('subInscOnlyWt', subRenderInsc);
+bindCurrentWeaponFilter('subEquipOnlyWt', subRenderEquip);
 
 function subRenderEquip(){
   const q = ($('subEquipSearch').value || '').trim().toLowerCase();
-  const active = submit[submit.slot];
+  const wt = currentWeaponFilter('subEquipOnlyWt');
   const grid = $('subEquipGrid');
   grid.innerHTML = '';
-  WEAPON_ITEMS.filter((it) => !q || it.name.toLowerCase().includes(q)).forEach((it) => {
+  WEAPON_ITEMS.filter((it) => (!wt || it.wt === wt) && (!q || it.name.toLowerCase().includes(q))).forEach((it) => {
     const inTransition = submit.transition.includes(it.name);
     const inGraduation = submit.graduation.includes(it.name);
     const el = subCell(it, inTransition || inGraduation, () => {
@@ -1380,18 +1633,31 @@ function subRenderTreasureSlots(){
 function subRenderSoul(){
   const q = ($('subSoulSearch').value || '').trim().toLowerCase();
   const grid = $('subSoulGrid');
+  const loadout = domain.soulLoadout(selectedSoulStones());
+  const availableShapes = new Set(loadout.groups.flat().filter(({ stone }) => !stone).map(({ shape }) => shape));
+  const fullHint = '灵魂石槽位已满，点击已选灵魂石可移除。';
+  subSet('subSoulHint', availableShapes.size ? '' : fullHint);
   grid.innerHTML = '';
   SOUL_STONES.filter((it) => !it.unavailable && (!q || it.name.toLowerCase().includes(q))).forEach((it) => {
-    const cell = subCell(it, submit.soulStones.includes(it.name), () => {
+    const selected = submit.soulStones.includes(it.name);
+    const shape = domain.soulShape(it);
+    const blocked = !selected && !availableShapes.has(shape);
+    const blockedHint = availableShapes.size ? (shape ? it.slot + '已满，先移除一个同形状的灵魂石。' : '没有对应的灵魂石槽位。') : fullHint;
+    const cell = subCell(it, selected, () => {
+      if (blocked) { showToast(esc(blockedHint)); return; }
       const at = submit.soulStones.indexOf(it.name);
       if (at >= 0) submit.soulStones.splice(at, 1); else submit.soulStones.push(it.name);
-      subRenderSoul(); subRenderSel(); subStatus();
+      subRenderSoul(); subStatus();
     }, it.name, it.name);
-    cell.dataset.shape = soulShape(it);
+    cell.dataset.shape = shape;
+    if (blocked) {
+      cell.classList.add('soul-slot-full');
+      cell.setAttribute('aria-disabled', 'true');
+      cell.title = blockedHint;
+    }
     grid.appendChild(cell);
   });
-  subSet('subSoulCount', submit.soulStones.length);
-  renderSoulRes();
+  renderSoulRes(loadout);
 }
 
 function subRenderCursed(){
@@ -1433,15 +1699,6 @@ function subRenderCursedSlots(){
   });
 }
 
-function subRenderSel(){
-  const soulBox = $('subSoulSel');
-  soulBox.innerHTML = submit.soulStones.map((n) =>
-    `<span class="subtag" data-name="${esc(n)}">${esc(n)} ×</span>`).join('');
-  soulBox.querySelectorAll('.subtag').forEach((el) => {
-    el.onclick = () => { submit.soulStones = submit.soulStones.filter((x) => x !== el.dataset.name); subRenderSoul(); subRenderSel(); subStatus(); };
-  });
-}
-
 function subStatus(){}
 
 function renderNightmareProgress(list){
@@ -1457,8 +1714,9 @@ function renderNightmareProgress(list){
     + '<div class="nightmare-scale">'
     + '<progress class="nightmare-meter" aria-label="梦魇强度" aria-valuetext="' + points + ' 点，' + depthLabel + '"'
     + ' value="' + Math.min(points, max) + '" max="' + max + '"></progress>'
-    + '<div class="nightmare-marks" aria-hidden="true"><span>0</span>'
-    + thresholds.map((threshold) => '<span' + (points >= threshold ? ' class="reached"' : '') + '>' + threshold + '</span>').join('')
+    + '<div class="nightmare-marks" aria-hidden="true">'
+    + [0, ...thresholds].map((threshold) => '<span class="nightmare-mark' + (threshold && points >= threshold ? ' reached' : '') + '">'
+      + '<span class="nightmare-mark-label">' + threshold + '</span></span>').join('')
     + '</div></div></div>';
 }
 
@@ -1532,13 +1790,12 @@ function openSubmit(){
   $('subTip').value = '';
   if($('subWtSearch')) $('subWtSearch').value = '';
   if($('subInscSearch')) $('subInscSearch').value = '';
-  if($('subInscOnlyWt')){ $('subInscOnlyWt').classList.remove('on'); $('subInscOnlyWt').setAttribute('aria-pressed','false'); $('subInscOnlyWt').disabled = true; }
   submit.wt = ''; submit.insc = ''; submit.transition = []; submit.graduation = []; submit.slot = 'transition'; submit.armorTransition = []; submit.armorGraduation = []; submit.armorSlot = 'transition'; submit.treasureTiers = { must: [], recommended: [], backup: [] }; submit.treasureSlot = 'must';
   submit.soulStones = []; submit.cursed = { none: [], suggest: [], must: [] }; submit.cursedSlot = 'none'; submit.resonance = ['', '', ''];
   nightmareSelections.clear();
   applyStoneOrder(['red', 'green', 'blue']);
   subRenderWt(); subRenderInsc(); subRenderEquip(); subRenderSlots(); subRenderArmor(); subRenderArmorSlots(); subRenderTreasures(); subRenderTreasureSlots();
-  subRenderSoul(); subRenderCursed(); subRenderCursedSlots(); subRenderTreasureSlots(); subRenderSel(); subStatus();
+  subRenderSoul(); subRenderCursed(); subRenderCursedSlots(); subRenderTreasureSlots(); subStatus();
   subGo(0);
   subReviewOpen = false;
   $subModal.classList.remove('review-mode');
@@ -1564,32 +1821,47 @@ function closeSubmit(){
 }
 
 function selectedResonance(){
-  const picks = submit.resonance.map((v, idx) => {
-    const entries = resEntries(idx);
-    const entry = entries[parseInt(v, 10) - 1];
-    return entry ? { entry, lines: entry.lines || [] } : null;
+  const rows = submit.resonance.map((v, idx) => {
+    const entry = resEntries(idx)[parseInt(v, 10) - 1];
+    const text = entry ? (entry.lines || []).join(' ') : '';
+    return text ? { slot: idx + 1, level: entry.level || 1, text } : null;
   }).filter(Boolean);
-  if(!picks.length) return null;
-  const nodes = picks.map((p) => p.lines.join(' ')).filter(Boolean);
-  if(!nodes.length) return null;
-  return { code: submit.resonance.map((v) => v || 0).join('-'), nodes };
+  if(!rows.length) return null;
+  return {
+    code: submit.resonance.map((v) => v || 0).join('-'),
+    nodes: rows.map((row) => row.text),   // 数据包只存文本
+    rows,                                  // 评审页渲染用（带图标等级）
+  };
 }
 
+/* 校验失败：提示 + 跳到要补的那一页，避免「点了没反应」的错觉 */
+function submitBlocked(message, page, focusId){
+  showToast(message);
+  const idx = SUB_PAGES.indexOf(page);
+  if(idx >= 0) subGo(idx);
+  const el = focusId ? $(focusId) : null;
+  if(el) requestAnimationFrame(() => acquireFocusInput(el));
+}
+
+let submitBusy = false;
+
 async function saveSubmit(){
+  if(submitBusy) return;
   const name = ($('subName').value || '').trim();
   const author = ($('subAuthor').value || '').trim();
   const gameVersion = ($('subVersion').value || '').trim();
   commitSubTagInput();
   const tags = submit.tags.slice();
   const tip = ($('subTip').value || '').trim();
-  if (name.length < 2 || name.length > 20) return showToast('流派名需要 2-20 个字');
-  if (!submit.wt) return showToast('请选择武器类型');
-  if (!submit.insc) return showToast('请选择主刻印');
-  if (!author) return showToast('请填写作者');
-  if (!gameVersion) return showToast('请填写游戏版本');
-  if (!tags.length) return showToast('请至少填一个标签');
-  if (tip.length < 6) return showToast('一句话技巧至少 6 个字');
+  if (name.length < 2 || name.length > 20) return submitBlocked('流派名需要 2-20 个字', 'basic', 'subName');
+  if (!submit.wt) return submitBlocked('请选择武器类型', 'wt');
+  if (!submit.insc) return submitBlocked('请选择主刻印', 'insc');
+  if (!author) return submitBlocked('请填写作者', 'basic', 'subAuthor');
+  if (!gameVersion) return submitBlocked('请填写游戏版本', 'basic', 'subVersion');
+  if (!tags.length) return submitBlocked('请至少填一个标签', 'basic', 'subTagInput');
+  if (tip.length < 6) return submitBlocked('一句话技巧至少 6 个字', 'basic', 'subTip');
 
+  const resPick = selectedResonance();
   const today = new Date().toISOString().slice(0, 10);
   const war = W(submit.wt);
   const gear = {};
@@ -1608,13 +1880,13 @@ async function saveSubmit(){
     rating: 0, votes: 0,
     features, tags, tip, author, gameVersion,
     updatedAt: today,
-    ...(selectedResonance() ? { resonance: selectedResonance() } : {}),
+    ...(resPick ? { resonance: { code: resPick.code, nodes: resPick.nodes } } : {}),
     ...(nightmare.length ? { nightmareList: nightmare } : {}),
     ...(submit.stoneConfirmed ? { stonePriority: Object.fromEntries(submit.stoneOrder.map((key, idx) => [key, idx + 1])) } : {}),
     sourceType: 'self-test',
     license: 'CC-BY-NC-SA-4.0',
     ...(Object.keys(gear).length ? { gear } : {}),
-    weaponChoices: submit.graduation.map((n, i) => ({ name: n, tag: i === 0 ? '核心' : '毕业' })),
+    weaponChoices: submit.graduation.map((name) => ({ name, tag: '毕业' })),
     transition: submit.transition.map((n) => ({ name: n, tag: '过渡' })),
     armorChoices: [
       ...submit.armorGraduation.map((n) => ({ n, tier: '毕业' })),
@@ -1641,6 +1913,8 @@ async function saveSubmit(){
       return { name: n, ...(c && c.eff ? { eff: c.eff } : {}), verdict };
     }),
   };
+  submitBusy = true;
+  subSet('subSave', '提交中…');
   try {
     const res = await window.lc2?.submitBuild?.(record);
     if (!res || !res.ok) throw new Error('保存失败');
@@ -1648,7 +1922,11 @@ async function saveSubmit(){
     closeSubmit();
     if (window.__lc2RefreshData) window.__lc2RefreshData();
   } catch (err) {
+    console.error('投稿保存失败', err);
     showToast('保存失败：' + esc(err && err.message ? err.message : String(err)));
+  } finally {
+    submitBusy = false;
+    subSet('subSave', subReviewOpen ? '提交' : '查看已选');
   }
 }
 
@@ -1677,6 +1955,7 @@ function subGo(i){
 }
 
 function openReview(){
+  commitSubTagInput();
   subReviewScroll = subPageScroller().scrollTop;
   subReviewOpen = true;
   $subModal.classList.remove('no-info');
@@ -1735,7 +2014,13 @@ function subRenderReview(){
   const resPick = selectedResonance();
   if(resPick){
     parts.push('<div class="rvsec"><div class="rvhead"><span>刻印共鸣</span><span class="rvcount">'+esc(resPick.code)+'</span></div>'
-      + resPick.nodes.map((node, i) => '<div class="rvnote"><b>共鸣 '+(i+1)+'</b>'+esc(node)+'</div>').join('') + '</div>');
+      + '<div class="rvresonance">'
+      + resPick.rows.map((row) => '<div class="rvnote">'
+        + '<span class="rvnote-ic"><img src="' + resIcon(row.level) + '" alt="Lv.' + row.level + '"></span>'
+        + '<span class="rvnote-name">共鸣 ' + row.slot + '</span>'
+        + '<span class="rvnote-text" title="' + esc(row.text) + '">' + esc(row.text) + '</span>'
+        + '</div>').join('')
+      + '</div></div>');
   }
   const stonePicks = submit.stoneOrder.map((key, idx) => [key, idx + 1]);
   if(submit.stoneConfirmed){
@@ -2102,6 +2387,10 @@ updateDialog.onclick = (event) => {
 
 $('noteCancel').onclick=closeNote;
 $('noteSave').onclick=saveNote;
+/* 点遮罩关掉：弹窗本体（不含 sheet）单独接管，和筛选 / 帮助等弹层一致 */
+document.getElementById('noteModal').addEventListener('mousedown', function(ev){
+  if(ev.target === ev.currentTarget) closeNote();
+});
 $('noteText').addEventListener('input',function(){ var c=$('noteCount'); if(c) c.textContent=String(this.value.length); });
 $('noteText').addEventListener('keydown',function(ev){
   if(ev.key==='Escape'){ ev.preventDefault(); ev.stopPropagation(); closeNote(); }
@@ -2239,11 +2528,14 @@ function openNote(id){
   var title = document.querySelector('#noteModal .mh b');
   if(title) title.textContent = existing ? '修改我的印象' : '写点印象 / 评价';
   m.classList.add('on');
+  /* 输入框获焦会注销面板热键，这里单独把 Esc 抢回来看住弹层 */
+  window.lc2?.modalEscape?.(true);
   acquireFocusInput(ta);
   setTimeout(function(){ try { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); } catch(e){} }, 40);
 }
 function closeNote(){
   var m = document.getElementById('noteModal'); if(m) m.classList.remove('on');
+  window.lc2?.modalEscape?.(false);
   releaseFocusInput();
   state.noteBid = null;
 }
@@ -2267,6 +2559,11 @@ document.addEventListener('keydown',e=>{
   const tag=(e.target&&e.target.tagName)||'';
   if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT') return;   // 输入控件自己处理键盘
   if(document.getElementById('itemDetail')?.classList.contains('on')){ if(k==='Escape'){e.preventDefault();closeItemDetail();} return; }
+  /* 印象弹层：打开时占住键盘，Esc 只关它，不要再往下触发「详情返回 / 收起面板」 */
+  if(document.getElementById('noteModal')?.classList.contains('on')){
+    if(k==='Escape'){e.preventDefault();e.stopPropagation();closeNote();}
+    return;
+  }
   if(e.target===searchQueryClear && k==='Enter') return;
   if(k==='`'){e.preventDefault();
     if(typeof window.lc2!=='undefined'){ window.lc2.requestToggle(); return; }
@@ -2316,7 +2613,7 @@ document.addEventListener('keydown',e=>{
     else if(state.expanded[state.cur]){state.expanded[state.cur]=false;render();}return;}
 });
 
-state.cur=BUILDS.length?BUILDS[0].id:'';
+state.cur=firstVisibleId()||(BUILDS.length?BUILDS[0].id:'');
 render();fbtnState();
 if(typeof window.lc2 === 'undefined') bootNotes();   // 浏览器 / 原型：读 localStorage
 
@@ -2526,24 +2823,34 @@ window.lc2.onPanel(function(s){
     var arr = domain.normalizeBuilds(d.builds);
     BUILDS.length = 0;
     Array.prototype.push.apply(BUILDS, arr);
-    state.cur = arr.length ? BUILDS[0].id : '';
+    state.cur = firstVisibleId() || (arr.length ? BUILDS[0].id : '');
     state.expanded = {};
-    logDataSummary(arr);
+    dataStatus = 'ready';
     render(); fbtnState();
     if (state.modal) renderModal();
   }
   window.__lc2ApplyPayload = applyPayload;
-  window.__lc2RefreshData = function(){
-    return infra.data.load().then(function(d){ if(d) applyPayload(d); return d; }).catch(function(e){ console.error('[lc2] 数据刷新失败', e); });
-  };
-  infra.data.load().then(function(d){
-    if(!d){
-      console.warn('[lc2] 数据为空，保留内置示例');
-      return;
+  async function refreshData(){
+    const isInitial = dataStatus !== 'ready';
+    if(dataStatus === 'failed'){
+      dataStatus = 'loading';
+      render();
     }
-    applyPayload(d);
-  }).catch(function(e){
-    console.error('[lc2] 数据加载失败', e);
-  });
+    try {
+      const data = await infra.data.load();
+      if (!data) throw new Error('未取得有效的流派数据');
+      applyPayload(data);
+      return data;
+    } catch (error) {
+      console.error('[lc2] 数据加载失败', error);
+      if(isInitial){
+        dataStatus = 'failed';
+        render();
+      }
+      return null;
+    }
+  }
+  window.__lc2RefreshData = refreshData;
+  void refreshData();
 })();
 })();

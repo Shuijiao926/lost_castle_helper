@@ -18,7 +18,9 @@ const path = require('path');
 const fs = require('fs');
 const { app, screen } = require('electron');
 
-const log = (...a) => console.log('[lc2:shadow]', ...a);
+const logger = require('./util/log');
+const log = (...a) => logger.warn('[窗口辅助]', ...a);
+const debug = (...a) => logger.debug('[窗口辅助]', ...a);
 
 const READY_TIMEOUT = 15000;
 let child = null;
@@ -79,7 +81,7 @@ function ensureStarted({ panelW, panelH, radius = 16, pad = 24 } = {}) {
     '-ParentPid', String(process.pid),
   ];
 
-  log('spawn pad=' + pad + ' scale=' + scale);
+  debug('spawn pad=' + pad + ' scale=' + scale);
   child = spawn('powershell.exe', args, { windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'] });
 
   starting = new Promise((resolve) => {
@@ -106,7 +108,7 @@ function ensureStarted({ panelW, panelH, radius = 16, pad = 24 } = {}) {
         if (line === 'READY') {
           ready = true;
           clearTimeout(timer);
-          log('ready');
+          debug('ready');
           finish(true);
         } else if (line.startsWith('CLICK ')) {
           const [x, y] = line.slice(6).split(',').map(Number);
@@ -120,10 +122,10 @@ function ensureStarted({ panelW, panelH, radius = 16, pad = 24 } = {}) {
           if (dragEndHandler) dragEndHandler();
         } else if (line === 'DWM ok' || line === 'DWM fail') {
           const ok = line === 'DWM ok';
-          log('dwm rounded corners:', ok);
+          debug('dwm rounded corners:', ok);
           if (cornerResolver) { const r = cornerResolver; cornerResolver = null; r(ok); }
         } else {
-          log('stdout:', line);
+          debug('stdout:', line);
         }
       }
     });
@@ -141,7 +143,7 @@ function ensureStarted({ panelW, panelH, radius = 16, pad = 24 } = {}) {
       child = null;
       if (cornerResolver) { const r = cornerResolver; cornerResolver = null; r(false); }
       if (!settled) finish(false);
-      else log('exited code=' + code);
+      else if (code !== 0 && !app.isQuitting) log('exited code=' + code);
     });
   });
 

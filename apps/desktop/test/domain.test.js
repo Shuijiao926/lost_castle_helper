@@ -40,7 +40,18 @@ test('catalog：结构完整，允许流派数据为空（真实数据未接入�
   assert.equal(catalog.BUILDS.length, 0);
   assert.ok(Array.isArray(catalog.WEAPONS));
   assert.ok(Object.keys(catalog.INSC).length > 0);
-  assert.ok(Array.isArray(catalog.ALL_TAGS));
+});
+
+test('标签索引从当前流派统计，每个流派的同名标签只计一次', () => {
+  const builds = [];
+  assert.deepEqual(domain.listTags(builds), []);
+  builds.push(makeBuild({ tags: ['冰属性', '盾反', '冰属性'] }), makeBuild({ tags: ['冰属性', ''] }));
+  assert.deepEqual(domain.listTags(builds), [['冰属性', 2], ['盾反', 1]]);
+});
+
+test('标签搜索忽略首尾空格和大小写', () => {
+  const builds = [makeBuild({ tags: ['DOT 流', '火属性'] })];
+  assert.deepEqual(domain.listTags(builds, ' dot '), [['DOT 流', 1]]);
 });
 
 test('目录查找：武器名 / 刻印名 / 未知兜底', () => {
@@ -48,6 +59,92 @@ test('目录查找：武器名 / 刻印名 / 未知兜底', () => {
   assert.equal(domain.weapon('不存在的类型').name, '不存在的类型');
   assert.match(domain.inscriptionName('shw_revenge'), /刻印/);
   assert.equal(domain.inscriptionName('nope'), '—');
+});
+
+test('同一件武器合并到一行并保留清单与毕业装里的不同说明', () => {
+  const primary = { name: '铁木大剑', atk: '35', type: '双手武器', note: '适合蓄力', obtain: '宝箱' };
+  const { weapons } = domain.equipmentForDetail(makeBuild({
+    gear: { weapon: primary },
+    weaponChoices: [{ name: '铁木大剑', tag: '毕业', note: '优先升级', obtain: '宝箱' }],
+  }));
+  assert.deepEqual(weapons, [{
+    name: '铁木大剑', stages: ['毕业'], types: ['双手武器'],
+    notes: ['优先升级', '适合蓄力'], sources: ['宝箱'], primary,
+  }]);
+});
+
+test('旧流派的核心武器在详情里标为毕业，过渡武器按所属槽位显示', () => {
+  const firstChoice = { name: '铁木大剑', tag: '核心' };
+  const { weapons } = domain.equipmentForDetail(makeBuild({
+    weaponChoices: [firstChoice, { name: '黑铁大剑', tag: '毕业' }],
+    transition: [{ name: '生铁大剑', tag: '核心' }],
+    gear: { weapon: { name: firstChoice.name } },
+  }));
+  assert.deepEqual(weapons.map(({ stages }) => stages), [['毕业'], ['毕业'], ['过渡']]);
+  assert.equal(firstChoice.tag, '核心');
+});
+
+test('旧流派只提供核心武器名单时也显示为毕业', () => {
+  const { weapons } = domain.equipmentForDetail(makeBuild({ core: ['铁木大剑'] }));
+  assert.deepEqual(weapons.map(({ name, stages }) => [name, stages]), [['铁木大剑', ['毕业']]]);
+});
+
+test('未保存类型的武器使用对应图鉴的武器类型', () => {
+  const equipmentCatalog = createCatalog();
+  equipmentCatalog.loadWeapons([
+    { name: '生铁大剑', wt: 'THW' },
+    { name: '旧长弓', wt: 'BOW' },
+  ]);
+  const { weapons } = createDomain(equipmentCatalog).equipmentForDetail(makeBuild({
+    wt: 'THW',
+    weaponChoices: [{ name: '铁木大剑', tag: '毕业' }],
+    gear: { weapon: { name: '铁木大剑', type: '双手武器' } },
+    transition: [{ name: '生铁大剑' }, { name: '旧长弓' }],
+  }));
+  assert.deepEqual(weapons.map(({ types }) => types), [['双手武器'], ['双手武器'], ['弓箭']]);
+});
+
+test('只录入过渡衣服时，主装备字段不会把它变成毕业装', () => {
+  const { armors } = domain.equipmentForDetail(makeBuild({
+    gear: { armor: { name: '朴素的内衬', type: '轻甲' } },
+    armorChoices: [{ name: '朴素的内衬', type: '轻甲', tier: '过渡' }],
+  }));
+  assert.deepEqual(armors.map(({ stages }) => stages), [['过渡']]);
+});
+
+test('旧流派只填写毕业装时仍显示在装备清单中', () => {
+  const { armors } = domain.equipmentForDetail(makeBuild({
+    gear: { armor: { name: '猎手轻甲' } },
+  }));
+  assert.deepEqual(armors.map(({ name, stages }) => [name, stages]), [['猎手轻甲', ['毕业']]]);
+});
+
+test('灵魂石按形状占用槽位，同形状选满后仍可使用其他空槽', () => {
+  const stones = ['圆形槽位', '圆形槽位', '圆形槽位'].map((slot, index) => ({ name: '灵魂石' + index, slot }));
+  const { groups, extras } = domain.soulLoadout(stones);
+  const slots = groups.flat();
+  assert.equal(slots.length, 8);
+  assert.deepEqual(slots.filter(({ shape }) => shape === 'circle').map(({ stone }) => stone), stones.slice(0, 2));
+  assert.ok(slots.some(({ shape, stone }) => shape === 'triangle' && !stone));
+  assert.deepEqual(extras, stones.slice(2));
+});
+
+test('灵魂石未指定等级时概括已知变化，保留固定距离和各等级原文', () => {
+  const detail = domain.soulEffectDetails('Lv.1 3米以内伤害增加1.5% / Lv.2 3米以内伤害增加3.0% / Lv.3 3米以内伤害增加4.5%');
+  assert.equal(detail.summary, '3米以内伤害增加1.5–4.5%');
+  assert.equal(detail.sampleLevel, null);
+  assert.deepEqual(detail.levels[1], { level: 2, text: '3米以内伤害增加3.0%' });
+});
+
+test('灵魂石已指定等级时展示该档的图鉴效果', () => {
+  const detail = domain.soulEffectDetails('Lv.1 生命值增加1% / Lv.2 生命值增加2.5%', 2);
+  assert.equal(detail.summary, '生命值增加2.5%');
+});
+
+test('灵魂石只有一档资料时保留已知等级与原文', () => {
+  const detail = domain.soulEffectDetails('Lv.1 蓄力值可累积至第三层');
+  assert.equal(detail.summary, '蓄力值可累积至第三层');
+  assert.equal(detail.sampleLevel, 1);
 });
 
 test('梦魇推荐只保存图鉴中可选的档位，并按累计强度求和', () => {
@@ -158,6 +255,26 @@ test('visibleBuilds：人气 / 评分排序 + 过滤（空列表也安全）', (
   for (let i = 1; i < rating.length; i++) assert.ok(rating[i - 1].rating >= rating[i].rating);
 
   assert.equal(domain.visibleBuilds(FIXTURE_BUILDS, { sort: 'hot', q: '绝对不存在的词' }).length, 0);
+});
+
+test('visibleBuilds：时间排序由近到远（createdAt 优先，缺时间沉底）', () => {
+  const builds = [
+    makeBuild({ id: 'old', updatedAt: '2026-11-01' }),
+    makeBuild({ id: 'newest', createdAt: '2026-11-25T08:30:00.000Z' }),
+    // 更新时间比 newest 还晚，但投稿时间更早：应以 createdAt 为准排第三
+    makeBuild({ id: 'mid', createdAt: '2026-11-10T00:00:00.000Z', updatedAt: '2026-11-28T00:00:00.000Z' }),
+    makeBuild({ id: 'none' }),
+  ];
+  const sorted = domain.visibleBuilds(builds, { sort: 'time' });
+  assert.deepEqual(sorted.map((b) => b.id), ['newest', 'mid', 'old', 'none']);
+  // 不改原数组
+  assert.deepEqual(builds.map((b) => b.id), ['old', 'newest', 'mid', 'none']);
+  // 时间戳缺失时给 0，不抛错
+  assert.equal(domain.buildTime({}), 0);
+  assert.equal(domain.buildTime({ updated: '不是日期' }), 0);
+  // 同一时间戳：退回人气高者优先
+  const sameDay = [makeBuild({ id: 'low', votes: 10, updatedAt: '2026-11-05' }), makeBuild({ id: 'high', votes: 900, updatedAt: '2026-11-05' })];
+  assert.deepEqual(domain.visibleBuilds(sameDay, { sort: 'time' }).map((b) => b.id), ['high', 'low']);
 });
 
 test('宝藏选项合并流派宝藏、去重并支持名称搜索', () => {

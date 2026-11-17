@@ -6,10 +6,9 @@
  */
 function registerIpc({
   ipcMain,
-  log,
   dataLoader,
+  startInitialDataLoad,
   notesStore,
-  configStore,
   panel,
   getAppVersion,
   getBaseKey,
@@ -18,12 +17,25 @@ function registerIpc({
   persistBubbleBounds,
   onSubmitBuild,
   onSubmitMode,
+  setModalEscape,
 }) {
   let dragState = null;
   const finite = (v) => Number.isFinite(v);
 
   /* ---------------- 数据 / 配置 ---------------- */
-  ipcMain.handle('lc2:getData', () => dataLoader.load());
+  let firstDataRequest = true;
+  ipcMain.handle('lc2:getData', async () => {
+    const finish = firstDataRequest ? startInitialDataLoad?.() : null;
+    firstDataRequest = false;
+    try {
+      const data = await dataLoader.load();
+      finish?.('来源=' + data.meta.source + ' · 流派=' + data.builds.length + ' 条');
+      return data;
+    } catch (error) {
+      finish?.('失败');
+      throw error;
+    }
+  });
   ipcMain.handle('lc2:checkUpdate', () => updater.checkForUpdates());
   ipcMain.handle('lc2:openExternal', (_e, url) => updater.openExternal(String(url || '')));
   ipcMain.handle('lc2:getConfig', () => ({ version: getAppVersion(), baseKey: getBaseKey(), panelOpen: panel.isOpen() }));
@@ -32,9 +44,7 @@ function registerIpc({
   ipcMain.handle('lc2:notes:get', () => notesStore.readAll());
   ipcMain.handle('lc2:notes:set', (_e, payload) => {
     const { buildId, text } = payload || {};
-    const { ok, all } = notesStore.set(buildId, text);
-    if (ok) log('note saved:', buildId, typeof text === 'string' && text.trim() ? '(len ' + text.trim().length + ')' : '(cleared)');
-    else log('note rejected: invalid buildId');
+    const { all } = notesStore.set(buildId, text);
     return all;
   });
 
@@ -56,6 +66,16 @@ function registerIpc({
   ipcMain.on('lc2:searchFocus', (_e, on) => panel.setSearchFocus(on === true));
 
   /**
+   * 弹层占用 Esc
+   * 输入框临时获焦时面板热键会被注销（否则输入框收不到按键），
+   * 这时 Esc 只能靠窗口焦点，窗口一失焦弹层就关不掉。
+   * 由渲染层在打开/关闭弹层时申请，单独把 Esc 抢回来再转发成普通按键。
+   */
+  ipcMain.on('lc2:modalEscape', (_e, on) => {
+    if (typeof setModalEscape === 'function') setModalEscape(on === true);
+  });
+
+  /**
    * 搜索/筛选输入：临时让面板窗口可聚焦
    * 面板默认 focusable:false（不抢游戏焦点），用户主动点搜索栏时才临时放开。
    */
@@ -75,7 +95,6 @@ function registerIpc({
   ipcMain.on('lc2:dragEnd', () => {
     dragState = null;
     persistBubbleBounds();
-    log('bubble moved ->', JSON.stringify(configStore.state.bubble));
   });
 
   /* ---------------- 面板拖拽 ---------------- */

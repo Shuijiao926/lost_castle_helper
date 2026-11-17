@@ -1,6 +1,6 @@
 /* ================= 基础设施层：数据源 / 本地持久化 =================
  * 把「数据从哪来、存到哪」收口在这里：
- * - lc2.data：真实流派数据（Electron IPC；浏览器环境返回 null 走内置示例）
+ * - lc2.data：真实流派数据（Electron IPC；浏览器环境返回 null）
  * - lc2.notes：用户印象（Electron 写 userData/notes.json；浏览器退回 localStorage）
  *
  * 上层只依赖这些接口，不关心 IPC / localStorage 细节，便于测试与替换。
@@ -24,7 +24,7 @@
     available: function () {
       return !!(lc2 && typeof lc2.getData === 'function');
     },
-    /** 加载真实数据；浏览器 / 数据为空时返回 null，由上层保留内置示例 */
+    /** 浏览器或无效响应返回 null；空列表是有效的加载结果 */
     load: function () {
       if (!dataRepo.available()) return Promise.resolve(null);
       return lc2.getData().then(function (d) {

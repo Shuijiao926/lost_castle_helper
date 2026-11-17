@@ -39,6 +39,8 @@ contextBridge.exposeInMainWorld('lc2', {
 
   /* ---- 搜索/筛选时临时获焦（输入框需要键盘） ---- */
   searchFocus: (on) => ipcRenderer.send('lc2:searchFocus', !!on),
+  /** 弹层占用 Esc：输入控件获焦时面板热键被注销，这里单独把 Esc 抢回来 */
+  modalEscape: (on) => ipcRenderer.send('lc2:modalEscape', !!on),
   /** 面板休眠（被点到外部后不接收键盘）→ 点击面板时唤醒 */
   activatePanel: () => ipcRenderer.send('lc2:activatePanel'),
   onDormant: (cb) => {

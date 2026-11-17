@@ -45,6 +45,14 @@ function fixIconUrl(src){
   return src;
 }
 
+/* 武器品类色（表现层用：卡片图标盘 / 品类圆点）。
+   只做低饱和区分，别抢金色评分的位置。 */
+const WC={
+  THW:'#7C9AC6', SHW:'#C69A64', STAFF:'#A188DC', DB:'#C67C90',
+  BOW:'#84B08A', FD:'#CE8A5E', GUN:'#6DAFB4', PL:'#8A99DC', KA:'#BE97CC',
+};
+function weaponTint(id){ return WC[id] || '#8B93A6'; }
+
 function ic(key,label,size,color){
   const src=fixIconUrl(Object.hasOwn(ICON,key)?ICON[key]:Object.hasOwn(ICON,label)?ICON[label]:null);
   const ch=window.LC2.ui.dom.esc(String(label||'?').slice(0,1)),c=color||'#3b4a63';
@@ -93,6 +101,8 @@ function nightmareIcon(name) {
     CDN: CDN,
     ICON: ICON,
     RC: RC,
+    WC: WC,
+    weaponTint,
     ic: ic,
     ICON_SVG: ICON_SVG,
     nightmareIcon,

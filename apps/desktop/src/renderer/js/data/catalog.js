@@ -1,8 +1,7 @@
-/* ================= 静态目录 + 内置示例流派 =================
+/* ================= 静态目录 + 运行时流派 =================
  * 领域层的数据来源（domain 只读取，不修改）：
  * - INSC_DEF / WEAPONS / INSC：武器类型与刻印目录
- * - BUILDS：内置示例流派（真实数据加载前的兜底 / 原型预览数据）
- * - ALL_TAGS：按流派数量排序的标签索引
+ * - BUILDS：客户端运行时从数据源取得的流派
  */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory;
@@ -53,10 +52,6 @@ const ARMORS=[];
 const SOUL_STONES=[];
 const CURSED_TREASURES=[];
 const NIGHTMARE_EFFECTS=[];
-
-const ALL_TAGS=(()=>{const m=new Map();BUILDS.forEach(b=>(b.tags||[]).forEach(t=>{
-  if(!m.has(t))m.set(t,[]);m.get(t).push(b);}));
-  return [...m.entries()].sort((a,b)=>b[1].length-a[1].length||a[0].localeCompare(b[0],'zh'));})();
 
   function loadTreasures(entries) {
     if (!Array.isArray(entries)) return;
@@ -140,7 +135,7 @@ const ALL_TAGS=(()=>{const m=new Map();BUILDS.forEach(b=>(b.tags||[]).forEach(t=
 
   return {
     INSC_DEF, WEAPONS, WEAPON_ITEMS, ARMORS, SOUL_STONES, CURSED_TREASURES, NIGHTMARE_EFFECTS,
-    INSC, BUILDS, TREASURES, ALL_TAGS,
+    INSC, BUILDS, TREASURES,
     loadInscriptions, loadTreasures, loadWeapons, loadWeaponTypes, loadArmors, loadSoulStones,
     loadCursedTreasures, loadNightmareEffects,
   };

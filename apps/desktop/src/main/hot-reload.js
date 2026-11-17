@@ -27,7 +27,7 @@ function setupDevHotReload({ fs, path, debounce, dirs, actions, log }) {
   }
 
   // 数据文件（开发模式读本地）→ 重载界面即可重新 getData
-  const dataFiles = ['builds.json', 'weapons.json', 'inscriptions.json', 'schools.json']
+  const dataFiles = ['builds.json', 'builds.local.json', 'weapons.json', 'inscriptions.json', 'schools.json']
     .map((n) => path.join(dirs.dataDir, n));
   const reloadData = debounce(() => actions.reloadRendererWindows('data'), 350);
   for (const f of dataFiles) fs.watchFile(f, { interval: 500 }, reloadData);
@@ -51,13 +51,13 @@ function setupDevHotReload({ fs, path, debounce, dirs, actions, log }) {
     } catch {}
   }
 
-  log('开发热部署已开启：renderer / data / native 自动重载（LC2_HOT=0 关闭）');
+  log.debug?.('开发热部署已开启：renderer / data / native 自动重载（LC2_HOT=0 关闭）');
 
   return () => {
     for (const d of disposers) {
       try { d(); } catch {}
     }
-    log('开发热部署已关闭');
+    log.debug?.('开发热部署已关闭');
   };
 }
 

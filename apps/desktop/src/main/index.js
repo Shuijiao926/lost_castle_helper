@@ -1,3 +1,8 @@
+'use strict';
+
+const { performance } = require('node:perf_hooks');
+const startedAt = performance.now();
+
 /**
  * 城堡助手 · 主进程入口（组合根）
  *
@@ -32,6 +37,7 @@ const path = require('path');
 const fs = require('fs');
 
 const log = require('./util/log');
+const startStage = require('./util/startup-timer')(log, startedAt);
 const debounce = require('./util/debounce');
 const shapeRounded = require('./shape');
 const createConfigStore = require('./config');
@@ -41,6 +47,7 @@ const createSubmissionStore = require('./submission-store');
 const createGeometry = require('./geometry');
 const createPanel = require('./panel');
 const createBubbleWindow = require('./bubble-window');
+const createStartupWindow = require('./startup-window');
 const createShortcuts = require('./shortcuts');
 const createTray = require('./tray');
 const { registerIpc } = require('./ipc');
@@ -110,6 +117,10 @@ app.isQuitting = false;
 
 let panel = null;
 let bubbleWin = null;
+let bubbleReady = null;
+let startupWin = null;
+let desktopInitialized = false;
+let startupVisible = false;   // 启动卡片还在屏幕上：气泡延后露出
 let bubbleHidden = false;
 let bubbleMenu = null;
 let bubbleMenuBounds = null;
@@ -164,8 +175,14 @@ function hardenWindow(win) {
 }
 
 /* ---------------- 气泡窗口 ---------------- */
-function createElectronBubble() {
-  if (bubbleWin && !bubbleWin.isDestroyed()) return bubbleWin;
+function canRevealBubble() {
+  return desktopInitialized && !app.isQuitting && !bubbleHidden && !startupVisible;
+}
+
+async function createElectronBubble() {
+  if (bubbleWin && !bubbleWin.isDestroyed()) return bubbleReady;
+  let onLoaded;
+  bubbleReady = new Promise((resolve) => { onLoaded = resolve; });
   bubbleWin = createBubbleWindow({
     BrowserWindow,
     path,
@@ -174,15 +191,17 @@ function createElectronBubble() {
     bounds: currentBubbleBounds(),
     preloadPath: PRELOAD_PATH,
     rendererDir: RENDERER_DIR,
-    canReveal: () => !bubbleHidden,
+    canReveal: canRevealBubble,
     onContextMenu: (win) => showBubbleMenu(win, win.getBounds()),
+    onLoaded,
+    onLoadError: (error) => log.warn('Electron 气泡加载失败:', error.message),
     topmostLevel: 'floating',
     applyShape: (win) => {
       if (USE_SHAPE_CLIP) shapeRounded(win, BUBBLE.w, BUBBLE.h, BUBBLE.w / 2, log);
     },
   });
   hardenWindow(bubbleWin);
-  return bubbleWin;
+  return bubbleReady;
 }
 
 /**
@@ -195,6 +214,7 @@ async function startNativeBubble() {
     const started = await nativeBubble.start({
       x: b.x,
       y: b.y,
+      hidden: true,
       onClick: () => {
         closeBubbleMenu();
         panel.toggle();
@@ -210,28 +230,32 @@ async function startNativeBubble() {
       onExit: () => {
         closeBubbleMenu();
         // 原生进程意外退出：拉起 Electron 气泡兜底，保证热键仍可用
-        log('原生气泡退出，切换 Electron 气泡');
-        if (!app.isQuitting) createElectronBubble();
+        if (!app.isQuitting) {
+          log.warn('原生气泡退出，切换 Electron 气泡');
+          createElectronBubble().catch((error) => log.error('Electron 气泡创建失败:', error));
+        }
       },
     });
-    if (started && bubbleHidden) nativeBubble.hide();
     return started;
   } catch (e) {
-    log('startNativeBubble failed:', e.message);
+    log.warn('startNativeBubble failed:', e.message);
     return false;
   }
 }
 
 async function initializeBubble() {
   const started = USE_NATIVE_BUBBLE && await startNativeBubble();
+  if (app.isQuitting) return '已退出';
   if (!started) {
-    if (USE_NATIVE_BUBBLE) log('原生启动失败，回退 Electron 气泡窗口');
-    if (!app.isQuitting) createElectronBubble();
+    if (USE_NATIVE_BUBBLE) log.warn('原生气泡启动失败，回退 Electron 气泡窗口');
+    return await createElectronBubble() ? 'Electron' : 'Electron 加载失败';
   } else if (bubbleWin && !bubbleWin.isDestroyed()) {
     // 原生接管成功后销毁备用窗口，避免两个气泡叠在一起。
     bubbleWin.destroy();
     bubbleWin = null;
   }
+  revealBubble();
+  return '原生';
 }
 
 /* ---------------- 孤儿 helper 清理 ---------------- */
@@ -250,13 +274,12 @@ function cleanupOrphanHelpers() {
     ].join(' ');
     try {
       execFile('powershell.exe', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', ps], { windowsHide: true }, (err) => {
-        if (err) log('cleanup orphan helpers failed:', err.message);
-        else log('已清理上次遗留的原生 helper 进程');
-        resolve();
+        if (err) log.warn('cleanup orphan helpers failed:', err.message);
+        resolve(!err);
       });
     } catch (e) {
-      log('cleanup orphan helpers failed:', e.message);
-      resolve();
+      log.warn('cleanup orphan helpers failed:', e.message);
+      resolve(false);
     }
   });
 }
@@ -331,15 +354,27 @@ function hideBubbleAndPanel() {
   panel.hide();
 }
 
-/* ---------------- 托盘动作 ---------------- */
+/* ---------------- 托盘动作 / 气泡露出 ---------------- */
+/** 露出气泡（不改变“用户主动隐藏”的意图，供启动卡片退场时调用） */
+function revealBubble() {
+  if (!canRevealBubble()) return;
+  if (nativeBubble.isRunning()) {
+    nativeBubble.show();
+    return;
+  }
+  const win = bubbleWin;
+  if (!win || !bubbleReady) return;
+  bubbleReady.then((ready) => {
+    if (!ready || win !== bubbleWin || win.isDestroyed() || win.isVisible() || !canRevealBubble()) return;
+    const b = currentBubbleBounds();
+    win.setBounds({ x: b.x, y: b.y, width: BUBBLE.w, height: BUBBLE.h });
+    win.showInactive();
+  }).catch((error) => log.warn('显示 Electron 气泡失败:', error.message));
+}
+
 function showBubble() {
   bubbleHidden = false;
-  if (nativeBubble.isRunning()) nativeBubble.show();
-  if (bubbleWin && !bubbleWin.isDestroyed() && !bubbleWin.isVisible()) {
-    const b = currentBubbleBounds();
-    bubbleWin.setBounds({ x: b.x, y: b.y, width: BUBBLE.w, height: BUBBLE.h });
-    bubbleWin.showInactive();
-  }
+  revealBubble();
 }
 
 /* ---------------- 启动 ---------------- */
@@ -356,10 +391,9 @@ if (!gotLock) {
   });
 
   app.whenReady().then(async () => {
-    log('app ready，开始初始化');
-    await cleanupOrphanHelpers();
-    log('残留 helper 清理完成');
+    startStage('Electron 就绪', startedAt)();
 
+    const finishConfig = startStage('读取配置');
     const userDataDir = app.getPath('userData');
     configStore = createConfigStore({
       userDataDir,
@@ -368,18 +402,47 @@ if (!gotLock) {
       log,
     });
     configStore.load();
+    finishConfig('数据来源配置=' + configStore.state.dataSource);
 
-    log('数据来源 =', configStore.state.dataSource, '| 缓存目录 =', source.cacheDir(), process.env.LC2_DATA_URL ? '| 自定义数据地址 = ' + process.env.LC2_DATA_URL : '');
     geometry = createGeometry({ BUBBLE, PANEL, MARGIN });
+    try {
+      startupVisible = true;
+      startupWin = createStartupWindow({
+        BrowserWindow,
+        screen,
+        bounds: currentBubbleBounds(),
+        page: path.join(RENDERER_DIR, 'startup.html'),
+        isQuitting: () => app.isQuitting,
+        log,
+        onClosed: () => {
+          startupWin = null;
+          startupVisible = false;
+          // 加载页退场后才露出气泡（此时气泡可能已经就绪）
+          log.debug('启动卡片退场，露出气泡');
+          revealBubble();
+        },
+      });
+    } catch (error) {
+      startupVisible = false;
+      log.warn('启动提示创建失败:', error.message);
+    }
+
+    const finishCleanup = startStage('清理残留原生进程');
+    const cleaned = await cleanupOrphanHelpers();
+    if (app.isQuitting) return;
+    finishCleanup(cleaned ? '' : '未完成');
+
+    const finishAssembly = startStage('组装本地存储与 IPC');
     notesStore = createNotesStore({ userDataDir, log });
     const submissionStore = createSubmissionStore({
-      dir: path.join(app.getPath('userData'), 'submissions'),
+      dir: path.join(userDataDir, 'submissions'),
       log,
     });
-    dataLoader = createDataLoader({ source, configStore, log, submissionStore });
+    dataLoader = createDataLoader({ source, configStore, submissionStore });
 
     shortcuts = createShortcuts({ globalShortcut, log, BASE_KEYS, PANEL_KEYS });
 
+    let finishPage;
     panel = createPanel({
       BrowserWindow,
       screen,
@@ -394,6 +457,7 @@ if (!gotLock) {
       disablePanelKeys: () => shortcuts.disablePanelKeys(),
       isQuitting: () => Boolean(app.isQuitting),
       log,
+      onPageLoaded: (ok) => finishPage(ok ? '' : '失败'),
       paths: { preload: PRELOAD_PATH, rendererIndex: RENDERER_INDEX },
       PANEL,
       PANEL_RADIUS,
@@ -409,10 +473,9 @@ if (!gotLock) {
 
     registerIpc({
       ipcMain,
-      log,
       dataLoader,
+      startInitialDataLoad: () => startStage('读取首批流派与图鉴'),
       notesStore,
-      configStore,
       panel,
       getAppVersion: () => app.getVersion(),
       getBaseKey: () => shortcuts.getBaseKey(),
@@ -420,15 +483,20 @@ if (!gotLock) {
       setBubblePosition,
       persistBubbleBounds,
       onSubmitMode: panel.setSubmitMode,
+      setModalEscape: (on) => {
+        shortcuts.setModalEscape(on ? () => {
+          const win = panel.getWindow();
+          if (win && !win.isDestroyed()) win.webContents.send('lc2:key', 'Escape');
+        } : null);
+      },
       onSubmitBuild: async (payload) => {
         if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
           throw new Error('投稿内容无效');
         }
-        const res = submissionStore.save(payload);
-        log('submission saved:', res.path);
-        return res;
+        return submissionStore.save(payload);
       },
     });
+    finishAssembly();
 
     // 辅助进程必须常驻：即使不显示阴影，它也负责
     //   1) 给面板窗口设置 DWM 系统圆角/描边
@@ -436,22 +504,29 @@ if (!gotLock) {
     panelShadow.onClick(handleOutsideClick);
     panelShadow.onDrag((px, py) => panel.dragToPhysical(px, py));
     panelShadow.onDragEnd(() => panel.finalizeDrag());
+    const finishHelper = startStage('面板原生辅助进程');
     panelShadow
       .ensureStarted({ panelW: PANEL.w, panelH: PANEL.h, radius: PANEL_RADIUS, pad: SHADOW_PAD })
       .then((ok) => {
-        if (!ok) log('警告：辅助进程启动失败 → 外部点击收起 / 系统圆角将不可用');
-        else log('辅助进程就绪（DWM 圆角 + 全局点击轮询）');
+        finishHelper(ok ? '' : '降级');
+        if (!ok) log.warn('辅助进程启动失败，外部点击收起和系统圆角不可用');
+      })
+      .catch((error) => {
+        finishHelper('失败');
+        log.error('启动面板辅助进程失败:', error);
       });
 
+    finishPage = startStage('创建并加载面板页面');
     panel.create();
     hardenWindow(panel.getWindow());
-    log('面板窗口已创建');
 
-    log('启动气泡：' + (USE_NATIVE_BUBBLE ? 'native' : 'electron'));
-    await initializeBubble();
+    const finishBubble = startStage('启动气泡');
+    const bubbleMode = await initializeBubble();
+    if (app.isQuitting) return;
+    finishBubble(bubbleMode);
 
-    shortcuts.registerBaseKey(() => panel.toggle());
-    log('window mode =', WIN_MODE, '| panel shadow =', USE_PANEL_SHADOW, '| shadow pad =', SHADOW_PAD, '| pinned =', panel.isPinned());
+    const finishControls = startStage('注册热键与托盘');
+    const baseKey = shortcuts.registerBaseKey(() => panel.toggle());
     trayHandle = createTray({
       Tray,
       Menu,
@@ -465,9 +540,10 @@ if (!gotLock) {
       onQuit: quitApp,
       log,
     });
-    log(trayHandle ? '托盘已就绪' : '托盘不可用（缺少图标资源）');
+    finishControls('热键=' + (baseKey || '不可用') + ' · 托盘=' + (trayHandle ? '就绪' : '不可用'));
 
     if (DEV_HOT) {
+      const finishHotReload = startStage('注册开发热部署');
       disposeHotReload = setupDevHotReload({
         fs,
         path,
@@ -486,10 +562,10 @@ if (!gotLock) {
             for (const w of targets) {
               try { w.webContents.reloadIgnoringCache(); } catch {}
             }
-            log('hot reload:', reason);
+            log.debug('hot reload:', reason);
           },
           async restartNativeHelpers() {
-            log('hot reload: native scripts changed, restarting helpers');
+            log.debug('hot reload: native scripts changed, restarting helpers');
             closeBubbleMenu();
             try { nativeBubble.stop(); } catch {}
             try { panelShadow.stop(); } catch {}
@@ -500,6 +576,7 @@ if (!gotLock) {
         },
         log,
       });
+      finishHotReload();
     }
 
     screen.on('display-metrics-changed', () => {
@@ -508,14 +585,24 @@ if (!gotLock) {
       setBubblePosition(b.x, b.y);
       persistBubbleBounds();
     });
+    startStage('桌面入口初始化完成', startedAt)();
+  }).catch((error) => {
+    log.error('启动失败:', error);
+    app.quit();
+  }).finally(() => {
+    if (app.isQuitting) return;
+    desktopInitialized = true;
+    if (startupWin) startupWin.finish();
+    else revealBubble();
   });
 
   app.on('window-all-closed', () => app.quit());
 
   app.on('before-quit', () => {
     app.isQuitting = true;
+    startupWin?.destroy();
     closeBubbleMenu();
-      if (disposeHotReload) {
+    if (disposeHotReload) {
       try { disposeHotReload(); } catch {}
     }
     try { nativeBubble.stop(); } catch {}

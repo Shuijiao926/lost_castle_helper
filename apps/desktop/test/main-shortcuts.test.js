@@ -51,3 +51,28 @@ test('关闭面板会注销方向键并保留气泡菜单的 Esc', () => {
   shortcuts.disablePanelKeys();
   assert.deepEqual([...registered.keys()], ['Escape']);
 });
+
+test('弹层占用 Esc 后，注销面板热键不会让 Esc 失效', () => {
+  const { registered, shortcuts } = makeShortcuts();
+  shortcuts.enablePanelKeys({});
+  shortcuts.setModalEscape(() => {});
+  // 输入框获焦时主进程会注销面板热键，Esc 必须还留着
+  shortcuts.disablePanelKeys();
+  assert.equal(registered.has('Escape'), true);
+});
+
+test('弹层关闭后 Esc 交还面板', () => {
+  const { registered, shortcuts } = makeShortcuts();
+  const actions = [];
+  shortcuts.enablePanelKeys({
+    getWindow: () => ({ isDestroyed: () => false, webContents: { send: (_ch, key) => actions.push('panel:' + key) } }),
+    isOpen: () => true,
+  });
+  shortcuts.setModalEscape(() => {
+    actions.push('modal');
+    shortcuts.setModalEscape(null);
+  });
+  registered.get('Escape')();
+  registered.get('Escape')();
+  assert.deepEqual(actions, ['modal', 'panel:Escape']);
+});

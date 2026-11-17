@@ -21,6 +21,7 @@ param(
   [int]$X = 100,
   [int]$Y = 100,
   [int]$ParentPid = 0,
+  [switch]$Hidden,
   [string]$Preview = '',
   [switch]$GenerateOnly
 )
@@ -105,12 +106,26 @@ public class Lc2Bubble : Form
     private const int HoverInterval = 33;   // ms
     private const float HoverStep = 7f;     // deg/tick -> ~1.7s per turn
 
+    /* start hidden: the startup card still owns the screen until it is destroyed.
+       SetVisibleCore interception keeps the window from flashing on Application.Run. */
+    private bool suppressed;
+
     private bool dragging;
     private bool moved;
     private Point dragAnchor;
     private Point winAnchor;
 
     protected override bool ShowWithoutActivation { get { return true; } }
+
+    protected override void SetVisibleCore(bool value)
+    {
+        if (value && suppressed) { base.SetVisibleCore(false); return; }
+        base.SetVisibleCore(value);
+    }
+
+    /* commands from Electron */
+    public void HideBubble() { suppressed = true; Hide(); }
+    public void ShowBubble() { suppressed = false; Show(); }
 
     protected override CreateParams CreateParams
     {
@@ -122,9 +137,10 @@ public class Lc2Bubble : Form
         }
     }
 
-    public Lc2Bubble(int size, int x, int y, string iconPath)
+    public Lc2Bubble(int size, int x, int y, string iconPath, bool startHidden)
     {
         sizePx = size;
+        suppressed = startHidden;
         FormBorderStyle = FormBorderStyle.None;
         ShowInTaskbar = false;
         TopMost = true;
@@ -532,6 +548,8 @@ public class Lc2Bubble : Form
 
     private void OnTick(object sender, EventArgs e)
     {
+        if (suppressed) return;   // hidden: no frame to compose
+
         // 悬停状态以 OnMouseEnter / OnMouseLeave 为准；
         // 每帧只做“离开”校正（鼠标离开事件偶尔会丢）
         if (hovering && !IsCursorInside()) SetHovering(false);
@@ -624,10 +642,20 @@ public class Lc2Bubble : Form
 
     /* ---------------- entry ---------------- */
 
-    public static void Run(string iconPath, int size, int x, int y, int parentPid)
+    public static void Run(string iconPath, int size, int x, int y, int parentPid, bool startHidden)
     {
         Application.EnableVisualStyles();
-        Instance = new Lc2Bubble(size, x, y, iconPath);
+        Instance = new Lc2Bubble(size, x, y, iconPath, startHidden);
+
+        if (startHidden)
+        {
+            /* suppressed mode blocks the implicit Show() inside Application.Run,
+               so the handle is never created lazily. Create it now: READY and the
+               first frame must still be produced, otherwise Electron times out
+               and falls back to the Electron bubble window. */
+            IntPtr prewarm = Instance.Handle;
+            GC.KeepAlive(prewarm);
+        }
 
         if (parentPid > 0)
         {
@@ -667,12 +695,12 @@ public class Lc2Bubble : Form
                 }
                 else if (line == "HIDE")
                 {
-                    try { Instance.BeginInvoke(new MethodInvoker(delegate() { Instance.Hide(); })); }
+                    try { Instance.BeginInvoke(new MethodInvoker(delegate() { Instance.HideBubble(); })); }
                     catch { }
                 }
                 else if (line == "SHOW")
                 {
-                    try { Instance.BeginInvoke(new MethodInvoker(delegate() { Instance.Show(); })); }
+                    try { Instance.BeginInvoke(new MethodInvoker(delegate() { Instance.ShowBubble(); })); }
                     catch { }
                 }
             }
@@ -717,4 +745,4 @@ if ($GenerateOnly) {
 }
 
 if (-not $Icon) { throw '-Icon is required' }
-[Lc2Bubble]::Run($Icon, $Size, $X, $Y, $ParentPid)
+[Lc2Bubble]::Run($Icon, $Size, $X, $Y, $ParentPid, [bool]$Hidden)

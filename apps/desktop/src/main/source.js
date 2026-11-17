@@ -1,7 +1,7 @@
 /**
  * 数据来源层
  *
- *   local  : 读仓库 data/（开发 / 离线）
+ *   local  : 读仓库 data/（开发 / 离线），开发时支持本地预览文件
  *   github : 从 GitHub raw 拉数据包，本地缓存 + hash 校验（当前线上方案）
  *
  * 文件存储暂由 GitHub 承担：图标与 data/*.json 都在数据仓库里，
@@ -15,7 +15,9 @@ const { app } = require('electron');
 const DEFAULT_REPO = { owner: 'Shuijiao926', repo: 'lost_castle_helper', branch: 'main' };
 const FETCH_TIMEOUT = 8000;
 
-function log(...a) { console.log('[lc2:data]', ...a); }
+const logger = require('./util/log');
+const log = (...a) => logger.warn('[数据]', ...a);
+const debug = (...a) => logger.debug('[数据]', ...a);
 
 function dataDir() {
   return app.isPackaged
@@ -97,7 +99,7 @@ async function fetchRemote(repo) {
   if (meta && meta.fileHash) {
     const cached = readCache();
     if (cached && cached.__hash === meta.fileHash && cached.__version === meta.version) {
-      log('remote unchanged ->', meta.version);
+      debug('remote unchanged ->', meta.version);
       return cached.data;
     }
     const text = await fetchText(meta.fileUrl || `${base}/builds.json`);
@@ -105,13 +107,13 @@ async function fetchRemote(repo) {
     if (hash !== meta.fileHash) log('hash mismatch, use downloaded anyway');
     const data = JSON.parse(text);
     writeCache({ __hash: hash, __version: meta.version, data });
-    log('remote updated ->', meta.version);
+    debug('remote updated ->', meta.version);
     return data;
   }
 
   const data = await fetchJSON(`${base}/builds.json`);
   writeCache({ __hash: sha256(JSON.stringify(data)), __version: 'unknown', data });
-  log('remote fetched（无 package.json，直接拉 builds.json）');
+  debug('remote fetched（无 package.json，直接拉 builds.json）');
   return data;
 }
 
@@ -123,6 +125,12 @@ async function loadBuilds(opts = {}) {
   const source = opts.source || 'github';
 
   if (source === 'local') {
+    const previewName = 'builds.local.json';
+    if (!app.isPackaged && fs.existsSync(path.join(dataDir(), previewName))) {
+      const preview = readLocalJSON(previewName, null);
+      if (Array.isArray(preview?.builds)) return { source: 'local', file: preview };
+      log(`preview ${previewName} invalid, use local seed`);
+    }
     const file = readLocalJSON('builds.json', null);
     return { source: 'local', file: file || { builds: [] } };
   }

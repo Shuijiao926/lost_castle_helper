@@ -6,7 +6,7 @@
  */
 function createBubbleWindow({
   BrowserWindow, path, BUBBLE, WIN_MODE, bounds, preloadPath, rendererDir,
-  applyShape, topmostLevel, canReveal, onContextMenu,
+  applyShape, topmostLevel, canReveal, onContextMenu, onLoadError, onLoaded,
 }) {
   const level = topmostLevel || 'floating';
   const win = new BrowserWindow({
@@ -35,15 +35,26 @@ function createBubbleWindow({
   try { win.setBackgroundColor('#00000000'); } catch {}
   try { win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true }); } catch {}
 
+  let reported = false;
+  const report = (ok) => {
+    if (reported) return;
+    reported = true;
+    onLoaded?.(ok);
+  };
   const reveal = () => {
     if (win.isDestroyed()) return;
     applyShape(win);
     if (canReveal() && !win.isVisible()) win.showInactive();
+    report(true);
   };
   win.once('ready-to-show', reveal);
   win.webContents.once('did-finish-load', reveal);
   win.webContents.on('context-menu', () => onContextMenu(win));
-  win.loadFile(path.join(rendererDir, 'index.html'), { query: { mode: 'bubble', win: WIN_MODE } });
+  win.once('closed', () => report(false));
+  Promise.resolve(win.loadFile(path.join(rendererDir, 'index.html'), { query: { mode: 'bubble', win: WIN_MODE } })).catch((error) => {
+    if (!win.isDestroyed()) onLoadError?.(error);
+    report(false);
+  });
 
   return win;
 }
