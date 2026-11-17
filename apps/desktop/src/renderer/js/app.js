@@ -17,7 +17,7 @@
     INSC, BUILDS, TREASURES, ALL_TAGS, loadInscriptions, loadTreasures, loadWeapons,
     loadWeaponTypes, loadArmors, loadSoulStones, loadCursedTreasures, loadNightmareEffects,
   } = LC2.data.catalog;
-  const { ic, ICON, ICON_SVG, RC } = LC2.ui.icons;
+  const { ic, ICON, ICON_SVG, RC, nightmareIcon } = LC2.ui.icons;
   const { $, esc } = LC2.ui.dom;
   const refs = LC2.ui.dom.refs;
   const elFeed = refs.feed, elDetail = refs.detail, elSbar = refs.sbar, elBack = refs.back,
@@ -190,8 +190,8 @@ function renderFeed(){
   const list=visible();
   if(!list.some(b=>b.id===state.cur)&&list.length)state.cur=list[0].id;
   if(!BUILDS.length){
-    elFeed.innerHTML = emptyState('小狗还在翻笔记 汪！','资料还没搬完，它已经很努力了 (´･ω･`)', false)
-      .replace(/<\/div>$/, '<div class="empty-hint">先去打一局，回来也许就有啦</div></div>');
+    elFeed.innerHTML = emptyState('流派数据还在路上', '更新后，就能在这里查装备和刻印搭配。', false)
+      .replace(/<\/div>$/, '<div class="empty-hint">先去城堡闯一局，回头再来看看。</div></div>');
     return;
   }
   if(!list.length){elFeed.innerHTML='<div class="tip">没有匹配的流派。按 F 重新筛选。</div>';return;}
@@ -399,9 +399,9 @@ function renderDetail(){
 
   /* ⑧ 梦魇加点 */
   if(Array.isArray(b.nightmareList) && b.nightmareList.length){
-    const total = domain.nightmareTotal(b.nightmareList);
-    h += sec('梦魇推荐加点', box(total === null ? '个人自用方案' : '总强度 ' + total + ' 点',
-      '<div class="nmgrid">' + renderNightmareRows(b.nightmareList) + '</div>'));
+    h += sec('梦魇推荐加点', '<div class="box">'
+      + renderNightmareProgress(b.nightmareList)
+      + '<div class="nmgrid">' + renderNightmareRows(b.nightmareList) + '</div></div>');
   }
 
   h+='<div class="footline"><span>作者 '+esc(b.author||'—')+' · 来源：'+esc(b.src)+'</span><span>更新 '+esc(b.updated)+'</span></div>';
@@ -1444,45 +1444,82 @@ function subRenderSel(){
 
 function subStatus(){}
 
-function updateNightmareTotal(){
-  const total = domain.nightmareTotal(domain.nightmareList(nightmareSelections));
-  subSet('subNightmareTotal', '总强度 ' + total + ' 点');
+function renderNightmareProgress(list){
+  const progress = domain.nightmareProgress(list);
+  if (!progress) return '<p class="nightmare-unrecorded">这份方案未记录梦魇强度</p>';
+  const { points, depth, thresholds } = progress;
+  const max = thresholds.at(-1);
+  const depthLabel = depth ? '梦魇深度 ' + depth : '未达深度 1';
+  return '<div class="nightmare-progress">'
+    + '<div class="nightmare-progress-caption"><b>梦魇强度</b>'
+    + '<span class="nightmare-points">' + points + ' 点</span>'
+    + '<span class="nightmare-depth">' + depthLabel + '</span></div>'
+    + '<div class="nightmare-scale">'
+    + '<progress class="nightmare-meter" aria-label="梦魇强度" aria-valuetext="' + points + ' 点，' + depthLabel + '"'
+    + ' value="' + Math.min(points, max) + '" max="' + max + '"></progress>'
+    + '<div class="nightmare-marks" aria-hidden="true"><span>0</span>'
+    + thresholds.map((threshold) => '<span' + (points >= threshold ? ' class="reached"' : '') + '>' + threshold + '</span>').join('')
+    + '</div></div></div>';
+}
+
+function updateNightmareProgress(){
+  $('subNightmareProgress').innerHTML = renderNightmareProgress(domain.nightmareList(nightmareSelections));
+}
+
+function updateNightmareStepper(stepper, options, index){
+  const option = options[index];
+  stepper.querySelector('.nightmare-option').textContent = option ? option.label : '不加点';
+  stepper.querySelector('.nightmare-option-points').textContent = option ? option.points + ' 点' : '';
+  stepper.querySelector('[data-nightmare-step="-1"]').disabled = index < 0;
+  stepper.querySelector('[data-nightmare-step="1"]').disabled = index >= options.length - 1;
+  stepper.classList.toggle('has-points', index >= 0);
 }
 
 function renderNightmareEditor(){
   const list = $('subNightmareEffects');
+  if (!list) return;
   if (!NIGHTMARE_EFFECTS.length) {
     list.textContent = '暂时没有可选的梦魇效果。';
-    $('subNightmareTotal').textContent = '';
+    $('subNightmareProgress').textContent = '';
     return;
   }
-  list.innerHTML = NIGHTMARE_EFFECTS.map(({ name, description, options }) => {
-    const selected = nightmareSelections.get(name);
-    return '<label class="nightmare-row"><span><b>' + esc(name) + '</b><small>' + esc(description) + '</small></span>'
-      + '<select class="subinp" data-nightmare="' + esc(name) + '"><option value="">不加点</option>'
-      + options.map(({ points, label }) => '<option value="' + points + '"' + (selected === points ? ' selected' : '')
-        + '>' + points + ' 点 · ' + esc(label) + '</option>').join('')
-      + '</select></label>';
-  }).join('');
-  updateNightmareTotal();
+  list.innerHTML = NIGHTMARE_EFFECTS.map(({ name, description }) =>
+    '<div class="nightmare-row"><div class="nightmare-effect">' + nightmareIcon(name)
+    + '<span><b>' + esc(name) + '</b><small>' + esc(description) + '</small></span></div>'
+    + '<div class="nightmare-stepper" role="group" aria-label="' + esc(name) + '" data-nightmare="' + esc(name) + '">'
+    + '<button type="button" data-nightmare-step="-1" aria-label="降低' + esc(name) + '档位">−</button>'
+    + '<div class="nightmare-option-readout"><span class="nightmare-option"></span><small class="nightmare-option-points"></small></div>'
+    + '<button type="button" data-nightmare-step="1" aria-label="提高' + esc(name) + '档位">+</button></div></div>'
+  ).join('');
+  list.querySelectorAll('.nightmare-stepper').forEach((stepper, i) => {
+    const { name, options } = NIGHTMARE_EFFECTS[i];
+    updateNightmareStepper(stepper, options, options.findIndex(({ points }) => points === nightmareSelections.get(name)));
+  });
+  updateNightmareProgress();
 }
 
 function renderNightmareRows(list, removable = false){
   return list.map((entry) => {
     const { n, p, points } = entry;
     const value = [points ? points + ' 点' : '', p].filter(Boolean).join(' · ') || '—';
-    return '<div class="nmrow"><span>' + esc(n) + '</span><span class="p">' + esc(value) + '</span>'
+    return '<div class="nmrow"><span class="nightmare-effect">' + nightmareIcon(n) + '<span>' + esc(n) + '</span></span>'
+      + '<span class="p">' + esc(value) + '</span>'
       + (removable ? '<button type="button" class="nightmare-remove" data-remove-nightmare="' + esc(n)
         + '" aria-label="移除' + esc(n) + '">×</button>' : '') + '</div>';
   }).join('');
 }
 
-$('subNightmareEffects').addEventListener('change', (ev) => {
-  const select = ev.target.closest('select[data-nightmare]');
-  if (!select) return;
-  if (select.value) nightmareSelections.set(select.dataset.nightmare, Number(select.value));
-  else nightmareSelections.delete(select.dataset.nightmare);
-  updateNightmareTotal();
+$('subNightmareEffects')?.addEventListener('click', (ev) => {
+  const button = ev.target.closest('button[data-nightmare-step]');
+  if (!button || button.disabled) return;
+  const stepper = button.closest('.nightmare-stepper');
+  const { name, options } = NIGHTMARE_EFFECTS.find(({ name }) => name === stepper.dataset.nightmare);
+  const current = options.findIndex(({ points }) => points === nightmareSelections.get(name));
+  const next = current + Number(button.dataset.nightmareStep);
+  if (next === -1) nightmareSelections.delete(name);
+  else nightmareSelections.set(name, options[next].points);
+  updateNightmareStepper(stepper, options, next);
+  updateNightmareProgress();
 });
 
 function openSubmit(){
@@ -1620,6 +1657,9 @@ const SUB_PAGES = ['basic', 'wt', 'insc', 'equip', 'armor', 'treasure', 'soul', 
 let subPage = 0;
 let subReviewOpen = false;
 let subReviewScroll = 0;
+function subPageScroller(){
+  return SUB_PAGES[subPage] === 'nightmare' ? $('subNightmareEffects') : $('subMain');
+}
 function subGo(i){
   subReviewOpen = false;
   $subModal.classList.remove('review-mode');
@@ -1637,7 +1677,7 @@ function subGo(i){
 }
 
 function openReview(){
-  subReviewScroll = $('subMain').scrollTop;
+  subReviewScroll = subPageScroller().scrollTop;
   subReviewOpen = true;
   $subModal.classList.remove('no-info');
   $subModal.classList.add('review-mode');
@@ -1654,7 +1694,7 @@ function openReview(){
 
 function backToSubmitPage(){
   subGo(subPage);
-  $('subMain').scrollTop = subReviewScroll;
+  subPageScroller().scrollTop = subReviewScroll;
 }
 
 function subReviewRow(label, items, kind, group, opts){
@@ -1743,8 +1783,8 @@ function subRenderReview(){
   }
   const nightmare = domain.nightmareList(nightmareSelections);
   if (nightmare.length) {
-    parts.push('<div class="rvsec"><div class="rvhead"><span>梦魇推荐加点</span><span class="rvcount">'
-      + domain.nightmareTotal(nightmare) + ' 点</span></div>'
+    parts.push('<div class="rvsec"><div class="rvhead"><span>梦魇推荐加点</span></div>'
+      + renderNightmareProgress(nightmare)
       + renderNightmareRows(nightmare, true) + '</div>');
   }
   box.innerHTML = parts.length ? parts.join('') : emptyState('还没有选东西呢 (´･ω･`)', '去前面的页签挑一挑吧', true);

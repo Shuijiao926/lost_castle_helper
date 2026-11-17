@@ -18,6 +18,7 @@
 
   var WEAPONS = catalog.WEAPONS;
   var INSC = catalog.INSC;
+  const NIGHTMARE_DEPTH_THRESHOLDS = Object.freeze([10, 20, 30, 40, 50]);
 
   /** 武器目录查找（找不到时兜底成 id 自身） */
   function weapon(id) {
@@ -163,6 +164,13 @@
     return list.reduce((sum, entry) => sum + entry.points, 0);
   }
 
+  function nightmareProgress(list) {
+    const points = nightmareTotal(list);
+    if (points === null) return null;
+    const thresholds = NIGHTMARE_DEPTH_THRESHOLDS;
+    return { points, depth: thresholds.filter((threshold) => threshold <= points).length, thresholds };
+  }
+
   return {
     weapon: weapon,
     weaponName: weaponName,
@@ -175,5 +183,6 @@
     normalizeBuilds: normalizeBuilds,
     nightmareList,
     nightmareTotal,
+    nightmareProgress,
   };
 }));

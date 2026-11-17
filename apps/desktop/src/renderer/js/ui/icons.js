@@ -61,11 +61,40 @@ const ICON_SVG = {
 };
 
 
+const NIGHTMARE_ICON_FILES = {
+  '生命锁定': 'hp-block.png',
+  '灵药污染': 'alchemy-bottle-block.png',
+  '法力锁定': 'mp-block.png',
+  '泉水污染': 'fountain-pollution.png',
+  '虚弱体质': 'reduced-healing.png',
+  '脆弱身板': 'increased-damage.png',
+  '元素易伤': 'elemental-vulnerability.png',
+  '回收惩罚': 'recycle-penalty.png',
+  '负重降低': 'reduced-capacity.png',
+  '坏运气': 'bad-luck.png',
+  '选择限制': 'limited-choice.png',
+  '升级锁定': 'upgrade-lock.png',
+};
+
+function nightmareIcon(name) {
+  let icon;
+  if (Object.hasOwn(NIGHTMARE_ICON_FILES, name)) {
+    icon = '<img src="../../assets/nightmare/' + NIGHTMARE_ICON_FILES[name] + '" alt="">';
+  } else {
+    const drawing = name === '魂晶吞噬'
+      ? '<path d="m12 3 6 6-6 7-6-7ZM4 16l2 5h12l2-5M8 9h8"/>'
+      : '<path d="m12 4 8 8-8 8-8-8Z"/>';
+    icon = '<svg viewBox="0 0 24 24">' + drawing + '</svg>';
+  }
+  return '<span class="nightmare-icon" aria-hidden="true">' + icon + '</span>';
+}
+
   window.LC2.ui.icons = {
     CDN: CDN,
     ICON: ICON,
     RC: RC,
     ic: ic,
-    ICON_SVG: ICON_SVG
+    ICON_SVG: ICON_SVG,
+    nightmareIcon,
   };
 })();

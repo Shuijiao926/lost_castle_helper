@@ -42,6 +42,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts\make-panel-bg.ps1
 `icon-art.png` / `icon-half.png` / `icon-face.png` / `icon-full.png` / `icon-raw.png`
 由 `scripts/make-icons.ps1` 生成。
 
+## 梦魇效果图标
+
+`nightmare/` 存放维护者提供的 12 张透明 PNG，游戏美术版权归 Hunter Studio。文件随客户端打包，离线可用。魂晶吞噬使用客户端自制图标。
+
 ## 图标缓存（M2 再做）
 
 正式版会把武器 / 刻印 / 宝藏图标下载到本地，避免依赖 wiki CDN：

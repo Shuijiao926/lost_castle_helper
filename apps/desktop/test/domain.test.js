@@ -68,9 +68,17 @@ test('梦魇推荐只保存图鉴中可选的档位，并按累计强度求和',
   assert.equal(nightmare.nightmareTotal(picks), 17);
 });
 
+test('梦魇强度每到一个刻度提升一层深度，超过 50 点仍为深度 5', () => {
+  assert.equal(domain.nightmareProgress([]).depth, 0);
+  for (const [points, depth] of [[9, 0], [10, 1], [20, 2], [30, 3], [40, 4], [49, 4], [50, 5], [52, 5]]) {
+    assert.equal(domain.nightmareProgress([{ points }]).depth, depth);
+  }
+  assert.equal(domain.nightmareProgress([{ points: 52 }]).points, 52);
+});
+
 test('历史梦魇方案没有强度字段时依然可展示，也不计算不完整的总强度', () => {
   const legacy = [{ n: '生命锁定', p: '65%' }, { n: '升级锁定' }];
-  assert.equal(domain.nightmareTotal(legacy), null);
+  assert.equal(domain.nightmareProgress(legacy), null);
   assert.deepEqual(domain.normalizeBuilds([makeBuild({ nightmareList: legacy })])[0].nightmareList, legacy);
 });
 
