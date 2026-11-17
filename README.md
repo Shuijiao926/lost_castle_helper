@@ -48,6 +48,10 @@ Alt + `  →  浮出流派卡片  →  ↑ ↓ 选择  →  Enter 展开 / D 看
 
 ## 快速开始
 
+安装版适用于 Windows 10/11（64 位）。双击 `LC2Helper-版本号-win-x64-setup.exe` 安装，再从开始菜单启动 **LC2 Helper**。安装版自带 Electron，无需另装 Node.js。
+
+从源码运行：
+
 **要求**：Windows 10/11、Node.js ≥ 18（推荐 20+）
 
 ```bash
@@ -85,7 +89,7 @@ npm run test:server  # 28 个用例
 **打包**
 
 ```bash
-npm run dist         # 产物在 apps/desktop/release/
+npm run dist         # 安装包在 release/LC2Helper-版本号-win-x64-setup.exe
 ```
 
 ## 数据
