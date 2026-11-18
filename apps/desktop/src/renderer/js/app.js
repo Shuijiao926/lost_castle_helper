@@ -228,7 +228,6 @@ function renderFeed(){
   elFeed.querySelectorAll('.card').forEach(n=>{
     n.onclick=ev=>{
       const bid=n.dataset.bid;
-      if(ev.target.closest('.det')){openDetail(bid);return;}
       if(ev.target.closest('[data-fav]')){toggleFav(bid);return;}
       if(ev.target.closest('[data-rate]')){state.ratingOpen=(state.ratingOpen===bid?null:bid);render();return;}
 if(ev.target.closest('[data-note]')){openNote(bid);return;}
@@ -242,7 +241,7 @@ if(ev.target.closest('[data-note]')){openNote(bid);return;}
 function ratingHTML(build, { showStars = true } = {}){
   if(!build.votes && !build.rating) return '<div class="rate is-unrated"><span class="rating-empty">暂无评分</span></div>';
   return '<div class="rate"><span class="sc" aria-label="评分 '+build.rating.toFixed(1)+' 分">'
-    +'<strong>'+build.rating.toFixed(1)+'</strong><small>/10</small></span>'
+    +'<strong>'+build.rating.toFixed(1)+'</strong><small>'+(showStars?'/10':'分')+'</small></span>'
     +'<div class="rating-meta">'+(showStars?stars(build.rating):'')+'<span class="votes">'+build.votes+' 人打分</span></div></div>';
 }
 
@@ -256,11 +255,10 @@ function cardHTML(b,isCur){
   let h='<div class="card'+(isCur?' is-active':'')+'" data-bid="'+b.id+'">';
   // 列表概览显示分数与人数，布局根据可用宽度安排在品类下方或右侧。
   h+='<div class="ch">'+ic(iconKey,W(b.wt).short,'s48',tint)
-   +'<div class="main"><div class="ctop"><div class="cname">'+esc(b.name)+'</div>'+badge+'</div>'
+   +'<div class="main"><div class="ctop"><button type="button" class="cname" aria-label="查看'+esc(b.name)+'详情">'+esc(b.name)+'</button>'+badge+'</div>'
    +'<div class="cmeta"><span class="cate" style="--tc:'+tint+'">'+esc(wName(b.wt))+'</span>'
    +'<span class="csep">·</span><span class="cate insc">'+esc(inscName(b.insc))+'</span></div></div>'
-   +ratingHTML(b, { showStars: false })
-   +'<button type="button" class="det" data-det="'+b.id+'" aria-label="查看'+esc(b.name)+'详情"><span aria-hidden="true">›</span></button></div>';
+   +ratingHTML(b, { showStars: false })+'</div>';
 
   if(b.tip) h+='<p class="card-summary">'+esc(b.tip)+'</p>';
 
@@ -2558,7 +2556,7 @@ document.addEventListener('keydown',e=>{
   const tag=(e.target&&e.target.tagName)||'';
   if(k==='Escape' && e.target.matches?.('.rating-half')){e.preventDefault();state.ratingOpen=null;render();return;}
   if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT') return;   // 输入控件自己处理键盘
-  if((k==='Enter'||k===' ') && e.target.closest?.('.card .det')) return;
+  if((k==='Enter'||k===' ') && e.target.closest?.('.card .cname')) return;
   if(document.getElementById('itemDetail')?.classList.contains('on')){ if(k==='Escape'){e.preventDefault();closeItemDetail();} return; }
   /* 印象弹层：打开时占住键盘，Esc 只关它，不要再往下触发「详情返回 / 收起面板」 */
   if(document.getElementById('noteModal')?.classList.contains('on')){
@@ -2589,6 +2587,20 @@ document.addEventListener('keydown',e=>{
     else if(selectedCount()){clearAllFilters();render();fbtnState();}
     else if(typeof window.lc2!=='undefined'){ window.lc2.requestToggle(); }
     return;}
+  // 面板热键从主进程合成到 document，评分获得焦点时按半星档位处理。
+  const focusedRating=document.activeElement?.closest('.rating-half');
+  if(state.ratingOpen && focusedRating){
+    const steps={ArrowLeft:-1,ArrowUp:-1,ArrowRight:1,ArrowDown:1};
+    if(Object.hasOwn(steps,k)){
+      e.preventDefault();
+      const options=[...focusedRating.closest('.rating-stars').querySelectorAll('.rating-half')];
+      const next=options[(options.indexOf(focusedRating)+steps[k]+options.length)%options.length];
+      next.focus();
+      next.click();
+      return;
+    }
+    if(k==='Enter'||k===' '){e.preventDefault();focusedRating.click();return;}
+  }
   if(k==='f'||k==='F'){e.preventDefault();motion.press($('sbar'));if(state.view==='feed')openModal();return;}
   if(k==='i'||k==='I'){e.preventDefault();motion.press($('sbtn'));if(state.view==='feed')$sbtn.click();return;}
   if(k==='h'||k==='H'){e.preventDefault();motion.press($('hbtn'));openHelp();return;}
@@ -2602,7 +2614,13 @@ document.addEventListener('keydown',e=>{
     e.preventDefault();const list=visible();const i=list.findIndex(b=>b.id===state.cur);
     const n=Math.max(0,Math.min(list.length-1,(i<0?0:i)+(k==='ArrowDown'?1:-1)));
     if(list[n]){state.cur=list[n].id;render();}return;}
-  if(k==='Enter'||k==='ArrowRight'){e.preventDefault();if(state.view==='detail'||!state.cur)return;openDetail(state.cur);return;}
+  if(k==='Enter'||k==='ArrowRight'){
+    e.preventDefault();
+    if(state.view==='detail'||!state.cur)return;
+    const focusedName=document.activeElement?.closest('.card .cname');
+    openDetail(focusedName?focusedName.closest('.card').dataset.bid:state.cur);
+    return;
+  }
   if(k==='ArrowLeft'){e.preventDefault();
     if(state.view==='detail')closeDetail();return;}
 });

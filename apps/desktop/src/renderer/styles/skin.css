@@ -157,15 +157,10 @@
   .card .votes{color:#96889F}
   .card .cbadge.score{background:rgba(198,177,218,.08);border-color:rgba(198,177,218,.18);color:#C5B1D6}
   .card .cbadge.hot{background:rgba(198,177,218,.08);border-color:rgba(198,177,218,.18);color:#C5B1D6}
-  .card .det{background:transparent;color:#A291AF}
-  .card:hover .det,.card .det:hover{background:transparent;color:#EEE1F5}
   /* 展开后的正文块：卡面已经是暖炭紫，正文别再回到冷紫，改成同族的深色内嵌井 */
   .card .tip,.card .box{background:rgba(24,17,28,.55);border:1px solid rgba(255,214,146,.10);color:#E9DFF1}
   .stars{color:#4A4260}
   .stars i{color:var(--star);text-shadow:0 0 6px rgba(240,184,74,.28)}
-  /* 详情按钮压一档：卡片里最亮的应该是分数，不是每张卡右上角都亮着同一块金色 */
-  .det{border-color:rgba(255,214,146,.20);background:rgba(255,214,146,.05);color:#D5BC93}
-  .det:hover{background:rgba(255,214,146,.14);border-color:rgba(255,214,146,.46);color:#FFE6B0}
   .act{color:#8B7FA6}
   .act:hover{background:rgba(255,214,146,.1);color:#FFE6B0}
   .act.on{color:#F0B84A}

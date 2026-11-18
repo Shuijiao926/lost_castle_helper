@@ -149,24 +149,27 @@
   .card:hover{border-color:#3a4358}
   .card.is-active{border-color:#556796;background:rgba(86,120,200,.10)}
   /* 窄窗沿名称列读完概览，宽窗让评分独立靠右。 */
-  .ch{display:grid;grid-template-columns:auto minmax(0,1fr) auto;column-gap:12px;align-items:start}
+  .ch{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:12px;align-items:start}
   .ch > .ic{grid-column:1;grid-row:1 / span 2;align-self:center}
   .ch > .main{grid-column:2;grid-row:1;min-width:0}
-  .ch > .det{grid-column:3;grid-row:1 / span 2;justify-self:end;align-self:center;flex:none}
-  .ch > .rate{grid-column:2;grid-row:2;min-width:0;margin-top:6px;gap:8px}
-  .card .rate .sc strong{font-size:14px;line-height:1.3}
-  .card .rating-meta{display:block;line-height:1.3}
+  .ch > .rate{grid-column:2;grid-row:2;display:grid;grid-template-columns:max-content max-content;
+    align-items:baseline;justify-content:start;justify-self:start;min-width:0;margin-top:7px;gap:12px}
+  .card .rate .sc strong{font-size:14px;line-height:1.4}
+  .card .rate .sc small{font-size:10px;line-height:1.4}
+  .card .rating-meta{display:block;padding-left:12px;border-left:1px solid rgba(190,170,205,.22);line-height:1.4}
   @media (min-width:560px){
-    .ch{grid-template-columns:auto minmax(0,1fr) minmax(80px,max-content) auto;column-gap:16px;align-items:center}
+    .ch{grid-template-columns:auto minmax(0,1fr) minmax(88px,max-content);column-gap:16px;align-items:center}
     .ch > .ic{grid-row:1}
-    .ch > .rate{grid-column:3;grid-row:1;flex-direction:column;align-items:flex-end;justify-content:center;
-      gap:3px;margin-top:0;min-height:40px}
+    .ch > .rate{grid-column:3;grid-row:1;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;
+      justify-self:end;gap:4px;margin-top:0;min-height:40px}
     .card .rate .sc strong{font-size:16px}
-    .ch > .det{grid-column:4;grid-row:1}
+    .card .rating-meta{padding-left:0;border-left:0}
   }
   .ctop{display:flex;align-items:center;gap:7px;min-width:0}
   .cname{font-size:17px;font-weight:650;line-height:1.4;letter-spacing:.1px;
-    min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    padding:0;border:0;background:none;font-family:var(--font-ui);text-align:left;cursor:pointer}
+  .cname:focus-visible{outline:1px solid rgba(220,189,244,.65);outline-offset:3px;border-radius:2px}
   .cbadge{flex:none;font-size:10px;line-height:1;padding:3px 5px 2px;border-radius:4px;
     letter-spacing:.3px;border:1px solid transparent;white-space:nowrap}
   .cmeta{display:flex;align-items:center;gap:6px;margin-top:4px;font-size:11.5px;min-width:0}
@@ -191,13 +194,7 @@
   /* 图标盘：卡片里的武器图标做成宝石圆盘（配色在皮肤层） */
   .card .ch > .ic{width:52px;height:56px;border-radius:13px}
   .card .ch .ic img{width:84%;height:84%;object-fit:contain}
-  .card .det{display:inline-flex;align-items:center;gap:5px;flex:none;margin-left:2px;padding:2px 0 2px 6px;
-    width:26px;height:28px;justify-content:center;border:0;border-radius:8px;font-family:var(--font-ui);font-size:11px;line-height:1.6}
-  .card .det > span{font-family:var(--font-symbol);font-size:24px;line-height:1}
-  .card .det:focus-visible{outline:1px solid currentColor;outline-offset:4px}
   .who{font-size:11px;color:#9C90B4}
-  .det{font-size:11px;color:#93b6ea;border:1px solid #37456520;background:#243049;border-radius:6px;padding:3px 9px;cursor:pointer;white-space:nowrap}
-  .det:hover{background:#2c3b58}
   .act{font-size:15px;color:#6b7386;cursor:pointer;padding:1px 5px;border-radius:6px;line-height:1.3;user-select:none}
   .act:hover{background:#262b38;color:#a3b2d4}
   .act.on{color:#e0b44a}
@@ -676,9 +673,6 @@
 
 
 /* ---- 按钮交互反馈（hover / 按下 / 键盘触发）---- */
-.det{transition:background .16s ease,border-color .16s ease,color .16s ease,transform .1s cubic-bezier(.22,1,.36,1)}
-.det:hover{background:#2c3a55;border-color:#4a5b80;color:#cfe0ff}
-.det:active{transform:scale(.95)}
 .act{transition:transform .12s cubic-bezier(.22,1,.36,1),color .16s ease}
 .act:hover{transform:scale(1.18)}
 .act:active{transform:scale(.88)}
@@ -706,11 +700,9 @@
 /* 上浮后补足原来的底部命中区，避免指针贴着底边时反复进入、离开。 */
 .card.m-card-hover::after{content:'';position:absolute;left:0;right:0;bottom:-3px;height:3px}
 .card .ch > .ic img{transition:transform var(--m3) var(--me),filter var(--m3) ease}
-.card .det > span{transition:transform var(--m2) var(--me)}
-.card .det,.card .cname,.card .card-summary{transition:color var(--m2) ease}
+.card .cname,.card .card-summary{transition:color var(--m2) ease}
 .card .cardacts .act{transition:background var(--m1) ease,color var(--m1) ease,transform var(--m1) var(--me)}
 .card.m-card-hover .ch > .ic img,.card:focus-within .ch > .ic img{transform:translateY(-3px) rotate(-5deg) scale(1.16)}
-.card.m-card-hover .det > span,.card:focus-within .det > span{transform:translateX(4px)}
 .card.m-card-hover .card-summary,.card:focus-within .card-summary{color:#E0D1E7}
 .card:active .ch > .ic img{transform:scale(.98)}
 .card.is-active{box-shadow:0 8px 22px rgba(0,0,0,.30)}
@@ -721,7 +713,7 @@
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
   .card.m-card-hover,.card.m-card-hover .ch > .ic img,.card:focus-within .ch > .ic img,
-  .card.m-card-hover .det > span,.card:focus-within .det > span,.card:active .ch > .ic img{transform:none}
+  .card:active .ch > .ic img{transform:none}
 }
 
 
