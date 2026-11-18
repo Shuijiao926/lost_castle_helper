@@ -116,13 +116,19 @@
   .feed{flex:1;overflow-y:auto;padding:12px 14px 16px;display:block}
   .feed.scrolled{mask-image:linear-gradient(to bottom,transparent,#000 14px)}
   .feed-status{min-height:210px;display:grid;place-content:center;justify-items:center;gap:14px;text-align:center}
-  .startup{display:flex;align-items:center;gap:14px;padding:0 18px}
+  .startup{display:flex;align-items:center;justify-content:flex-end;padding:0 15px 0 18px;
+    -webkit-app-region:drag;user-select:none;overflow:hidden;cursor:grab}
+  .startup:active{cursor:grabbing}
+  .startup-copy{position:absolute;left:18px;white-space:nowrap;transition:opacity .12s ease}
+  .startup.is-finishing .startup-copy{opacity:0}
   .startup-brand{width:42px;height:42px;display:grid;place-items:center;position:relative;flex:none}
-  .startup-brand img{width:26px;height:26px}
+  .startup-brand img{width:30px;height:30px}
   .startup strong,.startup [role="status"] span{display:block}
   .startup [role="status"] span{font-size:12px}
   .loading-ring{display:inline-block;width:32px;height:32px;border:2px solid;border-radius:50%;animation:ringSpin 1s linear infinite}
   .startup-brand .loading-ring{position:absolute;inset:0;width:100%;height:100%}
+  .m-bubble-in{animation:m-bubble-in .2s ease-out both}
+  @keyframes m-bubble-in{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
   .detail{flex:1;overflow-y:auto;padding:14px 16px 20px;display:none}
 
   /* 图标基元 */
@@ -137,7 +143,7 @@
 
   /* ============ 卡片 ============ */
   .card{position:relative;display:block;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.028);
-    padding:13px 14px 12px;margin-bottom:12px;cursor:pointer;
+    padding:16px 16px 11px;margin-bottom:12px;cursor:pointer;
     transition:border-color .16s,background .16s,box-shadow .16s,transform .16s}
   .card > *{position:relative;z-index:1}
   .card:hover{border-color:#3a4358}
@@ -153,10 +159,14 @@
     .ch{grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center}
     .ch > .ic{grid-row:1}
     .ch > .rate{grid-column:3;grid-row:1;justify-self:end;margin-top:0}
+    .card .rate{display:grid;grid-template-columns:auto auto;gap:0 8px}
+    .card .rate .sc{grid-column:1;grid-row:1 / 3;align-self:center}
+    .card .rate .stars{grid-column:2;grid-row:1}
+    .card .rate .votes{grid-column:2;grid-row:2}
     .ch > .det{grid-column:4;grid-row:1;align-self:center}
   }
   .ctop{display:flex;align-items:center;gap:7px;min-width:0}
-  .cname{font-size:15.5px;font-weight:650;line-height:1.3;letter-spacing:.2px;
+  .cname{font-size:16px;font-weight:650;line-height:1.4;letter-spacing:.2px;
     min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .cbadge{flex:none;font-size:10px;line-height:1;padding:3px 5px 2px;border-radius:4px;
     letter-spacing:.3px;border:1px solid transparent;white-space:nowrap}
@@ -174,11 +184,17 @@
   .votes{font-size:11px;color:#767e94;min-width:66px;text-align:right}
   .stars{color:#4d5468;letter-spacing:1.5px;font-size:12px}
   .stars i{color:var(--star);font-style:normal}
-  .card .cfoot{display:flex;align-items:flex-end;gap:10px;margin-top:10px}
+  .card-summary{font-size:12px;line-height:1.8;margin:12px 0 0;display:-webkit-box;
+    -webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .card .cfoot{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:9px;border-top:1px solid transparent}
   .card .cfoot .chips{flex:1;min-width:0}
   /* 图标盘：卡片里的武器图标做成宝石圆盘（配色在皮肤层） */
-  .card .ch .ic img{width:76%;height:76%}
-  .card .det{flex:none;margin-left:2px}
+  .card .ch > .ic{width:52px;height:56px;border-radius:13px}
+  .card .ch .ic img{width:84%;height:84%;object-fit:contain}
+  .card .det{display:inline-flex;align-items:center;gap:5px;flex:none;margin-left:2px;padding:2px 0 2px 6px;
+    width:26px;height:28px;justify-content:center;border:0;border-radius:8px;font-family:var(--font-ui);font-size:11px;line-height:1.6}
+  .card .det > span{font-family:var(--font-symbol);font-size:24px;line-height:1}
+  .card .det:focus-visible{outline:1px solid currentColor;outline-offset:4px}
   .who{font-size:11px;color:#9C90B4}
   .det{font-size:11px;color:#93b6ea;border:1px solid #37456520;background:#243049;border-radius:6px;padding:3px 9px;cursor:pointer;white-space:nowrap}
   .det:hover{background:#2c3b58}
@@ -572,8 +588,7 @@
     box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
     backface-visibility:hidden
   }
-  /* 滚动区收边：列表/详情滚到底时，卡片会被金框（inset 5px）横穿而过。
-     把滚动视口整体抬起来，内容永远停在框内，最下面一屏是干净的画框留白（和左右留白对齐）。 */
+  /* 滚动区留出与左右一致的底部呼吸空间。 */
   body.electron.mode-panel .feed,
   body.electron.mode-panel .detail{margin-bottom:14px}
   /* 拖拽条原本卡在金框上（handle 在 y=5~9，金框在 y=5~6），会看成"顶部多画了一条线"。
@@ -663,14 +678,28 @@
 #feed.m-view-back{animation:m-view-back var(--m2) var(--me) both}
 #detail.m-view-in{animation:m-view-in var(--m2) var(--me) both}
 .card{transition:border-color var(--m2) ease,background var(--m2) ease,transform var(--m1) var(--me),box-shadow var(--m2) ease}
-.card:hover{transform:translateY(-1px)}
+.card:hover{transform:none}
+.card.m-card-hover{transform:translateY(-3px)}
+/* 上浮后补足原来的底部命中区，避免指针贴着底边时反复进入、离开。 */
+.card.m-card-hover::after{content:'';position:absolute;left:0;right:0;bottom:-3px;height:3px}
+.card .ch > .ic img{transition:transform var(--m3) var(--me),filter var(--m3) ease}
+.card .det > span{transition:transform var(--m2) var(--me)}
+.card .det,.card .cname,.card .card-summary{transition:color var(--m2) ease}
+.card .cardacts .act{transition:background var(--m1) ease,color var(--m1) ease,transform var(--m1) var(--me)}
+.card.m-card-hover .ch > .ic img,.card:focus-within .ch > .ic img{transform:translateY(-3px) rotate(-5deg) scale(1.16)}
+.card.m-card-hover .det > span,.card:focus-within .det > span{transform:translateX(4px)}
+.card.m-card-hover .card-summary,.card:focus-within .card-summary{color:#E0D1E7}
+.card:active .ch > .ic img{transform:scale(.98)}
 .card.is-active{box-shadow:0 8px 22px rgba(0,0,0,.30)}
 .card.m-item-in{animation:m-item-in var(--m2) var(--me) both;animation-delay:calc(var(--i,0)*24ms)}
-.card.m-expanding .sec,.card.m-expanding .tip,.card.m-expanding .chips,.card.m-expanding .footline{animation:m-item-in var(--m2) var(--me) both}
 .modal.on .msheet{animation:m-modal-in var(--m2) var(--me) both}
 .toast.on{animation:m-toast-in var(--m2) var(--me) both}
 .m-pop{animation:m-pop 260ms var(--me)}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .card.m-card-hover,.card.m-card-hover .ch > .ic img,.card:focus-within .ch > .ic img,
+  .card.m-card-hover .det > span,.card:focus-within .det > span,.card:active .ch > .ic img{transform:none}
+}
 
 
   /* 打分悬停预览：悬停到第 N 颗，前 N 颗亮起 */

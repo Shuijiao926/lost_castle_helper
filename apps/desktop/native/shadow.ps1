@@ -296,10 +296,9 @@ public class PanelShadow : Form
         {
             int pref = cornerPref;              // DWMWCP_ROUND=2 / DWMWCP_DONOTROUND=1
             int hr = DwmSetCorner(hwnd, 33, ref pref, 4);
-            // 去掉 Win11 默认窗口边框：暗色面板上这条边会呈现白/浅灰细线，
-            // 圆角处尤其像锯齿毛边（DWMWA_COLOR_NONE = 0xFFFFFFFE）
-            uint borderNone = 0xFFFFFFFE;
-            DwmSetColor(hwnd, 34, ref borderNone, 4);
+            // Let DWM draw the gold border along its own rounded window edge.
+            uint borderGold = 0x00587EAB; // COLORREF, RGB(171, 126, 88)
+            DwmSetColor(hwnd, 34, ref borderGold, 4);
             return hr == 0;
         }
         catch { return false; }

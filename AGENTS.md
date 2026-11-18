@@ -214,13 +214,13 @@ scope：`desktop` / `renderer` / `main` / `server` / `shared` / `data` / `docs` 
 - 字体：只用系统字体（不内嵌 webfont），统一 `var(--font-ui)`；图标符号用 `var(--font-symbol)`；不要写死 font-family
 - 文案用用户视角，不出现「根级 / 1 级 / 2 级」等内部术语
 - 圆角/阴影走 Win11 DWM；不要用 CSS 阴影模拟窗口阴影
-- **不要在窗口最外沿画描边**：DWM 会把窗口四角真真切切切掉约 4px，贴边 1px 线会被咬断成豁口。面板金框一律走 `.panel::after`（inset 5px），面板自身 `border-radius:0`；见[窗口渲染方案](./文档/窗口渲染方案.md#7-面板的圆角与阴影)
-- **金框内缩了，外面就得干净**：底图（`.bgart/.bgveil/.rune`）用 `clip-path:inset(5px round 9px)` 裁到框内，滚动区（`.feed/.detail`）留 `margin-bottom:14px` 收边——否则卡片的底边会从金框上横穿过去
+- **面板金线贴最外沿**：Win11 用 DWM 暖金系统描边，`frame-dwm` 下关闭 CSS 内框；DWM 不可用时，CSS 外沿线匹配 `setShape` 的实际半径。面板自身 `border-radius:0`；见[窗口渲染方案](./文档/窗口渲染方案.md#7-面板的圆角与阴影)
+- 底图铺到窗口外沿，滚动区（`.feed/.detail`）保留 `margin-bottom:14px` 呼吸空间
 - 弹层层级：`.modal` z-index 30、`.toast` 60、面板缩放手柄 `.rz` 20；提示条必须挂在 `.panel` **外面**（面板自成语境，留在里面会被弹层盖住）；新浮层必须显式设层级
 - 弹层关闭：遮罩点击（`ev.target === 弹窗本体`）+ Esc 两条路都要有；带输入框的弹层要在打开时 `window.lc2.modalEscape(true)`，否则输入焦点会注销面板热键、Esc 再也到不了渲染层
 - 空数据 / 无筛选结果给友好空状态，不白屏、不报错
 - **列表级控件**（排序 tab、回到顶部/去底部）：默认排序是 `最新`（时间由近到远）；换排序后必须把结果第一条设为当前卡（`state.cur`）并回列表顶部，否则高亮会停在旧位置像点错了；跳转按钮统一以「一个视口」为触发距离，且只改滚动位置、不动筛选与排序
-- **流派卡片**：颜色只用来分层——金色只给分数（`★ 7.1` 胶囊），武器品类色（`weaponTint()`）只出现在图标盘和品类圆点上，刻印不再重复一枚圆点；徽章最多一枚（高分 / 热门），别让每张卡都挂标签
+- **流派卡片**：颜色只用来分层——金色只给评分数字，武器品类色（`weaponTint()`）只出现在图标盘和品类圆点上，刻印不再重复一枚圆点；徽章最多一枚（高分 / 热门）。点击卡面直接打开详情，Enter / → 同样打开，← 返回列表
 - **卡片选中态要"收着"**：只提亮一档 + 边框 `.15→.34`，**不要加侧边金条/发光条**——列表里最响的应该是内容。卡面色走暖炭紫（跟面板同族），别再回去用浅薰衣草紫
 - **卡片头部用 grid 不用 flex**：评分块（分数+星级+人数）是一个整体，`<560px` 时落到名字下一行、`≥560px` 时整体靠右成一列。**别用 `margin-left:auto` 把人数单独推到右边**——窗口一拉宽它就飘到离星星半张卡远的地方（这版之前踩过）
 - 动效统一走 `ui/motion.js`（replay / stagger / panelIn / press），不要猴补丁替换业务函数
@@ -229,7 +229,7 @@ scope：`desktop` / `renderer` / `main` / `server` / `shared` / `data` / `docs` 
 
 ## 12. Windows 环境坑
 
-- **圆角毛边**：Win11 系统边框会在深色面板圆角处形成白边，native helper 需把 `DWMWA_BORDER_COLOR` 设为 `0xFFFFFFFE`（COLOR_NONE）
+- **圆角描边**：Win11 native helper 用 `DWMWA_BORDER_COLOR` 设置暖金色 `#AB7E58`，由 DWM 绘制系统外沿线；渲染层关闭重复边框
 
 - **拖拽性能**：面板拖拽由主进程 8ms 轮询 `screen.getCursorScreenPoint()` 驱动；不要在每次 move 里重设 `setAlwaysOnTop`/重算显示信息，helper 只用于检测窗口外松开
 

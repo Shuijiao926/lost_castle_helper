@@ -9,7 +9,7 @@
  *
  * 与脚本的行协议：
  *   PS -> Electron : READY | CLICK | RCLICK x,y,width,height | DRAGSTART | MOVE x,y
- *   Electron -> PS : QUIT | HIDE | SHOW
+ *   Electron -> PS : QUIT | HIDE | SHOW | POSITION x,y
  *
  * 坐标约定：脚本回调的是**物理像素**，这里统一换算成 Electron 的 DIP。
  */
@@ -181,5 +181,9 @@ function stop() {
 function isRunning() { return Boolean(child) && ready; }
 function hide() { return send('HIDE'); }
 function show() { return send('SHOW'); }
+function moveTo(x, y) {
+  const point = screen.dipToScreenPoint({ x: Math.round(x), y: Math.round(y) });
+  return send('POSITION ' + point.x + ',' + point.y);
+}
 
-module.exports = { start, stop, send, hide, show, isRunning, BUBBLE_DIP };
+module.exports = { start, stop, send, hide, show, moveTo, isRunning, BUBBLE_DIP };

@@ -10,7 +10,7 @@
 #
 # 与 Electron 的行协议（stdin/stdout）：
 #   PS -> Electron : READY | CLICK | RCLICK x,y,width,height | DRAGSTART | MOVE x,y
-#   Electron -> PS : QUIT | HIDE | SHOW
+#   Electron -> PS : QUIT | HIDE | SHOW | POSITION x,y
 #
 # 手动调试：
 #   powershell -NoProfile -ExecutionPolicy Bypass -File bubble.ps1 -Icon <icon.png> -Size 90
@@ -109,6 +109,16 @@ public class Lc2Bubble : Form
     /* start hidden: the startup card still owns the screen until it is destroyed.
        SetVisibleCore interception keeps the window from flashing on Application.Run. */
     private bool suppressed;
+    private long revealStarted;
+    private byte revealAlpha = 255;
+    [DllImport("user32.dll")]
+    private static extern bool SystemParametersInfo(uint action, uint parameter, out int value, uint flags);
+    private static bool MotionReduced()
+    {
+        int enabled;
+        return SystemParametersInfo(0x1042, 0, out enabled, 0) && enabled == 0;
+    }
+    private readonly bool reduceMotion = MotionReduced();
 
     private bool dragging;
     private bool moved;
@@ -125,7 +135,16 @@ public class Lc2Bubble : Form
 
     /* commands from Electron */
     public void HideBubble() { suppressed = true; Hide(); }
-    public void ShowBubble() { suppressed = false; Show(); }
+    public void ShowBubble()
+    {
+        if (!suppressed && Visible) return;
+        suppressed = false;
+        revealStarted = System.Diagnostics.Stopwatch.GetTimestamp();
+        revealAlpha = reduceMotion ? (byte)255 : (byte)0;
+        Compose(angle, hovering);
+        Show();
+        timer.Interval = reduceMotion ? IdleInterval : 16;
+    }
 
     protected override CreateParams CreateParams
     {
@@ -509,7 +528,7 @@ public class Lc2Bubble : Form
         POINT topPos = new POINT(); topPos.X = Left; topPos.Y = Top;
         BLENDFUNCTION blend = new BLENDFUNCTION();
         blend.BlendOp = 0; blend.BlendFlags = 0;
-        blend.SourceConstantAlpha = 255; blend.AlphaFormat = AC_SRC_ALPHA;
+        blend.SourceConstantAlpha = revealAlpha; blend.AlphaFormat = AC_SRC_ALPHA;
 
         UpdateLayeredWindow(Handle, screenDc, ref topPos, ref size, memDc, ref srcPos, 0, ref blend, ULW_ALPHA);
 
@@ -549,6 +568,14 @@ public class Lc2Bubble : Form
     private void OnTick(object sender, EventArgs e)
     {
         if (suppressed) return;   // hidden: no frame to compose
+        if (revealAlpha < 255)
+        {
+            double elapsed = (System.Diagnostics.Stopwatch.GetTimestamp() - revealStarted)
+                * 1000.0 / System.Diagnostics.Stopwatch.Frequency;
+            double progress = Math.Min(1.0, elapsed / 200.0);
+            revealAlpha = (byte)(255 * (1 - Math.Pow(1 - progress, 3)));
+            if (progress >= 1) timer.Interval = hovering ? HoverInterval : IdleInterval;
+        }
 
         // 悬停状态以 OnMouseEnter / OnMouseLeave 为准；
         // 每帧只做“离开”校正（鼠标离开事件偶尔会丢）
@@ -702,6 +729,17 @@ public class Lc2Bubble : Form
                 {
                     try { Instance.BeginInvoke(new MethodInvoker(delegate() { Instance.ShowBubble(); })); }
                     catch { }
+                }
+                else if (line.StartsWith("POSITION "))
+                {
+                    string[] coordinates = line.Substring(9).Split(',');
+                    int px, py;
+                    if (coordinates.Length == 2 && int.TryParse(coordinates[0], out px) && int.TryParse(coordinates[1], out py))
+                    {
+                        Point position = new Point(px, py);
+                        try { Instance.BeginInvoke(new MethodInvoker(delegate() { Instance.Location = position; })); }
+                        catch { }
+                    }
                 }
             }
         });

@@ -37,7 +37,7 @@ let pendingStagger = false;   // render 后是否让列表重新错峰入场
 let notesLoaded = false;
 let dataStatus = window.lc2 ? 'loading' : 'ready';
 
-const state={sort:'time',view:'feed',detailId:null,filterItem:null,lastSubmitItem:null,expanded:{},cur:'',owned:new Set(),myVote:{},
+const state={sort:'time',view:'feed',detailId:null,filterItem:null,lastSubmitItem:null,cur:'',owned:new Set(),myVote:{},
   favs:new Set(),ratingOpen:null,notes:{},noteBid:null,
   q:'',focusedInput:false,dormant:false,tags:[],filterW:[],filterI:[],filterEquip:[],filterArmor:[],filterTreasures:[],modal:false,seg:'w',sideSel:null,mq:''};
 
@@ -233,27 +233,31 @@ function renderFeed(){
       if(ev.target.closest('[data-rate]')){state.ratingOpen=(state.ratingOpen===bid?null:bid);render();return;}
 if(ev.target.closest('[data-note]')){openNote(bid);return;}
       if(ev.target.closest('.rp')){state.myVote[bid]=+ev.target.dataset.v;state.ratingOpen=null;render();return;}
-      toggleExpand(bid);
+      openDetail(bid);
     };
   });
+  motion.bindCards(elFeed);
   const c=elFeed.querySelector('.card.is-active');if(c)c.scrollIntoView({block:'nearest'});
 }
 function cardHTML(b,isCur){
-  const open=!!state.expanded[b.id];
   const tint=weaponTint(b.wt);
   // 一枚就够：分数够高给「高分」，否则人气够旺给「热门」，避免整列卡片都挂标签
   const badge = b.rating>=9 ? '<span class="cbadge score">高分</span>'
     : (b.votes>=150 ? '<span class="cbadge hot">热门</span>' : '');
+  const weaponImage = b.gear?.weapon?.name;
+  const iconKey = weaponImage && ICON[weaponImage] ? weaponImage : b.wt;
   let h='<div class="card'+(isCur?' is-active':'')+'" data-bid="'+b.id+'">';
   // 评分块是 .ch 的直接子元素（不在 .main 里）：窄窗口排在名字下面，宽窗口靠 CSS 排到右侧成列，
   // 分数 / 星级 / 人数永远作为一个整体移动，不会因为窗口变宽而各自漂开
-  h+='<div class="ch">'+ic(b.wt,W(b.wt).short,'s48',tint)
+  h+='<div class="ch">'+ic(iconKey,W(b.wt).short,'s48',tint)
    +'<div class="main"><div class="ctop"><div class="cname">'+esc(b.name)+'</div>'+badge+'</div>'
    +'<div class="cmeta"><span class="cate" style="--tc:'+tint+'">'+esc(wName(b.wt))+'</span>'
    +'<span class="csep">·</span><span class="cate insc">'+esc(inscName(b.insc))+'</span></div></div>'
-   +'<div class="rate"><span class="sc"><i>★</i>'+b.rating.toFixed(1)+'</span>'+stars(b.rating)
+   +'<div class="rate"><span class="sc" aria-label="评分 '+b.rating.toFixed(1)+' 分"><strong>'+b.rating.toFixed(1)+'</strong><small>/10</small></span>'+stars(b.rating)
    +'<span class="votes">'+b.votes+' 人打分</span></div>'
-   +'<span class="det" data-det="'+b.id+'">详情</span></div>';
+   +'<button type="button" class="det" data-det="'+b.id+'" aria-label="查看'+esc(b.name)+'详情"><span aria-hidden="true">›</span></button></div>';
+
+  if(b.tip) h+='<p class="card-summary">'+esc(b.tip)+'</p>';
 
   // 特征 chip 与三个操作图标同排：左边标签、右边动作，卡片底部才有"收口"
   h+='<div class="cfoot"><div class="chips feat">'
@@ -270,19 +274,11 @@ function cardHTML(b,isCur){
      +[1,2,3,4,5].map(v=>'<span class="rp'+(v<=my?' on':'')+'" data-v="'+v+'">★</span>').join('')
      +'</div>';
   }
-  if(open){
-    h+='<div class="sec">玩法技巧</div><div class="tip">'+esc(b.tip)+'</div>';
-    if((b.treasureOrder||[]).length){
-      h+='<div class="sec">核心宝藏</div><div class="chips">'
-       +b.treasureOrder.slice(0,6).map(t=>'<span class="chip">'+ic(t.n,t.n,'s24',RC[t.r]||'#3b4a63')+esc(t.n)+'</span>').join('')+'</div>';
-    }
-    h+='<div class="footline"><span>'+esc(b.src)+'</span><span>更新 '+esc(b.updated)+'</span></div>';
-  }
   return h+'</div>';
 }
 
 /* ---------- 详情 ---------- */
-function openDetail(id){state.detailId=id;state.view='detail';render();motion.replay(elDetail,'m-view-in');}
+function openDetail(id){state.cur=id;state.detailId=id;state.view='detail';render();motion.replay(elDetail,'m-view-in');}
 function closeDetail(){state.view='feed';state.detailId=null;render();motion.replay(elFeed,'m-view-back');}
 function sec(t,body,hint){return body?('<div class="sec">'+t+(hint?' <span class="hint">'+hint+'</span>':'')+'</div>'+body):'';}
 function box(title,body,iconHtml){return '<div class="box"><h4>'+(iconHtml||'')+esc(title)+'</h4>'+body+'</div>';}
@@ -638,15 +634,6 @@ function renderNightmareCards(list){
 }
 
 /* ================= 交互 ================= */
-function toggleExpand(id){
-  state.cur=id;
-  state.expanded[id]=!state.expanded[id];
-  render();
-  if(state.expanded[id]){
-    const card=document.querySelector('.card[data-bid="'+id+'"]');
-    if(card) motion.replay(card,'m-expanding');
-  }
-}
 function toggleFav(id){
   state.favs.has(id)?state.favs.delete(id):state.favs.add(id);
   render();
@@ -2558,6 +2545,7 @@ document.addEventListener('keydown',e=>{
   const k=e.key;
   const tag=(e.target&&e.target.tagName)||'';
   if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT') return;   // 输入控件自己处理键盘
+  if((k==='Enter'||k===' ') && e.target.closest?.('.card .det')) return;
   if(document.getElementById('itemDetail')?.classList.contains('on')){ if(k==='Escape'){e.preventDefault();closeItemDetail();} return; }
   /* 印象弹层：打开时占住键盘，Esc 只关它，不要再往下触发「详情返回 / 收起面板」 */
   if(document.getElementById('noteModal')?.classList.contains('on')){
@@ -2607,10 +2595,9 @@ document.addEventListener('keydown',e=>{
     e.preventDefault();const list=visible();const i=list.findIndex(b=>b.id===state.cur);
     const n=Math.max(0,Math.min(list.length-1,(i<0?0:i)+(k==='ArrowDown'?1:-1)));
     if(list[n]){state.cur=list[n].id;render();}return;}
-  if(k==='Enter'||k==='ArrowRight'){e.preventDefault();if(state.view==='detail'||!state.cur)return;toggleExpand(state.cur);return;}
+  if(k==='Enter'||k==='ArrowRight'){e.preventDefault();if(state.view==='detail'||!state.cur)return;openDetail(state.cur);return;}
   if(k==='ArrowLeft'){e.preventDefault();
-    if(state.view==='detail')closeDetail();
-    else if(state.expanded[state.cur]){state.expanded[state.cur]=false;render();}return;}
+    if(state.view==='detail')closeDetail();return;}
 });
 
 state.cur=firstVisibleId()||(BUILDS.length?BUILDS[0].id:'');
@@ -2784,6 +2771,10 @@ if (window.lc2.onDormant) {
 window.lc2.onPanel(function(s){
     var payload = (s && typeof s === 'object') ? s : { open: s === 'open' };
     state.open = !!payload.open;
+    if(payload.frame){
+      document.body.classList.toggle('frame-dwm', payload.frame === 'dwm');
+      elPanel.style.setProperty('--window-radius', payload.cornerRadius + 'px');
+    }
     if (!state.open) closeUpdateDialog();
     if (!payload.open) resetInputFocus();
     if(typeof payload.pinned === 'boolean'){
@@ -2824,7 +2815,6 @@ window.lc2.onPanel(function(s){
     BUILDS.length = 0;
     Array.prototype.push.apply(BUILDS, arr);
     state.cur = firstVisibleId() || (arr.length ? BUILDS[0].id : '');
-    state.expanded = {};
     dataStatus = 'ready';
     render(); fbtnState();
     if (state.modal) renderModal();

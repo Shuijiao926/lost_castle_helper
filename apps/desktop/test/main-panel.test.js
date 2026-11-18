@@ -57,7 +57,7 @@ class FakeWin {
   destroy() { this.destroyed = true; }
 }
 
-function makeHarness({ pinned = false } = {}) {
+function makeHarness({ pinned = false, nativeCorners = true } = {}) {
   const created = [];
   const BrowserWindow = class extends FakeWin {
     constructor(opts) {
@@ -77,7 +77,7 @@ function makeHarness({ pinned = false } = {}) {
   const setCursor = (x, y) => { cursor = { x, y }; };
   const shadow = {
     started: 0,
-    setPanelCorner: async () => true,
+    setPanelCorner: async () => nativeCorners,
     ensureStarted: async () => true,
     setFill: () => {},
     showAt: () => {},
@@ -127,6 +127,23 @@ test('panel：创建后默认隐藏、不可聚焦', () => {
   assert.equal(panel.isOpen(), false);
   assert.equal(win.visible, false);
   assert.equal(win.focusable, false);
+});
+
+test('panel：系统圆角就绪后通知渲染层使用原生外沿边框', async () => {
+  const { win } = makeHarness();
+  await Promise.resolve();
+  const message = win.sent.find(([channel, payload]) => channel === 'lc2:panel' && payload.frame === 'dwm');
+  assert.ok(message);
+  assert.equal(message[1].cornerRadius, 4);
+  assert.equal(win.focusable, false);
+});
+
+test('panel：系统圆角不可用时通知渲染层匹配裁剪半径', async () => {
+  const { win } = makeHarness({ nativeCorners: false });
+  await Promise.resolve();
+  const message = win.sent.find(([channel, payload]) => channel === 'lc2:panel' && payload.frame === 'shape');
+  assert.ok(message);
+  assert.equal(message[1].cornerRadius, 16);
 });
 
 test('panel：show → 可见 + 通知渲染层 + 注册热键；hide 反之', () => {

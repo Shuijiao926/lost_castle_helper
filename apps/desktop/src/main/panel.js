@@ -91,6 +91,7 @@ function createPanel(deps) {
       cornersMode = 'shape';
       if (USE_PANEL_SHADOW) panelShadow.setFill(true);
       applyShape();
+      sendPanelState();
       log.debug?.('panel corners: shape (forced)');
       return;
     }
@@ -118,6 +119,7 @@ function createPanel(deps) {
         applyShape();
         log.debug?.('panel corners: shape fallback (win10/7)');
       }
+      sendPanelState();
     });
   }
 
@@ -225,7 +227,9 @@ function createPanel(deps) {
   function sendPanelState() {
     if (!win || win.isDestroyed()) return;
     try {
-      win.webContents.send('lc2:panel', { open, pinned, side: sideOfPanel() });
+      const cornerRadius = cornersMode === 'shape' ? PANEL_RADIUS
+        : (PANEL_CORNER_PREF === 1 ? 0 : (PANEL_CORNER_PREF === 2 ? 8 : 4));
+      win.webContents.send('lc2:panel', { open, pinned, side: sideOfPanel(), frame: cornersMode, cornerRadius });
     } catch (e) {
       log('send panel state failed:', e.message);
     }

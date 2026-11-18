@@ -2,19 +2,20 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; img-src 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; img-src 'self'; script-src 'self'">
   <title>城堡助手 · 正在启动</title>
   <link rel="stylesheet" href="styles/base.css">
   <link rel="stylesheet" href="styles/skin.css">
 </head>
 <body class="startup">
+  <div class="startup-copy" role="status">
+    <strong>城堡助手</strong>
+    <span id="startupStatus">正在准备…</span>
+  </div>
   <div class="startup-brand" aria-hidden="true">
     <img src="../../assets/tray-32.png" alt="">
     <span class="loading-ring"></span>
   </div>
-  <div role="status">
-    <strong>城堡助手</strong>
-    <span>正在启动…</span>
-  </div>
+  <script src="js/ui/motion.js"></script>
 </body>
 </html>

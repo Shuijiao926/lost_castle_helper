@@ -4,6 +4,7 @@
  * - stagger：列表卡片错峰入场
  * - panelIn：面板呼出时的入场
  * - press：按钮按压反馈（键盘触发时用）
+ * - bindCards：卡片悬停的进入、离开与取消反馈
  *
  * app 层在对应时机显式调用（不再猴补丁替换业务函数）。
  */
@@ -45,11 +46,47 @@
     el.classList.add('m-press');
   }
 
+  function bindCards(root) {
+    root.querySelectorAll('.card').forEach(function (card) {
+      var frame = 0;
+      var pointerX = 0;
+      var pointerY = 0;
+      function move(event) {
+        if (reduce) return;
+        pointerX = event.clientX;
+        pointerY = event.clientY;
+        if (frame) return;
+        frame = requestAnimationFrame(function () {
+          frame = 0;
+          var bounds = card.getBoundingClientRect();
+          card.style.setProperty('--hover-x', (pointerX - bounds.left) + 'px');
+          card.style.setProperty('--hover-y', (pointerY - bounds.top) + 'px');
+        });
+      }
+      function leave() {
+        cancelAnimationFrame(frame);
+        frame = 0;
+        card.classList.remove('m-card-hover');
+      }
+      card.addEventListener('pointerenter', function () {
+        card.classList.remove('m-item-in');
+        card.classList.add('m-card-hover');
+      });
+      card.addEventListener('animationend', function (event) {
+        if (event.target === card && event.animationName === 'm-item-in') card.classList.remove('m-item-in');
+      });
+      card.addEventListener('pointermove', move);
+      card.addEventListener('pointerleave', leave);
+      card.addEventListener('pointercancel', leave);
+    });
+  }
+
   window.LC2.ui.motion = {
     isReduced: function () { return reduce; },
     replay: replay,
     stagger: stagger,
     panelIn: panelIn,
-    press: press
+    press: press,
+    bindCards: bindCards
   };
 })();

@@ -368,6 +368,9 @@ function revealBubble() {
     if (!ready || win !== bubbleWin || win.isDestroyed() || win.isVisible() || !canRevealBubble()) return;
     const b = currentBubbleBounds();
     win.setBounds({ x: b.x, y: b.y, width: BUBBLE.w, height: BUBBLE.h });
+    win.webContents.executeJavaScript(
+      'LC2.ui.motion.replay(document.getElementById("bubble"), "m-bubble-in");',
+    ).catch((error) => log.warn('气泡入场动效失败:', error.message));
     win.showInactive();
   }).catch((error) => log.warn('显示 Electron 气泡失败:', error.message));
 }
@@ -414,7 +417,12 @@ if (!gotLock) {
         page: path.join(RENDERER_DIR, 'startup.html'),
         isQuitting: () => app.isQuitting,
         log,
-        onClosed: () => {
+        onClosed: (bounds) => {
+          if (bounds && !app.isQuitting) {
+            configStore.state.bubble = bounds;
+            configStore.save();
+            if (nativeBubble.isRunning()) nativeBubble.moveTo(bounds.x, bounds.y);
+          }
           startupWin = null;
           startupVisible = false;
           // 加载页退场后才露出气泡（此时气泡可能已经就绪）
@@ -428,11 +436,13 @@ if (!gotLock) {
     }
 
     const finishCleanup = startStage('清理残留原生进程');
+    startupWin?.setStatus('正在准备运行环境…');
     const cleaned = await cleanupOrphanHelpers();
     if (app.isQuitting) return;
     finishCleanup(cleaned ? '' : '未完成');
 
     const finishAssembly = startStage('组装本地存储与 IPC');
+    startupWin?.setStatus('正在读取本地设置…');
     notesStore = createNotesStore({ userDataDir, log });
     const submissionStore = createSubmissionStore({
       dir: path.join(userDataDir, 'submissions'),
@@ -521,11 +531,13 @@ if (!gotLock) {
     hardenWindow(panel.getWindow());
 
     const finishBubble = startStage('启动气泡');
+    startupWin?.setStatus('正在准备悬浮入口…');
     const bubbleMode = await initializeBubble();
     if (app.isQuitting) return;
     finishBubble(bubbleMode);
 
     const finishControls = startStage('注册热键与托盘');
+    startupWin?.setStatus('正在启用热键与托盘…');
     const baseKey = shortcuts.registerBaseKey(() => panel.toggle());
     trayHandle = createTray({
       Tray,

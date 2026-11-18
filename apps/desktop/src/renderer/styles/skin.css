@@ -11,8 +11,7 @@
       radial-gradient(60% 42% at -8% 96%, rgba(226,90,170,.08) 0%, rgba(226,90,170,0) 60%),
       radial-gradient(56% 26% at 50% -4%, rgba(255,214,146,.12) 0%, rgba(255,214,146,0) 72%),
       linear-gradient(180deg,#241B38 0%,#1E1528 240px,#191120 100%);
-    /* 贴窗口边缘的描边在 Electron 模式下必须让位：窗口圆角由 DWM 裁，贴边线会被切出豁口。
-       所以这里只给浏览器预览留边线，真正的面板金框走下面的 .panel::after（内缩 5px，安全） */
+    /* 浏览器预览保留单条外沿金线，Electron 的系统边框由 DWM 接管。 */
     border:1px solid rgba(255,214,146,.44);
     box-shadow:
       inset 0 0 0 1px rgba(8,5,14,.68),
@@ -20,22 +19,15 @@
       inset 0 0 70px rgba(8,5,16,.60);
     overflow:hidden;
   }
-  /* Electron：贴边金线让位给内框，但窗口自己得有一条边 —— 用近黑 1px 暗边收口。
-     暗边被 DWM 的圆角切掉也看不出来（本来就是深色），所以这条可以贴着窗口边画。 */
   body.electron.mode-panel .panel{
-    border-color:transparent;
-    box-shadow:
-      inset 0 0 0 1px rgba(4,3,9,.92),      /* 窗口暗边：浅色桌面上也能看出面板边界 */
-      inset 0 0 64px rgba(6,4,14,.58),      /* 四边压暗，衬出内层金框 */
-      inset 0 1px 0 rgba(255,241,204,.06);
+    border:0;
+    box-shadow:none;
   }
-  /* 底图裁到金框里面：框外那 5px 只留平的底色，别让花纹、符文光晕漏到框外 ——
-     会看起来像"画框外面还长着画面"。裁完以后金框才真的像面板边界。 */
   body.electron.mode-panel .panel > .bgart,
   body.electron.mode-panel .panel > .bgveil,
-  body.electron.mode-panel .panel > .rune{clip-path:inset(5px round 9px)}
-  /* 噪点 + 暗角 */
-  .panel::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:4;
+  body.electron.mode-panel .panel > .rune{clip-path:inset(0 round var(--window-radius,4px))}
+  /* 噪点与暗角留在背景层，避免覆盖卡片文字、图标和评分。 */
+  .panel::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
     background-image:
       linear-gradient(180deg, rgba(8,5,16,0) 52%, rgba(8,5,16,.42) 100%),
       url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='160' height='160' filter='url(%23n)' opacity='.055'/></svg>"),
@@ -47,19 +39,11 @@
     background-repeat:no-repeat, repeat, no-repeat, no-repeat, no-repeat, no-repeat;
     mix-blend-mode:normal;
   }
-  /* 内框线：浏览器预览里贴边金框已经够用，这层只是很淡的第二道 */
-  .panel::after{content:'';position:absolute;inset:6px;border-radius:8px;pointer-events:none;z-index:5;
-    border:1px solid rgba(255,214,146,.16);
-    box-shadow:inset 0 0 0 1px rgba(0,0,0,.35)}
-  /* Electron：贴边金框必须让位，改成内缩 5px 的主框。
-     DWM 会把窗口四角切掉约 4px，贴边描边正好落在切口里 → 横线断、竖线断、拐角缺一块；
-     内缩后圆弧离窗口角点约 10.8px，比 4 / 8 / 16px 任何一档圆角都远，怎么调都不会破。 */
-  body.electron.mode-panel .panel::after{inset:5px;border-radius:9px;
-    border-color:rgba(255,214,146,.55);
-    box-shadow:
-      inset 0 0 0 1px rgba(6,4,12,.42),   /* 内侧暗线，压出厚度 */
-      0 0 0 1px rgba(6,4,12,.50),         /* 外侧暗线，深色底图上也拉得出边界 */
-      0 0 7px rgba(255,196,110,.10)}      /* 极淡的外发光，把金线从底图里托起来 */
+  .panel::after{content:none}
+  /* setShape 回退时，CSS 金线与主进程实际裁剪半径一致。 */
+  body.electron.mode-panel .panel::after{content:'';position:absolute;inset:0;
+    border:1px solid #AB7E58;border-radius:var(--window-radius,4px);pointer-events:none;z-index:5}
+  body.electron.mode-panel.frame-dwm .panel::after{content:none}
   /* 营地截图底纹（暖色，低透明度 + 遮罩） */
   .bgart{position:absolute;inset:0;z-index:0;pointer-events:none;
     background:url('../../../assets/panel-bg.jpg') center 38% / cover no-repeat;
@@ -120,54 +104,37 @@
   .searchbar .schev::before{border-color:#D9C8EA}
   .searchbar input::placeholder{color:#7E7394}
 
-  /* 卡片：暖炭紫底（跟面板底色同一族，不再是一块发灰的紫塑料）
-   * 光向统一：上方一束暖光 + 右上一点紫环境光 + 左上斜切高光 + 底边压暗，
-   * 再叠一层跟面板同源的细颗粒 —— 卡片才有"材质"，而不是一块平的渐变。 */
+  /* 使用不透明的同族卡面，避免面板底图和噪点叠加后使文字发灰。 */
   .card{
     background:
-      radial-gradient(150% 62% at 50% -22%, rgba(255,228,182,.12), rgba(255,228,182,0) 68%),
-      radial-gradient(96% 64% at 108% -10%, rgba(150,110,220,.10), rgba(150,110,220,0) 64%),
-      linear-gradient(104deg, rgba(255,255,255,.045) 0 26%, rgba(255,255,255,0) 54%),
-      linear-gradient(180deg, rgba(48,36,43,.96) 0%, rgba(39,30,37,.97) 54%, rgba(31,24,31,.98) 100%);
+      radial-gradient(ellipse at 0 0,rgba(112,79,142,.13),transparent 60%),
+      linear-gradient(125deg,#2D2334,#241C2A 65%,#261F2B);
     border:1px solid rgba(255,214,146,.15);
-    box-shadow:0 7px 18px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,238,206,.10),
-      inset 0 0 22px rgba(0,0,0,.14),inset 0 -1px 0 rgba(0,0,0,.30),
-      inset 0 0 0 1px rgba(255,214,146,.035)}
-  /* 细颗粒：和面板 `.panel::before` 用的是同一张噪点，卡片才不会像平塑料 */
+    box-shadow:0 4px 12px rgba(9,5,15,.20),inset 0 1px 0 rgba(255,244,224,.035)}
+  .card:hover,.card:focus-within{border-color:rgba(217,187,233,.30)}
   .card::before{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='160' height='160' filter='url(%23n)' opacity='.075'/></svg>")}
-  /* 顶部「封条」：44px 一段金线，左对齐内容起点，向右渐隐 ——
-     一张卡片有个明确的"起头"，才不会像一块切好的色块 */
-  .card::after{content:'';position:absolute;left:14px;top:-1px;width:56px;height:1px;pointer-events:none;
-    background:linear-gradient(90deg,#FFE6B4,rgba(255,214,146,.35) 62%,rgba(255,214,146,0));
-    box-shadow:0 0 6px rgba(255,190,90,.22)}
-  .card:hover{border-color:rgba(255,214,146,.26);
     background:
-      radial-gradient(150% 62% at 50% -22%, rgba(255,230,186,.15), rgba(255,230,186,0) 68%),
-      radial-gradient(96% 64% at 108% -10%, rgba(150,110,220,.12), rgba(150,110,220,0) 64%),
-      linear-gradient(104deg, rgba(255,255,255,.06) 0 26%, rgba(255,255,255,0) 54%),
-      linear-gradient(180deg, rgba(54,41,48,.96) 0%, rgba(44,34,41,.97) 54%, rgba(35,27,34,.98) 100%);
-    box-shadow:0 11px 24px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,240,210,.13),
-      inset 0 -1px 0 rgba(0,0,0,.30),inset 0 0 0 1px rgba(255,214,146,.05)}
+      radial-gradient(240px circle at var(--hover-x,50%) var(--hover-y,25%),rgba(209,170,245,.22),transparent 100%),
+      linear-gradient(115deg,rgba(172,127,205,.10),rgba(172,127,205,.025));
+    opacity:0;transition:opacity var(--m2) var(--me)}
+  .card.m-card-hover::before,.card:focus-within::before{opacity:1}
   /* 选中只做「一点点更亮 + 一点更暖的边」，不加侧边条：
      列表里最响的应该是内容，不是选中态 */
   .card.is-active{border-color:rgba(244,199,119,.34);
     background:
-      radial-gradient(150% 62% at 50% -22%, rgba(255,232,190,.17), rgba(255,232,190,0) 68%),
-      radial-gradient(96% 64% at 108% -10%, rgba(150,110,220,.12), rgba(150,110,220,0) 64%),
-      linear-gradient(104deg, rgba(255,255,255,.055) 0 26%, rgba(255,255,255,0) 54%),
-      linear-gradient(180deg, rgba(56,42,49,.96) 0%, rgba(46,35,42,.97) 54%, rgba(36,27,34,.98) 100%);
-    box-shadow:0 9px 22px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,242,212,.14),
-      inset 0 -1px 0 rgba(0,0,0,.30),0 0 12px rgba(255,190,90,.05)}
-  /* 图标盘：宝石圆盘（品类色打底 + 顶部高光 + 底部压暗 + 金细圈） */
+      radial-gradient(ellipse at 0 0,rgba(112,79,142,.16),transparent 60%),
+      linear-gradient(125deg,#352A3D,#2D2333 65%,#2E2534);
+    box-shadow:0 4px 12px rgba(9,5,15,.20),inset 0 1px 0 rgba(255,244,224,.05)}
+  .card.m-card-hover,.card:focus-within{border-color:rgba(220,189,244,.60);
+    box-shadow:0 10px 24px rgba(8,4,15,.42),0 0 16px rgba(151,106,191,.10),inset 0 1px 0 rgba(240,221,255,.12)}
+  /* 品类色集中在装备底座，深色中心衬出游戏素材本身。 */
   .card .ch .ic{
     background:
-      radial-gradient(circle at 50% 14%, rgba(255,255,255,.26), rgba(255,255,255,0) 58%),
-      radial-gradient(circle at 50% 132%, rgba(0,0,0,.50), rgba(0,0,0,0) 62%),
-      var(--c,#3b4a63);
-    box-shadow:inset 0 0 0 1px rgba(255,214,146,.34),inset 0 -10px 16px rgba(0,0,0,.32),
-      0 3px 9px rgba(0,0,0,.28),0 0 14px rgba(255,190,90,.08)}
+      radial-gradient(ellipse at 50% 110%,color-mix(in srgb,var(--c) 38%,transparent),transparent 80%),
+      linear-gradient(145deg,#302B3B,#19151F);
+    box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 38%,transparent),0 3px 8px rgba(0,0,0,.22)}
   .card .ch .ic img{filter:brightness(1.12) drop-shadow(0 1px 2px rgba(0,0,0,.45))}
+  .card.m-card-hover .ch .ic img,.card:focus-within .ch .ic img{filter:brightness(1.24) drop-shadow(0 3px 5px rgba(176,133,222,.35))}
   .cname{color:#F5EEE1;text-shadow:0 1px 2px rgba(0,0,0,.30)}
   .card.is-active .cname{color:#FFF7E8}
   .cmeta{color:#B4A9C8}
@@ -179,9 +146,20 @@
   .votes{color:#8A7FA6}
   .cbadge.score{border-color:rgba(255,214,146,.36);background:rgba(255,214,146,.15);color:#FFDFA6}
   .cbadge.hot{border-color:rgba(178,146,236,.38);background:rgba(140,110,220,.20);color:#DCCCF8}
-  .rate .sc{background:linear-gradient(180deg,rgba(255,214,146,.22),rgba(202,148,91,.14));
-    color:#FFE3AC;border:1px solid rgba(255,214,146,.36);box-shadow:inset 0 1px 0 rgba(255,240,210,.20)}
-  .rate .sc i{color:#F5C15E}
+  .card .rate .sc{padding:0;gap:3px;border:0;background:none;box-shadow:none;color:#E7C58F}
+  .card .rate .sc strong{font-size:19px;line-height:1.1;font-weight:650;letter-spacing:-.5px}
+  .card .rate .sc small{align-self:flex-end;margin-bottom:1px;font-size:9px;font-weight:400;color:#95849E;letter-spacing:0}
+  .card .card-summary{color:#C8BACF}
+  .card .cfoot{border-top-color:rgba(213,195,227,.08)}
+  .card .cfoot .chips .chip.np{background:rgba(182,155,209,.07);border-color:rgba(182,155,209,.12);color:#BCAAC9;
+    font-size:10.5px;border-radius:5px;padding:2px 7px}
+  .card .stars{color:#51445E;letter-spacing:1px;font-size:10px}
+  .card .stars i{color:#B4A0C1;text-shadow:none}
+  .card .votes{color:#93829E;min-width:0;text-align:left;font-size:10px}
+  .card .cbadge.score{background:rgba(198,177,218,.08);border-color:rgba(198,177,218,.18);color:#C5B1D6}
+  .card .cbadge.hot{background:rgba(198,177,218,.08);border-color:rgba(198,177,218,.18);color:#C5B1D6}
+  .card .det{background:transparent;color:#A291AF}
+  .card:hover .det,.card .det:hover{background:transparent;color:#EEE1F5}
   /* 展开后的正文块：卡面已经是暖炭紫，正文别再回到冷紫，改成同族的深色内嵌井 */
   .card .tip,.card .box{background:rgba(24,17,28,.55);border:1px solid rgba(255,214,146,.10);color:#E9DFF1}
   .stars{color:#4A4260}
@@ -286,7 +264,7 @@
   .empty.compact .empty-sub{margin-top:6px;font-size:11.5px;color:#A295BC;max-width:250px;line-height:1.65}
   .empty-hint{margin-top:14px;font-size:11.5px;color:#A096B8;line-height:1.75;max-width:280px;
     border-top:1px dashed rgba(255,214,146,.12);padding-top:12px}
-  .startup{background:linear-gradient(120deg,#32233e,#21162c);border:1px solid #735d54;color:#ffe5ad}
+  .startup{background:linear-gradient(120deg,#32233e,#21162c);color:#ffe5ad}
   .startup [role="status"] span,.feed-status{color:#d7c8e7}
   .loading-ring{border-color:rgba(255,220,157,.18);border-top-color:#ffdc9d;border-right-color:#cc97ee}
   .load-retry{padding:5px 14px;border:1px solid #80694e;border-radius:6px;background:#362641;color:#ffe5ad;font:inherit;cursor:pointer}
