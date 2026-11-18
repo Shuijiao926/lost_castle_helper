@@ -4,7 +4,7 @@
 
 ## 最容易上手的瘦身方法
 
-先按[构建步骤](#在这台电脑上重新打出-exe)生成原包。在 [桌面端 package.json](../apps/desktop/package.json) 的 `build` 下，将 `files` 和 `extraResources` 两项替换为下列内容。`files` 控制应用归档，`extraResources` 控制应用归档旁边的普通文件。
+先按[构建步骤](#在这台电脑上重新打出-exe)生成原包。在 [桌面端 package.json](../../apps/desktop/package.json) 的 `build` 下，将 `files` 和 `extraResources` 两项替换为下列内容。`files` 控制应用归档，`extraResources` 控制应用归档旁边的普通文件。
 
 ```json
 {
@@ -97,7 +97,7 @@ npm test
 npm run dist
 ```
 
-每条命令成功后再执行下一条。`npm install` 准备开发依赖和项目 Git hooks。`npm test` 会校验数据并运行桌面端和服务端测试。`npm run dist` 读取 [桌面端 package.json](../apps/desktop/package.json) 的 `build`，用本地工作区的代码和资源生成安装包。
+每条命令成功后再执行下一条。`npm install` 准备开发依赖和项目 Git hooks。`npm test` 会校验数据并运行桌面端和服务端测试。`npm run dist` 读取 [桌面端 package.json](../../apps/desktop/package.json) 的 `build`，用本地工作区的代码和资源生成安装包。
 
 | 产物 | 用途 |
 | --- | --- |
@@ -138,4 +138,4 @@ Get-FileHash 'release/*-setup.exe' -Algorithm SHA256
 2. 小范围试用直接发送 `setup.exe`。对外发布时，可以在代码仓库创建对应版本的 GitHub Release，把 EXE 作为附件上传，再分享附件链接。 [GitHub Release 操作说明](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository)
 3. 在下载说明中写清 Windows 版本、x64、安装包大小、主要变更和签名状态。当前本地试用包没有数字签名，Windows 可能显示「未知发布者」。
 
-之后修改程序、皮肤或随包资源时重新打包。只更新由 GitHub 分发的流派数据时，已运行在线取数的客户端可继续拉取数据，更新流程见 [数据说明](./数据说明.md)。
+之后修改程序、皮肤或随包资源时重新打包。只更新由 GitHub 分发的流派数据时，已运行在线取数的客户端可继续拉取数据，更新流程见 [数据说明](数据说明.md)。
