@@ -179,6 +179,24 @@ test('历史梦魇方案没有强度字段时依然可展示，也不计算不�
   assert.deepEqual(domain.normalizeBuilds([makeBuild({ nightmareList: legacy })])[0].nightmareList, legacy);
 });
 
+test('半颗星对应 1 分，十个选择档位与填充状态一致', () => {
+  for (let score = 1; score <= 10; score++) {
+    const result = domain.ratingSelection(score / 2);
+    assert.equal(result.score, score);
+    assert.equal(result.stars, score / 2);
+    assert.equal(result.fills.length, 5);
+    assert.equal(result.fills.reduce((sum, fill) => sum + fill, 0) * 2, score);
+  }
+  assert.deepEqual(domain.ratingSelection(3.5).fills, [1, 1, 1, 0.5, 0]);
+});
+
+test('评分选择保留原有整星值，并将无效值恢复为未选择', () => {
+  assert.equal(domain.ratingSelection(3).score, 6);
+  assert.deepEqual(domain.ratingSelection(0).fills, [0, 0, 0, 0, 0]);
+  for (const value of [NaN, Infinity, undefined, -1]) assert.equal(domain.ratingSelection(value).score, 0);
+  assert.equal(domain.ratingSelection(6).score, 10);
+});
+
 test('stars：每 2 分一颗星，四舍五入', () => {
   assert.equal((domain.stars(10).match(/<i>/g) || []).length, 5);
   assert.equal((domain.stars(8.2).match(/<i>/g) || []).length, 4);

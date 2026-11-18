@@ -104,11 +104,12 @@
   .searchbar .schev::before{border-color:#D9C8EA}
   .searchbar input::placeholder{color:#7E7394}
 
-  /* 使用不透明的同族卡面，避免面板底图和噪点叠加后使文字发灰。 */
+  /* 保留暗色文字衬底，让营地底图穿过卡面，轻度模糊抑制细碎纹理。 */
   .card{
     background:
       radial-gradient(ellipse at 0 0,rgba(112,79,142,.13),transparent 60%),
-      linear-gradient(125deg,#2D2334,#241C2A 65%,#261F2B);
+      linear-gradient(125deg,rgba(35,24,43,.58),rgba(24,17,31,.68) 65%,rgba(29,20,35,.72));
+    backdrop-filter:blur(3px) saturate(.85);
     border:1px solid rgba(255,214,146,.15);
     box-shadow:0 4px 12px rgba(9,5,15,.20),inset 0 1px 0 rgba(255,244,224,.035)}
   .card:hover,.card:focus-within{border-color:rgba(217,187,233,.30)}
@@ -123,7 +124,7 @@
   .card.is-active{border-color:rgba(244,199,119,.34);
     background:
       radial-gradient(ellipse at 0 0,rgba(112,79,142,.16),transparent 60%),
-      linear-gradient(125deg,#352A3D,#2D2333 65%,#2E2534);
+      linear-gradient(125deg,rgba(48,33,58,.56),rgba(32,23,40,.64) 65%,rgba(36,26,44,.68));
     box-shadow:0 4px 12px rgba(9,5,15,.20),inset 0 1px 0 rgba(255,244,224,.05)}
   .card.m-card-hover,.card:focus-within{border-color:rgba(220,189,244,.60);
     box-shadow:0 10px 24px rgba(8,4,15,.42),0 0 16px rgba(151,106,191,.10),inset 0 1px 0 rgba(240,221,255,.12)}
@@ -137,6 +138,7 @@
   .card.m-card-hover .ch .ic img,.card:focus-within .ch .ic img{filter:brightness(1.24) drop-shadow(0 3px 5px rgba(176,133,222,.35))}
   .cname{color:#F5EEE1;text-shadow:0 1px 2px rgba(0,0,0,.30)}
   .card.is-active .cname{color:#FFF7E8}
+  .card.m-card-hover .cname{color:#FFF6EE}
   .cmeta{color:#B4A9C8}
   .cate{color:#C4B8D6}
   /* 刻印不再重复一枚圆点：品类点只标武器，刻印靠颜色和位置区分 */
@@ -146,16 +148,13 @@
   .votes{color:#8A7FA6}
   .cbadge.score{border-color:rgba(255,214,146,.36);background:rgba(255,214,146,.15);color:#FFDFA6}
   .cbadge.hot{border-color:rgba(178,146,236,.38);background:rgba(140,110,220,.20);color:#DCCCF8}
-  .card .rate .sc{padding:0;gap:3px;border:0;background:none;box-shadow:none;color:#E7C58F}
-  .card .rate .sc strong{font-size:19px;line-height:1.1;font-weight:650;letter-spacing:-.5px}
-  .card .rate .sc small{align-self:flex-end;margin-bottom:1px;font-size:9px;font-weight:400;color:#95849E;letter-spacing:0}
+  .rate .sc{color:#B6A28A}
+  .rate .sc small,.rating-empty{color:#93869D}
   .card .card-summary{color:#C8BACF}
   .card .cfoot{border-top-color:rgba(213,195,227,.08)}
   .card .cfoot .chips .chip.np{background:rgba(182,155,209,.07);border-color:rgba(182,155,209,.12);color:#BCAAC9;
     font-size:10.5px;border-radius:5px;padding:2px 7px}
-  .card .stars{color:#51445E;letter-spacing:1px;font-size:10px}
-  .card .stars i{color:#B4A0C1;text-shadow:none}
-  .card .votes{color:#93829E;min-width:0;text-align:left;font-size:10px}
+  .card .votes{color:#96889F}
   .card .cbadge.score{background:rgba(198,177,218,.08);border-color:rgba(198,177,218,.18);color:#C5B1D6}
   .card .cbadge.hot{background:rgba(198,177,218,.08);border-color:rgba(198,177,218,.18);color:#C5B1D6}
   .card .det{background:transparent;color:#A291AF}
@@ -197,7 +196,6 @@
   .chip.gold{background:rgba(224,180,74,.16);color:#FFDE9C;border-color:rgba(255,214,146,.22)}
   .footline{border-top:1px dashed rgba(255,214,146,.18);color:#A092BE}
   .ratepick{background:rgba(255,214,146,.08);border-color:rgba(255,214,146,.24)}
-  .ratepick .rp:hover,.ratepick .rp.on{color:#F4C567}
   .dname{color:#FBF3DF}
   .dhead{border-bottom:1px solid rgba(255,214,146,.14)}
   .dps b{color:#FFD9A0}
@@ -224,10 +222,6 @@
   #modal .msheet > *{position:relative;z-index:1}
   .mh{border-bottom:1px solid rgba(255,214,146,.14)}
   .mh span.ok{color:#F2C878}
-  #updateDialog .msheet,.update-version{border-color:rgba(255,214,146,.18)}
-  .update-version{background:rgba(255,214,146,.04);color:#D8CDE5}
-  .update-version strong,.update-body h2,.update-body li::marker{color:#F2C878}
-  .update-body ul{color:#D8CDE5}
   .msearch input{background:rgba(20,15,34,.9);border-color:rgba(255,214,146,.14)}
   .mseg div{border-color:transparent;color:#A99FC0}
   .mseg div.on{background:transparent;color:#FFE6B0;border-color:transparent}

@@ -148,25 +148,24 @@
   .card > *{position:relative;z-index:1}
   .card:hover{border-color:#3a4358}
   .card.is-active{border-color:#556796;background:rgba(86,120,200,.10)}
-  /* 卡片头部用 grid 排：窄窗口「图标 | 名字 · 详情 / 评分整行」，
-     宽窗口（≥560）评分块整体右移成一列 —— 分数/星级/人数是同一个整体，不会随窗口缩放被拉散 */
+  /* 窄窗沿名称列读完概览，宽窗让评分独立靠右。 */
   .ch{display:grid;grid-template-columns:auto minmax(0,1fr) auto;column-gap:12px;align-items:start}
-  .ch > .ic{grid-column:1;grid-row:1 / span 2}
+  .ch > .ic{grid-column:1;grid-row:1 / span 2;align-self:center}
   .ch > .main{grid-column:2;grid-row:1;min-width:0}
-  .ch > .det{grid-column:3;grid-row:1;justify-self:end;align-self:start;flex:none}
-  .ch > .rate{grid-column:2 / 4;grid-row:2;margin-top:8px}
+  .ch > .det{grid-column:3;grid-row:1 / span 2;justify-self:end;align-self:center;flex:none}
+  .ch > .rate{grid-column:2;grid-row:2;min-width:0;margin-top:6px;gap:8px}
+  .card .rate .sc strong{font-size:14px;line-height:1.3}
+  .card .rating-meta{display:block;line-height:1.3}
   @media (min-width:560px){
-    .ch{grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center}
+    .ch{grid-template-columns:auto minmax(0,1fr) minmax(80px,max-content) auto;column-gap:16px;align-items:center}
     .ch > .ic{grid-row:1}
-    .ch > .rate{grid-column:3;grid-row:1;justify-self:end;margin-top:0}
-    .card .rate{display:grid;grid-template-columns:auto auto;gap:0 8px}
-    .card .rate .sc{grid-column:1;grid-row:1 / 3;align-self:center}
-    .card .rate .stars{grid-column:2;grid-row:1}
-    .card .rate .votes{grid-column:2;grid-row:2}
-    .ch > .det{grid-column:4;grid-row:1;align-self:center}
+    .ch > .rate{grid-column:3;grid-row:1;flex-direction:column;align-items:flex-end;justify-content:center;
+      gap:3px;margin-top:0;min-height:40px}
+    .card .rate .sc strong{font-size:16px}
+    .ch > .det{grid-column:4;grid-row:1}
   }
   .ctop{display:flex;align-items:center;gap:7px;min-width:0}
-  .cname{font-size:16px;font-weight:650;line-height:1.4;letter-spacing:.2px;
+  .cname{font-size:17px;font-weight:650;line-height:1.4;letter-spacing:.1px;
     min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .cbadge{flex:none;font-size:10px;line-height:1;padding:3px 5px 2px;border-radius:4px;
     letter-spacing:.3px;border:1px solid transparent;white-space:nowrap}
@@ -175,13 +174,14 @@
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .cate::before{content:'';flex:none;width:5px;height:5px;border-radius:50%;background:var(--tc,#8b93a6)}
   .csep{flex:none;opacity:.5}
-  .rate{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:11.5px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
-  .rate .sc{display:inline-flex;align-items:center;gap:3px;border-radius:5px;padding:1px 6px 2px;
-    font-size:13px;font-weight:700;letter-spacing:.2px;border:1px solid transparent}
-  .rate .sc i{font-style:normal;font-size:9.5px;transform:translateY(-.5px)}
-  /* 定宽 + 右对齐：宽窗口下评分块整体右移时，各卡「★ 分数」才能对齐成一列，
-     不会因为「97 人」和「177 人」差一个字就参差不齐 */
-  .votes{font-size:11px;color:#767e94;min-width:66px;text-align:right}
+  .rate{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:11.5px;font-variant-numeric:tabular-nums}
+  .rate .sc{display:inline-flex;align-items:baseline;gap:3px;flex:none;white-space:nowrap}
+  .rate .sc strong{font-size:16px;font-weight:500;line-height:1.2;letter-spacing:-.2px}
+  .rate .sc small{font-size:10px;line-height:1;font-weight:400;letter-spacing:0}
+  .rating-meta{display:flex;flex-direction:column;align-items:flex-start;gap:3px;line-height:1.2}
+  .rating-meta .stars{display:block;font-size:11px;line-height:1;letter-spacing:1px;white-space:nowrap}
+  .votes{font-size:11px;color:#767e94;white-space:nowrap}
+  .rating-empty{font-size:12px;line-height:1.5}
   .stars{color:#4d5468;letter-spacing:1.5px;font-size:12px}
   .stars i{color:var(--star);font-style:normal}
   .card-summary{font-size:12px;line-height:1.8;margin:12px 0 0;display:-webkit-box;
@@ -202,10 +202,25 @@
   .act:hover{background:#262b38;color:#a3b2d4}
   .act.on{color:#e0b44a}
   .act.fav.on{color:#e0728f}
-  .ratepick{display:flex;align-items:center;gap:7px;margin-top:10px;padding:8px 11px;
+  .ratepick{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:10px;padding:8px 11px;
     background:rgba(224,180,74,.07);border:1px solid rgba(224,180,74,.22);border-radius:8px;font-size:12px;color:#b6bdd0}
-  .ratepick .rp{font-size:19px;color:#4d5468;cursor:pointer;letter-spacing:2px}
-  .ratepick .rp:hover,.ratepick .rp.on{color:#e0b44a}
+  .rating-prompt{font-size:11.5px;white-space:nowrap}
+  .rating-stars{display:flex;align-items:center;gap:2px;flex:none}
+  .ratepick .rp{position:relative;display:block;width:28px;height:32px;border-radius:5px}
+  .rp-icon,.rp-icon::after{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-symbol);font-size:26px;line-height:1;pointer-events:none;user-select:none}
+  .rp-icon{color:#74647E;transition:transform .15s var(--me)}
+  .rp-icon::after{content:'★';color:#F4C567;clip-path:inset(0 100% 0 0);transition:clip-path .12s ease}
+  .rp.is-half .rp-icon::after{clip-path:inset(0 50% 0 0)}
+  .rp.is-full .rp-icon::after{clip-path:inset(0)}
+  .rating-half{position:absolute;top:0;left:0;width:50%;height:100%;margin:0;opacity:0;cursor:pointer;z-index:2}
+  .rating-half + .rating-half{left:50%}
+  .rp:has(.rating-half:hover) .rp-icon{transform:scale(1.08)}
+  .rp:has(.rating-half:focus-visible){outline:1px solid #F2C878;outline-offset:1px}
+  .rating-value{display:inline-flex;align-items:baseline;justify-content:flex-end;gap:4px;min-width:44px;margin-left:auto;
+    color:#BBAAC9;white-space:nowrap;font-size:11px;font-variant-numeric:tabular-nums}
+  .rating-value strong{font-size:16px;font-weight:600;color:#FFD98A}
+  .rating-value small{font-size:11px}
 
   .sec{font-size:12px;color:#a3b2d4;margin:16px 0 7px;padding-top:13px;font-weight:600;letter-spacing:.3px;
     border-top:1px solid rgba(255,255,255,.055)}
@@ -258,10 +273,10 @@
   .plan .pg{font-size:11.5px;background:rgba(255,255,255,.045);border-radius:6px;padding:5px 8px;color:#CBC0E0;line-height:1.5}
   .plan .pg b{display:block;color:var(--d-meta);font-weight:500;font-size:10.5px;margin-bottom:2px;letter-spacing:.3px}
 
-  .cursed{display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-bottom:1px dashed rgba(255,255,255,.05)}
+  .cursed{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed rgba(255,255,255,.05)}
   .cursed:last-child{border:0}
   .cursed .cmain{flex:1;min-width:0}
-  .cursed .ctitle{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--d-name)}
+  .cursed .ctitle{display:flex;align-items:center;flex-wrap:wrap;gap:5px 8px;min-height:var(--detail-icon-size);font-size:13px;color:var(--d-name)}
   .cursed .ceff{font-size:11.5px;color:var(--d-note);margin-top:3px;line-height:1.6}
   .vd{font-size:10.5px;padding:1px 7px;border-radius:4px;flex:none}
   .vd.purge{background:rgba(207,148,64,.18);color:var(--legend)}
@@ -276,6 +291,7 @@
 
   /* ---------- 详情页：物品名、数值和可连续阅读的说明 ---------- */
   #detail{
+    --detail-icon-size:44px;
     --d-name:#F6E9F7;
     --d-note:#E5D6EC;
     --d-note-dim:#D0BCDE;
@@ -286,6 +302,16 @@
   #detail .sec{font-size:13px;font-weight:700}
   #detail .tip{font-size:13px;color:var(--d-note);line-height:1.75}
   #detail .ps,#detail .nmeff,#detail .ceff{font-size:12px;color:var(--d-note);line-height:1.65}
+  #detail .rate .sc{color:color-mix(in srgb,var(--d-num) 50%,var(--d-meta))}
+  #detail .rate .sc small,#detail .rating-meta .stars i{color:var(--d-meta);text-shadow:none}
+  #detail .rate .votes,#detail .rating-empty{color:var(--d-note-dim)}
+  #detail .ic{width:var(--detail-icon-size);height:var(--detail-icon-size);border-radius:10px;
+    background:linear-gradient(145deg,color-mix(in srgb,var(--c) 22%,#302238),color-mix(in srgb,var(--c) 10%,#1E1625));
+    box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 38%,transparent)}
+  #detail .ic img{width:86%;height:86%;object-fit:contain}
+  #detail .ic i{font-size:15px;color:var(--d-name)}
+  #detail .dhead > .ic{width:64px;height:64px;border-radius:14px}
+  #detail .inscrow > .ic{width:52px;height:52px;border-radius:12px}
 
   /* 速记 / 完整：一枚很轻的文字开关，不跟标题抢 */
   .dmode{display:flex;align-items:center;justify-content:flex-end;gap:1px;margin:-3px 0 3px}
@@ -301,9 +327,9 @@
   .dhead+.dmode+.sec{border-top:0;padding-top:0;margin-top:11px}
 
   /* 刻印 */
-  .inscrow{display:flex;align-items:flex-start;gap:11px}
+  .inscrow{display:flex;align-items:flex-start;gap:12px}
   .inscmain{flex:1;min-width:0}
-  .inscname{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:13.5px;font-weight:600;color:var(--d-name)}
+  .inscname{display:flex;align-items:center;gap:7px;flex-wrap:wrap;min-height:52px;font-size:13.5px;font-weight:600;color:var(--d-name)}
   .inscdesc{font-size:12px;color:var(--d-note-dim);line-height:1.7;margin-top:7px;padding-top:7px;
     border-top:1px dashed rgba(255,255,255,.06)}
 
@@ -312,22 +338,23 @@
   .drescap{font-size:11px;color:var(--d-meta)}
   .drescode{font-size:11.5px;letter-spacing:1.6px;color:var(--d-num);background:rgba(255,214,146,.10);
     border:1px solid rgba(255,214,146,.26);border-radius:6px;padding:1px 8px;font-variant-numeric:tabular-nums}
-  .dresrow{display:flex;align-items:flex-start;gap:8px;padding:5px 0}
+  .dresrow{display:grid;grid-template-columns:var(--detail-icon-size) minmax(0,1fr);gap:3px 12px;padding:10px 0}
   .dresrow+.dresrow{border-top:1px dashed rgba(255,255,255,.05)}
-  .dresic{width:26px;height:26px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:50%;
+  .dresic{grid-column:1;grid-row:1 / 3;align-self:center;width:var(--detail-icon-size);height:var(--detail-icon-size);display:flex;align-items:center;justify-content:center;border-radius:50%;
     background:rgba(255,214,146,.07);border:1px solid rgba(255,214,146,.30)}
-  .dresic img{width:22px;height:22px;object-fit:contain;display:block}
-  .dresslot{flex:none;min-width:46px;font-size:11px;color:var(--d-meta);padding-top:4px}
-  .drestxt{flex:1;min-width:0;font-size:13px;color:var(--d-note);line-height:1.65;overflow-wrap:anywhere;padding-top:3px}
+  .dresic img{width:36px;height:36px;object-fit:contain;display:block}
+  .dresslot{grid-column:2;font-size:11px;color:var(--d-meta)}
+  .drestxt{grid-column:2;min-width:0;font-size:13px;color:var(--d-note);line-height:1.65;overflow-wrap:anywhere}
 
   /* 灵魂石 / 炼金：统一物品行 */
   .dstones,.dlist,.dtierlist,.dorder{display:flex;flex-direction:column;gap:6px}
   /* 单列的物品清单给多一点行间气口，条目本身没分隔线，全靠间距分块 */
   .dlist,.dstones,.dtierlist{gap:9px}
-  .dstone,.ditem,.drow{display:flex;align-items:flex-start;gap:9px}
+  .dstone,.ditem,.drow{display:flex;align-items:flex-start;gap:12px}
+  .drow{align-items:center}
   .dstonemain,.ditemmain,.dtmain{flex:1;min-width:0}
-  .dstonetop,.ditemtop,.dttop{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-  .dstonename,.ditemname,.dtname{font-size:13.5px;font-weight:650;color:var(--d-name)}
+  .dstonetop,.ditemtop,.dttop{display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-height:var(--detail-icon-size)}
+  .dstonename,.ditemname,.dtname{font-size:13.5px;font-weight:650;color:var(--d-name);overflow-wrap:anywhere}
   .dstonelv{font-size:10.5px;color:var(--d-num);background:rgba(255,214,146,.12);
     border:1px solid rgba(255,214,146,.26);border-radius:5px;padding:0 5px;font-variant-numeric:tabular-nums}
   .dstonerange,.dstoneslot,.dstone-example{font-size:11px;color:var(--d-meta)}
@@ -343,9 +370,9 @@
   .dgear-group h4{margin:0;padding:7px 11px;font-size:14px;font-weight:700;color:var(--d-meta)}
   .dgear-group h4::before{content:'';width:3px;height:12px;flex:none;border-radius:2px}
   .dgear-group ul{list-style:none;margin:0;padding:0 11px}
-  .dgear-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;column-gap:9px;padding:7px 0}
+  .dgear-row{display:grid;grid-template-columns:var(--detail-icon-size) minmax(0,1fr) auto;align-items:center;column-gap:12px;padding:11px 0}
   .dgear-ident{display:flex;align-items:center;flex-wrap:wrap;gap:3px 6px}
-  .dgear-name{font-size:12.5px;font-weight:500;color:var(--d-name);overflow-wrap:anywhere}
+  .dgear-name{flex-basis:100%;font-size:13px;font-weight:600;color:var(--d-name);overflow-wrap:anywhere}
   .dgear-stages{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:4px;max-width:106px}
   .dgear-stage{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-width:49px;
     padding:2px 7px;border-radius:999px;font-size:11px;font-weight:500;line-height:1.5;white-space:nowrap}
@@ -353,13 +380,13 @@
   .dgear-description{grid-column:2 / -1;min-width:0;padding-top:2px}
   .dgear-source{margin-top:4px;font-size:11px;color:var(--d-meta);overflow-wrap:anywhere}
 
-  /* 速记：灵魂石两列排，别让名字后面空出一大片 */
-  .dstones.is-compact{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 10px}
-  .dstones.is-compact .dstone{align-items:center;gap:7px}
-  .dstones.is-compact .dstonemain{display:flex;align-items:center;gap:5px;min-width:0}
-  .dstones.is-compact .dstonetop{flex-wrap:nowrap;min-width:0;gap:4px}
-  .dstones.is-compact .dstonename{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  /* 大图标优先留出可读的名称宽度，宽窗口再切换两列。 */
+  .dstones.is-compact{display:grid;grid-template-columns:1fr;gap:10px 14px}
+  .dstones.is-compact .dstone{align-items:center}
+  .dstones.is-compact .dstonetop{min-width:0;gap:4px 6px}
+  .dstones.is-compact .dstonename{font-size:13px}
   .dstones.is-compact .dstonelv{flex:none;font-size:10px;padding:0 4px}
+  @media (min-width:560px){.dstones.is-compact{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
   /* 效果文案：一行一条，数字上色，诅咒单独一行 */
   .effblock{margin-top:3px}
@@ -379,10 +406,13 @@
   .dtiernum{font-size:10px;color:var(--d-meta);background:rgba(255,255,255,.05);border-radius:6px;padding:0 5px;
     font-variant-numeric:tabular-nums}
   .dtierchips{display:flex;flex-wrap:wrap;gap:6px}
-  .dtierchips .chip{max-width:100%;white-space:normal;color:var(--d-note);font-size:11.5px}
-  .dtrow{padding:8px 9px;border:1px solid rgba(202,162,232,.14);border-radius:7px;background:rgba(14,9,24,.36)}
+  .dtierchips .chip{max-width:100%;white-space:normal;color:var(--d-note);font-size:12px;padding:4px 8px;gap:8px}
+  .dtrow{display:grid;grid-template-columns:var(--detail-icon-size) minmax(0,1fr);align-items:start;gap:12px;
+    padding:10px;border:1px solid rgba(202,162,232,.14);border-radius:9px;background:rgba(14,9,24,.36)}
+  .dtrow:has(> .dordernum){grid-template-columns:18px var(--detail-icon-size) minmax(0,1fr)}
   .dtrow .effblock{margin-top:6px}
-  .dtrow .dordernum{margin-top:0}
+  .dtrow .dordernum{margin-top:0;line-height:var(--detail-icon-size)}
+  .drow .dordernum{margin-top:0}
   .dordernum{flex:none;width:15px;margin-top:5px;font-size:10.5px;color:var(--d-meta);text-align:right;
     font-variant-numeric:tabular-nums}
 
@@ -395,16 +425,18 @@
 
   /* 梦魇：单列，名字不再被挤断 */
   .nmlist{display:flex;flex-direction:column;margin-top:4px}
-  .nmitem{display:flex;align-items:flex-start;gap:9px;padding:6px 0;border-bottom:1px dashed rgba(255,255,255,.05)}
+  .nmitem{display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:12px;
+    padding:11px 0;border-bottom:1px solid rgba(255,255,255,.05)}
   .nmitem:last-child{border-bottom:0;padding-bottom:0}
-  .nmitem .nightmare-icon{width:22px;height:22px;border-radius:5px}
-  .nmitem .nightmare-icon svg{width:14px;height:14px}
-  .nmitem .nightmare-icon img{width:18px;height:18px}
-  .nmmain{flex:1;min-width:0}
-  .nmline{display:flex;align-items:center;gap:8px}
-  .nmname{flex:1;min-width:0;font-size:12.5px;color:var(--d-name);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .nmpt{flex:none;font-size:11px;font-weight:600;color:var(--d-num);font-variant-numeric:tabular-nums}
-  .nmeff{font-size:11.5px;color:var(--d-note);margin-top:2px;line-height:1.6}
+  .nmitem .nightmare-icon{width:44px;height:44px;border-radius:10px}
+  .nmitem .nightmare-icon svg{width:28px;height:28px}
+  .nmitem .nightmare-icon img{width:38px;height:38px}
+  .nmmain{min-width:0}
+  .nmname{font-size:13px;font-weight:600;color:var(--d-name);line-height:1.5;overflow-wrap:anywhere}
+  .nmpt{display:flex;align-items:baseline;justify-self:end;gap:4px;font-size:13px;font-weight:600;
+    color:var(--d-num);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .nmpt small{font-size:10px;font-weight:400;color:var(--d-meta)}
+  .nmeff{font-size:12px;color:var(--d-note);margin-top:3px;line-height:1.65}
 
   .hintbox{font-size:11.5px;color:#98a0b2;line-height:1.75;background:rgba(109,143,232,.07);
     border-left:2px solid #4a5680;border-radius:6px;padding:8px 10px;margin:5px 0 9px}
@@ -549,16 +581,7 @@
   .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 
   .helpbody{padding:14px 20px 22px;overflow-y:auto}
-  #updateDialog{justify-content:center;align-items:center;padding:20px}
-  #updateDialog .msheet{width:min(520px,calc(100% - 28px));max-width:none;max-height:80%;border:1px solid var(--line);border-radius:12px}
   button.mh-close{padding:0;border:0;background:transparent;cursor:pointer}
-  .update-body{padding:16px 20px 20px;overflow-y:auto;font-size:12.5px}
-  .update-version{display:flex;align-items:center;justify-content:space-between;gap:12px;
-    padding:8px 11px;border:1px solid var(--line);border-radius:8px}
-  .update-version strong{font-variant-numeric:tabular-nums}
-  .update-body h2{font-size:13px;font-weight:600;margin:15px 0 6px}
-  .update-body ul{margin:0;padding-left:17px}
-  .update-body li + li{margin-top:6px}
   .update-source{margin:16px 0 0;color:var(--dim);font-size:11px}
   .hgroup{font-size:12px;color:#8b9ad4;font-weight:600;margin:14px 0 7px;letter-spacing:.4px}
   .hgroup:first-child{margin-top:4px}
@@ -702,10 +725,7 @@
 }
 
 
-  /* 打分悬停预览：悬停到第 N 颗，前 N 颗亮起 */
-  .ratepick .rp{transition:color .12s ease,transform .12s ease}
-  .ratepick .rp.preview{color:#F4C567;transform:scale(1.12)}
-  .ratepick .rp.dim{color:#3E4457!important;transform:none}
+  @media (prefers-reduced-motion:reduce){.rp:has(.rating-half:hover) .rp-icon{transform:none}}
 
 
   /* ================= 用户印象 / 评价 ================= */
@@ -1203,8 +1223,8 @@
   .rz-sw{bottom:0;left:0;width:12px;height:12px;cursor:nesw-resize}
 
   /* 弹窗标题栏/遮罩空白区可拖动整窗 */
-  #modal, #submitModal, #help, #updateDialog{cursor:grab}
-  #modal .msheet, #submitModal .msheet, #help .msheet, #updateDialog .msheet{cursor:default}
+  #modal, #submitModal, #help{cursor:grab}
+  #modal .msheet, #submitModal .msheet, #help .msheet{cursor:default}
   .modal .mh, #submitModal .rvbar{cursor:grab}
   .modal .mh:active, #submitModal .rvbar:active{cursor:grabbing}
   .modal .mh .mh-close, #submitModal .rvbar .rvback, #submitModal .rvbar .rvclear{cursor:pointer}
@@ -1233,6 +1253,12 @@
   .settings-copy{display:flex;flex-direction:column;gap:3px;min-width:0}
   .settings-copy b{font-size:12.5px;color:#E8DDF5;font-weight:600}
   .settings-copy span{font-size:10.5px;color:#8F83A8;line-height:1.5}
+  .settings-version{margin-left:6px;font-variant-numeric:tabular-nums;color:#F2C878}
+  .settings-changelog{font-size:12px;line-height:1.8;color:#D8CDE5}
+  .settings-changelog h3{font-size:12px;font-weight:600;margin:16px 0 6px;color:#F2C878}
+  .settings-changelog ul{margin:0;padding-left:17px}
+  .settings-changelog li + li{margin-top:6px}
+  .settings-changelog li::marker{color:#F2C878}
   .settings-sizes{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
   .szbtn,.settings-action{flex:none;font:inherit;font-size:11px;color:#D9CCEC;background:rgba(255,214,146,.05);border:1px solid rgba(255,214,146,.22);border-radius:7px;padding:5px 9px;cursor:pointer;transition:background .16s,color .16s}
   .szbtn:hover,.settings-action:hover{color:#FFE6B0;background:rgba(255,214,146,.12)}
@@ -1240,7 +1266,6 @@
   .settings-actions{display:flex;gap:6px;flex:none;align-items:center}
   .settings-action:disabled{opacity:.5;cursor:default}
   .settings-download{color:#FFE6B0;border-color:rgba(255,214,146,.5);background:rgba(255,214,146,.12)}
-  .settings-note{text-align:center;font-size:10px;color:#6B7386;margin-top:16px}
   #settings .msheet{cursor:default}
   #settings{cursor:grab}
 

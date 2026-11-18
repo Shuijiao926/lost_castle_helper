@@ -232,13 +232,20 @@ function renderFeed(){
       if(ev.target.closest('[data-fav]')){toggleFav(bid);return;}
       if(ev.target.closest('[data-rate]')){state.ratingOpen=(state.ratingOpen===bid?null:bid);render();return;}
 if(ev.target.closest('[data-note]')){openNote(bid);return;}
-      if(ev.target.closest('.rp')){state.myVote[bid]=+ev.target.dataset.v;state.ratingOpen=null;render();return;}
+      if(ev.target.closest('.ratepick')) return;
       openDetail(bid);
     };
   });
   motion.bindCards(elFeed);
   const c=elFeed.querySelector('.card.is-active');if(c)c.scrollIntoView({block:'nearest'});
 }
+function ratingHTML(build, { showStars = true } = {}){
+  if(!build.votes && !build.rating) return '<div class="rate is-unrated"><span class="rating-empty">暂无评分</span></div>';
+  return '<div class="rate"><span class="sc" aria-label="评分 '+build.rating.toFixed(1)+' 分">'
+    +'<strong>'+build.rating.toFixed(1)+'</strong><small>/10</small></span>'
+    +'<div class="rating-meta">'+(showStars?stars(build.rating):'')+'<span class="votes">'+build.votes+' 人打分</span></div></div>';
+}
+
 function cardHTML(b,isCur){
   const tint=weaponTint(b.wt);
   // 一枚就够：分数够高给「高分」，否则人气够旺给「热门」，避免整列卡片都挂标签
@@ -247,14 +254,12 @@ function cardHTML(b,isCur){
   const weaponImage = b.gear?.weapon?.name;
   const iconKey = weaponImage && ICON[weaponImage] ? weaponImage : b.wt;
   let h='<div class="card'+(isCur?' is-active':'')+'" data-bid="'+b.id+'">';
-  // 评分块是 .ch 的直接子元素（不在 .main 里）：窄窗口排在名字下面，宽窗口靠 CSS 排到右侧成列，
-  // 分数 / 星级 / 人数永远作为一个整体移动，不会因为窗口变宽而各自漂开
+  // 列表概览显示分数与人数，布局根据可用宽度安排在品类下方或右侧。
   h+='<div class="ch">'+ic(iconKey,W(b.wt).short,'s48',tint)
    +'<div class="main"><div class="ctop"><div class="cname">'+esc(b.name)+'</div>'+badge+'</div>'
    +'<div class="cmeta"><span class="cate" style="--tc:'+tint+'">'+esc(wName(b.wt))+'</span>'
    +'<span class="csep">·</span><span class="cate insc">'+esc(inscName(b.insc))+'</span></div></div>'
-   +'<div class="rate"><span class="sc" aria-label="评分 '+b.rating.toFixed(1)+' 分"><strong>'+b.rating.toFixed(1)+'</strong><small>/10</small></span>'+stars(b.rating)
-   +'<span class="votes">'+b.votes+' 人打分</span></div>'
+   +ratingHTML(b, { showStars: false })
    +'<button type="button" class="det" data-det="'+b.id+'" aria-label="查看'+esc(b.name)+'详情"><span aria-hidden="true">›</span></button></div>';
 
   if(b.tip) h+='<p class="card-summary">'+esc(b.tip)+'</p>';
@@ -269,10 +274,15 @@ function cardHTML(b,isCur){
    +'</div></div>';
 
   if(state.ratingOpen===b.id){
-    const my=state.myVote[b.id]||0;
-    h+='<div class="ratepick"><span>给这个流派打分</span>'
-     +[1,2,3,4,5].map(v=>'<span class="rp'+(v<=my?' on':'')+'" data-v="'+v+'">★</span>').join('')
-     +'</div>';
+    const selection=domain.ratingSelection(state.myVote[b.id]||0);
+    h+='<div class="ratepick" data-bid="'+esc(b.id)+'"><span class="rating-prompt">给流派打分</span>'
+     +'<div class="rating-stars" role="radiogroup" aria-label="流派评分，满分 10 分">'
+     +selection.fills.map((fill,index)=>'<span class="rp'+(fill===1?' is-full':fill===0.5?' is-half':'')+'">'
+       +'<span class="rp-icon" aria-hidden="true">★</span>'
+       +[index+0.5,index+1].map(value=>'<input type="radio" class="rating-half" name="rating-'+esc(b.id)+'" value="'+value+'"'
+         +' aria-label="'+(value*2)+' 分，'+value+' 颗星"'+(selection.stars===value?' checked':'')+'>').join('')
+       +'</span>').join('')+'</div>'
+     +'<output class="rating-value" aria-live="polite" aria-atomic="true">'+ratingValueHTML(selection)+'</output></div>';
   }
   return h+'</div>';
 }
@@ -386,9 +396,9 @@ function renderSoulEffect(eff, level, maxLevel){
 }
 
 function renderTreasureDetail(name, rarity, color, effect, order = ''){
-  return '<div class="dtrow"><div class="dttop">' + order + ic(name,name,'s30',color)
-    + '<span class="dtname">' + esc(name) + '</span>'
-    + rtag(rarity, RC[rarity] || '#8b93a6') + '</div>' + effBlock(effect) + '</div>';
+  return '<div class="dtrow">' + order + ic(name,name,'s30',color)
+    + '<div class="dtmain"><div class="dttop"><span class="dtname">' + esc(name) + '</span>'
+    + rtag(rarity, RC[rarity] || '#8b93a6') + '</div>' + effBlock(effect) + '</div></div>';
 }
 
 function renderEquipmentDetails({ primary, notes, sources }, kind) {
@@ -436,8 +446,7 @@ function renderDetail(){
    +'<div class="chips" style="margin-top:7px">'
      +(b.features||[]).map(f=>'<span class="chip np">'+esc(f)+'</span>').join('')
      +(b.tags||[]).map(t=>'<span class="chip np" data-tag="'+esc(t)+'">#'+esc(t)+'</span>').join('')+'</div>'
-   +'<div class="rate"><span class="sc">★ '+b.rating.toFixed(1)+'</span>'+stars(b.rating)
-     +'<span style="color:#767e94">'+b.votes+' 人打分</span></div>'
+   +ratingHTML(b)
    +'</div></div>';
 
   /* ①.5 展示形态：一枚轻量文字开关，别抢标题 */
@@ -491,7 +500,7 @@ function renderDetail(){
     h+=sec('共鸣',plainBox(body));
   }
 
-  /* ⑥ 灵魂石：速记两列排开，完整单列 + 该等级效果 */
+  /* ⑥ 灵魂石：速记按窗口宽度排列，完整单列 + 该等级效果 */
   const stones=Array.isArray(b.soulStones)?b.soulStones:[];
   if(stones.length||(b.soulPlan||[]).length){
     let body='';
@@ -623,14 +632,13 @@ function renderDetail(){
   elDetail.querySelectorAll('[data-dmode]').forEach(n=>{n.onclick=()=>setDetailMode(n.dataset.dmode);});
 }
 
-/* 梦魇条目：一行名字 + 点数，效果单独一行（原来两列挤在一起会断字） */
+/* 梦魇条目：图标跨两行，名称与效果成组，点数在独立列中垂直居中。 */
 function renderNightmareCards(list){
   return '<div class="nmlist">'+list.map(({n,p,points})=>
     '<div class="nmitem">'+nightmareIcon(n)
-    +'<div class="nmmain"><div class="nmline"><span class="nmname">'+esc(n)+'</span>'
-    +(points?'<span class="nmpt">'+points+' 点</span>':'')+'</div>'
+    +'<div class="nmmain"><div class="nmname">'+esc(n)+'</div>'
     +(p?'<div class="nmeff">'+accentText(p)+'</div>':'')
-    +'</div></div>').join('')+'</div>';
+    +'</div>'+(points?'<span class="nmpt">'+points+'<small>点</small></span>':'')+'</div>').join('')+'</div>';
 }
 
 /* ================= 交互 ================= */
@@ -2219,10 +2227,11 @@ function applyPanelSize(w, h){
     }
   }, 320);
 }
-function openSettings(){
+async function openSettings(){
   settingsModal.classList.add('on');
   syncSizeButtons();
   if(settingsBtn) settingsBtn.setAttribute('aria-expanded', 'true');
+  await loadSettingsVersion();
 }
 function closeSettings(){
   settingsModal.classList.remove('on');
@@ -2230,6 +2239,10 @@ function closeSettings(){
 }
 if(settingsBtn) settingsBtn.onclick = openSettings;
 if(settingsClose) settingsClose.onclick = closeSettings;
+settingsModal.onclick = (event) => {
+  if(window.__lc2SuppressBackdrop){window.__lc2SuppressBackdrop=false;return;}
+  if(event.target === settingsModal) closeSettings();
+};
 document.querySelectorAll('#settings [data-size]').forEach((btn) => {
   btn.onclick = () => {
     const [w, h] = btn.dataset.size.split('x').map(Number);
@@ -2329,8 +2342,6 @@ $hbtn.onclick=openHelp;
 $helpClose.onclick=closeHelp;
 $help.onclick=ev=>{if(window.__lc2SuppressBackdrop){window.__lc2SuppressBackdrop=false;return;}if(ev.target===$help)closeHelp();};
 
-const updateBtn = $('updateBtn');
-const updateDialog = $('updateDialog');
 const updateVersion = $('updateVersion');
 
 for (const note of LC2.data.updateNotes) {
@@ -2339,10 +2350,8 @@ for (const note of LC2.data.updateNotes) {
   $('updateNotes').append(item);
 }
 
-async function openUpdateDialog() {
+async function loadSettingsVersion() {
   const api = window.lc2;
-  updateDialog.classList.add('on');
-  updateBtn.setAttribute('aria-expanded', 'true');
   if (updateVersion.dataset.loaded) return;
   if (!api) {
     updateVersion.textContent = '网页原型';
@@ -2360,17 +2369,6 @@ async function openUpdateDialog() {
   }
 }
 
-function closeUpdateDialog() {
-  updateDialog.classList.remove('on');
-  updateBtn.setAttribute('aria-expanded', 'false');
-}
-
-updateBtn.onclick = openUpdateDialog;
-$('updateClose').onclick = closeUpdateDialog;
-updateDialog.onclick = (event) => {
-  if(window.__lc2SuppressBackdrop){window.__lc2SuppressBackdrop=false;return;}
-  if (event.target === updateDialog) closeUpdateDialog();
-};
 
 $('noteCancel').onclick=closeNote;
 $('noteSave').onclick=saveNote;
@@ -2461,26 +2459,40 @@ if (typeof window.lc2 !== 'undefined' && window.lc2) {
 }
 
 
-/* ===== 打分悬停预览 ===== */
-function __setRatePreview(box, n){
-  if(!box) return;
-  box.querySelectorAll('.rp').forEach(function(s){
-    var v = +s.dataset.v;
-    s.classList.toggle('preview', n > 0 && v <= n);
-    s.classList.toggle('dim', n > 0 && v > n);
-  });
+/* ===== 半星评分与实时预览 ===== */
+function ratingValueHTML(selection){
+  return selection.stars ? '<strong>'+selection.score+'</strong><small>分</small>' : '<span>未选择</span>';
 }
-document.addEventListener('mouseover', function(ev){
-  var rp = ev.target && ev.target.closest ? ev.target.closest('.ratepick .rp') : null;
-  if(!rp) return;
-  __setRatePreview(rp.closest('.ratepick'), +rp.dataset.v);
-});
-document.addEventListener('mouseout', function(ev){
-  var box = ev.target && ev.target.closest ? ev.target.closest('.ratepick') : null;
-  if(!box) return;
-  var to = ev.relatedTarget;
-  if(to && box.contains(to)) return;
-  __setRatePreview(box, 0);
+function updateRatingPreview(box, starCount){
+  const selection=domain.ratingSelection(starCount);
+  box.querySelectorAll('.rp').forEach((star,index)=>{
+    star.classList.toggle('is-full', selection.fills[index]===1);
+    star.classList.toggle('is-half', selection.fills[index]===0.5);
+  });
+  box.querySelector('.rating-value').innerHTML=ratingValueHTML(selection);
+}
+function previewRating(event){
+  const option=event.target.closest?.('.rating-half');
+  if(option) updateRatingPreview(option.closest('.ratepick'), Number(option.value));
+}
+function restoreRating(event){
+  const group=event.target.closest?.('.rating-stars');
+  if(!group || group.contains(event.relatedTarget)) return;
+  const box=group.closest('.ratepick');
+  updateRatingPreview(box, state.myVote[box.dataset.bid]||0);
+}
+document.addEventListener('pointerover', previewRating);
+document.addEventListener('focusin', previewRating);
+document.addEventListener('pointerout', restoreRating);
+document.addEventListener('focusout', restoreRating);
+document.addEventListener('change', (event)=>{
+  const option=event.target.closest?.('.rating-half');
+  if(!option || !option.checked) return;
+  const box=option.closest('.ratepick');
+  const selection=domain.ratingSelection(Number(option.value));
+  state.myVote[box.dataset.bid]=selection.stars;
+  updateRatingPreview(box, selection.stars);
+  box.closest('.card').querySelector('[data-rate]').classList.add('on');
 });
 
 
@@ -2544,6 +2556,7 @@ function saveNote(){
 document.addEventListener('keydown',e=>{
   const k=e.key;
   const tag=(e.target&&e.target.tagName)||'';
+  if(k==='Escape' && e.target.matches?.('.rating-half')){e.preventDefault();state.ratingOpen=null;render();return;}
   if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT') return;   // 输入控件自己处理键盘
   if((k==='Enter'||k===' ') && e.target.closest?.('.card .det')) return;
   if(document.getElementById('itemDetail')?.classList.contains('on')){ if(k==='Escape'){e.preventDefault();closeItemDetail();} return; }
@@ -2562,13 +2575,6 @@ document.addEventListener('keydown',e=>{
     if (k === 'Escape') { e.preventDefault(); closeSettings(); }
     return;
   }
-  if (updateDialog.classList.contains('on')) {
-    if (k === 'Escape') {
-      e.preventDefault();
-      closeUpdateDialog();
-    }
-    return;
-  }
   if($help.classList.contains('on')){
     if(k==='Escape'||k==='h'||k==='H'){e.preventDefault();closeHelp();}
     return;
@@ -2576,6 +2582,7 @@ document.addEventListener('keydown',e=>{
   if(state.submitOpen){if(k==='Escape'){e.preventDefault();closeSubmit();}return;}
   if(state.modal){if(k==='Escape'){e.preventDefault();closeModal();}return;}
   if(k==='Escape'){e.preventDefault();
+    if(state.ratingOpen){state.ratingOpen=null;render();return;}
     $toast.classList.remove('on');
     if(state.view==='detail')closeDetail();
     else if(state.q) clearSearchQuery();
@@ -2732,7 +2739,6 @@ if(typeof window.lc2 === 'undefined') bootNotes();   // 浏览器 / 原型：读
   bindPanelDrag(document.getElementById('modal'));
   bindPanelDrag(document.getElementById('submitModal'));
   bindPanelDrag(document.getElementById('help'));
-  bindPanelDrag(document.getElementById('updateDialog'));
   bindPanelDrag(document.getElementById('settings'));
     /* 阻止 Chromium 原生拖拽：否则按住图标/文字会拖出“幽灵”并选中 */
     document.addEventListener('dragstart', function(ev){ ev.preventDefault(); }, true);
@@ -2740,8 +2746,8 @@ if(typeof window.lc2 === 'undefined') bootNotes();   // 浏览器 / 原型：读
 
 /* 打分星点按弹一下（事件委托，不侵入业务逻辑） */
 document.addEventListener('click', function(ev){
-  var rp = ev.target && ev.target.closest ? ev.target.closest('.rp') : null;
-  if(rp) motion.replay(rp, 'm-pop');
+  const option=ev.target.closest?.('.rating-half');
+  if(option) motion.replay(option.closest('.rp').querySelector('.rp-icon'), 'm-pop');
 }, true);
 
 /* 主进程全局热键 → 合成 keydown，复用已有键盘逻辑 */
@@ -2775,7 +2781,7 @@ window.lc2.onPanel(function(s){
       document.body.classList.toggle('frame-dwm', payload.frame === 'dwm');
       elPanel.style.setProperty('--window-radius', payload.cornerRadius + 'px');
     }
-    if (!state.open) closeUpdateDialog();
+    if (!state.open) closeSettings();
     if (!payload.open) resetInputFocus();
     if(typeof payload.pinned === 'boolean'){
       var pb = document.getElementById('pinbtn');

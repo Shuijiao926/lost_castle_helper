@@ -137,6 +137,16 @@
       countB - countA || tagA.localeCompare(tagB, 'zh-CN'));
   }
 
+  /** 五星选择以半颗为一档，换算到 10 分制。 */
+  function ratingSelection(starCount) {
+    const selected = Number.isFinite(starCount) ? Math.min(5, Math.max(0, Math.round(starCount * 2) / 2)) : 0;
+    return {
+      stars: selected,
+      score: selected * 2,
+      fills: Array.from({ length: 5 }, (_, index) => Math.min(1, Math.max(0, selected - index))),
+    };
+  }
+
   /** 评分 → 5 颗星 HTML（四舍五入到每颗星 = 2 分） */
   function stars(rating) {
     var filled = Math.round(rating / 2);
@@ -312,6 +322,7 @@
     listTreasures: listTreasures,
     listTags,
     equipmentForDetail,
+    ratingSelection,
     stars: stars,
     matches: matches,
     buildTime: buildTime,
