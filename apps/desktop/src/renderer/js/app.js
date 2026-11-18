@@ -27,6 +27,7 @@
   const searchQuery = $('q'), searchQueryClear = $('qClear');
   const modalQuery = $('mq'), modalQueryClear = $('mqClear');
   const elFbtn = elSbar;
+  const feedScrollbar = LC2.ui.bindFeedScrollbar(elFeed, $('feedScrollbar'));
   const domain = LC2.domain;
   const infra = LC2.infra;
   const motion = LC2.ui.motion;
@@ -248,6 +249,7 @@ function renderFilterbar(isFeed){
 
 function syncFeedScroll(){
   elFeed.classList.toggle('scrolled', elFeed.scrollTop > 0);
+  feedScrollbar.sync(state.view==='feed' && !!elFeed.querySelector('.card'));
 }
 
 elFeed.addEventListener('scroll', syncFeedScroll, { passive: true });
