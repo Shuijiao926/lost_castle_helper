@@ -315,6 +315,12 @@
     return { points, depth: thresholds.filter((threshold) => threshold <= points).length, thresholds };
   }
 
+  function pickRandomBuild(builds, sample) {
+    if (!builds.length) return null;
+    const value = Number.isFinite(sample) ? Math.max(0, Math.min(1 - Number.EPSILON, sample)) : 0;
+    return builds[Math.floor(value * builds.length)];
+  }
+
   return {
     weapon: weapon,
     weaponName: weaponName,
@@ -335,5 +341,6 @@
     nightmareList,
     nightmareTotal,
     nightmareProgress,
+    pickRandomBuild,
   };
 }));

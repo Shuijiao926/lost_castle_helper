@@ -24,7 +24,7 @@
         elFilterbar = refs.filterbar, elListbar = refs.listbar,
         elTtl = refs.ttl, elModal = refs.modal, elGrid = refs.mgrid,
         elPanel = refs.panel, elBubble = refs.bubble, elTip = refs.bubbleTip;
-  const searchQuery = $('q'), searchQueryClear = $('qClear'), feedTop = $('feedTop'), feedBottom = $('feedBottom');
+  const searchQuery = $('q'), searchQueryClear = $('qClear');
   const modalQuery = $('mq'), modalQueryClear = $('mqClear');
   const elFbtn = elSbar;
   const domain = LC2.domain;
@@ -49,6 +49,85 @@ const filterSegments = {
   equip: { field: 'filterEquip', label: '装备' },
   armor: { field: 'filterArmor', label: '衣服' },
 };
+
+const randomButton=$('randomBuild'), randomModal=$('randomModal'), randomTrack=$('randomTrack');
+const randomPool=$('randomPool'), randomStatus=$('randomStatus'), randomWindow=$('randomWindow');
+const randomAgain=$('randomAgain'), randomView=$('randomView');
+let randomPhase='closed';
+let randomResult=null;
+let cancelRandomAnimation=null;
+
+function syncRandomButton(){
+  randomButton.disabled=dataStatus!=='ready' || !BUILDS.length || randomPhase==='rolling';
+  randomButton.title=BUILDS.length ? '随机一下 · 从全部 '+BUILDS.length+' 个流派中抽取' : '随机一下 · 暂无流派可抽取';
+}
+function randomEntryHTML(build){
+  const weapon=build.gear?.weapon?.name;
+  const key=weapon && ICON[weapon] ? weapon : build.wt;
+  return '<div class="draw-entry">'+ic(key,wName(build.wt),'s60',weaponTint(build.wt)).replace('loading="lazy"','loading="eager"')
+    +'<div class="draw-entry-main"><div class="draw-entry-name">'+esc(build.name)+'</div>'
+    +'<div class="draw-entry-meta">'+esc(wName(build.wt))+' · '+esc(inscName(build.insc))+'</div></div>'
+    +'<p class="draw-entry-tip">'+esc(build.tip)+'</p></div>';
+}
+function closeRandomDraw(){
+  if(randomPhase==='closed') return;
+  cancelRandomAnimation?.();
+  cancelRandomAnimation=null;
+  randomPhase='closed';
+  randomResult=null;
+  randomModal.classList.remove('on','is-result');
+  randomWindow.setAttribute('aria-busy','false');
+  randomButton.setAttribute('aria-expanded','false');
+  window.lc2?.modalEscape?.(false);
+  syncRandomButton();
+}
+function spinRandomDraw(){
+  if(randomPhase==='rolling' || dataStatus!=='ready' || !BUILDS.length) return;
+  cancelRandomAnimation?.();
+  const pool=BUILDS.slice();
+  randomResult=domain.pickRandomBuild(pool,Math.random());
+  randomPhase='rolling';
+  releaseFocusInput();
+  randomModal.classList.add('on');
+  randomModal.classList.remove('is-result');
+  randomButton.setAttribute('aria-expanded','true');
+  window.lc2?.modalEscape?.(true);
+  randomPool.textContent='从全部 '+pool.length+' 个流派中抽取';
+  randomStatus.textContent='正在抽取…';
+  randomWindow.setAttribute('aria-busy','true');
+  randomAgain.disabled=true;
+  randomView.disabled=true;
+  syncRandomButton();
+  const reel=Array.from({length:24},()=>domain.pickRandomBuild(pool,Math.random()));
+  reel.push(randomResult,domain.pickRandomBuild(pool,Math.random()));
+  randomTrack.innerHTML=reel.map(randomEntryHTML).join('');
+  cancelRandomAnimation=motion.drawReel(randomTrack,()=>{
+    randomPhase='result';
+    randomModal.classList.add('is-result');
+    randomWindow.setAttribute('aria-busy','false');
+    randomStatus.textContent='抽中了「'+randomResult.name+'」';
+    randomAgain.disabled=false;
+    randomView.disabled=false;
+    syncRandomButton();
+    motion.replay(randomWindow,'m-draw-reveal');
+  },{instant:pool.length===1});
+}
+function viewRandomResult(){
+  if(randomPhase!=='result') return;
+  const id=randomResult.id;
+  closeRandomDraw();
+  if(BUILDS.some(build=>build.id===id)) openDetail(id);
+  else showToast('流派数据已更新，请重新抽取');
+}
+randomButton.onclick=spinRandomDraw;
+randomAgain.onclick=spinRandomDraw;
+randomView.onclick=viewRandomResult;
+$('randomClose').onclick=closeRandomDraw;
+randomModal.onclick=(event)=>{
+  if(window.__lc2SuppressBackdrop){window.__lc2SuppressBackdrop=false;return;}
+  if(event.target===randomModal) closeRandomDraw();
+};
+window.addEventListener('pagehide',closeRandomDraw);
 
 /* ================= 领域调用（应用状态 → 领域参数） ================= */
 function currentFilters() {
@@ -167,29 +246,15 @@ function renderFilterbar(isFeed){
   });
 }
 
-/* 「回到顶部 / 去底部」：都以「一个视口」为触发距离，滚过一屏才出现，
- * 两个按钮在长列表里可能同时出现（列表超过两屏），互不遮挡。 */
 function syncFeedScroll(){
-  const top = elFeed.scrollTop;
-  const height = elFeed.clientHeight;
-  const rest = elFeed.scrollHeight - top - height;
-  elFeed.classList.toggle('scrolled', top > 0);
-  feedTop.hidden = !height || top < height;
-  feedBottom.hidden = !height || rest < height;
+  elFeed.classList.toggle('scrolled', elFeed.scrollTop > 0);
 }
 
 elFeed.addEventListener('scroll', syncFeedScroll, { passive: true });
 window.addEventListener('resize', syncFeedScroll);
-feedTop.addEventListener('click', () => {
-  elFeed.scrollTop = 0;
-  syncFeedScroll();
-});
-feedBottom.addEventListener('click', () => {
-  elFeed.scrollTop = elFeed.scrollHeight;
-  syncFeedScroll();
-});
 
 function render(){
+  syncRandomButton();
   const isFeed=state.view==='feed';
   elPanel.classList.toggle('detail-open', !isFeed);
   elFeed.style.display=isFeed?'block':'none';
@@ -2569,6 +2634,11 @@ document.addEventListener('keydown',e=>{
     const hid=elPanel.classList.toggle('hidden');
     elBubble.classList.toggle('hidden',!hid);elTip.classList.toggle('hidden',!hid);return;}
   if(elPanel.classList.contains('hidden'))return;
+  if(randomModal.classList.contains('on')){
+    if(k==='Escape'){e.preventDefault();closeRandomDraw();}
+    if(k==='Enter' && e.target===document){e.preventDefault();viewRandomResult();}
+    return;
+  }
   if (settingsModal.classList.contains('on')) {
     if (k === 'Escape') { e.preventDefault(); closeSettings(); }
     return;
@@ -2758,6 +2828,7 @@ if(typeof window.lc2 === 'undefined') bootNotes();   // 浏览器 / 原型：读
   bindPanelDrag(document.getElementById('submitModal'));
   bindPanelDrag(document.getElementById('help'));
   bindPanelDrag(document.getElementById('settings'));
+  bindPanelDrag(randomModal);
     /* 阻止 Chromium 原生拖拽：否则按住图标/文字会拖出“幽灵”并选中 */
     document.addEventListener('dragstart', function(ev){ ev.preventDefault(); }, true);
   }
@@ -2800,6 +2871,7 @@ window.lc2.onPanel(function(s){
       elPanel.style.setProperty('--window-radius', payload.cornerRadius + 'px');
     }
     if (!state.open) closeSettings();
+    if (!state.open) closeRandomDraw();
     if (!payload.open) resetInputFocus();
     if(typeof payload.pinned === 'boolean'){
       var pb = document.getElementById('pinbtn');
@@ -2817,6 +2889,7 @@ window.lc2.onPanel(function(s){
 
 /* 载入真实数据（Electron 面板窗口） */
   function applyPayload(d){
+    closeRandomDraw();
     loadInscriptions(d.inscriptions);
     loadWeaponTypes(d.weapons);
   loadWeapons(d.weaponItems);

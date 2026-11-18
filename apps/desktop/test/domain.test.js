@@ -35,6 +35,31 @@ const FIXTURE_BUILDS = [
   makeBuild({ id: 'test_build_3', name: '测试流派三', wt: 'BOW', insc: 'bow_roaring', rating: 9.1, votes: 300, tags: ['雷击'], features: ['远程'] }),
 ];
 
+test('随机流派按等长区间覆盖全部候选', () => {
+  assert.equal(domain.pickRandomBuild(FIXTURE_BUILDS, 0), FIXTURE_BUILDS[0]);
+  assert.equal(domain.pickRandomBuild(FIXTURE_BUILDS, 0.34), FIXTURE_BUILDS[1]);
+  assert.equal(domain.pickRandomBuild(FIXTURE_BUILDS, 0.67), FIXTURE_BUILDS[2]);
+  assert.equal(domain.pickRandomBuild(FIXTURE_BUILDS, 0.99999), FIXTURE_BUILDS[2]);
+});
+
+test('没有流派时随机抽取返回空结果', () => {
+  assert.equal(domain.pickRandomBuild([], 0.5), null);
+});
+
+test('只有一个流派时始终抽中该流派', () => {
+  for (const sample of [0, 0.5, 0.99999]) {
+    assert.equal(domain.pickRandomBuild([FIXTURE_BUILDS[0]], sample), FIXTURE_BUILDS[0]);
+  }
+});
+
+test('随机抽样边界不会产生越界或改变候选顺序', () => {
+  const before = FIXTURE_BUILDS.slice();
+  assert.equal(domain.pickRandomBuild(FIXTURE_BUILDS, 1), FIXTURE_BUILDS[2]);
+  assert.equal(domain.pickRandomBuild(FIXTURE_BUILDS, -1), FIXTURE_BUILDS[0]);
+  assert.equal(domain.pickRandomBuild(FIXTURE_BUILDS, NaN), FIXTURE_BUILDS[0]);
+  assert.deepEqual(FIXTURE_BUILDS, before);
+});
+
 test('catalog：结构完整，允许流派数据为空（真实数据未接入）', () => {
   assert.ok(Array.isArray(catalog.BUILDS));
   assert.equal(catalog.BUILDS.length, 0);

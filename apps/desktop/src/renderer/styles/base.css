@@ -767,13 +767,18 @@
   .fclear:hover{color:#FFE6B0;border-color:rgba(255,214,146,.6)}
 
   /* ================= 列表工具栏（筛选 chips + 排序） ================= */
-  .list-actions{display:flex;align-items:center;gap:6px;min-height:25px}
-  .feed-jump{display:flex;align-items:center;gap:4px;padding:4px 7px;border:0;border-radius:5px;
-    background:rgba(255,214,146,.08);color:#E5C892;font:inherit;font-size:11.5px;line-height:1.3;cursor:pointer;flex:none}
-  .feed-jump[hidden]{display:none}
-  .feed-jump:hover,.feed-jump:focus-visible{background:rgba(255,214,146,.16);color:#FFE6B0}
-  .feed-jump svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-  .sorter{margin-left:auto;display:flex;align-items:center;gap:14px;flex:none;padding:1px 2px 1px 0}
+  .list-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;min-height:28px}
+  .random-build{display:inline-flex;align-items:center;justify-content:center;flex:none;width:30px;height:28px;padding:0;
+    border:1px solid rgba(184,157,219,.18);border-radius:7px;background:rgba(81,59,102,.22);
+    color:#DCCDEB;font:inherit;font-size:11.5px;line-height:1.4;cursor:pointer;
+    transition:background .18s,border-color .18s,transform .18s}
+  .random-build:hover:not(:disabled){background:rgba(108,76,132,.5);border-color:rgba(222,198,246,.5);transform:translateY(-1px)}
+  .random-build:active:not(:disabled){transform:translateY(0) scale(.97)}
+  .random-build:focus-visible{outline:2px solid #C4A8E4;outline-offset:2px}
+  .random-build:disabled{opacity:.45;cursor:default}
+  .random-glyph{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round}
+  .random-glyph path{stroke-width:3}
+  .sorter{margin-left:auto;display:flex;align-items:center;gap:14px;flex:none;min-height:28px;padding:0 2px 0 0}
   .sorter .sbtn{position:relative;font-size:12.5px;color:#8F83A8;cursor:pointer;user-select:none;
     padding:2px 0;transition:color .15s}
   .sorter .sbtn:hover{color:#D9CCEC}
@@ -1222,23 +1227,23 @@
   .modal .mh .mh-close, #submitModal .rvbar .rvback, #submitModal .rvbar .rvclear{cursor:pointer}
 
   /* ================= 设置 ================= */
-  #settings{justify-content:center;align-items:center;padding:20px}
-  #settings .settingssheet{position:relative;overflow:hidden;width:min(520px,calc(100% - 28px));max-width:none;height:auto;max-height:82%;margin:0;
+  #settings,#randomModal{justify-content:center;align-items:center;padding:20px}
+  #settings .settingssheet,#randomModal .draw-sheet{position:relative;overflow:hidden;width:min(520px,calc(100% - 28px));max-width:none;height:auto;max-height:82%;margin:0;
     border-radius:12px;display:flex;flex-direction:column;
     background:linear-gradient(180deg,#3B2D5C 0%,#302449 46%,#291F41 100%);
     border:1px solid rgba(255,214,146,.22);border-top-color:rgba(255,214,146,.45);
     box-shadow:0 22px 50px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.10),
       inset 0 0 0 1px rgba(255,214,146,.05)}
-  #settings .settingssheet::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
+  #settings .settingssheet::before,#randomModal .draw-sheet::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
     background:url('../../../assets/panel-bg.jpg') center 22% / cover no-repeat;
     opacity:.10;filter:saturate(.85) brightness(1) blur(2.4px)}
-  #settings .settingssheet::after{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
+  #settings .settingssheet::after,#randomModal .draw-sheet::after{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
     background:
       radial-gradient(120% 70% at 50% -8%, rgba(255,235,200,.10), rgba(255,235,200,0) 58%),
       linear-gradient(180deg, rgba(255,255,255,.05) 0%, rgba(20,13,34,0) 24%,
         rgba(20,13,34,.06) 70%, rgba(16,10,28,.18) 100%)}
-  #settings .settingssheet > *{position:relative;z-index:1}
-  #settings .mh{border-bottom-color:rgba(255,214,146,.16)}
+  #settings .settingssheet > *,#randomModal .draw-sheet > *{position:relative;z-index:1}
+  #settings .mh,#randomModal .mh{border-bottom-color:rgba(255,214,146,.16)}
   .settingsbody{padding:8px 16px 16px;overflow-y:auto}
   .settings-group{font-size:10.5px;color:#C7A85E;letter-spacing:.5px;margin:14px 0 6px}
   .settings-row{display:flex;align-items:center;gap:12px;justify-content:space-between;padding:10px 12px;border:1px solid rgba(255,214,146,.16);border-radius:10px;background:rgba(255,255,255,.035);box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
@@ -1260,6 +1265,52 @@
   .settings-download{color:#FFE6B0;border-color:rgba(255,214,146,.5);background:rgba(255,214,146,.12)}
   #settings .msheet{cursor:default}
   #settings{cursor:grab}
+
+  /* ================= 随机流派：滚轴停靠后再揭晓 ================= */
+  #randomModal{z-index:30;cursor:grab}
+  #randomModal .draw-sheet{cursor:default}
+  .draw-body{padding:14px 16px 16px;overflow-y:auto}
+  .draw-pool{margin:0 0 12px;text-align:center;font-size:11px;color:#B5A4C8}
+  .draw-window{position:relative;height:284px;overflow:hidden;border-radius:12px;
+    background:rgba(14,10,24,.38);border:1px solid rgba(205,175,234,.14);
+    mask-image:linear-gradient(transparent,#000 12%,#000 88%,transparent)}
+  .draw-window::after{content:'';position:absolute;inset:51px 7px;z-index:1;pointer-events:none;
+    border:1px solid rgba(216,189,245,.32);border-radius:11px;
+    transition:border-color .3s,box-shadow .3s}
+  .draw-track{position:absolute;top:0;left:0;right:0;will-change:transform;pointer-events:none}
+  .draw-entry{box-sizing:border-box;height:180px;margin:0 8px;padding:17px 14px;display:grid;
+    grid-template-columns:60px minmax(0,1fr);column-gap:12px;align-content:center;
+    border:1px solid rgba(205,175,234,.12);border-radius:10px;
+    background:linear-gradient(135deg,rgba(90,66,108,.44),rgba(39,29,51,.68))}
+  .draw-entry .ic{width:60px;height:60px;border-radius:12px;align-self:center;
+    border:1px solid color-mix(in srgb,var(--c) 40%,#564361);
+    background:radial-gradient(circle at 35% 25%,color-mix(in srgb,var(--c) 22%,#2C2237),#201927)}
+  .draw-entry .ic img{width:84%;height:84%;filter:brightness(1.12) drop-shadow(0 2px 3px rgba(0,0,0,.4))}
+  .draw-entry-main{min-width:0;align-self:center}
+  .draw-entry-name{font-size:16px;font-weight:650;line-height:1.5;color:#F0E6E1;overflow-wrap:anywhere;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .draw-entry-meta{margin-top:4px;font-size:11px;line-height:1.6;color:#BDAFCB}
+  .draw-entry-tip{grid-column:1/-1;margin:12px 0 0;font-size:12px;line-height:1.7;color:#CFC3D6;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  #randomModal.is-result .draw-window::after{border-color:rgba(238,203,145,.62);box-shadow:inset 0 0 20px rgba(238,203,145,.06)}
+  .draw-status{min-height:36px;margin:12px 0;display:flex;align-items:center;justify-content:center;
+    text-align:center;font-size:12px;line-height:1.5;color:#C8B9D6;overflow-wrap:anywhere}
+  #randomModal.is-result .draw-status{color:#ECD4AE}
+  .draw-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .draw-actions button{min-height:36px;font:inherit;font-size:12px;color:#D7C9E6;
+    border:1px solid rgba(203,177,230,.24);border-radius:8px;background:rgba(255,255,255,.04);cursor:pointer;
+    transition:background .18s,border-color .18s,transform .18s}
+  .draw-actions .draw-view{background:rgba(233,200,145,.1);color:#EAD1A5;border-color:rgba(233,200,145,.35)}
+  .draw-actions button:hover:not(:disabled){background:rgba(218,193,241,.13);border-color:rgba(218,193,241,.5);transform:translateY(-1px)}
+  .draw-actions button:active:not(:disabled){transform:scale(.98)}
+  .draw-actions button:focus-visible{outline:2px solid #C4A8E4;outline-offset:2px}
+  .draw-actions button:disabled{opacity:.35;cursor:default}
+  .m-draw-reveal{animation:m-draw-reveal .5s ease-out}
+  @keyframes m-draw-reveal{from{filter:brightness(1.35)}to{filter:brightness(1)}}
+  @media(prefers-reduced-motion:reduce){
+    .random-build,.draw-actions button{transition:none;transform:none!important}
+    .m-draw-reveal{animation:none}
+  }
 
   /* ================= 刻印共鸣槽 ================= */
   .subresbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:2px 0 10px;margin:0 0 10px;border-bottom:1px dashed rgba(255,214,146,.16)}

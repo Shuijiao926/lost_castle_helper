@@ -51,11 +51,8 @@
     </span>
   </div>
   <div class="list-actions">
-    <button type="button" class="feed-jump" id="feedTop" aria-controls="feed" hidden>
-      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 7l4-4 4 4M8 3v10"/></svg>回到顶部
-    </button>
-    <button type="button" class="feed-jump" id="feedBottom" aria-controls="feed" hidden>
-      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 9l4 4 4-4M8 13V3"/></svg>去底部
+    <button type="button" class="random-build" id="randomBuild" aria-label="随机一下" title="随机一下" aria-haspopup="dialog" aria-controls="randomModal" aria-expanded="false" disabled>
+      <svg class="random-glyph" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 8h.01M16 8h.01M12 12h.01M8 16h.01M16 16h.01"/></svg>
     </button>
     <div class="sorter" id="sorter" data-sort="time" title="列表排序">
       <span class="sbtn on" data-sort="time">最新</span>
@@ -78,6 +75,20 @@
   </div>
 </div>
 
+    <div class="modal" id="randomModal" role="dialog" aria-modal="true" aria-labelledby="randomTitle" aria-describedby="randomPool randomStatus">
+      <div class="msheet draw-sheet">
+        <div class="mh"><span class="mh-spacer"></span><b id="randomTitle">随机一下</b><button type="button" class="mh-close" id="randomClose" aria-label="关闭" title="关闭（Esc）"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+        <div class="draw-body">
+          <p class="draw-pool" id="randomPool"></p>
+          <div class="draw-window" id="randomWindow" aria-busy="false"><div class="draw-track" id="randomTrack" aria-hidden="true"></div></div>
+          <p class="draw-status" id="randomStatus" role="status" aria-live="polite"></p>
+          <div class="draw-actions">
+            <button type="button" id="randomAgain" disabled>再抽一次</button>
+            <button type="button" class="draw-view" id="randomView" disabled>查看流派</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="modal" id="settings" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
       <div class="msheet settingssheet">
         <div class="mh"><span class="mh-spacer"></span><b id="settingsTitle">设置</b><button type="button" class="mh-close" id="settingsClose" aria-label="关闭" title="关闭（Esc）"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
