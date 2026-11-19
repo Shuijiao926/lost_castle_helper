@@ -35,6 +35,7 @@ function createHandlers(container) {
         env: container.config.env,
         persistence: container.persistence || 'json',
         persistenceDetails: container.persistenceDetails,
+        ratingWriteConfigured: container.ratingWriteConfigured || false,
         version: container.packageVersion || null,
         time: new Date().toISOString(),
       };

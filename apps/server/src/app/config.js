@@ -30,12 +30,20 @@ function list(name, fallback = []) {
 }
 
 const dataDir = path.resolve(str('DATA_DIR', path.join(REPO_ROOT, 'data')));
-// 生产环境可挂载连接串文件，避免把数据库密码写入 Compose 明文配置。
-const databaseUrlFile = str('DATABASE_URL_FILE', '');
-if (databaseUrlFile && str('DATABASE_URL', '')) throw new Error('DATABASE_URL 与 DATABASE_URL_FILE 只能设置一项');
-const databaseUrl = databaseUrlFile ? fs.readFileSync(databaseUrlFile, 'utf8').trim() : str('DATABASE_URL', '');
-if (databaseUrlFile && !databaseUrl) throw new Error('数据库连接串文件为空');
-if (databaseUrl && !/^postgres(?:ql)?:\/\//.test(databaseUrl)) throw new Error('数据库连接串必须使用 PostgreSQL 协议');
+
+/** 连接串统一从环境变量或密钥文件读取，异常不包含实际凭据。 */
+function databaseConnection(name) {
+  const file = str(name + '_FILE', '');
+  const value = str(name, '');
+  if (file && value) throw new Error(name + ' 与 ' + name + '_FILE 只能设置一项');
+  const url = file ? fs.readFileSync(file, 'utf8').trim() : value;
+  if (file && !url) throw new Error(name + ' 连接串文件为空');
+  if (url && !/^postgres(?:ql)?:\/\//.test(url)) throw new Error(name + ' 必须使用 PostgreSQL 协议');
+  return url;
+}
+const databaseUrl = databaseConnection('DATABASE_URL');
+const ratingsDatabaseUrl = databaseConnection('RATINGS_DATABASE_URL');
+if (ratingsDatabaseUrl && !databaseUrl) throw new Error('评分写入连接需要同时配置只读数据库连接');
 const adminTokenFile = str('ADMIN_TOKEN_FILE', '');
 if (adminTokenFile && str('ADMIN_TOKEN', '')) throw new Error('ADMIN_TOKEN 与 ADMIN_TOKEN_FILE 只能设置一项');
 const adminToken = adminTokenFile ? fs.readFileSync(adminTokenFile, 'utf8').trim() : str('ADMIN_TOKEN', 'change_me');
@@ -50,8 +58,9 @@ const config = {
   dataDir,
   runtimeDir: path.resolve(str('RUNTIME_DIR', path.join(dataDir, 'runtime'))),
 
-  /** 当前图鉴与流派查询使用 PostgreSQL，评分、投稿等仍使用 JSON。 */
+  /** 游戏数据和评分汇总共用只读账号，评分写入使用独立的最小权限账号。 */
   databaseUrl,
+  ratingsDatabaseUrl,
 
   /** HTTP 协议层 */
   api: {

@@ -14,9 +14,11 @@ services:
       DATA_DIR: /app/data
       RUNTIME_DIR: /app/runtime
       DATABASE_URL_FILE: /run/secrets/node_database_url
+      RATINGS_DATABASE_URL_FILE: /run/secrets/node_ratings_database_url
       ADMIN_TOKEN_FILE: /run/secrets/node_admin_token
     secrets:
       - node_database_url
+      - node_ratings_database_url
       - node_admin_token
     ports:
       - '127.0.0.1:4317:4317'
@@ -46,3 +48,5 @@ secrets:
     file: ./secrets/node_database_url
   node_admin_token:
     file: ./secrets/node_admin_token
+  node_ratings_database_url:
+    file: ./secrets/node_ratings_database_url

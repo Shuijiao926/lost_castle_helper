@@ -25,6 +25,7 @@ const { JsonBuildRepository } = require('../modules/builds/infrastructure/json-b
 const { PostgresBuildRepository } = require('../modules/builds/infrastructure/postgres-build-repository');
 const { JsonSubmissionRepository } = require('../modules/submissions/infrastructure/json-submission-repository');
 const { JsonRatingRepository } = require('../modules/ratings/infrastructure/json-rating-repository');
+const { PostgresRatingRepository } = require('../modules/ratings/infrastructure/postgres-rating-repository');
 const { JsonPackageRepository } = require('../modules/publishing/infrastructure/json-package-repository');
 
 const { PackageAssembler } = require('../modules/publishing/domain/package');
@@ -32,7 +33,7 @@ const { JsonRateLimitStore } = require('../modules/security/infrastructure/json-
 const { RequestFingerprint } = require('../modules/security/infrastructure/fingerprint');
 const { RateLimiter } = require('../modules/security/application/rate-limiter');
 
-function createContainer({ logger, databaseClient, catalogClient, config = defaultConfig } = {}) {
+function createContainer({ logger, databaseClient, catalogClient, ratingClient, config = defaultConfig } = {}) {
   const log = logger || createLogger({ scope: 'lc2', level: config.logLevel });
 
   const db = new JsonDatabase({ dataDir: config.dataDir, runtimeDir: config.runtimeDir });
@@ -42,11 +43,16 @@ function createContainer({ logger, databaseClient, catalogClient, config = defau
 
   /* ---------- 仓储 ---------- */
   let ownedClient = null;
+  let ownedRatingClient = null;
   const suppliedClient = databaseClient || catalogClient;
   if (config.databaseUrl && !suppliedClient) {
     // 仅使用已有 Prisma 的查询能力；不对 Java 管理的 schema 执行建表或迁移。
     const { PrismaClient } = require('@prisma/client');
     ownedClient = new PrismaClient({ datasources: { db: { url: config.databaseUrl } } });
+  }
+  if (config.databaseUrl && config.ratingsDatabaseUrl && !ratingClient) {
+    const { PrismaClient } = require('@prisma/client');
+    ownedRatingClient = new PrismaClient({ datasources: { db: { url: config.ratingsDatabaseUrl } } });
   }
   const catalogRepository = config.databaseUrl
     ? new PostgresCatalogRepository(suppliedClient || ownedClient)
@@ -55,7 +61,9 @@ function createContainer({ logger, databaseClient, catalogClient, config = defau
     ? new PostgresBuildRepository(suppliedClient || ownedClient)
     : new JsonBuildRepository(db, config);
   const submissionRepository = new JsonSubmissionRepository(db, config);
-  const ratingRepository = new JsonRatingRepository(db, config);
+  const ratingRepository = config.databaseUrl
+    ? new PostgresRatingRepository(suppliedClient || ownedClient, ratingClient || ownedRatingClient)
+    : new JsonRatingRepository(db, config);
   const packageRepository = new JsonPackageRepository(db, config);
 
   /* ---------- 安全管控 ---------- */
@@ -79,10 +87,11 @@ function createContainer({ logger, databaseClient, catalogClient, config = defau
     persistence: config.databaseUrl ? 'mixed' : 'json',
     persistenceDetails: {
       catalog: config.databaseUrl ? 'postgres' : 'json',
-      builds: config.databaseUrl ? 'postgres' : 'json', ratings: 'json', submissions: 'json', packages: 'json',
+      builds: config.databaseUrl ? 'postgres' : 'json', ratings: config.databaseUrl ? 'postgres' : 'json', submissions: 'json', packages: 'json',
     },
+    ratingWriteConfigured: Boolean(config.databaseUrl && (config.ratingsDatabaseUrl || ratingClient)),
     async closeResources() {
-      if (ownedClient) await ownedClient.$disconnect();
+      await Promise.all([ownedClient?.$disconnect(), ownedRatingClient?.$disconnect()]);
     },
     logger: log,
     db,
