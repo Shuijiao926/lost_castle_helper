@@ -33,7 +33,8 @@ function createHandlers(container) {
       return {
         service: 'lc2-server',
         env: container.config.env,
-        persistence: container.config.databaseUrl ? 'postgres' : 'json',
+        persistence: container.persistence || 'json',
+        persistenceDetails: container.persistenceDetails,
         version: container.packageVersion || null,
         time: new Date().toISOString(),
       };

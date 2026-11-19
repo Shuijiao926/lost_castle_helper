@@ -11,7 +11,7 @@
  * 业务代码只拿到接口能力，不关心具体实现。
  */
 
-const config = require('./config');
+const defaultConfig = require('./config');
 const { NodeHasher, SystemClock } = require('./adapters');
 const { createAdminGuard } = require('./admin-auth');
 const { createLogger } = require('../shared/logger');
@@ -20,7 +20,9 @@ const { InMemoryEventBus } = require('../shared/kernel/event-bus');
 const { JsonDatabase } = require('../shared/infrastructure/json-database');
 
 const { JsonCatalogRepository } = require('../modules/catalog/infrastructure/json-catalog-repository');
+const { PostgresCatalogRepository } = require('../modules/catalog/infrastructure/postgres-catalog-repository');
 const { JsonBuildRepository } = require('../modules/builds/infrastructure/json-build-repository');
+const { PostgresBuildRepository } = require('../modules/builds/infrastructure/postgres-build-repository');
 const { JsonSubmissionRepository } = require('../modules/submissions/infrastructure/json-submission-repository');
 const { JsonRatingRepository } = require('../modules/ratings/infrastructure/json-rating-repository');
 const { JsonPackageRepository } = require('../modules/publishing/infrastructure/json-package-repository');
@@ -30,7 +32,7 @@ const { JsonRateLimitStore } = require('../modules/security/infrastructure/json-
 const { RequestFingerprint } = require('../modules/security/infrastructure/fingerprint');
 const { RateLimiter } = require('../modules/security/application/rate-limiter');
 
-function createContainer({ logger } = {}) {
+function createContainer({ logger, databaseClient, catalogClient, config = defaultConfig } = {}) {
   const log = logger || createLogger({ scope: 'lc2', level: config.logLevel });
 
   const db = new JsonDatabase({ dataDir: config.dataDir, runtimeDir: config.runtimeDir });
@@ -39,8 +41,19 @@ function createContainer({ logger } = {}) {
   const clock = new SystemClock();
 
   /* ---------- 仓储 ---------- */
-  const catalogRepository = new JsonCatalogRepository(db, config);
-  const buildRepository = new JsonBuildRepository(db, config);
+  let ownedClient = null;
+  const suppliedClient = databaseClient || catalogClient;
+  if (config.databaseUrl && !suppliedClient) {
+    // 仅使用已有 Prisma 的查询能力；不对 Java 管理的 schema 执行建表或迁移。
+    const { PrismaClient } = require('@prisma/client');
+    ownedClient = new PrismaClient({ datasources: { db: { url: config.databaseUrl } } });
+  }
+  const catalogRepository = config.databaseUrl
+    ? new PostgresCatalogRepository(suppliedClient || ownedClient)
+    : new JsonCatalogRepository(db, config);
+  const buildRepository = config.databaseUrl
+    ? new PostgresBuildRepository(suppliedClient || ownedClient)
+    : new JsonBuildRepository(db, config);
   const submissionRepository = new JsonSubmissionRepository(db, config);
   const ratingRepository = new JsonRatingRepository(db, config);
   const packageRepository = new JsonPackageRepository(db, config);
@@ -63,6 +76,14 @@ function createContainer({ logger } = {}) {
 
   return {
     config,
+    persistence: config.databaseUrl ? 'mixed' : 'json',
+    persistenceDetails: {
+      catalog: config.databaseUrl ? 'postgres' : 'json',
+      builds: config.databaseUrl ? 'postgres' : 'json', ratings: 'json', submissions: 'json', packages: 'json',
+    },
+    async closeResources() {
+      if (ownedClient) await ownedClient.$disconnect();
+    },
     logger: log,
     db,
     eventBus,

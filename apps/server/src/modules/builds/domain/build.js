@@ -34,7 +34,7 @@ const LICENSE = 'CC-BY-NC-SA-4.0';
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 /** 内部字段：绝对不能出现在给客户端的数据里 */
-const INTERNAL_FIELDS = ['t'];
+const INTERNAL_FIELDS = new Set(['t', 'depth', '__proto__', 'constructor', 'prototype']);
 
 function assertUniqueTreasures(list) {
   const seen = new Set();
@@ -47,15 +47,16 @@ function assertUniqueTreasures(list) {
 
 /** 剥离内部字段（宝藏深度 t） */
 function stripInternal(record) {
-  const out = { ...record };
-  if (Array.isArray(out.treasureOrder)) {
-    out.treasureOrder = out.treasureOrder.map((item) => {
-      const copy = { ...item };
-      for (const f of INTERNAL_FIELDS) delete copy[f];
-      return copy;
-    });
-  }
-  return out;
+  const fields = new Set(kernel.BUILD_PUBLIC_FIELDS);
+  return publicValue(Object.fromEntries(Object.entries(record).filter(([key]) => fields.has(key))));
+}
+
+/** 详情中的嵌套效果也剥离内部字段，转换过程不改写持久化对象。 */
+function publicValue(value) {
+  if (Array.isArray(value)) return value.map(publicValue);
+  if (!value || typeof value !== 'object') return value;
+  return Object.fromEntries(Object.entries(value).filter(([key]) => !INTERNAL_FIELDS.has(key))
+    .map(([key, item]) => [key, publicValue(item)]));
 }
 
 class Build {

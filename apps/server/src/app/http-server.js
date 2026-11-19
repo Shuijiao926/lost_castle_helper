@@ -28,6 +28,9 @@ async function buildHttpServer(container, { logger } = {}) {
     bodyLimit: config.api.maxBodyBytes,
     disableRequestLogging: true,
   });
+  app.addHook('onClose', async () => {
+    await container.closeResources?.();
+  });
 
   await app.register(cors, {
     origin: config.cors.origins.length ? config.cors.origins : true,

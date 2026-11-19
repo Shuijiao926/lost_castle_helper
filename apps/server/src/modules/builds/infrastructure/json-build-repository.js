@@ -20,13 +20,13 @@ class JsonBuildRepository extends BuildRepository {
     const file = this.db.readSeed(this.file, { builds: [] });
     const record = (file.builds || []).find((b) => b.id === id);
     if (!record) return null;
-    if (record.status === BuildStatus.ARCHIVED) return null; // 已下架对外不可见
+    if (record.status && record.status !== BuildStatus.PUBLISHED) return null;
     return record;
   }
 
   async listPublished({ weaponType = null, inscriptionId = null, sort = 'rating', limit, offset = 0 } = {}) {
     const file = this.db.readSeed(this.file, { builds: [] });
-    let list = (file.builds || []).filter((b) => b.status !== BuildStatus.ARCHIVED);
+    let list = (file.builds || []).filter((b) => !b.status || b.status === BuildStatus.PUBLISHED);
     if (weaponType) list = list.filter((b) => b.wt === weaponType);
     if (inscriptionId) list = list.filter((b) => b.insc === inscriptionId);
 

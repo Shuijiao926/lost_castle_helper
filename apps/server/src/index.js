@@ -76,7 +76,7 @@ async function main() {
   log.info('服务已启动', {
     url: `http://${config.host}:${config.port}`,
     env: config.env,
-    persistence: config.databaseUrl ? 'postgres' : 'json',
+    persistence: container.persistence,
   });
   log.info('数据加载完成', status);
   log.debug('安全策略', container.security.describe());

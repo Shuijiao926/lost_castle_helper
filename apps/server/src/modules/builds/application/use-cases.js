@@ -31,8 +31,6 @@ class ListBuilds {
       weaponType: query.weaponType || null,
       inscriptionId: query.inscriptionId || null,
       sort,
-      limit: query.limit,
-      offset: query.offset,
     });
 
     const items = [];
@@ -50,8 +48,13 @@ class ListBuilds {
       }
     }
 
+    // 合并真实评分之后排序，分页前保留总数，避免数据库内容中的零值占位影响排名。
+    const byUpdated = (a, b) => String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')) || a.id.localeCompare(b.id);
+    items.sort(sort === 'updated' ? byUpdated : (a, b) => b[sort === 'votes' ? 'votes' : 'rating'] - a[sort === 'votes' ? 'votes' : 'rating'] || byUpdated(a, b));
+    const offset = Number.isSafeInteger(Number(query.offset)) ? Math.max(0, Number(query.offset)) : 0;
+    const limit = Number.isSafeInteger(Number(query.limit)) && Number(query.limit) > 0 ? Number(query.limit) : null;
     return {
-      items,
+      items: items.slice(offset, limit === null ? undefined : offset + limit),
       total: items.length,
       skipped,
       catalogVersion: catalog.version,

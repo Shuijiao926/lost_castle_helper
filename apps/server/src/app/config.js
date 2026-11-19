@@ -8,6 +8,7 @@
  */
 
 const path = require('path');
+const fs = require('fs');
 
 const REPO_ROOT = path.join(__dirname, '..', '..', '..', '..');
 const SERVER_DIR = path.join(__dirname, '..', '..');
@@ -29,6 +30,16 @@ function list(name, fallback = []) {
 }
 
 const dataDir = path.resolve(str('DATA_DIR', path.join(REPO_ROOT, 'data')));
+// 生产环境可挂载连接串文件，避免把数据库密码写入 Compose 明文配置。
+const databaseUrlFile = str('DATABASE_URL_FILE', '');
+if (databaseUrlFile && str('DATABASE_URL', '')) throw new Error('DATABASE_URL 与 DATABASE_URL_FILE 只能设置一项');
+const databaseUrl = databaseUrlFile ? fs.readFileSync(databaseUrlFile, 'utf8').trim() : str('DATABASE_URL', '');
+if (databaseUrlFile && !databaseUrl) throw new Error('数据库连接串文件为空');
+if (databaseUrl && !/^postgres(?:ql)?:\/\//.test(databaseUrl)) throw new Error('数据库连接串必须使用 PostgreSQL 协议');
+const adminTokenFile = str('ADMIN_TOKEN_FILE', '');
+if (adminTokenFile && str('ADMIN_TOKEN', '')) throw new Error('ADMIN_TOKEN 与 ADMIN_TOKEN_FILE 只能设置一项');
+const adminToken = adminTokenFile ? fs.readFileSync(adminTokenFile, 'utf8').trim() : str('ADMIN_TOKEN', 'change_me');
+if (adminTokenFile && !adminToken) throw new Error('管理令牌文件为空');
 
 const config = {
   env: str('NODE_ENV', 'development'),
@@ -39,8 +50,8 @@ const config = {
   dataDir,
   runtimeDir: path.resolve(str('RUNTIME_DIR', path.join(dataDir, 'runtime'))),
 
-  /** P4 启用；为空 = JSON 仓储 */
-  databaseUrl: str('DATABASE_URL', ''),
+  /** 当前图鉴与流派查询使用 PostgreSQL，评分、投稿等仍使用 JSON。 */
+  databaseUrl,
 
   /** HTTP 协议层 */
   api: {
@@ -53,27 +64,20 @@ const config = {
 
   cors: {
     /** 为空表示允许所有来源（本地开发）；生产建议填白名单 */
-    origins: list('CORS_ORIGINS', []),
-    credentials: false,
-    maxAge: int('CORS_MAX_AGE', 86400),
+    origins: list('CORS_ORIGINS', []), credentials: false, maxAge: int('CORS_MAX_AGE', 86400),
   },
 
   /** 安全管控（见 modules/security） */
   security: {
-    adminToken: str('ADMIN_TOKEN', 'change_me'),
-    rateLimits: {
+    adminToken, rateLimits: {
       /** 评分：同指纹窗口内最多几次 */
       rating: {
-        limit: int('RATING_RATE_LIMIT', 20),
-        windowMs: int('RATING_RATE_WINDOW_MS', 60_000),
-      },
-      /** 投稿：门槛更高（人工审核成本高） */
+        limit: int('RATING_RATE_LIMIT', 20), windowMs: int('RATING_RATE_WINDOW_MS', 60_000),
+      }, /** 投稿：门槛更高（人工审核成本高） */
       submission: {
-        limit: int('SUBMISSION_RATE_LIMIT', 5),
-        windowMs: int('SUBMISSION_RATE_WINDOW_MS', 600_000),
+        limit: int('SUBMISSION_RATE_LIMIT', 5), windowMs: int('SUBMISSION_RATE_WINDOW_MS', 600_000),
       },
-    },
-    /** 限流计数持久化文件（放 runtime，重启不清零） */
+    }, /** 限流计数持久化文件（放 runtime，重启不清零） */
     storeFile: str('SECURITY_STORE_FILE', 'security-limits.json'),
   },
 
@@ -94,8 +98,7 @@ const config = {
 
   /** 数据包发布 */
   publishing: {
-    fileBaseUrl: str('FILE_BASE_URL', ''),
-    filePrefix: str('PACKAGE_FILE_PREFIX', 'builds'),
+    fileBaseUrl: str('FILE_BASE_URL', ''), filePrefix: str('PACKAGE_FILE_PREFIX', 'builds'),
   },
 
   /** 目录信息（启动日志用） */

@@ -61,6 +61,14 @@ class BadRequestError extends DomainError {
   }
 }
 
+/** 依赖不可用或发布数据不完整，保留原因供排查，不将原始连接信息返回客户端。 */
+class UnavailableError extends DomainError {
+  constructor(message, cause) {
+    super(message, 'UNAVAILABLE');
+    this.cause = cause;
+  }
+}
+
 module.exports = {
   DomainError,
   ValidationError,
@@ -69,4 +77,5 @@ module.exports = {
   ForbiddenError,
   RateLimitedError,
   BadRequestError,
+  UnavailableError,
 };

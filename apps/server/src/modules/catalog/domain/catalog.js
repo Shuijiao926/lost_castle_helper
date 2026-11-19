@@ -9,6 +9,7 @@
 
 const { ValidationError } = require('../../../shared/kernel/errors');
 const kernel = require('../../../shared/kernel/shared-kernel');
+const { projectCollections } = require('./catalog-projection');
 
 /** 枚举（值来自共享内核，保证前后端一致） */
 const Enums = {
@@ -83,8 +84,9 @@ class Treasure {
  * 领域层只通过它引用图鉴，不直接碰数据源。
  */
 class CatalogSnapshot {
-  constructor({ weapons = [], inscriptions = [], schools = [], treasures = [], version = '0' } = {}) {
+  constructor({ weapons = [], inscriptions = [], schools = [], treasures = [], version = '0', collections = null } = {}) {
     this.version = version;
+    this.collections = collections;
 
     this.weapons = new Map();
     for (const raw of weapons) {
@@ -145,6 +147,7 @@ class CatalogSnapshot {
   }
 
   toDTO() {
+    if (this.collections) return { version: this.version, ...projectCollections(this.collections) };
     return {
       version: this.version,
       weapons: [...this.weapons.values()],

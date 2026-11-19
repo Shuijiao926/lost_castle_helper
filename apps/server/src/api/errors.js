@@ -14,11 +14,19 @@ const {
   ForbiddenError,
   RateLimitedError,
   BadRequestError,
+  UnavailableError,
 } = require('../shared/kernel/errors');
 
 const SCOPE = 'api:errors';
 
 function mapError(error, logger) {
+  if (error instanceof UnavailableError) {
+    logger?.error('数据依赖不可用', {
+      scope: SCOPE, code: error.code,
+      dependencyCode: error.cause?.meta?.code || error.cause?.code || 'UNKNOWN',
+    });
+    return { status: 503, body: { ok: false, error: error.message, code: error.code } };
+  }
   if (error instanceof ValidationError) {
     return { status: 422, body: { ok: false, error: 'validation failed', details: error.errors } };
   }

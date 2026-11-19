@@ -1,0 +1,48 @@
+services:
+  node:
+    image: lc2-node:local
+    profiles:
+      - node
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: '4317'
+      DATA_DIR: /app/data
+      RUNTIME_DIR: /app/runtime
+      DATABASE_URL_FILE: /run/secrets/node_database_url
+      ADMIN_TOKEN_FILE: /run/secrets/node_admin_token
+    secrets:
+      - node_database_url
+      - node_admin_token
+    ports:
+      - '127.0.0.1:4317:4317'
+    volumes:
+      - node_runtime:/app/runtime
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+    mem_limit: 512m
+    healthcheck:
+      test: ['CMD', 'node', '-e', 'Promise.all(["catalog","builds?limit=1"].map(p=>fetch("http://127.0.0.1:4317/api/"+p).then(async r=>({ok:r.ok,b:await r.json()})))).then(([c,b])=>process.exit(c.ok&&c.b.ok&&c.b.catalog?.weapons?.length>0&&b.ok&&b.b.ok&&Array.isArray(b.b.items)&&Number.isInteger(b.b.total)?0:1)).catch(()=>process.exit(1))']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    logging:
+      driver: json-file
+      options:
+        max-size: '10m'
+        max-file: '3'
+
+volumes:
+  node_runtime:
+
+secrets:
+  node_database_url:
+    file: ./secrets/node_database_url
+  node_admin_token:
+    file: ./secrets/node_admin_token

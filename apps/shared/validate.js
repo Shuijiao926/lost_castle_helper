@@ -11,6 +11,10 @@ const RARITIES = ['普通', '优秀', '稀有', '史诗', '传奇'];
 const VERDICTS = ['净化', '不净化'];
 const WEAPON_TAGS = ['核心', '毕业', '过渡', '可选'];
 const DEPTHS = ['S', 'R', '1', '2'];
+// 公开详情沿用现有 schema 字段，避免把管理侧未知字段直接输出给玩家。
+const BUILD_PUBLIC_FIELDS = Object.freeze([
+  ...Object.keys(require('./schema/build.schema.json').definitions.build.properties), 'status',
+]);
 
 const isStr = (v) => typeof v === 'string' && v.trim().length > 0;
 const isNum = (v) => Number.isFinite(Number(v));
@@ -126,4 +130,4 @@ function validateFile(file) {
   return { ok: errors.length === 0, errors };
 }
 
-module.exports = { validateBuild, validateFile, WEAPON_TYPES, RARITIES, VERDICTS, WEAPON_TAGS, DEPTHS };
+module.exports = { validateBuild, validateFile, WEAPON_TYPES, RARITIES, VERDICTS, WEAPON_TAGS, DEPTHS, BUILD_PUBLIC_FIELDS };
