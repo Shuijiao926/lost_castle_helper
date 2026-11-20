@@ -1,0 +1,28 @@
+# castle-helper.fun 入口：自动 HTTPS（Let's Encrypt）+ 两条路径分流
+#
+#   /api/*   → Node 用户服务（容器内 node:4317）
+#   /data/*  → 客户端读取的静态数据包（宿主机 ./data）
+#
+# 前置条件：域名 A 记录指向服务器公网 IP，且安全组放行 80 / 443。
+{$LC2_DOMAIN} {
+	encode zstd gzip
+
+	handle /data/* {
+		root * /srv
+		header Cache-Control "public, max-age=60"
+		file_server
+	}
+
+	handle /api/* {
+		reverse_proxy node:4317
+	}
+
+	handle {
+		respond "LC2 Helper service" 200
+	}
+
+	header {
+		-Server
+		X-Content-Type-Options nosniff
+	}
+}

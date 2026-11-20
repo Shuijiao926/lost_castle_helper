@@ -1,0 +1,21 @@
+# 白名单式：默认排除所有内容，只放行进镜像需要的文件。
+# 与服务端运行无关的桌面端、文档、构建产物都不进入构建上下文。
+**
+!package.json
+!package-lock.json
+!apps/
+!apps/server/
+!apps/server/package.json
+!apps/server/prisma/
+!apps/server/prisma/**
+!apps/server/src/
+!apps/server/src/**
+!apps/shared/
+!apps/shared/package.json
+!apps/shared/validate.js
+!apps/shared/schema/
+!apps/shared/schema/**
+!data/
+!data/*.json
+# 本地 mock 预览文件绝不进镜像（保留在仓库里给本地开发用）
+data/*.local.json

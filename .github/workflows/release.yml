@@ -1,0 +1,68 @@
+# 打 Windows 安装包并发到 GitHub Releases。
+#
+# 触发方式：
+#   1. 推 tag（v0.1.20）→ 构建 + 自动创建 Release 并附上 exe
+#   2. 手动 Run workflow（Actions 页面）→ 只构建，产物在本次运行的 Artifacts 里
+#
+# 之所以单独一个工作流：CI（validate.yml）跑在 Linux 上只做校验，
+# 出 exe 必须用 windows-latest，两者耗时和失败原因完全不同，混在一起会互相拖累。
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows-exe:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: 安装依赖
+        run: npm ci
+
+      # 先校验再打包：宁可不产 exe，也不上传一个数据或版本对不上的安装包。
+      - name: 版本一致性
+        run: node scripts/version.js check
+
+      - name: 数据校验
+        run: npm run validate
+
+      - name: 桌面测试
+        run: npm run test:desktop
+
+      - name: 服务端测试
+        run: npm run test:server
+
+      - name: 构建 exe
+        run: npm run package:exe
+        env:
+          # 没有证书就明确不做签名，避免 electron-builder 去探测无用的钥匙串。
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: lc2-helper-windows
+          if-no-files-found: error
+          path: |
+            release/*.exe
+            release/*.blockmap
+            release/latest.yml
+
+      - name: 发布到 Releases（仅 tag 触发）
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            release/*.exe

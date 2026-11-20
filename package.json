@@ -1,6 +1,6 @@
 {
   "name": "lc2-helper",
-  "version": "0.1.20",
+  "version": "0.1.21",
   "private": true,
   "description": "《失落城堡2》流派速查助手：Windows 常驻托盘 + 热键浮窗，不抢游戏焦点",
   "workspaces": [
@@ -10,6 +10,9 @@
     "desktop": "npm run start -w @lc2/desktop",
     "server": "npm run start -w @lc2/server",
     "dist": "npm run dist -w @lc2/desktop",
+    "package:exe": "node scripts/package-desktop.js",
+    "package:portable": "node scripts/package-desktop.js --portable",
+    "deploy:pack": "node scripts/package-deploy.js",
     "validate": "node scripts/validate-data.js",
     "test:server": "npm test -w @lc2/server",
     "test": "npm run validate && npm run test:desktop && npm run test:server",

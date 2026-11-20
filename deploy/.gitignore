@@ -1,0 +1,16 @@
+# 本目录只提交模板与脚本；运行期产物一律不进入仓库。
+
+# 密钥与本地配置
+/secrets/
+/.env
+
+# 服务器上的构建上下文（由 out/lc2-deploy.tar.gz 解出，不进仓库）
+/node-build/
+/admin-build/
+
+# 挂载目录
+/imports/
+/data/
+
+# 本地备份
+/backups/

@@ -1,0 +1,141 @@
+# 失落城堡2 助手 · 单机部署编排
+#
+# 四个服务一份文件：db（默认起）、node（默认起）、admin（profile: admin）、web（profile: web）。
+# 目录约定见 deploy/README.md；密钥全部走 ./secrets/，配置走 ./.env。
+# 数据卷名沿用项目名 lc2（lc2_pgdata），换编排文件不会丢数据。
+name: lc2
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: '10m'
+    max-file: '3'
+
+services:
+  db:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-lc2}
+      POSTGRES_USER: ${POSTGRES_USER:-lc2_admin}
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    mem_limit: 1g
+    shm_size: 128mb
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 20s
+    logging: *default-logging
+
+  node:
+    image: lc2-node:${LC2_TAG:-local}
+    build:
+      context: ${LC2_NODE_CONTEXT:-./node-build}
+      dockerfile: Dockerfile
+      # 留空走官方源；国内服务器在 .env 里指向就近镜像可大幅缩短构建时间。
+      args:
+        DEBIAN_MIRROR: ${DEBIAN_MIRROR:-}
+        NPM_REGISTRY: ${NPM_REGISTRY:-}
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: '4317'
+      DATA_DIR: /app/data
+      RUNTIME_DIR: /app/runtime
+      DATABASE_URL_FILE: /run/secrets/node_catalog_url
+      RATINGS_DATABASE_URL_FILE: /run/secrets/node_ratings_url
+      SUBMISSIONS_DATABASE_URL_FILE: /run/secrets/node_submissions_url
+      ADMIN_TOKEN_FILE: /run/secrets/node_admin_token
+      CORS_ORIGINS: ${LC2_CORS_ORIGINS:-}
+    secrets:
+      - node_catalog_url
+      - node_ratings_url
+      - node_submissions_url
+      - node_admin_token
+    # 只在内网可达；对外统一走 web 的 443。
+    ports:
+      - '127.0.0.1:4317:4317'
+    volumes:
+      - node_runtime:/app/runtime
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+    mem_limit: 512m
+    # 健康检查只看进程能否响应，不绑定业务数据：空库首次部署时也能启动，
+    # 数据是否就绪由 /api/health 里的 persistence 字段自查。
+    healthcheck:
+      test: ['CMD', 'node', '-e', 'fetch("http://127.0.0.1:4317/api/health").then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    logging: *default-logging
+
+  # 一次性管理命令：迁移、导入、审核。用完即删，不常驻。
+  admin:
+    image: lc2-admin:${LC2_TAG:-local}
+    build:
+      context: ${LC2_ADMIN_CONTEXT:-./admin-build}
+      dockerfile: Dockerfile
+    profiles: [admin]
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      LC2_DATABASE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-lc2}
+      LC2_DATABASE_USERNAME: ${POSTGRES_USER:-lc2_admin}
+      LC2_DATABASE_PASSWORD_FILE: /run/secrets/postgres_password
+      LC2_CATALOG_DATA_DIR: /imports/data
+    volumes:
+      - ${LC2_IMPORT_DIR:-./imports}:/imports/data:ro
+    secrets:
+      - postgres_password
+    mem_limit: 512m
+    logging: *default-logging
+
+  # 域名与 HTTPS：反向代理 /api，并托管客户端读取的静态数据包 /data。
+  web:
+    image: caddy:2-alpine
+    profiles: [web]
+    restart: unless-stopped
+    depends_on:
+      - node
+    environment:
+      LC2_DOMAIN: ${LC2_DOMAIN:-castle-helper.fun}
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ${LC2_DATA_DIR:-./data}:/srv/data:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    logging: *default-logging
+
+volumes:
+  pgdata:
+  node_runtime:
+  caddy_data:
+  caddy_config:
+
+secrets:
+  postgres_password:
+    file: ./secrets/postgres_password
+  node_catalog_url:
+    file: ./secrets/node_catalog_url
+  node_ratings_url:
+    file: ./secrets/node_ratings_url
+  node_submissions_url:
+    file: ./secrets/node_submissions_url
+  node_admin_token:
+    file: ./secrets/node_admin_token
