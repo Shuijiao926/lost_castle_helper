@@ -21,6 +21,18 @@ const logger = require('./util/log');
 
 const DEFAULT_REPO = { owner: 'Shuijiao926', repo: 'lost_castle_helper', branch: 'main' };
 const FETCH_TIMEOUT = 8000;
+/** 图鉴接口是 600KB 级的大包，链路拥塞时 8s 不够，单独放宽。 */
+const CATALOG_TIMEOUT = 15000;
+
+/* 瞬时网络错误才值得重试。
+   实测国内到这台服务器的 TLS 握手有约 20%~50% 被中途重置（TCP 层正常，
+   服务器本机自测 100% 正常，属于链路干扰），重试 3 次后失败率降到 1% 以下。 */
+const RETRY_ATTEMPTS = 3;
+const RETRY_BACKOFF = 400;
+const RETRY_CODES = new Set([
+  'ECONNRESET', 'ECONNREFUSED', 'ECONNABORTED', 'ETIMEDOUT', 'EPIPE',
+  'EAI_AGAIN', 'ENETUNREACH', 'EHOSTUNREACH', 'UND_ERR_SOCKET', 'UND_ERR_CONNECT_TIMEOUT',
+]);
 
 /** 图鉴至少要有武器类型；后端返回空集合说明批次异常，应降级而不是显示一张空面板。 */
 const MIN_WEAPONS = 1;
@@ -32,6 +44,10 @@ function createSource(options = {}) {
   const timeout = options.timeout || FETCH_TIMEOUT;
   const log = options.log || ((...a) => logger.warn('[数据]', ...a));
   const debug = options.debug || ((...a) => logger.debug('[数据]', ...a));
+  /** 重试间隔可注入，单测里换成同步实现就不会真的等。 */
+  const sleep = options.sleep || ((ms) => new Promise((resolve) => setTimeout(resolve, ms)));
+  const attempts = options.attempts || RETRY_ATTEMPTS;
+  const catalogTimeout = options.catalogTimeout || CATALOG_TIMEOUT;
 
   // 只有真正跑在 Electron 里才需要 app；测试注入 baseDir / cacheDirPath 后完全不碰它。
   const injectedPath = options.baseDir || options.cacheDirPath;
@@ -84,9 +100,9 @@ function createSource(options = {}) {
     return `${apiBase(env)}/data`;
   }
 
-  async function request(url, asText) {
+  async function requestOnce(url, asText, timeoutMs) {
     const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), timeout);
+    const timer = setTimeout(() => ctrl.abort(), timeoutMs || timeout);
     try {
       const res = await doFetch(url, {
         signal: ctrl.signal,
@@ -97,6 +113,32 @@ function createSource(options = {}) {
     } finally {
       clearTimeout(timer);
     }
+  }
+
+  /** HTTP 4xx/5xx 是服务端明确答复，重试没有意义；只重试链路抖动。 */
+  function isRetryable(e) {
+    if (!e) return false;
+    if (e.name === 'AbortError') return true; // 超时同样算瞬时问题
+    if (/^HTTP \d+$/.test(String(e.message || ''))) return false;
+    if (e.code && RETRY_CODES.has(e.code)) return true;
+    if (e.cause && e.cause.code && RETRY_CODES.has(e.cause.code)) return true;
+    return /fetch failed|socket hang up|ECONNRESET|other side closed|network/i.test(String(e.message || ''));
+  }
+
+  async function request(url, asText, opts = {}) {
+    const tries = opts.attempts || attempts;
+    let lastErr;
+    for (let i = 0; i < tries; i += 1) {
+      try {
+        return await requestOnce(url, asText, opts.timeout);
+      } catch (e) {
+        lastErr = e;
+        if (i === tries - 1 || !isRetryable(e)) throw e;
+        log(`请求失败，第 ${i + 1} 次重试：${url}（${e.message}）`);
+        await sleep(opts.backoff || RETRY_BACKOFF * (i + 1));
+      }
+    }
+    throw lastErr;
   }
 
   function sha256(str) {
@@ -240,7 +282,7 @@ function createSource(options = {}) {
   /** 武器 / 刻印 / 流派标签：优先服务端图鉴，失败按「缓存 → 安装包」降级。 */
   async function loadStatic() {
     try {
-      const payload = await request(`${apiBase(env)}/api/catalog`, false);
+      const payload = await request(`${apiBase(env)}/api/catalog`, false, { timeout: catalogTimeout });
       const statics = projectCatalog(payload && payload.catalog);
       if (statics) {
         writeStaticCache(statics, payload.catalog.version);

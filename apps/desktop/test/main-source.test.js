@@ -33,6 +33,7 @@ function makeSource(overrides = {}) {
     log: () => {},
     debug: () => {},
     timeout: 200,
+    sleep: () => {}, // 重试间隔不为单测真的等待
   });
 }
 
@@ -185,6 +186,7 @@ test('打包路径：静态数据从 resources/data 读，断网也能开面板'
     log: () => {},
     debug: () => {},
     timeout: 100,
+    sleep: () => {},
   });
 
   assert.equal(source.dataDir(), packagedData);
@@ -206,3 +208,59 @@ test('打包路径：拿不到 resourcesPath 时抛可读错误，而不是拿 u
   });
   assert.throws(() => source.dataDir(), /resourcesPath/);
 });
+
+/* ---------------- 链路抖动重试 ---------------- */
+
+/** 前 failTimes 次抛 ECONNRESET，之后正常返回；同时记录调用次数。 */
+function flakyFetch(body, failTimes, code = 'ECONNRESET') {
+  const state = { calls: 0 };
+  state.fetch = async () => {
+    state.calls += 1;
+    if (state.calls <= failTimes) {
+      const err = new Error('fetch failed');
+      err.cause = { code };
+      throw err;
+    }
+    return { ok: true, status: 200, json: async () => body, text: async () => JSON.stringify(body) };
+  };
+  return state;
+}
+
+test('重试：图鉴首次连接被重置，第二次成功就用服务端数据', async () => {
+  // 实测国内到服务器的 TLS 握手约 20%~50% 被重置，客户端不能一次失败就降级。
+  const flaky = flakyFetch(catalogPayload, 1);
+  const source = makeSource({ fetch: flaky.fetch });
+  const statics = await source.loadStatic();
+  assert.equal(statics.weapons[0].name, '服务端剑');
+  assert.equal(flaky.calls, 2);
+});
+
+test('重试：连续失败达到上限后仍按缓存 → 安装包降级，且不会无限重试', async () => {
+  const flaky = flakyFetch(catalogPayload, 99);
+  const source = makeSource({ fetch: flaky.fetch });
+  const statics = await source.loadStatic();
+  assert.equal(statics.weapons[0].name, '本地剑');
+  assert.equal(flaky.calls, 3);
+});
+
+test('重试：HTTP 4xx/5xx 是服务端明确答复，不做重试', async () => {
+  let calls = 0;
+  const source = makeSource({
+    fetch: async () => {
+      calls += 1;
+      return { ok: false, status: 500, json: async () => ({}), text: async () => '' };
+    },
+  });
+  const statics = await source.loadStatic();
+  assert.equal(statics.weapons[0].name, '本地剑');
+  assert.equal(calls, 1);
+});
+
+test('重试：流派数据包连接被重置时重试，成功后来源标 server', async () => {
+  const flaky = flakyFetch({ builds: [{ id: 'remote', name: '远端流派' }] }, 1);
+  const source = makeSource({ fetch: flaky.fetch });
+  const loaded = await source.loadBuilds({ source: 'server' });
+  assert.equal(loaded.source, 'server');
+  assert.equal(loaded.file.builds[0].id, 'remote');
+});
+
