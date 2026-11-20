@@ -44,6 +44,8 @@ function databaseConnection(name) {
 const databaseUrl = databaseConnection('DATABASE_URL');
 const ratingsDatabaseUrl = databaseConnection('RATINGS_DATABASE_URL');
 if (ratingsDatabaseUrl && !databaseUrl) throw new Error('评分写入连接需要同时配置只读数据库连接');
+/** 投稿写入同样使用独立最小权限账号，未配置时投稿仍走 JSON 仓储。 */
+const submissionsDatabaseUrl = databaseConnection('SUBMISSIONS_DATABASE_URL');
 const adminTokenFile = str('ADMIN_TOKEN_FILE', '');
 if (adminTokenFile && str('ADMIN_TOKEN', '')) throw new Error('ADMIN_TOKEN 与 ADMIN_TOKEN_FILE 只能设置一项');
 const adminToken = adminTokenFile ? fs.readFileSync(adminTokenFile, 'utf8').trim() : str('ADMIN_TOKEN', 'change_me');
@@ -58,9 +60,10 @@ const config = {
   dataDir,
   runtimeDir: path.resolve(str('RUNTIME_DIR', path.join(dataDir, 'runtime'))),
 
-  /** 游戏数据和评分汇总共用只读账号，评分写入使用独立的最小权限账号。 */
+  /** 游戏数据和评分汇总共用只读账号，评分写入与投稿写入各自独立的最小权限账号。 */
   databaseUrl,
   ratingsDatabaseUrl,
+  submissionsDatabaseUrl,
 
   /** HTTP 协议层 */
   api: {

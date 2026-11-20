@@ -1943,7 +1943,7 @@ async function saveSubmit(){
     ...(resPick ? { resonance: { code: resPick.code, nodes: resPick.nodes } } : {}),
     ...(nightmare.length ? { nightmareList: nightmare } : {}),
     ...(submit.stoneConfirmed ? { stonePriority: Object.fromEntries(submit.stoneOrder.map((key, idx) => [key, idx + 1])) } : {}),
-    sourceType: 'self-test',
+    sourceType: 'authorized-submission',
     license: 'CC-BY-NC-SA-4.0',
     ...(Object.keys(gear).length ? { gear } : {}),
     weaponChoices: submit.graduation.map((name) => ({ name, tag: '毕业' })),
@@ -1978,7 +1978,12 @@ async function saveSubmit(){
   try {
     const res = await window.lc2?.submitBuild?.(record);
     if (!res || !res.ok) throw new Error('保存失败');
-    showToast('<b style="color:#c8d8f5">投稿已保存并加入本地图鉴</b><br>' + esc(res.path));
+    // 远端受理时不进本地图鉴：待审内容还不能当成已发布流派展示。
+    if (res.mode === 'remote') {
+      showToast('<b style="color:#c8d8f5">投稿已提交，等待审核</b><br>' + esc(res.id || ''));
+    } else {
+      showToast('<b style="color:#c8d8f5">已保存到本地草稿</b><br>' + esc(res.reason || '服务未连接'));
+    }
     closeSubmit();
     if (window.__lc2RefreshData) window.__lc2RefreshData();
   } catch (err) {

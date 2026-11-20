@@ -11,8 +11,9 @@ const { Submission, SubmissionStatus } = require('../domain/submission');
 const { NotFoundError, ConflictError } = require('../../../shared/kernel/errors');
 
 class SubmitBuild {
-  constructor({ submissionRepository, catalogRepository, security, eventBus }) {
+  constructor({ submissionRepository, buildRepository, catalogRepository, security, eventBus }) {
     this.submissions = submissionRepository;
+    this.builds = buildRepository;
     this.catalog = catalogRepository;
     this.security = security;
     this.events = eventBus;
@@ -27,6 +28,13 @@ class SubmitBuild {
 
     // 先校验（非法投稿不消耗配额），再限流
     const submission = Submission.create({ id, payload: input.payload, meta: input.meta }, catalog);
+
+    // 投稿只允许新增；已存在的流派必须先由管理端处理，避免审核通过时覆盖线上内容。
+    if (this.builds && input.payload && input.payload.id) {
+      const existing = await this.builds.findById(input.payload.id);
+      if (existing) throw new ConflictError(`流派 ${input.payload.id} 已存在，投稿只能新增`);
+    }
+
     await this.security.rateLimiter.assert('submission', input.fingerprint);
 
     await this.submissions.save(submission);
@@ -37,14 +45,19 @@ class SubmitBuild {
 }
 
 class ReviewSubmission {
-  constructor({ submissionRepository, buildRepository, catalogRepository, eventBus }) {
+  constructor({ submissionRepository, buildRepository, catalogRepository, eventBus, submissionReviewOwner }) {
     this.submissions = submissionRepository;
     this.builds = buildRepository;
     this.catalog = catalogRepository;
     this.events = eventBus;
+    /** 流派转由 Java 维护后，Node 不再拥有审核权，避免两套状态机。 */
+    this.reviewOwner = submissionReviewOwner || 'node';
   }
 
   async execute({ id, decision, note, reviewer }) {
+    if (this.reviewOwner !== 'node') {
+      throw new ConflictError('投稿审核已由 Java 管理端负责，请使用管理端审核命令');
+    }
     const record = await this.submissions.findById(id);
     if (!record) throw new NotFoundError(`投稿 ${id}`);
 

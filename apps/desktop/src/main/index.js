@@ -44,6 +44,7 @@ const createConfigStore = require('./config');
 const createDataLoader = require('./data');
 const createNotesStore = require('./notes-store');
 const createSubmissionStore = require('./submission-store');
+const createSubmitService = require('./submission-submit');
 const createGeometry = require('./geometry');
 const createPanel = require('./panel');
 const createBubbleWindow = require('./bubble-window');
@@ -449,6 +450,12 @@ if (!gotLock) {
       log,
     });
     dataLoader = createDataLoader({ source, configStore, submissionStore });
+    // 服务地址只在入口读一次：未配置时投稿保持「只存本地」的旧行为。
+    const submitService = createSubmitService({
+      store: submissionStore,
+      apiBase: process.env.LC2_API_URL || '',
+      log: (...args) => log.warn(...args),
+    });
 
     shortcuts = createShortcuts({ globalShortcut, log, BASE_KEYS, PANEL_KEYS });
 
@@ -503,7 +510,7 @@ if (!gotLock) {
         if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
           throw new Error('投稿内容无效');
         }
-        return submissionStore.save(payload);
+        return submitService.submit(payload);
       },
     });
     finishAssembly();

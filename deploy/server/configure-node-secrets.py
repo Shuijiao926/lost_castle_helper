@@ -14,6 +14,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--replace", action="store_true", help="明确允许重建本次选择的密钥")
     parser.add_argument("--ratings-only", action="store_true", help="仅生成独立评分写入连接，不改只读连接和管理令牌")
+    parser.add_argument("--submissions-only", action="store_true", help="仅生成独立投稿写入连接，不改其他密钥")
     parser.add_argument("--db-user", default=None)
     parser.add_argument("--db-host", default="db")
     parser.add_argument("--db-port", type=int, default=5432)
@@ -25,13 +26,22 @@ def main():
     directory = root / "secrets"
     if not directory.resolve().is_relative_to(root):
         parser.error("密钥目录不能指向部署目录之外")
-    targets = ([directory / "node_ratings_database_url"] if args.ratings_only
-               else [directory / "node_database_url", directory / "node_admin_token"])
+    if args.ratings_only and args.submissions_only:
+        parser.error("--ratings-only 与 --submissions-only 不能同时使用")
+    if args.ratings_only:
+        targets = [directory / "node_ratings_database_url"]
+        default_user = "lc2_rating_writer"
+    elif args.submissions_only:
+        targets = [directory / "node_submissions_database_url"]
+        default_user = "lc2_submission_writer"
+    else:
+        targets = [directory / "node_database_url", directory / "node_admin_token"]
+        default_user = "lc2_catalog_reader"
     if any(path.is_symlink() for path in targets):
         parser.error("密钥文件不能是符号链接")
     if any(path.exists() for path in targets) and not args.replace:
         parser.error("Node 密钥已存在；确需重建时显式传入 --replace")
-    db_user = args.db_user or ("lc2_rating_writer" if args.ratings_only else "lc2_catalog_reader")
+    db_user = args.db_user or default_user
     password = getpass.getpass("请输入 " + db_user + " 的数据库密码（输入不显示）：")
     if not password:
         parser.error("数据库密码不能为空")
@@ -41,7 +51,7 @@ def main():
     directory.mkdir(mode=0o700, exist_ok=True)
     directory.chmod(0o700)
     # 父目录仅部署用户可遍历；文件需允许容器内 node 用户读取绑定挂载。
-    values = [url] if args.ratings_only else [url, secrets.token_urlsafe(48)]
+    values = [url] if len(targets) == 1 else [url, secrets.token_urlsafe(48)]
     for target, value in zip(targets, values):
         flags = os.O_WRONLY | os.O_CREAT | (os.O_TRUNC if args.replace else os.O_EXCL)
         descriptor = os.open(target, flags, 0o644)

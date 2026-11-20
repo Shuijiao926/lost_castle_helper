@@ -24,6 +24,7 @@ const { PostgresCatalogRepository } = require('../modules/catalog/infrastructure
 const { JsonBuildRepository } = require('../modules/builds/infrastructure/json-build-repository');
 const { PostgresBuildRepository } = require('../modules/builds/infrastructure/postgres-build-repository');
 const { JsonSubmissionRepository } = require('../modules/submissions/infrastructure/json-submission-repository');
+const { PostgresSubmissionRepository } = require('../modules/submissions/infrastructure/postgres-submission-repository');
 const { JsonRatingRepository } = require('../modules/ratings/infrastructure/json-rating-repository');
 const { PostgresRatingRepository } = require('../modules/ratings/infrastructure/postgres-rating-repository');
 const { JsonPackageRepository } = require('../modules/publishing/infrastructure/json-package-repository');
@@ -33,7 +34,7 @@ const { JsonRateLimitStore } = require('../modules/security/infrastructure/json-
 const { RequestFingerprint } = require('../modules/security/infrastructure/fingerprint');
 const { RateLimiter } = require('../modules/security/application/rate-limiter');
 
-function createContainer({ logger, databaseClient, catalogClient, ratingClient, config = defaultConfig } = {}) {
+function createContainer({ logger, databaseClient, catalogClient, ratingClient, submissionClient, config = defaultConfig } = {}) {
   const log = logger || createLogger({ scope: 'lc2', level: config.logLevel });
 
   const db = new JsonDatabase({ dataDir: config.dataDir, runtimeDir: config.runtimeDir });
@@ -44,6 +45,7 @@ function createContainer({ logger, databaseClient, catalogClient, ratingClient, 
   /* ---------- 仓储 ---------- */
   let ownedClient = null;
   let ownedRatingClient = null;
+  let ownedSubmissionClient = null;
   const suppliedClient = databaseClient || catalogClient;
   if (config.databaseUrl && !suppliedClient) {
     // 仅使用已有 Prisma 的查询能力；不对 Java 管理的 schema 执行建表或迁移。
@@ -54,13 +56,19 @@ function createContainer({ logger, databaseClient, catalogClient, ratingClient, 
     const { PrismaClient } = require('@prisma/client');
     ownedRatingClient = new PrismaClient({ datasources: { db: { url: config.ratingsDatabaseUrl } } });
   }
+  if (config.databaseUrl && config.submissionsDatabaseUrl && !submissionClient) {
+    const { PrismaClient } = require('@prisma/client');
+    ownedSubmissionClient = new PrismaClient({ datasources: { db: { url: config.submissionsDatabaseUrl } } });
+  }
   const catalogRepository = config.databaseUrl
     ? new PostgresCatalogRepository(suppliedClient || ownedClient)
     : new JsonCatalogRepository(db, config);
   const buildRepository = config.databaseUrl
     ? new PostgresBuildRepository(suppliedClient || ownedClient)
     : new JsonBuildRepository(db, config);
-  const submissionRepository = new JsonSubmissionRepository(db, config);
+  const submissionRepository = config.databaseUrl && config.submissionsDatabaseUrl
+    ? new PostgresSubmissionRepository(submissionClient || ownedSubmissionClient)
+    : new JsonSubmissionRepository(db, config);
   const ratingRepository = config.databaseUrl
     ? new PostgresRatingRepository(suppliedClient || ownedClient, ratingClient || ownedRatingClient)
     : new JsonRatingRepository(db, config);
@@ -87,11 +95,15 @@ function createContainer({ logger, databaseClient, catalogClient, ratingClient, 
     persistence: config.databaseUrl ? 'mixed' : 'json',
     persistenceDetails: {
       catalog: config.databaseUrl ? 'postgres' : 'json',
-      builds: config.databaseUrl ? 'postgres' : 'json', ratings: config.databaseUrl ? 'postgres' : 'json', submissions: 'json', packages: 'json',
+      builds: config.databaseUrl ? 'postgres' : 'json', ratings: config.databaseUrl ? 'postgres' : 'json',
+      submissions: config.databaseUrl && config.submissionsDatabaseUrl ? 'postgres' : 'json',
+      packages: 'json',
     },
     ratingWriteConfigured: Boolean(config.databaseUrl && (config.ratingsDatabaseUrl || ratingClient)),
+    /** 流派改由 Java 维护后，投稿审核也只能由管理端执行，Node 不再写入流派。 */
+    submissionReviewOwner: config.databaseUrl ? 'java' : 'node',
     async closeResources() {
-      await Promise.all([ownedClient?.$disconnect(), ownedRatingClient?.$disconnect()]);
+      await Promise.all([ownedClient?.$disconnect(), ownedRatingClient?.$disconnect(), ownedSubmissionClient?.$disconnect()]);
     },
     logger: log,
     db,
