@@ -31,7 +31,8 @@ function createConfigStore({ userDataDir, isPackaged, env = process.env, log, fs
   function resolveDataSource(saved) {
     if (env.LC2_DATA_SOURCE) return env.LC2_DATA_SOURCE;
     if (typeof saved === 'string' && saved) return saved;
-    return isPackaged ? 'github' : 'local';
+    // 打包后默认连自建服务端；开发时读仓库 data/，避免改代码就要联网。
+    return isPackaged ? 'server' : 'local';
   }
 
   function sanitize(raw) {

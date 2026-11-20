@@ -55,6 +55,7 @@ const { registerIpc } = require('./ipc');
 const setupDevHotReload = require('./hot-reload');
 
 const source = require('./source');
+const { apiBase } = require('./endpoints');
 const nativeBubble = require('./nativeBubble');
 const panelShadow = require('./panelShadow');
 
@@ -450,10 +451,11 @@ if (!gotLock) {
       log,
     });
     dataLoader = createDataLoader({ source, configStore, submissionStore });
-    // 服务地址只在入口读一次：未配置时投稿保持「只存本地」的旧行为。
+    // 服务地址只在入口取一次；未配置 LC2_API_URL 时用默认域名（见 endpoints.js），
+    // 投稿走远端失败才会降级成本地草稿。
     const submitService = createSubmitService({
       store: submissionStore,
-      apiBase: process.env.LC2_API_URL || '',
+      apiBase: apiBase(),
       log: (...args) => log.warn(...args),
     });
 

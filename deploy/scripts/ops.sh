@@ -19,6 +19,7 @@ usage() {
   status             容器状态 + /api/health
   check [ratings|submissions] 只读预检数据库连接与最小权限
   migrate            执行 Flyway 迁移（V1–V4）
+  export             把已发布流派导出成 data/builds.json（客户端数据包）
   review             列出待审投稿
   approve <id> [备注] 审核通过（会写入已发布流派）
   reject <id> <原因>  审核驳回
@@ -100,6 +101,24 @@ case "$command" in
 	migrate)
 		require_env
 		"${COMPOSE[@]}" --profile admin run --rm admin --lc2.catalog.command=migrate
+		;;
+	export)
+		require_env
+		# 客户端流派读的是数据包。导出后 Caddy 的 /data/builds.json 立即生效，
+		# 客户端下次启动（或缓存过期 60s 后）就能看到新流派。
+		tmp="$ROOT/data/.builds.json.tmp"
+		export_log="/tmp/lc2-export.log"
+		"${COMPOSE[@]}" run --rm -T node node apps/server/src/export-package.js 2>"$export_log" \
+			| sed -n '/^{/,$p' > "$tmp"
+		if ! python3 -m json.tool "$tmp" >/dev/null 2>&1; then
+			echo "导出失败，容器日志：" >&2
+			cat "$export_log" >&2
+			rm -f "$tmp"
+			exit 1
+		fi
+		mv "$tmp" "$ROOT/data/builds.json"
+		rm -f "$export_log"
+		echo "已写入 data/builds.json（$(wc -c < "$ROOT/data/builds.json") 字节）"
 		;;
 	check)
 		require_env

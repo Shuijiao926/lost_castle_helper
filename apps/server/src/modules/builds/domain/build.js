@@ -262,4 +262,6 @@ module.exports = {
   SourceType,
   BuildRepository,
   LICENSE,
+  /** 数据包导出复用同一套字段白名单，避免出现第二份「哪些字段能出去」的定义。 */
+  stripInternal,
 };

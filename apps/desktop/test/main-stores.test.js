@@ -24,14 +24,14 @@ test('config：首次加载给默认值，dataSource 按环境兜底', () => {
   assert.equal(state.dataSource, 'local');
 });
 
-test('config：env 覆盖 dataSource；打包环境默认 github', () => {
+test('config：env 覆盖 dataSource；打包环境默认连服务端', () => {
   const dir = tmpDir('lc2-cfg-');
   const envStore = createConfigStore({ userDataDir: dir, isPackaged: false, env: { LC2_DATA_SOURCE: 'github' }, log: () => {} });
   assert.equal(envStore.load().dataSource, 'github');
 
   const dir2 = tmpDir('lc2-cfg-');
   const pkgStore = createConfigStore({ userDataDir: dir2, isPackaged: true, env: {}, log: () => {} });
-  assert.equal(pkgStore.load().dataSource, 'github');
+  assert.equal(pkgStore.load().dataSource, 'server');
 });
 
 test('config：坏坐标被丢弃，正常坐标保留并落盘', () => {
