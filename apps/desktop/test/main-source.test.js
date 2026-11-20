@@ -164,3 +164,45 @@ test('流派：local 源完全不发网络请求', async () => {
   assert.equal(called, 0);
   assert.equal(loaded.source, 'local');
 });
+
+/* ---------------- 打包路径（安装包内 resources/data） ---------------- */
+
+test('打包路径：静态数据从 resources/data 读，断网也能开面板', async () => {
+  const resourcesPath = tmpDir('lc2-res-');
+  const packagedData = path.join(resourcesPath, 'data');
+  fs.mkdirSync(packagedData, { recursive: true });
+  fs.writeFileSync(path.join(packagedData, 'weapons.json'),
+    JSON.stringify({ weapons: [{ id: 'w', name: '包内剑' }] }));
+  fs.writeFileSync(path.join(packagedData, 'builds.json'),
+    JSON.stringify({ builds: [{ id: 'in-package' }] }));
+
+  const source = createSource({
+    resourcesPath,
+    cacheDirPath: tmpDir('lc2-cache-'),
+    isPackaged: true,
+    env: {},
+    fetch: async () => { throw new Error('offline'); },
+    log: () => {},
+    debug: () => {},
+    timeout: 100,
+  });
+
+  assert.equal(source.dataDir(), packagedData);
+  const statics = await source.loadStatic();
+  assert.equal(statics.weapons[0].name, '包内剑');
+  const loaded = await source.loadBuilds({ source: 'local' });
+  assert.equal(loaded.file.builds[0].id, 'in-package');
+});
+
+test('打包路径：拿不到 resourcesPath 时抛可读错误，而不是拿 undefined 拼路径', () => {
+  // 回归：曾经写成 app.resourcesPath（app 上没有这个属性），启动即崩。
+  const fakeApp = { isPackaged: true, getPath: () => tmpDir('lc2-ud-') };
+  const source = createSource({
+    app: fakeApp,
+    cacheDirPath: tmpDir('lc2-cache-'),
+    env: {},
+    log: () => {},
+    debug: () => {},
+  });
+  assert.throws(() => source.dataDir(), /resourcesPath/);
+});

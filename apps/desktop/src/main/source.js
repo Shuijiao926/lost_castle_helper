@@ -34,15 +34,27 @@ function createSource(options = {}) {
   const debug = options.debug || ((...a) => logger.debug('[数据]', ...a));
 
   // 只有真正跑在 Electron 里才需要 app；测试注入 baseDir / cacheDirPath 后完全不碰它。
-  const electronApp = options.app || (options.baseDir ? null : require('electron').app);
+  const injectedPath = options.baseDir || options.cacheDirPath;
+  const electronApp = options.app || (injectedPath ? null : require('electron').app);
   const isPackaged = options.isPackaged !== undefined
     ? options.isPackaged
     : Boolean(electronApp && electronApp.isPackaged);
 
+  /**
+   * 打包后静态数据在 resources/data。
+   * 注意是 `process.resourcesPath`（Electron 注入到进程上的），不是 app.resourcesPath ——
+   * app 上没有这个属性，写成 app.resourcesPath 会得到 undefined，然后在 path.join 里炸掉。
+   */
+  function resourcesPath() {
+    if (options.resourcesPath) return options.resourcesPath;
+    if (process.resourcesPath) return process.resourcesPath;
+    throw new Error('缺少 resourcesPath：打包环境应能从 process.resourcesPath 取得');
+  }
+
   function dataDir() {
     if (options.baseDir) return options.baseDir;
     return isPackaged
-      ? path.join(electronApp.resourcesPath, 'data')
+      ? path.join(resourcesPath(), 'data')
       : path.join(__dirname, '..', '..', '..', '..', 'data');
   }
 
@@ -50,7 +62,9 @@ function createSource(options = {}) {
     if (options.cacheDirPath) return options.cacheDirPath;
     // 拉取到的数据缓存在这里；LC2_CACHE_DIR 可改到自定义目录（如测试/多实例）
     const override = env.LC2_CACHE_DIR;
-    return override ? path.resolve(override) : path.join(electronApp.getPath('userData'), 'data-cache');
+    if (override) return path.resolve(override);
+    if (!electronApp) throw new Error('缺少 app 或 cacheDirPath，无法确定缓存目录');
+    return path.join(electronApp.getPath('userData'), 'data-cache');
   }
 
   function readLocalJSON(name, fallback) {
